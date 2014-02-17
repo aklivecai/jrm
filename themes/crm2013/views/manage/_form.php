@@ -74,11 +74,9 @@ $this->widget('application.components.MyMenu',array(
 	<div class="row-form clearfix">
     <?php echo $form->passwordFieldRow($model, 'user_pass', array('size'=>60,'maxlength'=>64)); ?>
 </div>
-<!--
 <div class="row-form clearfix">
     <?php echo $form->dropDownListRow($model,'branch',$this->branchs); ?>
 </div>
--->
 <div class="row-form clearfix">
     <?php echo $form->textFieldRow($model, 'user_nicename', array('size'=>60,'maxlength'=>64)); ?>
 </div><div class="row-form clearfix">

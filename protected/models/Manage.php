@@ -26,6 +26,9 @@ class Manage extends ModuleRecord
 	public $linkName = 'user_name'; /*连接的显示的字段名字*/
 	public $branch = 0;
 	public $isbranch = 0;
+
+	private $oldbranch = false;
+
 	public function primaryKey()
 	{
 		return 'manageid';
@@ -36,6 +39,11 @@ class Manage extends ModuleRecord
 	public function tableName()
 	{
 		return '{{manage}}';
+	}
+
+	/*记录修改过部门*/
+	public function  changeBranch(){
+		$this->oldbranch = $this->branch;
 	}
 
 	/**
@@ -77,14 +85,16 @@ class Manage extends ModuleRecord
 			$sql[] = ':ikey<>:itemid';
 			$arr[':ikey'] = $this->primaryKey();
 			$arr[':itemid'] = $this->primaryKey;
-		}
-		if (Tak::getAdmin()){
-			$sql[] = 'fromid='.Tak::getFormid();
+			$sql[] = 'fromid='.$this->fromid;
+		}else{
+			if (Tak::getAdmin()){
+				$sql[] = 'fromid='.Tak::getFormid();
+			}
 		}
 
 		$sql = join(' AND ',$sql);
 
-		// Tak::KD(strtr($sql,$arr),1);
+		 // Tak::KD(strtr($sql,$arr),1);
 		// if (Tak::getAdmin()) 	 Tak::KD(strtr($sql,$arr),1);
 		// 查找满足指定条件的结果中的第一行
 		
@@ -238,8 +248,7 @@ class Manage extends ModuleRecord
 	        	}
 			    if (!isset($this->user_status)) {
 			    	$this->user_status = TakType::STATUS_DELETED;
-			    }	        	
-
+			    }	
 	        }
 	    }
 	    return $result;
@@ -249,6 +258,31 @@ class Manage extends ModuleRecord
 	protected function afterSave(){
 		parent::afterSave();
 		// return $result;
+		//新建用户,插入部门权限
+		//存在替换
+		$sql = false;
+		$arr = array(
+			':itemname' => $this->branch,
+			':fromid' => $this->fromid,
+			':userid' => Tak::getManageid(),
+			':tabl' => '{{rbac_authassignment}}',
+		);
+
+		if ( $this->isNewRecord || $this->oldbranch){
+			$sql = "INSERT INTO :tabl (itemname,fromid,userid,data) VALUES(:itemname,:fromid,:userid,'N;')";
+			$db = Tak::getDb('db');
+		
+			$sql = strtr($sql,$arr);
+			// Tak::KD($sql);
+			$db->createCommand($sql)->execute();
+			if ($this->oldbranch) {
+				$arr[':oldbranch'] = $this->oldbranch;
+				$sql = "DELETE FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=:oldbranch";
+				$sql = strtr($sql,$arr);
+				$db->createCommand($sql)->execute();
+				// Tak::KD($sql,1);
+			}
+		}
 	}
 	
 	public  function upActivkey()

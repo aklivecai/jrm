@@ -87,7 +87,14 @@ class PermissionController extends Controller
 		));		
 	}
 
-	public function actionShow($id){
+	public function actionShow($child)
+	{
+		$child = urldecode($child);
+		$crypt = new SysCrypt();
+		$id = $crypt->decrypt($child);
+
+		$_model = $this->loadModel($id);
+		$itemName = $id;	
 		$_model = $this->loadModel($id);
 		$model = $this->loadModelI($id);
 		$itemName = $id;	
@@ -98,11 +105,14 @@ class PermissionController extends Controller
 		$parentDataProvider = new RAuthItemParentDataProvider($model);
 		$childDataProvider = new RAuthItemChildDataProvider($model);
 
+		$crypt = new SysCrypt();
+
 		$this->render('show',array(
 			'model' => $_model,
 			'models'=>$model,
 			'id' => $id,
-			
+
+			'crypt' => $crypt,
 			'childSelectOptions'=>$childSelectOptions,
 			'parentDataProvider'=>$parentDataProvider,
 			'childDataProvider'=>$childDataProvider,

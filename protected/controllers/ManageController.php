@@ -51,6 +51,26 @@ class ManageController extends Controller
 		));
 	}
 
+	public function actionUpdate($id)
+	{
+		$model = $this->loadModel($id);
+		$m = $this->modelName;		
+		if(isset($_POST[$m]))
+		{
+			$data = $_POST[$m];
+			if ($data['branch']!=$model->branch) {
+				$model->changeBranch();
+			}
+			$model->attributes = $data;  
+			if($model->save()){
+				$this->redirect($this->returnUrl?$this->returnUrl:array('view','id'=>$model->primaryKey));
+			}
+		}
+		$this->render($this->templates['update'],array(
+			'model'=>$model,
+		));
+	}	
+
 	protected function getSelectOption($q,$not = false) 
 	{
 		$result = parent::getSelectOption($q);
@@ -59,5 +79,6 @@ class ManageController extends Controller
 			$result['data']['criteria']->addSearchCondition('user_nicename',$q,true,'OR');
 		}
 		return $result;
-	}
+	}	
+
 }
