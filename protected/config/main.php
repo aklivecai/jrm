@@ -48,7 +48,7 @@ return array(
 			// 以及默认的位置
 			'class'=>'system.gii.GiiModule',
 			'password'=>'1',
-			// If removed, Gii defaults to localhost only. Edit carefully to taste.
+			// If removed, Gii defaults tan(arg)o localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 			 // 'bootstrap.gii',
 			// Gii 在GiiModule::generatorPaths 属性指定的目录中查找可用的生成器。 当需要定制时，我们可以在应用程序的配置文件中做如下配置，

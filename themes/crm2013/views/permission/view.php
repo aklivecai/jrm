@@ -30,9 +30,12 @@ $this->breadcrumbs=array(
                                 <div class="item clearfix">
                                     <div class="info">
                                         <?php
-                                            echo CHtml::link($value['description'],
-                                                array('show','id'=>$id,'child'=>urlencode($crypt->encrypt($value['name'])))
-                                                    ,array('class'=>'name data-ajax','title'=>Tk::g(array($this->types[$value['type']],' - ',$value['description'])))
+                                            echo CHtml::link($value['description']
+
+                                                // ,array('show','id'=>$id,'child'=>urlenc\ode($crypt->encrypt($value['name'])))
+                                                ,"#"
+
+                                                 ,array('class'=>'name data-ajax--','title'=>Tk::g(array($this->types[$value['type']],' - ',$value['description'])))
                                                 );
                                         ?>                                                            
                                         <span>

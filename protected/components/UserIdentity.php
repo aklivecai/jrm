@@ -47,6 +47,9 @@ class UserIdentity extends CUserIdentity
 				//记录平台会员编号
 				$this->setState('last_login_time', Tak::timetodate($user->last_login_time,6));
 				$this->setState('fromid', $user->fromid);
+
+				$this->setState('branch', $user->branch);
+				$this->setState('isbranch', $user->isbranch==1);
 				$this->errorCode = self::ERROR_NONE;
 			}
 		}

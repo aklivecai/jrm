@@ -926,3 +926,1129 @@ Stack trace:
 REQUEST_URI=/GitHub/CRM/Memeber/select?id=1&callback=jQuery18304958489949349314_1392632569584&_=1392632569965
 HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/admin?Manage[fromid]=1&Manage[user_status]=-1&Manage[branch]=-1&Manage[user_name]=&Manage[user_nicename]=&Manage[last_login_time]=&ajax=list-grid
 ---
+2014/02/18 08:31:38 [error] [exception.CHttpException.202] exception 'CHttpException' with message '非法操作' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '????????????')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(66): Controller->errorE()
+#2 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(49): SiteController->actionIndex()
+#3 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#4 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#5 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#6 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#7 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#9 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('')
+#12 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#13 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /k/GitHub/CRM/index.php(15): CApplication->run()
+#15 {main}
+REQUEST_URI=/GitHub/CRM/
+---
+2014/02/18 08:31:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "favicon.ico"。' in /f/tGitHub/Yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /k/GitHub/CRM/index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/GitHub/CRM/favicon.ico
+---
+2014/02/18 08:31:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "favicon.ico"。' in /f/tGitHub/Yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /k/GitHub/CRM/index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/GitHub/CRM/favicon.ico
+---
+2014/02/18 09:53:35 [error] [exception.CHttpException.202] exception 'CHttpException' with message '会员信息不存在！' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '???????????????...')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(144): Controller->errorE('???????????????...')
+#2 /k/GitHub/CRM/protected/controllers/SiteController.php(207): SiteController->inits(false)
+#3 [internal function]: SiteController->actionLogin(false)
+#4 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#5 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#6 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#7 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#9 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#10 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/login')
+#16 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/site/login
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/update/53514445759073163
+---
+2014/02/18 09:53:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /f/tGitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---
+2014/02/18 09:59:52 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[01000]: Warning: 1265 Data truncated for column 'active_time' at row 1. The SQL statement executed was: UPDATE `tak_test_memeber` SET `itemid`=:yp0, `manageid`=:yp1, `company`=:yp2, `email`=:yp3, `active_time`=:yp4, `add_time`=:yp5, `add_us`=:yp6, `add_ip`=:yp7, `modified_time`=:yp8, `modified_us`=:yp9, `modified_ip`=:yp10, `note`=:yp11, `status`=:yp12 WHERE `tak_test_memeber`.`itemid`=4227. Bound with :yp0=4227, :yp1='1', :yp2='深圳市和成宝投资有限公司', :yp3='', :yp4='2015-01-24', :yp5='1389077337', :yp6='1', :yp7='0', :yp8='1392688792', :yp9='52918235314868043', :yp10='2130706433', :yp11='hcbwood', :yp12=1.
+in /k/GitHub/CRM/protected/components/JController.php (185)
+in /k/GitHub/CRM/index.php (15)
+2014/02/18 09:59:52 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[01000]: Warning: 1265 Data truncated for column 'active_time' at row 1. The SQL statement executed was: UPDATE `tak_test_memeber` SET `itemid`=:yp0, `manageid`=:yp1, `company`=:yp2, `email`=:yp3, `active_time`=:yp4, `add_time`=:yp5, `add_us`=:yp6, `add_ip`=:yp7, `modified_time`=:yp8, `modified_us`=:yp9, `modified_ip`=:yp10, `note`=:yp11, `status`=:yp12 WHERE `tak_test_memeber`.`itemid`=4227. Bound with :yp0=4227, :yp1='1', :yp2='深圳市和成宝投资有限公司', :yp3='', :yp4='2015-01-24', :yp5='1389077337', :yp6='1', :yp7='0', :yp8='1392688792', :yp9='52918235314868043', :yp10='2130706433', :yp11='hcbwood', :yp12=1' in /f/tGitHub/Yii/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1751): CDbCommand->execute()
+#1 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1127): CActiveRecord->updateByPk('4227', Array)
+#2 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(809): CActiveRecord->update(NULL)
+#3 /k/GitHub/CRM/protected/components/JController.php(185): CActiveRecord->save()
+#4 [internal function]: JController->actionUpdate('4227')
+#5 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(TestMemeberController), Array)
+#6 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(TestMemeberController), Object(ReflectionMethod), Array)
+#7 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#9 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/CController.php(1145): CFilter->filter(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#13 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#14 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('update')
+#16 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('juren/testmemeb...')
+#17 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#18 /k/GitHub/CRM/index.php(15): CApplication->run()
+#19 {main}
+REQUEST_URI=/GitHub/CRM/juren/testmemeber/update/id/4227
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/juren/testmemeber/update/id/4227
+---
+2014/02/18 15:36:22 [error] [exception.CHttpException.202] exception 'CHttpException' with message '非法操作' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '????????????')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(66): Controller->errorE()
+#2 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(49): SiteController->actionIndex()
+#3 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#4 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#5 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#6 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#7 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#9 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('')
+#12 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#13 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /k/GitHub/CRM/index.php(15): CApplication->run()
+#15 {main}
+REQUEST_URI=/GitHub/CRM/
+---
+2014/02/18 15:36:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "favicon.ico"。' in /f/tGitHub/Yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /k/GitHub/CRM/index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/GitHub/CRM/favicon.ico
+---
+2014/02/18 15:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "favicon.ico"。' in /f/tGitHub/Yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /k/GitHub/CRM/index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/GitHub/CRM/favicon.ico
+---
+2014/02/18 15:53:16 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Taktype.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:53:16 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Taktype.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('AV4EMQ82XndQfFp...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=AV4EMQ82XndQfFp0XWEFeAF0
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:53:18 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Clientele.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:53:18 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Clientele.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('BU0AOA80ADgEP1t...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=BU0AOA80ADgEP1txW2cBPgw2V34LKA%253D%253D
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:53:20 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=ContactpPrson.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:53:20 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=ContactpPrson.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('UhoFPgQ4ACkEMFt...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=UhoFPgQ4ACkEMFtmCicHJFpVAHUNdwFvUTtUeFB5
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:53:42 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Taktype.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:53:42 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Taktype.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('AV4EMQ82XndQfFp...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=AV4EMQ82XndQfFp0XWEFeAF0
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:53:44 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Clientele.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:53:44 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Clientele.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('BU0AOA80ADgEP1t...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=BU0AOA80ADgEP1txW2cBPgw2V34LKA%253D%253D
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:53:46 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=ContactpPrson.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:53:46 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=ContactpPrson.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('UhoFPgQ4ACkEMFt...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=UhoFPgQ4ACkEMFtmCicHJFpVAHUNdwFvUTtUeFB5
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:54:09 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Invite.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:54:09 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Invite.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('URMCOFdzDjoAIV1...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=URMCOFdzDjoAIV1mWS5ULQ%253D%253D
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:54:12 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=ContactpPrson.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:54:12 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=ContactpPrson.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('UhoFPgQ4ACkEMFt...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=UhoFPgQ4ACkEMFtmCicHJFpVAHUNdwFvUTtUeFB5
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:54:14 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Clientele.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:54:14 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Clientele.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('BU0AOA80ADgEP1t...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=BU0AOA80ADgEP1txW2cBPgw2V34LKA%253D%253D
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:58:03 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Clientele.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:58:03 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Clientele.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('Vx8FPVdsATlVbgo...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=Vx8FPVdsATlVbgogAT0APwkzWXAKKQ%253D%253D
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:58:17 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Taktype.*.
+in /k/GitHub/CRM/protected/models/Permission.php (127)
+in /k/GitHub/CRM/themes/crm2013/views/permission/show.php (9)
+in /k/GitHub/CRM/protected/controllers/PermissionController.php (119)
+2014/02/18 15:58:17 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*' at line 1. The SQL statement executed was: SELECT count(`parent`) FROM tak_rbac_authitemchild WHERE `parent`=Taktype.*' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(433): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /k/GitHub/CRM/protected/models/Permission.php(127): CDbCommand->queryScalar()
+#2 /k/GitHub/CRM/themes/crm2013/views/permission/show.php(9): Permission->getChild()
+#3 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#4 /f/tGitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#5 /f/tGitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#6 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('show', Array, true)
+#7 /k/GitHub/CRM/protected/controllers/PermissionController.php(119): CController->render('show', Array)
+#8 [internal function]: PermissionController->actionShow('A1wGMwI7CCFXe1l...')
+#9 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(PermissionController), Array)
+#10 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(PermissionController), Object(ReflectionMethod), Array)
+#11 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#12 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#14 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#15 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#16 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#18 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('show')
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/show')
+#21 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /k/GitHub/CRM/index.php(15): CApplication->run()
+#23 {main}
+REQUEST_URI=/GitHub/CRM/permission/show/53763899612601129?child=A1wGMwI7CCFXe1l3WWVRLF8q
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:58:28 [error] [exception.CException] exception 'CException' with message 'PermissionController 无法找到请求的视图 "index".' in /f/tGitHub/Yii/framework/web/CController.php:878
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('index', Array, true)
+#1 /k/GitHub/CRM/protected/components/Controller.php(195): CController->render('index', Array)
+#2 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(49): Controller->actionIndex()
+#3 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#4 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#5 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#6 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#7 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#9 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('')
+#12 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission')
+#13 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /k/GitHub/CRM/index.php(15): CApplication->run()
+#15 {main}
+REQUEST_URI=/GitHub/CRM/permission/
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 15:59:08 [error] [exception.CException] exception 'CException' with message 'PermissionController 无法找到请求的视图 "index".' in /f/tGitHub/Yii/framework/web/CController.php:878
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('index', Array, true)
+#1 /k/GitHub/CRM/protected/components/Controller.php(195): CController->render('index', Array)
+#2 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(49): Controller->actionIndex()
+#3 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#4 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#5 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#6 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#7 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#9 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('')
+#12 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission')
+#13 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /k/GitHub/CRM/index.php(15): CApplication->run()
+#15 {main}
+REQUEST_URI=/GitHub/CRM/permission/
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/18 16:08:32 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (4)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(670): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1458): CActiveRecord->getCommandBuilder()
+#7 /k/GitHub/CRM/protected/components/UserIdentity.php(31): CActiveRecord->find('LOWER(user_name...', Array)
+#8 /k/GitHub/CRM/protected/models/LoginForm.php(68): UserIdentity->authenticate()
+#9 /f/tGitHub/Yii/framework/validators/CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#10 /f/tGitHub/Yii/framework/validators/CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#11 /f/tGitHub/Yii/framework/base/CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#12 /f/tGitHub/Yii/framework/web/widgets/CActiveForm.php(984): CModel->validate(NULL)
+#13 /k/GitHub/CRM/protected/modules/juren/controllers/DefaultController.php(109): CActiveForm::validate(Object(LoginForm))
+#14 [internal function]: DefaultController->actionLogin(false)
+#15 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(DefaultController), Array)
+#16 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(DefaultController), Object(ReflectionMethod), Array)
+#17 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#18 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#19 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#22 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('juren/default/l...')
+#23 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index.php(15): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/juren/default/login
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/juren/default/login
+---
+2014/02/18 16:08:38 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (113)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(670): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1458): CActiveRecord->getCommandBuilder()
+#7 /k/GitHub/CRM/protected/components/UserIdentity.php(31): CActiveRecord->find('LOWER(user_name...', Array)
+#8 /k/GitHub/CRM/protected/models/LoginForm.php(68): UserIdentity->authenticate()
+#9 /f/tGitHub/Yii/framework/validators/CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#10 /f/tGitHub/Yii/framework/validators/CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#11 /f/tGitHub/Yii/framework/base/CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#12 /k/GitHub/CRM/protected/modules/juren/controllers/DefaultController.php(125): CModel->validate()
+#13 [internal function]: DefaultController->actionLogin(false)
+#14 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(DefaultController), Array)
+#15 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(DefaultController), Object(ReflectionMethod), Array)
+#16 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#17 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#18 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#19 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#21 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('juren/default/l...')
+#22 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#23 /k/GitHub/CRM/index.php(15): CApplication->run()
+#24 {main}
+REQUEST_URI=/GitHub/CRM/juren/default/login
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/juren/default/login
+---
+2014/02/18 16:08:41 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (113)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(670): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1458): CActiveRecord->getCommandBuilder()
+#7 /k/GitHub/CRM/protected/components/UserIdentity.php(31): CActiveRecord->find('LOWER(user_name...', Array)
+#8 /k/GitHub/CRM/protected/models/LoginForm.php(68): UserIdentity->authenticate()
+#9 /f/tGitHub/Yii/framework/validators/CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#10 /f/tGitHub/Yii/framework/validators/CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#11 /f/tGitHub/Yii/framework/base/CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#12 /k/GitHub/CRM/protected/modules/juren/controllers/DefaultController.php(125): CModel->validate()
+#13 [internal function]: DefaultController->actionLogin(false)
+#14 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(DefaultController), Array)
+#15 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(DefaultController), Object(ReflectionMethod), Array)
+#16 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#17 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#18 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#19 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#21 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('juren/default/l...')
+#22 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#23 /k/GitHub/CRM/index.php(15): CApplication->run()
+#24 {main}
+REQUEST_URI=/GitHub/CRM/juren/default/login
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/juren/default/login
+---
+2014/02/18 16:10:44 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (113)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(2379): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(Permission))
+#7 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(79): CActiveRecord->getMetaData()
+#8 /k/GitHub/CRM/protected/models/Permission.php(112): CActiveRecord->__construct('search')
+#9 /k/GitHub/CRM/protected/controllers/PermissionController.php(16): Permission::getList()
+#10 /f/tGitHub/Yii/framework/web/CWebApplication.php(281): PermissionController->init()
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/admi...')
+#12 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /k/GitHub/CRM/index.php(15): CApplication->run()
+#14 {main}
+REQUEST_URI=/GitHub/CRM/permission/admin
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/assignment/view
+---
+2014/02/18 16:10:58 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (113)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(2379): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(Permission))
+#7 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(79): CActiveRecord->getMetaData()
+#8 /k/GitHub/CRM/protected/models/Permission.php(112): CActiveRecord->__construct('search')
+#9 /k/GitHub/CRM/protected/controllers/PermissionController.php(16): Permission::getList()
+#10 /f/tGitHub/Yii/framework/web/CWebApplication.php(281): PermissionController->init()
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/admi...')
+#12 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /k/GitHub/CRM/index.php(15): CApplication->run()
+#14 {main}
+REQUEST_URI=/GitHub/CRM/permission/admin
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/assignment/view
+---
+2014/02/18 16:11:01 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (113)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(2379): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(Permission))
+#7 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(79): CActiveRecord->getMetaData()
+#8 /k/GitHub/CRM/protected/models/Permission.php(112): CActiveRecord->__construct('search')
+#9 /k/GitHub/CRM/protected/controllers/PermissionController.php(16): Permission::getList()
+#10 /f/tGitHub/Yii/framework/web/CWebApplication.php(281): PermissionController->init()
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/admi...')
+#12 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /k/GitHub/CRM/index.php(15): CApplication->run()
+#14 {main}
+REQUEST_URI=/GitHub/CRM/permission/admin
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/assignment/view
+---
+2014/02/18 16:11:04 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (113)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(2379): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(Permission))
+#7 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(79): CActiveRecord->getMetaData()
+#8 /k/GitHub/CRM/protected/models/Permission.php(112): CActiveRecord->__construct('search')
+#9 /k/GitHub/CRM/protected/controllers/PermissionController.php(16): Permission::getList()
+#10 /f/tGitHub/Yii/framework/web/CWebApplication.php(281): PermissionController->init()
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/admi...')
+#12 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /k/GitHub/CRM/index.php(15): CApplication->run()
+#14 {main}
+REQUEST_URI=/GitHub/CRM/permission/admin
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/assignment/view
+---
+2014/02/18 16:11:22 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (113)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(2379): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(Permission))
+#7 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(79): CActiveRecord->getMetaData()
+#8 /k/GitHub/CRM/protected/models/Permission.php(112): CActiveRecord->__construct('search')
+#9 /k/GitHub/CRM/protected/controllers/PermissionController.php(16): Permission::getList()
+#10 /f/tGitHub/Yii/framework/web/CWebApplication.php(281): PermissionController->init()
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/admi...')
+#12 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /k/GitHub/CRM/index.php(15): CApplication->run()
+#14 {main}
+REQUEST_URI=/GitHub/CRM/permission/admin
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/assignment/view
+---
+2014/02/18 16:11:25 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '192.168.1.222' (113)' in /f/tGitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(2379): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(Permission))
+#7 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(79): CActiveRecord->getMetaData()
+#8 /k/GitHub/CRM/protected/models/Permission.php(112): CActiveRecord->__construct('search')
+#9 /k/GitHub/CRM/protected/controllers/PermissionController.php(16): Permission::getList()
+#10 /f/tGitHub/Yii/framework/web/CWebApplication.php(281): PermissionController->init()
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/admi...')
+#12 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /k/GitHub/CRM/index.php(15): CApplication->run()
+#14 {main}
+REQUEST_URI=/GitHub/CRM/permission/admin
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/assignment/view
+---
+2014/02/18 16:34:26 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '53763899612601129-52918235314868043' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO tak_rbac_authassignment (itemname,fromid,userid,data) VALUES(53763899612601129,1,52918235314868043,'N;').
+in /k/GitHub/CRM/protected/models/Manage.php (285)
+in /k/GitHub/CRM/protected/controllers/ManageController.php (65)
+in /k/GitHub/CRM/protected/components/Controller.php (95)
+2014/02/18 16:34:26 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '53763899612601129-52918235314868043' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO tak_rbac_authassignment (itemname,fromid,userid,data) VALUES(53763899612601129,1,52918235314868043,'N;')' in /f/tGitHub/Yii/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /k/GitHub/CRM/protected/models/Manage.php(285): CDbCommand->execute()
+#1 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1129): Manage->afterSave()
+#2 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(809): CActiveRecord->update(NULL)
+#3 /k/GitHub/CRM/protected/controllers/ManageController.php(65): CActiveRecord->save()
+#4 [internal function]: ManageController->actionUpdate('556792284749430...')
+#5 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#6 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#7 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#9 /k/GitHub/CRM/protected/components/Controller.php(95): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): Controller->filterUpdateOwn(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('update')
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/update')
+#16 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/manage/update/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/update/55679228474943058
+---
+2014/02/18 16:35:03 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: DELETE FROM tak_rbac_authassignment WHERE fromid=1 AND  userid=52918235314868043 AND itemname=.
+in /k/GitHub/CRM/protected/models/Manage.php (278)
+in /k/GitHub/CRM/protected/controllers/ManageController.php (65)
+in /k/GitHub/CRM/protected/components/Controller.php (95)
+2014/02/18 16:35:03 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: DELETE FROM tak_rbac_authassignment WHERE fromid=1 AND  userid=52918235314868043 AND itemname=' in /f/tGitHub/Yii/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /k/GitHub/CRM/protected/models/Manage.php(278): CDbCommand->execute()
+#1 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1129): Manage->afterSave()
+#2 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(809): CActiveRecord->update(NULL)
+#3 /k/GitHub/CRM/protected/controllers/ManageController.php(65): CActiveRecord->save()
+#4 [internal function]: ManageController->actionUpdate('556792284749430...')
+#5 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#6 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#7 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#9 /k/GitHub/CRM/protected/components/Controller.php(95): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): Controller->filterUpdateOwn(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('update')
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/update')
+#16 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/manage/update/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/update/55679228474943058
+---
+2014/02/18 16:35:07 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: DELETE FROM tak_rbac_authassignment WHERE fromid=1 AND  userid=52918235314868043 AND itemname=.
+in /k/GitHub/CRM/protected/models/Manage.php (278)
+in /k/GitHub/CRM/protected/controllers/ManageController.php (65)
+in /k/GitHub/CRM/protected/components/Controller.php (95)
+2014/02/18 16:35:07 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: DELETE FROM tak_rbac_authassignment WHERE fromid=1 AND  userid=52918235314868043 AND itemname=' in /f/tGitHub/Yii/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /k/GitHub/CRM/protected/models/Manage.php(278): CDbCommand->execute()
+#1 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1129): Manage->afterSave()
+#2 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(809): CActiveRecord->update(NULL)
+#3 /k/GitHub/CRM/protected/controllers/ManageController.php(65): CActiveRecord->save()
+#4 [internal function]: ManageController->actionUpdate('556792284749430...')
+#5 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#6 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#7 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#9 /k/GitHub/CRM/protected/components/Controller.php(95): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): Controller->filterUpdateOwn(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('update')
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/update')
+#16 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/manage/update/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/update/55679228474943058
+---
+2014/02/18 16:36:57 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: DELETE FROM tak_rbac_authassignment WHERE fromid=1 AND  userid=52918235314868043 AND itemname=.
+in /k/GitHub/CRM/protected/models/Manage.php (279)
+in /k/GitHub/CRM/protected/controllers/ManageController.php (65)
+in /k/GitHub/CRM/protected/components/Controller.php (95)
+2014/02/18 16:36:57 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: DELETE FROM tak_rbac_authassignment WHERE fromid=1 AND  userid=52918235314868043 AND itemname=' in /f/tGitHub/Yii/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /k/GitHub/CRM/protected/models/Manage.php(279): CDbCommand->execute()
+#1 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1129): Manage->afterSave()
+#2 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(809): CActiveRecord->update(NULL)
+#3 /k/GitHub/CRM/protected/controllers/ManageController.php(65): CActiveRecord->save()
+#4 [internal function]: ManageController->actionUpdate('556792284749430...')
+#5 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#6 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#7 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#9 /k/GitHub/CRM/protected/components/Controller.php(95): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): Controller->filterUpdateOwn(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('update')
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/update')
+#16 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/manage/update/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/update/55679228474943058
+---
+2014/02/18 17:11:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "subordinate"。' in /f/tGitHub/Yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('subordinate')
+#1 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /k/GitHub/CRM/index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/GitHub/CRM/subordinate
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/55679228474943058
+---
+2014/02/18 17:11:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "favicon.ico"。' in /f/tGitHub/Yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /k/GitHub/CRM/index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/GitHub/CRM/favicon.ico
+---
+2014/02/18 17:11:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "subordinate"。' in /f/tGitHub/Yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('subordinate')
+#1 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /k/GitHub/CRM/index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/GitHub/CRM/subordinate
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/55679228474943058
+---
+2014/02/18 17:18:49 [error] [php] Missing argument 1 for Ak::getState(), called in /k/GitHub/CRM/protected/components/Tak.php on line 257 and defined (/k/GitHub/CRM/protected/components/Ak.php:64)
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require()
+#1 /f/tGitHub/Yii/framework/web/CBaseController.php(95): ClienteleController->renderInternal()
+#2 /f/tGitHub/Yii/framework/web/widgets/CContentDecorator.php(76): ClienteleController->renderFile()
+#3 /f/tGitHub/Yii/framework/web/widgets/CContentDecorator.php(54): CContentDecorator->decorate()
+#4 /f/tGitHub/Yii/framework/web/widgets/COutputProcessor.php(44): CContentDecorator->processOutput()
+#5 /f/tGitHub/Yii/framework/web/CBaseController.php(214): CContentDecorator->run()
+#6 /f/tGitHub/Yii/framework/web/CBaseController.php(308): ClienteleController->endWidget()
+#7 /k/GitHub/CRM/themes/crm2013/views/layouts/column2.php(7): ClienteleController->endContent()
+#8 /f/tGitHub/Yii/framework/web/CBaseController.php(126): require()
+#9 /f/tGitHub/Yii/framework/web/CBaseController.php(95): ClienteleController->renderInternal()
+#10 /f/tGitHub/Yii/framework/web/CController.php(784): ClienteleController->renderFile()
+#11 /k/GitHub/CRM/protected/controllers/ClienteleController.php(79): ClienteleController->render()
+#12 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(49): ClienteleController->actionSeas()
+#13 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams()
+#14 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): ClienteleController->runAction()
+#15 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#16 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): RightsFilter->filter()
+#17 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): ClienteleController->filterRights()
+#18 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#19 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /f/tGitHub/Yii/framework/web/CController.php(265): ClienteleController->runActionWithFilters()
+#21 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): ClienteleController->run()
+#22 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#23 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index.php(15): CWebApplication->run()
+REQUEST_URI=/GitHub/CRM/clientele/seas?Clientele[industry]=&Clientele[manageid]=52316273334884042&Clientele[clientele_name]=&Clientele[add_time]=&Clientele_sort=clientele_name&ajax=list-grid&q=clientele/seas
+in /k/GitHub/CRM/protected/components/Ak.php (64)
+in /k/GitHub/CRM/protected/components/Tak.php (257)
+in /k/GitHub/CRM/themes/crm2013/views/layouts/main.php (180)
+2014/02/18 17:18:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /f/tGitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('clientele/favic...')
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/clientele/favicon.ico
+---
+2014/02/18 17:20:31 [error] [exception.CException] exception 'CException' with message 'SubordinateController 无法找到请求的视图 "index".' in /f/tGitHub/Yii/framework/web/CController.php:878
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(782): CController->renderPartial('index', Array, true)
+#1 /k/GitHub/CRM/protected/controllers/SubordinateController.php(35): CController->render('index', Array)
+#2 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(49): SubordinateController->actionIndex()
+#3 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#4 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#5 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#6 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#7 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#9 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('')
+#12 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('subordinate')
+#13 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /k/GitHub/CRM/index.php(15): CApplication->run()
+#15 {main}
+REQUEST_URI=/GitHub/CRM/subordinate
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/clientele/seas?Clientele[industry]=&Clientele[manageid]=52316273334884042&Clientele[clientele_name]=&Clientele[add_time]=&Clientele_sort=clientele_name&ajax=list-grid&q=clientele/seas
+---
+2014/02/18 17:37:23 [error] [exception.CDbException] exception 'CDbException' with message 'Table "tak_manage" 没有名为 "0" 的栏位.' in /f/tGitHub/Yii/framework/db/schema/CDbCommandBuilder.php:694
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1538): CDbCommandBuilder->createColumnCriteria(Object(CMysqlTableSchema), Array, '', Array, '`t`.')
+#1 /k/GitHub/CRM/protected/controllers/SubordinateController.php(13): CActiveRecord->findAllByAttributes(Array)
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(281): SubordinateController->init()
+#3 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('subordinate')
+#4 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /k/GitHub/CRM/index.php(15): CApplication->run()
+#6 {main}
+REQUEST_URI=/GitHub/CRM/subordinate
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/subordinate/index
+---
+2014/02/18 17:38:16 [error] [exception.CException] exception 'CException' with message 'SubordinateController and its behaviors do not have a method or closure named "getState".' in /f/tGitHub/Yii/framework/base/CComponent.php:266
+Stack trace:
+#0 /k/GitHub/CRM/protected/controllers/SubordinateController.php(12): CComponent->__call('getState', Array)
+#1 /k/GitHub/CRM/protected/controllers/SubordinateController.php(12): SubordinateController->getState('isbranch', '')
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(281): SubordinateController->init()
+#3 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('subordinate')
+#4 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /k/GitHub/CRM/index.php(15): CApplication->run()
+#6 {main}
+REQUEST_URI=/GitHub/CRM/subordinate
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/subordinate/index
+---
+2014/02/18 17:59:44 [error] [system.db.CDbCommand] CDbCommand::fetch() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND  status=1  AND fromid=1) AND (`t`.`itemid`='50759140958570172') ORDER BY las' at line 1. The SQL statement executed was: SELECT * FROM `tak_clientele` `t` WHERE ( AND  status=1  AND fromid=1) AND (`t`.`itemid`='50759140958570172') ORDER BY last_time DESC  LIMIT 1.
+in /k/GitHub/CRM/protected/controllers/SubordinateController.php (21)
+in /k/GitHub/CRM/protected/controllers/SubordinateController.php (45)
+in /k/GitHub/CRM/protected/modules/rights/components/RController.php (36)
+2014/02/18 17:59:44 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand 无法执行 SQL 语句: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND  status=1  AND fromid=1) AND (`t`.`itemid`='50759140958570172') ORDER BY las' at line 1. The SQL statement executed was: SELECT * FROM `tak_clientele` `t` WHERE ( AND  status=1  AND fromid=1) AND (`t`.`itemid`='50759140958570172') ORDER BY last_time DESC  LIMIT 1' in /f/tGitHub/Yii/framework/db/CDbCommand.php:551
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbCommand.php(415): CDbCommand->queryInternal('fetch', Array, Array)
+#1 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1354): CDbCommand->queryRow()
+#2 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1489): CActiveRecord->query(Object(CDbCriteria))
+#3 /k/GitHub/CRM/protected/controllers/SubordinateController.php(21): CActiveRecord->findByPk('507591409585701...')
+#4 /k/GitHub/CRM/protected/controllers/SubordinateController.php(45): SubordinateController->loadModel('507591409585701...')
+#5 [internal function]: SubordinateController->actionView('507591409585701...')
+#6 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SubordinateController), Array)
+#7 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SubordinateController), Object(ReflectionMethod), Array)
+#8 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#9 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#10 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#11 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#13 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#14 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#15 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('view')
+#17 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('subordinate/vie...')
+#18 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#19 /k/GitHub/CRM/index.php(15): CApplication->run()
+#20 {main}
+REQUEST_URI=/GitHub/CRM/subordinate/50759140958570172
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/subordinate/index
+---
+2014/02/19 07:33:18 [error] [exception.CHttpException.202] exception 'CHttpException' with message '会员信息不存在！' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '???????????????...')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(144): Controller->errorE('???????????????...')
+#2 /k/GitHub/CRM/protected/controllers/SiteController.php(207): SiteController->inits(false)
+#3 [internal function]: SiteController->actionLogin(false)
+#4 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#5 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#6 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#7 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#9 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#10 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/login')
+#16 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/site/login
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/authItem/create/type/1
+---
+2014/02/19 07:33:19 [error] [exception.CHttpException.202] exception 'CHttpException' with message '会员信息不存在！' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '???????????????...')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(144): Controller->errorE('???????????????...')
+#2 /k/GitHub/CRM/protected/controllers/SiteController.php(207): SiteController->inits(false)
+#3 [internal function]: SiteController->actionLogin(false)
+#4 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#5 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#6 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#7 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#9 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#10 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/login')
+#16 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/site/login
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/assignment/view
+---
+2014/02/19 07:33:20 [error] [exception.CHttpException.202] exception 'CHttpException' with message '会员信息不存在！' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '???????????????...')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(144): Controller->errorE('???????????????...')
+#2 /k/GitHub/CRM/protected/controllers/SiteController.php(207): SiteController->inits(false)
+#3 [internal function]: SiteController->actionLogin(false)
+#4 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#5 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#6 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#7 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#9 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#10 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#11 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#15 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/login')
+#16 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/site/login
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/permission/53763899612601129
+---
+2014/02/19 07:33:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /f/tGitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---
+2014/02/19 07:33:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /f/tGitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---
+2014/02/19 07:33:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /f/tGitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---
+2014/02/19 07:33:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /f/tGitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---
+2014/02/19 07:33:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /f/tGitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---

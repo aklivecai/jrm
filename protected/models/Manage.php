@@ -29,6 +29,8 @@ class Manage extends ModuleRecord
 
 	private $oldbranch = false;
 
+	public static $table = '{{manage}}';
+
 	public function primaryKey()
 	{
 		return 'manageid';
@@ -38,7 +40,7 @@ class Manage extends ModuleRecord
 	 */
 	public function tableName()
 	{
-		return '{{manage}}';
+		return self::$table;
 	}
 
 	/*记录修改过部门*/
@@ -114,8 +116,8 @@ class Manage extends ModuleRecord
 			$arr = array('order'=>'add_time DESC');
 
 			$condition = array();
-    	if($this->hasAttribute('fromid')){
-    		$fromid = Tak::getFormid();
+		    	if($this->hasAttribute('fromid')){
+		    		$fromid = Tak::getFormid();
 				if($fromid>0){
 					if (Tak::getAdmin()) {
 						$condition[] = 'fromid>0';	
@@ -124,9 +126,9 @@ class Manage extends ModuleRecord
 						// $condition[] = "user_name<>'admin'";	
 					}		
 				}
-    	}		
-	$arr['condition'] = join(" AND ",$condition);		
-    	return $arr;
+		    	}		
+			$arr['condition'] = join(" AND ",$condition);		
+		    	return $arr;
     }
 
 	/**
@@ -264,24 +266,42 @@ class Manage extends ModuleRecord
 		$arr = array(
 			':itemname' => $this->branch,
 			':fromid' => $this->fromid,
-			':userid' => Tak::getManageid(),
+			':userid' => $this->manageid,
 			':tabl' => '{{rbac_authassignment}}',
 		);
 
-		if ( $this->isNewRecord || $this->oldbranch){
-			$sql = "INSERT INTO :tabl (itemname,fromid,userid,data) VALUES(:itemname,:fromid,:userid,'N;')";
-			$db = Tak::getDb('db');
-		
-			$sql = strtr($sql,$arr);
-			// Tak::KD($sql);
-			$db->createCommand($sql)->execute();
-			if ($this->oldbranch) {
+		if ( $this->isNewRecord || $this->oldbranch>=0){
+			$comm = Tak::getDb('db')->createCommand();
+
+			// Tak::KD($this->oldbranch);
+			// 删除就记录
+			if ($this->oldbranch>=0&&$this->oldbranch!='') {
 				$arr[':oldbranch'] = $this->oldbranch;
-				$sql = "DELETE FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=:oldbranch";
+				$sql = "DELETE FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':oldbranch'";
 				$sql = strtr($sql,$arr);
-				$db->createCommand($sql)->execute();
+				$comm->setText($sql)->execute();
+				// $db->createCommand($sql)->execute();
 				// Tak::KD($sql,1);
 			}
+
+			// 判断是否已经存在 queryScalar
+			$sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";
+
+			$sql = strtr($sql,$arr);
+			$rows = $comm->setText($sql)->queryScalar();
+
+			// Tak::KD($rows);
+
+			// Tak::KD($rows,1);
+			if ($rows==0) {
+				$sql = "INSERT INTO :tabl (itemname,fromid,userid,data) VALUES(:itemname,:fromid,:userid,'N;')";
+				$sql = strtr($sql,$arr);
+				
+				// $db->createCommand($sql)->execute();
+				$comm->setText($sql)->execute();				
+				// Tak::KD($sql,1);
+			}
+			// exit;
 		}
 	}
 	

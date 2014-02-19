@@ -250,6 +250,12 @@ class Tak extends Ak{
               'label'=>'<span class="text">测试</span>',
               'visible'=>self::getAdmin(),
             ),
+            array(
+              'icon' =>'isw-user',
+              'url' => array('/subordinate/'),
+              'label'=>'<span class="text">'.Tk::g(array('Subordinate','Admin')).'</span>',
+              'visible'=> self::getState('isbranch',false)||self::getAdmin(),
+            ),
             'manage' => array(
               'icon' =>'isw-users',
               'label'=>'<span class="text">'.Tk::g(array('Manage','Setting')).'</span>',
@@ -267,7 +273,6 @@ class Tak extends Ak{
                        'icon' =>'user',
                       'label'=>'<span class="text">'.Tk::g(array('Manage','Permissions')).'</span>', 
                       'url'=>array('/permission/admin'), 
-                      
                     ), 
 
                 array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Create','Manage')).'</span>',  'url'=>array('/manage/create'),),               

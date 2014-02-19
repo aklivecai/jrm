@@ -132,7 +132,8 @@ return array (
   'Product Type'=>'货物分类',
   'Seas'=>'公海',
   'Success' =>'成功',
-  'Total' => ''
+  'Total' => '',
+  'Subordinate' => '下属' ,
  );
 
 

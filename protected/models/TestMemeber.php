@@ -46,6 +46,8 @@ class TestMemeber extends ModuleRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('itemid, manageid, company, email, active_time, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note', 'safe', 'on'=>'search'),
+			
+			array('active_time','checkTime'),
 		);
 	}
 

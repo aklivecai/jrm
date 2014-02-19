@@ -159,6 +159,9 @@ class PermissionController extends Controller
 		$type = Rights::getValidChildTypes($model->type);
 		$exclude = array(Rights::module()->superuserName);
 		$childSelectOptions = Rights::getParentAuthItemSelectOptions($model, $type, $exclude);
+
+
+
 		// 取消部门选择
 		if(isset($childSelectOptions['部门'])===true){
 			unset($childSelectOptions['部门']);				
@@ -169,11 +172,21 @@ class PermissionController extends Controller
 			}else{
 				$t = array();
 				foreach ($value as $k1 => $v1) {
-					$t[$crypt->encrypt($k1)]	 = $v1;
+					if ($k1=='Site.*'
+						||$k1=='Setting.*'
+						||$k1=='PostUpdateOwn'
+						||$k1=='Site.Logout'
+					) {
+						unset($childSelectOptions[$key][$k1]);
+
+					}else{
+						$t[$crypt->encrypt($k1)]	 = $v1;
+					}					
 				}
 				$childSelectOptions[$key] = $t;
 			}
 		}		
+	
 
 		$parentDataProvider = new RAuthItemParentDataProvider($model);
 		$childDataProvider = new RAuthItemChildDataProvider($model);
