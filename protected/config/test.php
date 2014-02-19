@@ -12,6 +12,9 @@ return CMap::mergeArray(
 				'connectionString'=>'DSN for test database',
 			),
 			*/
+			'db'=>array(
+				'connectionString'=>'sqlite:'.dirname(__FILE__).'/../../data/jrm-test.db',
+			),		
 		),
 	)
 );
