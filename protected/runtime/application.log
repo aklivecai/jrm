@@ -2291,3 +2291,476 @@ Stack trace:
 REQUEST_URI=/GitHub/CRM/juren/default/login
 HTTP_REFERER=http://127.0.0.1/GitHub/CRM/juren/default/login
 ---
+2014/02/19 17:28:12 [error] [exception.CHttpException.202] exception 'CHttpException' with message '非法操作' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '????????????')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(66): Controller->errorE()
+#2 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(49): SiteController->actionIndex()
+#3 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#4 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#5 /f/tGitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#6 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#7 /f/tGitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#8 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#9 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#10 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('')
+#12 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#13 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /k/GitHub/CRM/index-test.php(17): CApplication->run()
+#15 {main}
+REQUEST_URI=/GitHub/CRM/index-test.php/
+---
+2014/02/19 17:28:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "favicon.ico"。' in /f/tGitHub/Yii/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /k/GitHub/CRM/index-test.php(17): CApplication->run()
+#3 {main}
+REQUEST_URI=/GitHub/CRM/index-test.php/favicon.ico
+---
+2014/02/19 17:28:59 [error] [exception.CDbException] SQLSTATE[HY000] [14] unable to open database file
+2014/02/19 17:28:59 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection.' in /f/tGitHub/Yii/framework/db/CDbConnection.php:388
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(670): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1458): CActiveRecord->getCommandBuilder()
+#7 /k/GitHub/CRM/protected/components/UserIdentity.php(31): CActiveRecord->find('LOWER(user_name...', Array)
+#8 /k/GitHub/CRM/protected/models/LoginForm.php(68): UserIdentity->authenticate()
+#9 /f/tGitHub/Yii/framework/validators/CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#10 /f/tGitHub/Yii/framework/validators/CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#11 /f/tGitHub/Yii/framework/base/CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#12 /f/tGitHub/Yii/framework/web/widgets/CActiveForm.php(984): CModel->validate(NULL)
+#13 /k/GitHub/CRM/protected/modules/juren/controllers/DefaultController.php(109): CActiveForm::validate(Object(LoginForm))
+#14 [internal function]: DefaultController->actionLogin(false)
+#15 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(DefaultController), Array)
+#16 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(DefaultController), Object(ReflectionMethod), Array)
+#17 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#18 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#19 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#22 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('juren/default/l...')
+#23 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index-test.php(17): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/index-test.php/juren/default/login
+HTTP_REFERER=http://localhost/GitHub/CRM/index-test.php/juren/default/login
+---
+2014/02/19 17:28:59 [error] [exception.CDbException] SQLSTATE[HY000] [14] unable to open database file
+2014/02/19 17:28:59 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection.' in /f/tGitHub/Yii/framework/db/CDbConnection.php:388
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(670): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1458): CActiveRecord->getCommandBuilder()
+#7 /k/GitHub/CRM/protected/components/UserIdentity.php(31): CActiveRecord->find('LOWER(user_name...', Array)
+#8 /k/GitHub/CRM/protected/models/LoginForm.php(68): UserIdentity->authenticate()
+#9 /f/tGitHub/Yii/framework/validators/CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#10 /f/tGitHub/Yii/framework/validators/CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#11 /f/tGitHub/Yii/framework/base/CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#12 /k/GitHub/CRM/protected/modules/juren/controllers/DefaultController.php(125): CModel->validate()
+#13 [internal function]: DefaultController->actionLogin(false)
+#14 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(DefaultController), Array)
+#15 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(DefaultController), Object(ReflectionMethod), Array)
+#16 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#17 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#18 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#19 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#21 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('juren/default/l...')
+#22 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#23 /k/GitHub/CRM/index-test.php(17): CApplication->run()
+#24 {main}
+REQUEST_URI=/GitHub/CRM/index-test.php/juren/default/login
+HTTP_REFERER=http://localhost/GitHub/CRM/index-test.php/juren/default/login
+---
+2014/02/19 17:29:02 [error] [exception.CDbException] SQLSTATE[HY000] [14] unable to open database file
+2014/02/19 17:29:02 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection.' in /f/tGitHub/Yii/framework/db/CDbConnection.php:388
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(670): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1458): CActiveRecord->getCommandBuilder()
+#7 /k/GitHub/CRM/protected/components/UserIdentity.php(31): CActiveRecord->find('LOWER(user_name...', Array)
+#8 /k/GitHub/CRM/protected/models/LoginForm.php(68): UserIdentity->authenticate()
+#9 /f/tGitHub/Yii/framework/validators/CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#10 /f/tGitHub/Yii/framework/validators/CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#11 /f/tGitHub/Yii/framework/base/CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#12 /f/tGitHub/Yii/framework/web/widgets/CActiveForm.php(984): CModel->validate(NULL)
+#13 /k/GitHub/CRM/protected/modules/juren/controllers/DefaultController.php(109): CActiveForm::validate(Object(LoginForm))
+#14 [internal function]: DefaultController->actionLogin(false)
+#15 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(DefaultController), Array)
+#16 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(DefaultController), Object(ReflectionMethod), Array)
+#17 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#18 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#19 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#22 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('juren/default/l...')
+#23 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index-test.php(17): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/index-test.php/juren/default/login
+HTTP_REFERER=http://localhost/GitHub/CRM/index-test.php/juren/default/login
+---
+2014/02/19 17:29:03 [error] [exception.CDbException] SQLSTATE[HY000] [14] unable to open database file
+2014/02/19 17:29:03 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection.' in /f/tGitHub/Yii/framework/db/CDbConnection.php:388
+Stack trace:
+#0 /f/tGitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /f/tGitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /f/tGitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(670): CActiveRecord->getDbConnection()
+#6 /f/tGitHub/Yii/framework/db/ar/CActiveRecord.php(1458): CActiveRecord->getCommandBuilder()
+#7 /k/GitHub/CRM/protected/components/UserIdentity.php(31): CActiveRecord->find('LOWER(user_name...', Array)
+#8 /k/GitHub/CRM/protected/models/LoginForm.php(68): UserIdentity->authenticate()
+#9 /f/tGitHub/Yii/framework/validators/CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#10 /f/tGitHub/Yii/framework/validators/CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#11 /f/tGitHub/Yii/framework/base/CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#12 /f/tGitHub/Yii/framework/web/widgets/CActiveForm.php(984): CModel->validate(NULL)
+#13 /k/GitHub/CRM/protected/modules/juren/controllers/DefaultController.php(109): CActiveForm::validate(Object(LoginForm))
+#14 [internal function]: DefaultController->actionLogin(false)
+#15 /f/tGitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(DefaultController), Array)
+#16 /f/tGitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(DefaultController), Object(ReflectionMethod), Array)
+#17 /f/tGitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#18 /f/tGitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#19 /f/tGitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /f/tGitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /f/tGitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#22 /f/tGitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('juren/default/l...')
+#23 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index-test.php(17): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/index-test.php/juren/default/login
+HTTP_REFERER=http://localhost/GitHub/CRM/index-test.php/juren/default/login
+---
+2014/02/19 17:30:52 [error] [exception.CException] exception 'CException' with message 'CHttpRequest 不能确认请求的 URI.' in /f/tGitHub/Yii/framework/web/CHttpRequest.php:519
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CHttpRequest.php(431): CHttpRequest->getRequestUri()
+#1 /f/tGitHub/Yii/framework/web/CUrlManager.php(364): CHttpRequest->getPathInfo()
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(140): CUrlManager->parseUrl(Object(CHttpRequest))
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index-test.php(17): CApplication->run()
+#5 {main}
+---
+2014/02/19 17:32:15 [error] [exception.CException] exception 'CException' with message 'CHttpRequest 不能确认请求的 URI.' in /f/tGitHub/Yii/framework/web/CHttpRequest.php:519
+Stack trace:
+#0 /f/tGitHub/Yii/framework/web/CHttpRequest.php(431): CHttpRequest->getRequestUri()
+#1 /f/tGitHub/Yii/framework/web/CUrlManager.php(364): CHttpRequest->getPathInfo()
+#2 /f/tGitHub/Yii/framework/web/CWebApplication.php(140): CUrlManager->parseUrl(Object(CHttpRequest))
+#3 /f/tGitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index-test.php(17): CApplication->run()
+#5 {main}
+---
+2014/02/20 08:18:19 [error] [exception.CHttpException.202] exception 'CHttpException' with message '会员信息不存在！' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '???????????????...')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(144): Controller->errorE('???????????????...')
+#2 /k/GitHub/CRM/protected/controllers/SiteController.php(185): SiteController->inits('q')
+#3 [internal function]: SiteController->actionInit('q')
+#4 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#5 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#6 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#7 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#9 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#10 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#11 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('init')
+#15 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/init')
+#16 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/site/init?k=q
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/juren/default/index
+---
+2014/02/20 08:18:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /k/GitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /k/GitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---
+2014/02/20 08:18:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /k/GitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /k/GitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---
+2014/02/20 08:21:48 [error] [exception.CHttpException.202] exception 'CHttpException' with message '会员信息不存在！' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '???????????????...')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(144): Controller->errorE('???????????????...')
+#2 /k/GitHub/CRM/protected/controllers/SiteController.php(185): SiteController->inits('q')
+#3 [internal function]: SiteController->actionInit('q')
+#4 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#5 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#6 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#7 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#9 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#10 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#11 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('init')
+#15 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/init')
+#16 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/site/init?k=q
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/juren/default/index
+---
+2014/02/20 08:28:04 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2013] Lost connection to MySQL server at 'reading authorization packet', system error: 0' in /k/GitHub/Yii/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /k/GitHub/Yii/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /k/GitHub/Yii/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /k/GitHub/Yii/framework/base/CModule.php(387): CDbConnection->init()
+#3 /k/GitHub/Yii/framework/base/CApplication.php(450): CModule->getComponent('db')
+#4 /k/GitHub/Yii/framework/db/ar/CActiveRecord.php(637): CApplication->getDb()
+#5 /k/GitHub/Yii/framework/db/ar/CActiveRecord.php(2379): CActiveRecord->getDbConnection()
+#6 /k/GitHub/Yii/framework/db/ar/CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(Permission))
+#7 /k/GitHub/Yii/framework/db/ar/CActiveRecord.php(79): CActiveRecord->getMetaData()
+#8 /k/GitHub/CRM/protected/models/Permission.php(112): CActiveRecord->__construct('search')
+#9 /k/GitHub/CRM/protected/controllers/PermissionController.php(16): Permission::getList()
+#10 /k/GitHub/Yii/framework/web/CWebApplication.php(281): PermissionController->init()
+#11 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('permission/admi...')
+#12 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#13 /k/GitHub/CRM/index.php(15): CApplication->run()
+#14 {main}
+REQUEST_URI=/GitHub/CRM/permission/admin
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/rights/assignment/user/id/55679228474943058
+---
+2014/02/20 08:40:19 [error] [exception.CException] exception 'CException' with message '"dataProvider" 属性不能为空.' in /k/GitHub/Yii/framework/zii/widgets/CBaseListView.php:113
+Stack trace:
+#0 /k/GitHub/Yii/framework/zii/widgets/grid/CGridView.php(339): CBaseListView->init()
+#1 /k/GitHub/CRM/protected/extensions/bootstrap/widgets/TbGridView.php(49): CGridView->init()
+#2 /k/GitHub/Yii/framework/web/CBaseController.php(147): TbGridView->init()
+#3 /k/GitHub/Yii/framework/web/CBaseController.php(180): CBaseController->createWidget('bootstrap.widge...', Array)
+#4 /k/GitHub/CRM/themes/crm2013/views/manage/view.php(105): CBaseController->widget('bootstrap.widge...', Array)
+#5 /k/GitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#6 /k/GitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#7 /k/GitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#8 /k/GitHub/Yii/framework/web/CController.php(782): CController->renderPartial('view', Array, true)
+#9 /k/GitHub/CRM/protected/controllers/ManageController.php(34): CController->render('view', Array)
+#10 [internal function]: ManageController->actionView('556792284749430...')
+#11 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#12 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#13 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#14 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#15 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#16 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#17 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#18 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#19 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('view')
+#22 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/view')
+#23 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index.php(15): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/manage/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/admin
+---
+2014/02/20 08:40:38 [error] [exception.CException] exception 'CException' with message '"dataProvider" 属性不能为空.' in /k/GitHub/Yii/framework/zii/widgets/CBaseListView.php:113
+Stack trace:
+#0 /k/GitHub/Yii/framework/zii/widgets/grid/CGridView.php(339): CBaseListView->init()
+#1 /k/GitHub/CRM/protected/extensions/bootstrap/widgets/TbGridView.php(49): CGridView->init()
+#2 /k/GitHub/Yii/framework/web/CBaseController.php(147): TbGridView->init()
+#3 /k/GitHub/Yii/framework/web/CBaseController.php(180): CBaseController->createWidget('bootstrap.widge...', Array)
+#4 /k/GitHub/CRM/themes/crm2013/views/manage/view.php(105): CBaseController->widget('bootstrap.widge...', Array)
+#5 /k/GitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#6 /k/GitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#7 /k/GitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#8 /k/GitHub/Yii/framework/web/CController.php(782): CController->renderPartial('view', Array, true)
+#9 /k/GitHub/CRM/protected/controllers/ManageController.php(34): CController->render('view', Array)
+#10 [internal function]: ManageController->actionView('556792284749430...')
+#11 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#12 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#13 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#14 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#15 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#16 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#17 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#18 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#19 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('view')
+#22 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/view')
+#23 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index.php(15): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/manage/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/admin
+---
+2014/02/20 08:40:39 [error] [exception.CException] exception 'CException' with message '"dataProvider" 属性不能为空.' in /k/GitHub/Yii/framework/zii/widgets/CBaseListView.php:113
+Stack trace:
+#0 /k/GitHub/Yii/framework/zii/widgets/grid/CGridView.php(339): CBaseListView->init()
+#1 /k/GitHub/CRM/protected/extensions/bootstrap/widgets/TbGridView.php(49): CGridView->init()
+#2 /k/GitHub/Yii/framework/web/CBaseController.php(147): TbGridView->init()
+#3 /k/GitHub/Yii/framework/web/CBaseController.php(180): CBaseController->createWidget('bootstrap.widge...', Array)
+#4 /k/GitHub/CRM/themes/crm2013/views/manage/view.php(105): CBaseController->widget('bootstrap.widge...', Array)
+#5 /k/GitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#6 /k/GitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#7 /k/GitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#8 /k/GitHub/Yii/framework/web/CController.php(782): CController->renderPartial('view', Array, true)
+#9 /k/GitHub/CRM/protected/controllers/ManageController.php(34): CController->render('view', Array)
+#10 [internal function]: ManageController->actionView('556792284749430...')
+#11 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#12 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#13 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#14 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#15 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#16 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#17 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#18 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#19 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('view')
+#22 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/view')
+#23 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index.php(15): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/manage/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/admin
+---
+2014/02/20 08:40:40 [error] [exception.CException] exception 'CException' with message '"dataProvider" 属性不能为空.' in /k/GitHub/Yii/framework/zii/widgets/CBaseListView.php:113
+Stack trace:
+#0 /k/GitHub/Yii/framework/zii/widgets/grid/CGridView.php(339): CBaseListView->init()
+#1 /k/GitHub/CRM/protected/extensions/bootstrap/widgets/TbGridView.php(49): CGridView->init()
+#2 /k/GitHub/Yii/framework/web/CBaseController.php(147): TbGridView->init()
+#3 /k/GitHub/Yii/framework/web/CBaseController.php(180): CBaseController->createWidget('bootstrap.widge...', Array)
+#4 /k/GitHub/CRM/themes/crm2013/views/manage/view.php(105): CBaseController->widget('bootstrap.widge...', Array)
+#5 /k/GitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#6 /k/GitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#7 /k/GitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#8 /k/GitHub/Yii/framework/web/CController.php(782): CController->renderPartial('view', Array, true)
+#9 /k/GitHub/CRM/protected/controllers/ManageController.php(34): CController->render('view', Array)
+#10 [internal function]: ManageController->actionView('556792284749430...')
+#11 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#12 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#13 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#14 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#15 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#16 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#17 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#18 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#19 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('view')
+#22 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/view')
+#23 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index.php(15): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/manage/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/admin
+---
+2014/02/20 08:40:40 [error] [exception.CException] exception 'CException' with message '"dataProvider" 属性不能为空.' in /k/GitHub/Yii/framework/zii/widgets/CBaseListView.php:113
+Stack trace:
+#0 /k/GitHub/Yii/framework/zii/widgets/grid/CGridView.php(339): CBaseListView->init()
+#1 /k/GitHub/CRM/protected/extensions/bootstrap/widgets/TbGridView.php(49): CGridView->init()
+#2 /k/GitHub/Yii/framework/web/CBaseController.php(147): TbGridView->init()
+#3 /k/GitHub/Yii/framework/web/CBaseController.php(180): CBaseController->createWidget('bootstrap.widge...', Array)
+#4 /k/GitHub/CRM/themes/crm2013/views/manage/view.php(105): CBaseController->widget('bootstrap.widge...', Array)
+#5 /k/GitHub/Yii/framework/web/CBaseController.php(126): require('/k/GitHub/CRM/t...')
+#6 /k/GitHub/Yii/framework/web/CBaseController.php(95): CBaseController->renderInternal('/k/GitHub/CRM/t...', Array, true)
+#7 /k/GitHub/Yii/framework/web/CController.php(869): CBaseController->renderFile('/k/GitHub/CRM/t...', Array, true)
+#8 /k/GitHub/Yii/framework/web/CController.php(782): CController->renderPartial('view', Array, true)
+#9 /k/GitHub/CRM/protected/controllers/ManageController.php(34): CController->render('view', Array)
+#10 [internal function]: ManageController->actionView('556792284749430...')
+#11 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(ManageController), Array)
+#12 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(ManageController), Object(ReflectionMethod), Array)
+#13 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#14 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#15 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#16 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#17 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#18 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#19 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#20 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('view')
+#22 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('manage/view')
+#23 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#24 /k/GitHub/CRM/index.php(15): CApplication->run()
+#25 {main}
+REQUEST_URI=/GitHub/CRM/manage/55679228474943058
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/manage/admin
+---
+2014/02/20 08:41:09 [error] [exception.CHttpException.202] exception 'CHttpException' with message '会员信息不存在！' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '???????????????...')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(144): Controller->errorE('???????????????...')
+#2 /k/GitHub/CRM/protected/controllers/SiteController.php(207): SiteController->inits(false)
+#3 [internal function]: SiteController->actionLogin(false)
+#4 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#5 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#6 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#7 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#9 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#10 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#11 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#15 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/login')
+#16 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/site/login
+---
+2014/02/20 08:41:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "favicon.ico" 动作.' in /k/GitHub/Yii/framework/web/CController.php:483
+Stack trace:
+#0 /k/GitHub/Yii/framework/web/CController.php(270): CController->missingAction('favicon.ico')
+#1 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('favicon.ico')
+#2 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/favicon.ic...')
+#3 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /k/GitHub/CRM/index.php(15): CApplication->run()
+#5 {main}
+REQUEST_URI=/GitHub/CRM/site/favicon.ico
+---
+2014/02/20 09:59:34 [error] [exception.CHttpException.202] exception 'CHttpException' with message '会员信息不存在！' in /k/GitHub/CRM/protected/components/Controller.php:384
+Stack trace:
+#0 /k/GitHub/CRM/protected/components/Controller.php(381): Controller->error(202, '???????????????...')
+#1 /k/GitHub/CRM/protected/controllers/SiteController.php(144): Controller->errorE('???????????????...')
+#2 /k/GitHub/CRM/protected/controllers/SiteController.php(207): SiteController->inits(false)
+#3 [internal function]: SiteController->actionLogin(false)
+#4 /k/GitHub/Yii/framework/web/actions/CAction.php(108): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#5 /k/GitHub/Yii/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#6 /k/GitHub/Yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#7 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#8 /k/GitHub/Yii/framework/web/filters/CFilter.php(40): CFilterChain->run()
+#9 /k/GitHub/CRM/protected/modules/rights/components/RController.php(36): CFilter->filter(Object(CFilterChain))
+#10 /k/GitHub/Yii/framework/web/filters/CInlineFilter.php(58): RController->filterRights(Object(CFilterChain))
+#11 /k/GitHub/Yii/framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 /k/GitHub/Yii/framework/web/CController.php(291): CFilterChain->run()
+#13 /k/GitHub/Yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /k/GitHub/Yii/framework/web/CWebApplication.php(282): CController->run('login')
+#15 /k/GitHub/Yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/login')
+#16 /k/GitHub/Yii/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /k/GitHub/CRM/index.php(15): CApplication->run()
+#18 {main}
+REQUEST_URI=/GitHub/CRM/site/login
+HTTP_REFERER=http://127.0.0.1/GitHub/CRM/clientele/seas
+---

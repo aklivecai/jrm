@@ -1,6 +1,6 @@
 <?php
 
-return CMap::mergeArray(
+$data =  CMap::mergeArray(
 	require(dirname(__FILE__).'/main.php'),
 	array(
 		'components'=>array(
@@ -13,8 +13,9 @@ return CMap::mergeArray(
 			),
 			*/
 			'db'=>array(
-				'connectionString'=>'sqlite:'.dirname(__FILE__).'/../../data/jrm-test.db',
+				'connectionString'=>'sqlite:'.dirname(__FILE__).'/../../../data/jrm-test.db',
 			),		
 		),
 	)
 );
+return $data;

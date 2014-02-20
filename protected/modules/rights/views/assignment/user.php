@@ -51,10 +51,10 @@ array_push($items
 ?>
     </li>
 </ul>       
+
 </div>
 <div class="block-fluid clearfix">
 	<div class="assignments span6">
-
 		<?php  $widget = $this->widget('bootstrap.widgets.TbGridView', array(
 			'dataProvider'=>$dataProvider,
 			'type'=>'striped bordered condensed',

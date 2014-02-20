@@ -27,10 +27,39 @@ class ManageController extends Controller
 	 	return 'actionSelectById,actionSelect';
 	}		
 
+	private function getJurisdiction($id){
+		$types = array(
+			'0' =>'操作',
+			'1' =>'任务',
+			'2' =>'部门',
+		);
+		$sql = ' SELECT name,t1.type,description,t1.bizrule,t1.data,weight 
+			FROM  {{rbac_authitem}} t1 
+			LEFT JOIN {{rbac_authassignment}} t2 ON name=t2.itemname 
+			LEFT JOIN {{rbac_rights}} t3 ON name=t3.itemname 
+			WHERE 
+				userid=:userid   
+			ORDER 
+				BY t1.type DESC, weight ASC
+			';
+		$sql = strtr($sql,array(':userid'=>$id));
+		$data =  Tak::getDb('db')->createCommand($sql)->queryAll();
+
+		$result = array();
+		$crypt = new SysCrypt();
+		foreach ($data as $key => $value) {
+			$id = $crypt->encrypt($value['name']);
+			$result[$id] = array('title'=>$value['description'],'type'=>$types[$value['type']]);
+		}
+		return $result;
+	}
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id);
+		$dataJurisdiction = $this->getJurisdiction($id);
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$model,
+			'dataJurisdiction' =>$dataJurisdiction,
 		));
 	}
 

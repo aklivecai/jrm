@@ -69,3 +69,61 @@ $this->widget('bootstrap.widgets.TbMenu', array(
 </div>
 </div>
 </div>
+
+<div class="row-fluid" id="userAssignments">
+<div class="head clearfix">
+	<i class="isw-documents"></i> <h1><?php echo Tk::g(array('Jurisdiction'));?></h1>
+<ul class="buttons">
+        <li class="toggle"><a href="#userAssignments"></a></li>
+</ul>
+</div>
+
+<div class="block-fluid clearfix">
+	<div class="assignments span6">
+<table cellpadding="0" cellspacing="0" width="100%" class="table">
+  <thead>
+      <tr>
+      	 <th width="15%">类型</th>
+          <th width="65%">名字</th>
+          <th width="20%">操作</th>
+      </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($dataJurisdiction as $key => $value) :?>
+      <tr>
+          <td><?php echo $value['type']  ?></td>
+          <td><?php echo $value['title']  ?></td>
+          <td>
+          <?php 
+          	echo'';?>
+          <a class="revoke-link" href="#" >撤销</a></td>
+      </tr>
+    <?php endforeach ?>
+      </tbody>
+</table>
+	</div>
+    <div class="span5 add-assignment">
+        <div class="block-fluid nm without-head">
+            <div class="toolbar nopadding-toolbar clear clearfix">
+                <h4><?php echo Rights::t('core', 'Assign item'); ?></h4>
+            </div>                                  
+        </div>
+		<?php if( $formModel!==null ): ?>
+			 <div class="block uploads">
+				<?php $this->renderPartial('_form', array(
+					'model'=>$formModel,
+					'itemnameSelectOptions'=>$assignSelectOptions,
+				)); ?>
+
+			</div>
+		<?php else: ?>
+			<p class="info">
+			<?php echo Rights::t('core', 'No assignments available to be assigned to this user.'); ?>
+		<?php endif; ?>
+
+	</div>
+	</div>
+
+</div>
+
+</p>

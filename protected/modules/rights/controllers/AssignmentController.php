@@ -133,6 +133,7 @@ class AssignmentController extends RController
 	public function actionUser()
 	{
 		// Create the user model and attach the required behavior
+		Tak::KD($this->module->userClass);
 		$userClass = $this->module->userClass;
 		$model = CActiveRecord::model($userClass)->findByPk($_GET['id']);
 		$this->_authorizer->attachUserBehavior($model);

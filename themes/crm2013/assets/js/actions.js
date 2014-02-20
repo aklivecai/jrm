@@ -422,10 +422,13 @@ if (btnAffirm.length>0) {
     // collapsing widgets    
         $(".toggle a").click(function(){            
             var box = $(this).parents('[class^=head]').parent('div[class^=span]').find('div[class^=block]');
+            if (box.length==0) {               
+                box = $(this).parents('[class^=head]').parent('div[class^=row]').find('div[class^=block]').eq(0);
+            };
             if(box.length == 1){                
                 if(box.is(':visible')){                          
                     if(box.attr('data-cookie'))                    
-                        $.cookies.set(box.attr('data-cookie'),'hidden');                                      
+                        $.cookies.set(box.attr('data-cookie'),'hidden');
                     $(this).parent('li').addClass('active');
                     box.slideUp(100);                    
                 }else{                    

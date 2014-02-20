@@ -120,6 +120,7 @@ return array (
   'Permissions' => '部门',
   'Permission' =>'部门',
 
+
   'View Roles' => '部门权限介绍',
 
   'Order' => '订单',
@@ -134,6 +135,8 @@ return array (
   'Success' =>'成功',
   'Total' => '',
   'Subordinate' => '下属' ,
+
+  'Jurisdiction' => '权限',
  );
 
 
