@@ -181,6 +181,10 @@ if($('#'+modid).length==0){
     });
 }
 
+var sCF  = function(msg){
+     return !confirm(msg);
+}
+
 $(document).on('click','#list-views tbody tr',function(){
     var t = $(this);
     t.toggleClass('active');
@@ -207,13 +211,26 @@ $(document).on('click','#list-views tbody tr',function(){
             t.trigger('click');          
         })
     }
-}).on('click','li a.delete',function(){
-        var str = $(this).attr('data-title') ? ' ['+$(this).attr('data-title')+'] ' : '这个信息';
-        if(!confirm('你确定要删除'+str+'吗?')) return false;
-    }).on('click','a.icon-remove',function(){
-        if(!confirm('你确定要删除信息吗?')) return false;
-    }).on('click','.to-seas',function(){
-        if(!confirm('你确定要把这个信息仍进公海吗?')) return false;
+}).on('click','li a.delete',function(event){
+        var str = '你确定要删除'+($(this).attr('data-title') ? ' ['+$(this).attr('data-title')+'] ' : '这个信息');        
+        if(sCF(str)){
+            event.preventDefault();
+        }
+    }).on('click','a.icon-remove',function(event){
+        var str = ('你确定要删除信息吗?');
+        if(sCF(str)){
+            event.preventDefault();
+        }
+    }).on('click','.to-seas',function(event){
+        var str = '你确定要把这个信息仍进公海吗?';
+        if(sCF(str)){
+            event.preventDefault();
+        }        
+    }).on('click','.revoke-link',function(event){
+        var str = '你确定要'+$(this).text()+'?';
+        if(sCF(str)){
+            event.preventDefault();
+        }        
     }).on('click','.navigation .openable > a',function(event){
         event.preventDefault();
         var par = $(this).parent('.openable');
@@ -242,11 +259,53 @@ $('[data-preview]').on('click',function(){
     window.open ($(this).attr('data-preview'), 'preview', 'height=350, width=450, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no') //这句要写成一行
 });
 
+(function(){
+var modid = 'ajax-modal'
+, strMod =  '<div id="'+modid+'" class="modal hide fade"  tabindex="-1"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> <h4 class="mhead"></h4> </div> <div class="modal-body"> </div> </div> '
+,mod,mhead,modC
+; 
+$(document).on('click','.data-ajax', function(event){
+    event.preventDefault();
+        var t = $(this)
+        , url = t.attr('href')
+    ;
+    if (!mod) {
+        mod = $(strMod).appendTo(document.body);
+        modC = mod.find('.modal-body');
+        mhead = mod.find('.mhead');
+    }
+    if (mod.attr('data-url')==url) {
+        
+    }else{
+        var _thead = t.attr('title')!=''?t.attr('title'):t.text();
+            ;
+            mhead.text(_thead);
+            modC.html('<div class="loading-spinner in" style="width: 200px; margin-left: -100px;"><div class="progress progress-striped active"><div class="bar" style="width: 20%;"></div></div>').addClass('load-content');
+            $.ajax(url).done(function(data) {                
+                modC.html(data);
+            }) .fail(function(error,i,s) {
+                mhead.text('请求错误:'+s);
+                 modC.html('<div class="alert alert-error">'+error.responseText+'</div>');
+              })
+              .always(function() {
+                    modC.removeClass('load-content');
+                    mod.attr('data-url',url).trigger('k-load');
+                    t.trigger('click');
+              });
+    }
+    mod.modal('show');
+});
+}());
+
+
 $(document).on('submit','#'+modid+' form',function(event){
     event.preventDefault();
     var t = $(this)
     ;
-    if (!confirm('是否确认 '+ mhead.text() +'?')) return false;
+    if (!sCF('是否确认 '+ mhead.text() +'?')){ 
+        return false;
+    }
+
     $.ajax({
             url: t.attr('action'),
             type: t.attr('method'),
@@ -387,7 +446,7 @@ if (btnAffirm.length>0) {
         if (arr.length==0) {
             alert('请选则需要删除的信息!');
            
-        }else if(!confirm('你确定要删除选择的'+arr.length+'信息')){
+        }else if(!sCF('你确定要删除选择的'+arr.length+'信息')){
 
         }else{        
             jQuery('#list-grid').yiiGridView('update', {
@@ -410,7 +469,7 @@ if (btnAffirm.length>0) {
         return false;
     });
     $('.logout').on('click',function(event){
-        if (!confirm('是否确认退出？')) {
+        if (sCF('是否确认退出？')) {
             event.preventDefault();
             return false;
         };

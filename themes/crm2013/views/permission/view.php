@@ -43,7 +43,7 @@ $this->breadcrumbs=array(
                                         </span>
                                         <div class="controls">
                                         <?php
-                                        	echo CHtml::link('',array('RemoveChild','id'=>$id,'child'=>urlencode($crypt->encrypt($value['name']))),array('class'=>'icon-remove'));
+                                        	echo CHtml::link('<i class="icon-remove"></i>'.Tk::g('Revoke'),array('RemoveChild','id'=>$id,'child'=>urlencode($crypt->encrypt($value['name']))),array('class'=>'revoke-link'));
                                         ?>                    
                                         </div>                                      
                                     </div>                                
@@ -96,43 +96,6 @@ if (count($this->tabs)<=1) {
 <?php
 Tak::regScript('bodyend',
 "
-(function(){
-var modid = 'ajax-modal'
-, strMod =  '<div id=\"'+modid+'\" class=\"modal hide fade\"  tabindex=\"-1\"> <div class=\"modal-header\"> <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button> <h4 class=\"mhead\"></h4> </div> <div class=\"modal-body\"> </div> </div> '
-,mod,mhead,modC
-; 
-$(document).on('click','.data-ajax', function(event){
-    event.preventDefault();
-        var t = $(this)
-        , url = t.attr('href')
-    ;
-    if (!mod) {
-        mod = $(strMod).appendTo(document.body);
-        modC = mod.find('.modal-body');
-        mhead = mod.find('.mhead');
-    }
-    if (mod.attr('data-url')==url) {
-        
-    }else{
-        var _thead = t.attr('title')!=''?t.attr('title'):t.text();
-            ;
-            mhead.text(_thead);
-            modC.html('<div class=\"loading-spinner in\" style=\"width: 200px; margin-left: -100px;\"><div class=\"progress progress-striped active\"><div class=\"bar\" style=\"width: 20%;\"></div></div>').addClass('load-content');
-            $.ajax(url).done(function(data) {                
-                modC.html(data);
-            }) .fail(function(error,i,s) {
-                mhead.text('请求错误:'+s);
-                 modC.html('<div class=\"alert alert-error\">'+error.responseText+'</div>');
-              })
-              .always(function() {
-                    modC.removeClass('load-content');
-                    mod.attr('data-url',url).trigger('k-load');
-                    t.trigger('click');
-              });
-    }
-    mod.modal('show');
-});
-}());
 ");
 ?>
 </div>

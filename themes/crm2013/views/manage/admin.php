@@ -145,18 +145,9 @@ $listOptions['dataProvider'] = $model->search();
 $listOptions['columns'] = array(
 		// array('class'=>'CCheckBoxColumn','name'=>'manageid','id'=>'select'), 	
 		Tak::getAdminPageCol(array(
-			  'template'=>'<span>{vrights}</span> | {view} {update}'
-			  ,'buttons'=>array(
-					'vrights' => array
-					(
-						'label'=>'权限',
-						 'url'=>'Yii::app()->createUrl("rights/assignment/user", array("id"=>$data->manageid))',
-						 'linkOptions'=>array('style'=>'width: 50px'),
-					),
-			  ),
+			  'template'=>' {view} {update}'
 			)
 			  ,'list-grid'
-			  ,'80px'
 		),	
 		array(
 			'name'=>'user_name',

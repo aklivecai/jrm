@@ -31,7 +31,7 @@ class PermissionController extends Controller
 	public function getAuthorizer()
 	{
 		if( isset($this->_authorizer)===false ){
-			$this->_authorizer = Rights::getAuthorizer();
+			$this->_authorizer = Jurisdiction::getAuthorizer();
 		}
 		return $this->_authorizer;
 	}
@@ -86,6 +86,18 @@ class PermissionController extends Controller
 			'model'=>$model,
 		));		
 	}
+
+	public function actionPreview($id)
+	{
+		$model = $this->loadModel($id);
+	 	$childDataProvider = $model->getChild();
+	 	$data = $childDataProvider->getData();	
+		$this->render($this->templates['preview'],array(
+			'model' => $model,
+			'data' => $data,
+		));	 	
+	}
+
 
 	public function actionShow($child)
 	{

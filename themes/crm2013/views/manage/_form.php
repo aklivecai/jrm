@@ -3,7 +3,7 @@
 /* @var $model Manage */
 /* @var $form CActiveForm */
 ?>
-
+<?php echo Yii::app()->request->csrfToken; ?>
 <div class="row-fluid">
 <div class="span12">
 

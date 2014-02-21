@@ -105,11 +105,20 @@ class SiteController extends Controller
 
 
 	private function inits($k){
-
 		/*已经登录，返回上一页，没有就首页*/
 		if (!Tak::isGuest()) {
 			$this->redirect(Yii::app()->user->returnUrl);
 		}
+		if (!$k
+			&&isset(Yii::app()->request->cookies['fid'])
+			&&Yii::app()->request->cookies['fid']->value) {
+			$k = Yii::app()->request->cookies['fid']->value;			
+			$this->inits($k);	
+			return false;		
+		}else{
+			
+		}
+		
 			$itemid = Tak::getCryptNum($k);
 			$errorInfo = '会员信息不存在！';
 			if ($itemid) {

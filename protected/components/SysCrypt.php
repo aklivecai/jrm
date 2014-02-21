@@ -38,10 +38,14 @@ class SysCrypt{
         $this->crypt_key=NULL;
     }
 }
-    // $m = new SysCrypt();
-    // $t = $m->encrypt('cdd.*');
-    // $t2 = $m->decrypt($t);
+    $m = new SysCrypt();
+    $t = $m->encrypt('53788158634402140');
+    $t2 = $m->decrypt($t);
+    
     // echo sprintf("%s\n", $t);
     // echo sprintf("%s\n", $t2);
     // echo sprintf("%s\n", $m->encrypt('0'));
     // echo sprintf("%s\n",$m->decrypt('C2NVZQE3DH8Eew=='));
+
+    // $t2 = $m->decrypt('UmwGYQNmDGkAbVs0CWUAaw9mVGBYZQE0AjYAMAIwVjJQaw==');
+    // echo $t2;

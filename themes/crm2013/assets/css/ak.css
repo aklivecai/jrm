@@ -132,8 +132,9 @@ ul.yiiPager .first, ul.yiiPager .last {
 
  /*权限*/
  .actions-column .revoke-link,
- a.remove-link{
-  color: red;
+ a.remove-link,
+ #content a.revoke-link{
+    color: red;
  }
  
  .tak-smail .row-form {
@@ -598,4 +599,8 @@ form.active .wap-flow-content{
     .tak-order-status{
       opacity: .2;
     }
+}
+
+#ibody .unedit td{
+  background-color: #ffffdd;
 }

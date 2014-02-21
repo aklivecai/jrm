@@ -43,6 +43,10 @@ $this->widget('bootstrap.widgets.TbDetailView', array(
 
 $items = Tak::getViewMenu($model->primaryKey);
 
+// revoke-link
+$items['Delete']['label'] = Tk::g('Lock');
+$items['Delete']['linkOptions']['class'] = 'revoke-link';
+
 $_itemis = array(
 	'---',
 	'Permissions' => array('label'=>Tk::g('Permissions'), 'icon'=>'user','url'=>array('rights/assignment/user','id'=>$model->manageid)),
@@ -90,13 +94,22 @@ $this->widget('bootstrap.widgets.TbMenu', array(
   </thead>
   <tbody>
   <?php foreach ($dataJurisdiction as $key => $value) :?>
-      <tr>
-          <td><?php echo $value['type']  ?></td>
+      <tr <?php if($value['active']){echo 'class="unedit"';}?>>
+          <td><?php echo $value['typeName']  ?></td>
           <td><?php echo $value['title']  ?></td>
           <td>
-          <?php 
-          	echo'';?>
-          <a class="revoke-link" href="#" >撤销</a></td>
+		<?php 
+			if (!$value['active']) {
+				echo JHtml::link('<i class="icon-remove"></i>'.Tk::g('Revoke'),array('revoke','id'=>$model->primaryKey,'name'=>$value['id']),array('class'=>'revoke-link'));
+				echo '&nbsp;|&nbsp;';
+			}
+
+			if ($value['type']==2&&is_numeric($value['name'])) {
+				
+				echo JHtml::link('<i class="icon-eye-open"></i>'.Tk::g('View'),array('permission/preview','id'=>$value['name']),array('class'=>'data-ajax','title'=>Tk::g(array('View',' 「'.$value['title'].'」','Jurisdiction'))));				
+			}
+		?>          
+          </td>
       </tr>
     <?php endforeach ?>
       </tbody>
@@ -110,10 +123,19 @@ $this->widget('bootstrap.widgets.TbMenu', array(
         </div>
 		<?php if( $formModel!==null ): ?>
 			 <div class="block uploads">
-				<?php $this->renderPartial('_form', array(
-					'model'=>$formModel,
-					'itemnameSelectOptions'=>$assignSelectOptions,
-				)); ?>
+
+		<?php 
+		$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+		    'id'=>'horizontalForm',
+		    'type'=>'horizontal',
+		)); 
+
+		echo $form->dropDownList($formModel, 'itemname', $assignSelectOptions); 
+		echo $form->error($formModel, 'itemname'); 
+		$this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Rights::t('core', 'Assign'))); 
+		$this->endWidget(); 
+
+		?>
 
 			</div>
 		<?php else: ?>

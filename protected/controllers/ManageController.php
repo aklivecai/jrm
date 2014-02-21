@@ -5,6 +5,7 @@ class ManageController extends Controller
 
 	protected $branchs = null;
 
+
 	public function init()  
 	{     
     		parent::init();
@@ -14,8 +15,9 @@ class ManageController extends Controller
     		if (count($this->branchs)==0) {
     			$this->redirect(array('/permission/create'));
     		}
+
 	  // Yii::app()->clientScript->registerCoreScript('jquery');
-  //   	$cs = Yii::app()->getClientScript();
+  	  //	$cs = Yii::app()->getClientScript();
 		// $cs->enableJavaScript = false;
 	}
 	public function getBranch($key){
@@ -28,38 +30,127 @@ class ManageController extends Controller
 	}		
 
 	private function getJurisdiction($id){
-		$types = array(
-			'0' =>'操作',
-			'1' =>'任务',
-			'2' =>'部门',
-		);
-		$sql = ' SELECT name,t1.type,description,t1.bizrule,t1.data,weight 
-			FROM  {{rbac_authitem}} t1 
-			LEFT JOIN {{rbac_authassignment}} t2 ON name=t2.itemname 
-			LEFT JOIN {{rbac_rights}} t3 ON name=t3.itemname 
-			WHERE 
-				userid=:userid   
-			ORDER 
-				BY t1.type DESC, weight ASC
-			';
-		$sql = strtr($sql,array(':userid'=>$id));
-		$data =  Tak::getDb('db')->createCommand($sql)->queryAll();
-
-		$result = array();
-		$crypt = new SysCrypt();
-		foreach ($data as $key => $value) {
-			$id = $crypt->encrypt($value['name']);
-			$result[$id] = array('title'=>$value['description'],'type'=>$types[$value['type']]);
+		$result = Jurisdiction::getJurisdiction($id);
+		$branch = $this->_model->branch;
+		if ($branch>0&&$result[$branch]) {
+			$temp = $result[$branch];
+			$temp['active'] = true;
+			unset($result[$branch]);
+			array_unshift($result,$temp);
 		}
 		return $result;
 	}
+
+	public function getJUrl()
+	{
+		return $this->createUrl('view',array('id'=>$this->_model->primaryKey)).'#userAssignments';
+	}
+
+	private function loadJurisdiction($name){
+		$m = Jurisdiction::getObj($name);
+			if($m===null)
+				$this->error();
+		return $m;
+	}
+
+	public function getItemName()
+	{
+		$name = isset($_GET['name'])===true ? trim($_GET['name']) : null;
+		if ($name) {
+			$crypt = new SysCrypt();
+			$name = $crypt->decrypt($name);
+		}
+		return $name;
+	}
+
+	public function actionRevoke($id)
+	{
+		$model = $this->loadModel($id);
+		$name = $this->getItemName();
+		$m = $this->loadJurisdiction($name);
+		Jurisdiction::revoke($model->primaryKey,$model->fromid,$name);
+
+		// Tak::setFlash(
+		// 	Rights::t('core', 'Permission :name revoked.', array(':name'=>$m['description'])),
+		// 	'success'
+		// );		
+		$this->redirect($this->getJUrl());
+	}
+
 	public function actionView($id)
 	{
 		$model = $this->loadModel($id);
 		$dataJurisdiction = $this->getJurisdiction($id);
+
+		$assignSelectOptions = Jurisdiction::getSelectOptions($model);
+
+		if( $assignSelectOptions!==array() )
+		{
+
+			$crypt = new SysCrypt();
+			$formModel = new AssignmentForm();
+		    // Form is submitted and data is valid, redirect the user
+		    if( isset($_POST['AssignmentForm'])===true )
+			{
+				$formModel->attributes = $_POST['AssignmentForm'];
+				if( $formModel->validate()===true )
+				{
+					$name = $formModel->itemname;
+					if (!is_numeric($name)&&$name!=='Admin') {
+						$name = $crypt->decrypt($formModel->itemname);
+					}
+					$m = $this->loadJurisdiction($name);
+					Jurisdiction::create($model->primaryKey,$model->fromid,$name);
+
+					// Tak::setFlash(
+					// 	Rights::t('core', 'Permission :name assigned.', array(':name'=>$m['description'])),
+					// 	'success'
+					// );
+
+					$this->redirect($this->getJUrl());
+				}
+			}	
+
+			$childSelectOptions = array();
+
+			$ts = Permission::getList();
+			$_arr = array();
+			if ($assignSelectOptions['部门']['Admin']) {
+				$_arr['Admin'] = $assignSelectOptions['部门']['Admin'];
+			}			
+			foreach ($ts as $key => $value) {
+				$_arr[$crypt->encrypt($key)] = $value;
+			}
+
+
+			// $childSelectOptions['部门'] = $_arr;
+			unset($assignSelectOptions['部门']);
+			foreach ($assignSelectOptions as $key => $value) {
+				$t = array();
+				foreach ($value as $k1 => $v1) {
+					if ($k1=='Site.*'
+						||$k1=='Setting.*'
+						||$k1=='PostUpdateOwn'
+						||$k1=='Site.Logout'
+					) {
+						unset($childSelectOptions[$key][$k1]);
+					}else{
+						$t[$crypt->encrypt($k1)]	 = $v1;
+					}					
+				}
+				$childSelectOptions[$key] = $t;				
+			}
+			$assignSelectOptions = $childSelectOptions;
+
+		} else {
+		 	$formModel = null;
+		}				
+
 		$this->render('view',array(
 			'model'=>$model,
 			'dataJurisdiction' =>$dataJurisdiction,
+			'formModel'=>$formModel,
+			'assignSelectOptions'=>$assignSelectOptions,			
 		));
 	}
 

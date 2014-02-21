@@ -88,9 +88,16 @@ return array(
    		),
 
 		'log' => array(
-            'class'=>'CLogRouter',
-            'routes'=>include( $tshiPatch.'/log.conf.php'),
-        ),
+            		'class'=>'CLogRouter',
+            		'routes'=>include( $tshiPatch.'/log.conf.php'),
+       	 ),	
+	       'session' => array(
+       		 'timeout' => 86400,
+   		 ),
+	    'request'=>array(  
+	        // Enable Yii Validate CSRF Token  
+	        // 'enableCsrfValidation' => true,  
+	    ),  	       
 	),
 
 );

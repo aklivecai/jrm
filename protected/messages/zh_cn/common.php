@@ -37,6 +37,7 @@ return array (
 
   'Admin' => '管理',
   'View' => '浏览',
+  'Preview' => '预览',
   'Action' => '操作',
   'Create New' => '添加新的',
   'Restore' => '还原',
@@ -137,6 +138,8 @@ return array (
   'Subordinate' => '下属' ,
 
   'Jurisdiction' => '权限',
+  'Lock' => '锁定',
+
  );
 
 
