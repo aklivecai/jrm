@@ -15,10 +15,6 @@ class ManageController extends Controller
     		if (count($this->branchs)==0) {
     			$this->redirect(array('/permission/create'));
     		}
-
-	  // Yii::app()->clientScript->registerCoreScript('jquery');
-  	  //	$cs = Yii::app()->getClientScript();
-		// $cs->enableJavaScript = false;
 	}
 	public function getBranch($key){
 		$result = isset($this->branchs[$key])?$this->branchs[$key]:'用户';
@@ -69,11 +65,10 @@ class ManageController extends Controller
 		$name = $this->getItemName();
 		$m = $this->loadJurisdiction($name);
 		Jurisdiction::revoke($model->primaryKey,$model->fromid,$name);
-
-		// Tak::setFlash(
-		// 	Rights::t('core', 'Permission :name revoked.', array(':name'=>$m['description'])),
-		// 	'success'
-		// );		
+		Tak::setFlash(
+			Tk::g('成功撤销  :name 「:title」',array(':name'=>$m['description'])),
+			'success'
+		);		
 		$this->redirect($this->getJUrl());
 	}
 
@@ -193,7 +188,11 @@ class ManageController extends Controller
 
 	protected function getSelectOption($q,$not = false) 
 	{
-		$result = parent::getSelectOption($q);
+		
+		if (!$not&&isset($_GET['not'])) {
+			$not = $_GET['not'];
+		}
+		$result = parent::getSelectOption($q,$not);
 		$result['data']['attributes'][] = 'user_nicename';
 		if ($q) {
 			$result['data']['criteria']->addSearchCondition('user_nicename',$q,true,'OR');

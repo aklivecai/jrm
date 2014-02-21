@@ -114,9 +114,22 @@
                             _temp = _temp.split(':');
                             result[_temp[1]] = $(_temp[0]).val();
                         };
-                        if (t.attr('data-not')) {
-                           result['not']  = t.attr('data-not');
+                        var _not = [];
+                        if (t.attr('data-not')&&t.attr('data-not')!='') {
+                           result.push(t.attr('data-not'));
                         };
+
+                        // data-notbyel
+                        if (t.attr('data-notbyel')) {
+                          var _ls = '.'+t.attr('class').split(' ')[0];
+                           var _els = $(_ls);
+                           _els.each(function(i,_el){
+                                if ($(_el).val()!='') {
+                                    _not.push($(_el).val());
+                                };                                  
+                           });
+                        }
+                        result['not'] = _not.join(',');
                         return result;
                     },
                     results: function (data, page) { 
@@ -148,7 +161,9 @@ jQuery(function($){
 
     var clientele = $(".select-clientele").attr({'data-select':'Clientele','placeholder':'搜索客户'})
     , prson = $(".select-prsonid").attr({'data-select':'ContactpPrson','placeholder':'搜索联系人','data-selectby':'input.select-clientele:clienteleid'})
-    , manage = $(".select-manageid").attr({'data-select':'Manage'})
+
+    , manage = $(".select-manageid,.select-mvuser").attr({'data-select':'Manage'})
+
     , fromidS = $(".select-fromid").attr({'data-select':'Memeber'})
     ;
     prson.on('select-load',function(){

@@ -264,14 +264,14 @@ class Tak extends Ak{
               'items'=>array(
                     array(
                        'icon' =>'user',
-                      'label'=>'<span class="text">'.Tk::g(array('Manage','Permissions')).'</span>', 
+                      'label'=>'<span class="text">'.Tk::g(array('Permissions','Admin')).'</span>', 
                       'url'=>array('/rights/assignment/view'), 
                       'visible'=>self::checkSuperuser()&&YII_DEBUG,
                       'linkOptions'=>array('id'=>'tak-permissions'),
                     ), 
                     array(
                        'icon' =>'user',
-                      'label'=>'<span class="text">'.Tk::g(array('Manage','Permissions')).'</span>', 
+                      'label'=>'<span class="text">'.Tk::g(array('Permissions','Admin')).'</span>', 
                       'url'=>array('/permission/admin'), 
                     ), 
 

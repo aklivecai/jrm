@@ -342,7 +342,7 @@ class Controller extends RController
 			$criteria->addSearchCondition($model->linkName,$q,true);
 		}
 		if ($not) {
-			$_not = str_split($not);
+			$_not = explode(',',$not);
 			if (is_array($_not)&&count($_not)>0) {
 				$criteria->addNotInCondition($model->primaryKey(),$_not);	
 			}

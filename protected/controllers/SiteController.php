@@ -113,8 +113,7 @@ class SiteController extends Controller
 			&&isset(Yii::app()->request->cookies['fid'])
 			&&Yii::app()->request->cookies['fid']->value) {
 			$k = Yii::app()->request->cookies['fid']->value;			
-			$this->inits($k);	
-			return false;		
+			return $this->inits($k);	
 		}else{
 			
 		}

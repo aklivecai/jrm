@@ -172,12 +172,12 @@ class AdminLog extends CActiveRecord
 					}	 	
 			 }
 		}		
-    	$m->fromid =  $arr['fromid'];
-    	$m->manageid =  $arr['manageid'];
-    	$m->user_name = $arr['user_name'];
-    	$m->itemid = $arr['itemid'];
-    	$m->add_time = $arr['time'];
-    	$m->ip = $arr['ip'];
-    	$m->save();
+	    	$m->fromid =  $arr['fromid'];
+	    	$m->manageid =  $arr['manageid'];
+	    	$m->user_name = $arr['user_name'];
+	    	$m->itemid = $arr['itemid'];
+	    	$m->add_time = $arr['time'];
+	    	$m->ip = $arr['ip'];
+	    	$m->save();
 	}
 }

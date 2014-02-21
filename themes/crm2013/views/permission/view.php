@@ -6,15 +6,7 @@ $this->breadcrumbs=array(
 	Tk::g($this->modelName)=>array('admin'),
 	$model->title,
 );
-// CSqlDataProvider
-	 $childDataProvider = $model->getChild();
-	// $childDataProvider = new RAuthItemChildDataProvider($model);
-	// $childSelectOptions = Rights::getParentAuthItemSelectOptions($model, $type, $exclude);
-	// $childFormModel = new AuthChildForm();
-	 $data = $childDataProvider->getData();
-
     $this->renderPartial('_tabs', array('model'=>$model,'id'=>$id)); 
-
  ?>
 <div class="tab-content">
    <div class="row-fluid">
@@ -30,16 +22,18 @@ $this->breadcrumbs=array(
                                 <div class="item clearfix">
                                     <div class="info">
                                         <?php
+                                            $_type = Jurisdiction::getTypeName($value['type']);
                                             echo CHtml::link($value['description']
-
                                                 // ,array('show','id'=>$id,'child'=>urlenc\ode($crypt->encrypt($value['name'])))
                                                 ,"#"
-
-                                                 ,array('class'=>'name data-ajax--','title'=>Tk::g(array($this->types[$value['type']],' - ',$value['description'])))
+                                                 ,array(
+                                                        'class'=>'name data-ajax--',
+                                                        'title'=>Tk::g(array($_type,' - ',$value['description']))
+                                                    )
                                                 );
                                         ?>                                                            
                                         <span>
-                                        <?php echo $this->types[$value['type']];?>
+                                        <?php echo $_type ;?>
                                         </span>
                                         <div class="controls">
                                         <?php

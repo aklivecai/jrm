@@ -1,10 +1,7 @@
 <?php
 class PermissionController extends Controller
 {
-
-	// 类型标识(0::Operation=操作,1::Task=任务,2::Role=角色)
 	protected $tabs = null;
-	protected $types = array('0'=>'操作','1'=>'任务','2'=>'角色');
 	private  $_authorizer = null;
 	private $_mods = null;
 
@@ -15,7 +12,6 @@ class PermissionController extends Controller
 		if (!$this->isAjax) {
 			$this->tabs = Permission::getList();
 		}
-		$this->getAuthorizer();
 	}
 	public function loadModel($id){
 		if($this->_model===null)
@@ -54,8 +50,9 @@ class PermissionController extends Controller
 		{
 			$itemName = $name;
 			if( $itemName!==null ){
-				$this->_mods = $this->_authorizer->authManager->getAuthItem($itemName);				
-				$this->_mods = $this->_authorizer->attachAuthItemBehavior($this->_mods);
+				$authorizer  = $this->getAuthorizer();
+				$this->_mods = $authorizer->authManager->getAuthItem($itemName);		
+				$this->_mods = $authorizer->attachAuthItemBehavior($this->_mods);
 			}
 			if( $this->_mods===null )
 				$this->error();
@@ -105,7 +102,6 @@ class PermissionController extends Controller
 		$crypt = new SysCrypt();
 		$id = $crypt->decrypt($child);
 
-		$_model = $this->loadModel($id);
 		$itemName = $id;	
 		$_model = $this->loadModel($id);
 		$model = $this->loadModelI($id);
@@ -149,10 +145,12 @@ class PermissionController extends Controller
 				$childFormModel->attributes = $_POST['AuthChildForm'];
 				if( $childFormModel->validate()===true )
 				{
+					$authorizer  = $this->getAuthorizer();
+
 					$childFormModel->itemname = $crypt->decrypt($childFormModel->itemname);
-					$this->_authorizer->authManager->addItemChild($itemName, $childFormModel->itemname);
-					$child = $this->_authorizer->authManager->getAuthItem($childFormModel->itemname);
-					$child = $this->_authorizer->attachAuthItemBehavior($child);
+					$authorizer->authManager->addItemChild($itemName, $childFormModel->itemname);
+					$child = $authorizer->authManager->getAuthItem($childFormModel->itemname);
+					$child = $authorizer->attachAuthItemBehavior($child);
 
 					// Set a flash message for adding the child
 					Tak::setFlash(
@@ -171,8 +169,6 @@ class PermissionController extends Controller
 		$type = Rights::getValidChildTypes($model->type);
 		$exclude = array(Rights::module()->superuserName);
 		$childSelectOptions = Rights::getParentAuthItemSelectOptions($model, $type, $exclude);
-
-
 
 		// 取消部门选择
 		if(isset($childSelectOptions['部门'])===true){
@@ -200,8 +196,13 @@ class PermissionController extends Controller
 		}		
 	
 
-		$parentDataProvider = new RAuthItemParentDataProvider($model);
-		$childDataProvider = new RAuthItemChildDataProvider($model);
+		$parentDataProvider = new RAuthItemParentDataProvider($_model);
+		$childDataProvider = new RAuthItemChildDataProvider($_model);
+
+
+		 $childDataProvider = $_model->getChild();
+		 $data = $childDataProvider->getData();
+
 
 		$this->render($this->templates['view'],array(
 			'model' => $_model,
@@ -211,8 +212,8 @@ class PermissionController extends Controller
 
 			'childFormModel'=>$childFormModel,
 			'childSelectOptions'=>$childSelectOptions,
-			'parentDataProvider'=>$parentDataProvider,
-			'childDataProvider'=>$childDataProvider,
+			
+			'data'=> $data,
 		));
 	}
 
@@ -227,17 +228,19 @@ class PermissionController extends Controller
 		$crypt = new SysCrypt();
 		$childName = $crypt->decrypt($child);
 		
+		$authorizer  = $this->getAuthorizer();
+
 			// Remove the child and load it
-			$this->_authorizer->authManager->removeItemChild($itemName, $childName);
-			$child = $this->_authorizer->authManager->getAuthItem($childName);
-			$child = $this->_authorizer->attachAuthItemBehavior($child);
+			$authorizer->authManager->removeItemChild($itemName, $childName);
+			$child = $authorizer->authManager->getAuthItem($childName);
+			$child = $authorizer->attachAuthItemBehavior($child);
 
 
 			// Set a flash message for removing the child
 					Tak::setFlash(
 						Rights::t('core', 'Child :name removed.', array(':name'=>$child->getNameText())),
 						'success'
-					);			
+					);
 			// If AJAX request, we should not redirect the browser
 			if( !$this->isAjax){
 				$this->redirect(array('view', 'id'=>urlencode($id)));

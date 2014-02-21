@@ -13,8 +13,7 @@ $this->breadcrumbs=array(
                                 <div class="item clearfix">
                                     <div class="info">
                                         <strong>「
-                                        <?php echo $this->types[$value['type']];?>
-                                        」
+                                        <?php echo Jurisdiction::getTypeName($value['type']);?>
                                         </strong>
                                         <?php
                                             echo $value['description'];

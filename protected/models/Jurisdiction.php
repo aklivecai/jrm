@@ -1,6 +1,7 @@
 <?php 
 class Jurisdiction 
 {
+	// 类型标识(0::Operation=操作,1::Task=任务,2::Role=角色)
 	public static
 		$types = array(
 			'0' =>'操作',
@@ -15,6 +16,12 @@ class Jurisdiction
 			self::$_authorizer = Rights::getAuthorizer();
 		}
 		return self::$_authorizer;
+	}
+
+	public static function getTypeName($type)
+	{
+		$result = isset(self::$types[$type])?self::$types[$type]:'';
+		return $result;
 	}
 
 	public static function getJurisdiction($id)
@@ -38,7 +45,7 @@ class Jurisdiction
 					'name'=> $value['name'],
 					'title'=>$value['description'],
 					'type'=>$value['type'],
-					'typeName'=>self::$types[$value['type']],
+					'typeName'=>self::getTypeName($value['type']),
 					'active' => false,
 				);
 		}		

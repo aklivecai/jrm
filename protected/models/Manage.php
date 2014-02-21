@@ -114,13 +114,12 @@ class Manage extends ModuleRecord
     public function defaultScope()
     {
 			$arr = array('order'=>'add_time DESC');
-
 			$condition = array();
 		    	if($this->hasAttribute('fromid')){
 		    		$fromid = Tak::getFormid();
 				if($fromid>0){
 					if (Tak::getAdmin()) {
-						$condition[] = 'fromid>0';	
+						 $condition[] = '1=1';	
 					}else{
 						$condition[] = 'fromid='.Tak::getFormid();	
 						// $condition[] = "user_name<>'admin'";	
@@ -153,8 +152,11 @@ class Manage extends ModuleRecord
 		$criteria = new CDbCriteria;
 		
 		if (Tak::getAdmin()) {
+			if ($this->fromid) {
 				$criteria->compare('fromid',$this->fromid);
-				
+			}else{
+				$criteria->addCondition("fromid=".Tak::getFormid());	
+			}				
 		}else{
 			$criteria->addCondition("fromid=".Tak::getFormid());
 			$criteria->addCondition("user_name<>'admin'");	

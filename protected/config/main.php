@@ -82,9 +82,9 @@ return array(
 			'errorAction'=>'site/error',
 		),
 		'mailer' => array(
-	      'class' => 'application.extensions.mailer.EMailer',
-	      'pathViews' => 'application.views.email',
-	      'pathLayouts' => 'application.views.email.layouts'
+		      	'class' => 'application.extensions.mailer.EMailer',
+		      	'pathViews' => 'application.views.email',
+	      		'pathLayouts' => 'application.views.email.layouts'
    		),
 
 		'log' => array(

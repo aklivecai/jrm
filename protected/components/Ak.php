@@ -21,6 +21,17 @@ class Ak {
         }
         if ($isexit) exit;
     }    
+    /*
+        trace: 这是在 Yii::trace 中使用的级别。它用于在开发中 跟踪程序的执行流程。
+        info: 这个用于记录普通的信息。
+        profile: 这个是性能概述（profile）。下面马上会有更详细的说明。
+        warning: 这个用于警告（warning）信息。
+        error: 这个用于致命错误（fatal error）信息。
+    */
+    public static function log($title,$type='info',$note='')
+    {
+        Yii::log($title,$type,$note);  
+    }
     public static function checkSuperuser(){
         return Yii::app()->user->checkAccess(self::getSuper());
     }

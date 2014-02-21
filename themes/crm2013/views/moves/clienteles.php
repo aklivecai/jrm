@@ -9,14 +9,6 @@ $this->breadcrumbs=array(
     'id'=>'verticalForm',
 ));
 
-    echo $form->errorSummary($model); 
-
-     $this->widget('bootstrap.widgets.TbAlert', array(
-        'alerts'=>array( // configurations per alert type
-            'info'=>array('block'=>true, 'fade'=>true, 'closeText'=>'&times;'), // success, info, warning, error or danger
-        ),
-    ));
-
  ?>
  <div class="form">
  <div class="block-fluid ucard">
@@ -29,7 +21,7 @@ $this->breadcrumbs=array(
 				<div class="title"><?php echo $model->getAttributeLabel('fMid')?>:</div>  
 				<div class="text">&nbsp;
 				<?php 
-				  echo $form->textField($model,'fMid',array('class'=>'select-manageid','data-select'=>'Manage','data-not'=>$uid,'size'=>10,'style'=>'width:150px')); 
+				  echo $form->textField($model,'fMid',array('class'=>'select-mvuser','data-select'=>'Manage','data-not'=>$uid,'data-notbyel'=>true,'size'=>10,'style'=>'width:180px')); 
 				?>
 				<?php echo $form->error($model,'fMid'); ?>
 				</div>
@@ -38,13 +30,22 @@ $this->breadcrumbs=array(
 				<div class="title"><?php echo $model->getAttributeLabel('tMid')?>:</div> 
 				<div class="text">&nbsp;
 				<?php 
-				  echo $form->textField($model,'tMid',array('class'=>'select-manageid','data-select'=>'Manage','data-not'=>$uid,'size'=>10,'style'=>'width:150px')); 
+				  echo $form->textField($model,'tMid',array('class'=>'select-mvuser','data-select'=>'Manage','data-not'=>$uid,'data-notbyel'=>true,'size'=>10,'style'=>'width:180px')); 
 				?>
 				<?php echo $form->error($model,'tMid'); ?>
 				</div>
 			</li>       
+			<li >
+				<div class="title"><?php echo $model->getAttributeLabel('note')?>:</div> 
+				<div class="text">&nbsp;
+				<?php 
+				  echo $form->textArea($model,'note',array()); 
+				?>
+				<?php echo $form->error($model,'note'); ?>
+				</div>
+			</li>       
                 </ul>
-            </div>                        
+            </div>      
 
 <div class="footer tar">
     <?php $this->widget('bootstrap.widgets.TbButton', array('type'=>'primary','buttonType'=>'submit', 'label'=>Tk::g('Move'))); ?>
