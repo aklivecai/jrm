@@ -3,13 +3,7 @@ class ContactpPrson extends ModuleRecord
 {
 	
 	public $linkName = 'nicename';
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{contactp_prson}}';
-	}
+	public static $table = '{{contactp_prson}}';
 
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果
@@ -223,4 +217,5 @@ class ContactpPrson extends ModuleRecord
 		}
 		return $result;
 	}	
+
 }

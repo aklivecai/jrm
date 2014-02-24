@@ -37,7 +37,7 @@ $listOptions['columns'] = array(
 		                    (
 		                        'label'=>'',
 		                         'url'=>'Yii::app()->controller->createUrl("move", array("id"=>$data->primaryKey))',
-		                         'options'=>array('title'=>Tk::g(array('Move','Clientele')),'class'=>'icon-share-alt data-preview'),
+		                         'options'=>array('title'=>Tk::g(array('Move','Clientele')),'class'=>'icon-share-alt data-ajax'),
 		                    ),
 		              )
 		),	

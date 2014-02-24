@@ -17,14 +17,7 @@
  */
 class History extends MRecord
 {
-	
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{history}}';
-	}
+	public static $table = '{{history}}';
 
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果

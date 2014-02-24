@@ -135,7 +135,8 @@ return array (
   'Seas'=>'公海',
   'Success' =>'成功',
   'Total' => '',
-  'Subordinate' => '下属' ,
+  
+  'Subordinate' => '员工' ,
 
   'Jurisdiction' => '权限',
   'Lock' => '锁定',

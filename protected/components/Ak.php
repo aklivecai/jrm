@@ -1,4 +1,5 @@
 <?php  
+$tak_time = time();
 class Ak {  
     public static function KD($msg,$isexit=false){
         if (!YII_DEBUG) {
@@ -126,6 +127,7 @@ class Ak {
     public static function setCryptNum($str,$rand=false){
         $result = is_numeric($str);
         if ($result) {
+            // 你给的字符串是任意的，但是这个函数只认你给定的进制的符号，你给定的是10，所以只认0-9的字符转换为36进制
             $result = base_convert($str, 10, 36);
                 $arr = str_split($result);
                 $length = count($arr);
@@ -209,7 +211,12 @@ class Ak {
 
     /*获取当前时间*/
     public static function now(){
-        return time();
+        global  $tak_time;
+        if (!$tak_time) {
+            $tak_time = time();
+        }
+        return $tak_time;
+        // return time();
     }
 
     /*获取时间结束一天*/

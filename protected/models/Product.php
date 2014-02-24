@@ -1,25 +1,5 @@
 <?php
 
-/**
- * 这个模块来自表 "{{product}}".
- *
- * 数据表的字段 '{{product}}':
- * @property string $itemid
- * @property string $fromid
- * @property string $name
- * @property string $typeid
- * @property string $material
- * @property string $spec
- * @property string $unit
- * @property integer $stockssds
- * @property string $add_time
- * @property string $add_us
- * @property string $add_ip
- * @property string $modified_time
- * @property string $modified_us
- * @property string $modified_ip
- * @property string $note
- */
 class Product extends ModuleRecord
 {
 
@@ -31,12 +11,6 @@ class Product extends ModuleRecord
 	public $price = '0.00';
 	private $total = '0.00';
 	private $stock = 0;	
-
-	public function tableName()
-	{
-		return self::$table;
-	}
-
 
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果

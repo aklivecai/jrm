@@ -2,7 +2,7 @@
 class ModuleRecord extends MRecord
 {
 	public $scondition = ' status=1 ';/*默认搜索条件*/
-	private $_bycu = true; //搜索自己
+	protected $_bycu = true; //搜索自己
 
 	public function init(){
 		parent::init();
@@ -42,15 +42,16 @@ class ModuleRecord extends MRecord
     	$arr['condition'] = join(" AND ",$condition);
     	return $arr;
     }
+    
     public function setGetCU($isTure=false){
     	$this->_bycu = $isTure;
     	return $this;
     }
     protected function getCu(){
     	$result = false;
-    	if($this->hasAttribute('manageid')
-    		&&$this->_bycu
-    		&&!Tak::checkSuperuser()
+    	if( $this->hasAttribute('manageid')
+    		&& $this->_bycu
+    		&& !Tak::checkSuperuser()
     		){
     		$result = true;
     	}

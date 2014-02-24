@@ -1,25 +1,4 @@
 <?php
-
-/**
- * 这个模块来自表 "{{movings}}".
- *
- * 数据表的字段 '{{movings}}':
- * @property string $itemid
- * @property string $fromid
- * @property integer $type
- * @property string $numbers
- * @property string $time
- * @property string $typeid
- * @property string $enterprise
- * @property string $us_launch
- * @property string $time_stocked
- * @property string $add_time
- * @property string $add_ip
- * @property string $modified
- * @property string $modified_ip
- * @property string $note
- * @property integer $status
- */
 class Movings extends ModuleRecord
 {
 
@@ -32,13 +11,7 @@ class Movings extends ModuleRecord
 
 	public $time = '';
 	
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{movings}}';
-	}
+	public static $table = '{{movings}}';
 
 	public function init(){
 		parent::init();

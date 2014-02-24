@@ -267,7 +267,7 @@ var modid = 'ajax-modal'
 $(document).on('click','.data-ajax', function(event){
     event.preventDefault();
         var t = $(this)
-        , url = t.attr('href')
+        , url = t.attr('data-url')?t.attr('data-url'):t.attr('href')
     ;
     if (!mod) {
         mod = $(strMod).appendTo(document.body);
@@ -280,9 +280,10 @@ $(document).on('click','.data-ajax', function(event){
         var _thead = t.attr('title')!=''?t.attr('title'):t.text();
             ;
             mhead.text(_thead);
-            modC.html('<div class="loading-spinner in" style="width: 200px; margin-left: -100px;"><div class="progress progress-striped active"><div class="bar" style="width: 20%;"></div></div>').addClass('load-content');
-            $.ajax(url).done(function(data) {                
+            modC.html('...').addClass('load-content');
+            $.ajax(url).done(function(data) {
                 modC.html(data);
+                initSelect(modC);
             }) .fail(function(error,i,s) {
                 mhead.text('请求错误:'+s);
                  modC.html('<div class="alert alert-error">'+error.responseText+'</div>');
@@ -291,6 +292,7 @@ $(document).on('click','.data-ajax', function(event){
                     modC.removeClass('load-content');
                     mod.attr('data-url',url).trigger('k-load');
                     t.trigger('click');
+                    t.trigger('tak-over');
               });
     }
     mod.modal('show');

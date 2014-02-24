@@ -84,7 +84,8 @@ $this->widget('application.components.MyMenu',array(
 </div><div class="row-form clearfix">
 	<?php echo $form->textAreaRow($model, 'note', array('maxlength'=>255)); ?>
     </div><div class="row-form clearfix">    
-    <?php echo $form->checkBoxRow($model, 'isbranch'); ?>
+    <?php echo $form->dropDownListRow($model,'isbranch',TakType::items('isbranch')); ?>
+
   </div><div class="row-form">
   <div class="controls">
       <?php 

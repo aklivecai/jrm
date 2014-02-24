@@ -1,18 +1,5 @@
 <?php
 
-/**
- * 这个模块来自表 "{{profile}}".
- *
- * 数据表的字段 '{{profile}}':
- * @property string $itemid
- * @property integer $sex
- * @property string $company
- * @property string $user_nicename
- * @property string $telephone
- * @property string $mobile
- * @property string $address
- * @property string $fax
- */
 class Profile extends CActiveRecord
 {
 	

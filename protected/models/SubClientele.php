@@ -1,16 +1,12 @@
 <?php
 class SubClientele extends Clientele
 {
+
 	//默认继承的搜索条件
 	public function defaultScope()
 	{
 		$arr = parent::defaultScope();
-		$sql = strtr('manageid IN (SELECT manageid FROM :tabl WHERE fromid=:fromid AND branch=:branch AND isbranch=0)',
-			array(':tabl'=>Manage::$table
-				, ':fromid' =>Tak::getFormid()
-				, ':branch' =>Tak::getState('branch',-1)
-			)
-		);
+		$sql = Subordinate::getSubManageSql();
 		$condition = array(
 			$sql
 		);

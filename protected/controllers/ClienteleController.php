@@ -78,7 +78,7 @@ class ClienteleController extends Controller
 			'model'=>$model,
 		));		
 	}
-	public function actionSelectById($id=false){
+	public function actionSelectByIdxx($id=false){
 		 // header('Content-Type: application/json');
 		if (!is_numeric($id)) {
 			$message = Tk::g('Illegal operation');

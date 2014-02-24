@@ -1,14 +1,8 @@
 <?php
 class Events extends ModuleRecord
 {
-	
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{events}}';
-	}
+	public static $table = '{{events}}';
+
 	// 默认等级
 	public $priority = 0; 
 	// 默认状态

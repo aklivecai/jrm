@@ -16,7 +16,7 @@ $att = array(
 		'user_name',
 		'user_nicename',
 		array('name'=>'branch','type'=>'raw' ,'value'=>$this->getBranch($model->branch)),
-		array('name'=>'isbranch','type'=>'raw' ,'value'=>TakType::getStatus("isok",$model->isbranch)),
+		array('name'=>'isbranch','type'=>'raw' ,'value'=>TakType::getStatus("isbranch",$model->isbranch)),
 
 		'user_email',
 		array('name'=>'add_time', 'value'=>Tak::timetodate($model->add_time,6),),
@@ -84,6 +84,27 @@ $this->widget('bootstrap.widgets.TbMenu', array(
 
 <div class="block-fluid clearfix">
 	<div class="assignments span6">
+    <div class="block-fluid nm without-head">
+		<?php if( $formModel!==null ): ?>
+			 <div class="">
+		<?php 
+		$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+		    'id'=>'horizontalForm',
+		    'type'=>'horizontal',
+		)); 
+		echo JHtml::tag('label',Rights::t('core', 'Assign item'));
+		echo $form->dropDownList($formModel, 'itemname', $assignSelectOptions); 
+		echo $form->error($formModel, 'itemname'); 
+		$this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Rights::t('core', 'Assign'))); 
+		$this->endWidget(); 
+		?>
+
+			</div>
+		<?php else: ?>
+			<p class="info">
+			<?php echo Rights::t('core', 'No assignments available to be assigned to this user.'); ?>
+		</p>
+		<?php endif; ?>    
 <table cellpadding="0" cellspacing="0" width="100%" class="table">
   <thead>
       <tr>
@@ -114,38 +135,10 @@ $this->widget('bootstrap.widgets.TbMenu', array(
     <?php endforeach ?>
       </tbody>
 </table>
-	</div>
-    <div class="span5 add-assignment">
-        <div class="block-fluid nm without-head">
-            <div class="toolbar nopadding-toolbar clear clearfix">
-                <h4><?php echo Rights::t('core', 'Assign item'); ?></h4>
-            </div>                                  
-        </div>
-		<?php if( $formModel!==null ): ?>
-			 <div class="block uploads">
-
-		<?php 
-		$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-		    'id'=>'horizontalForm',
-		    'type'=>'horizontal',
-		)); 
-
-		echo $form->dropDownList($formModel, 'itemname', $assignSelectOptions); 
-		echo $form->error($formModel, 'itemname'); 
-		$this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Rights::t('core', 'Assign'))); 
-		$this->endWidget(); 
-
-		?>
-
-			</div>
-		<?php else: ?>
-			<p class="info">
-			<?php echo Rights::t('core', 'No assignments available to be assigned to this user.'); ?>
-		<?php endif; ?>
-
-	</div>
-	</div>
-
 </div>
 
-</p>
+	</div>
+    <div class="span5 add-assignment">
+    
+	</div>
+</div>

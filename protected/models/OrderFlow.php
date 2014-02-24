@@ -17,13 +17,7 @@ class OrderFlow extends MRecord
 {
 	public $action_user = '系统';
 
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{order_flow}}';
-	}
+	public static $table = '{{order_flow}}';
 
 	public function init(){
 		parent::init();

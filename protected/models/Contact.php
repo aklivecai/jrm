@@ -1,16 +1,8 @@
 <?php
 class Contact extends ModuleRecord
 {
-	
 	public $linkName = 'contact_time';
-	
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{contact}}';
-	}
+	public static $table = '{{contact}}';
 
 	public function rules()
 	{
@@ -21,8 +13,7 @@ class Contact extends ModuleRecord
 			array('add_time, add_ip, modified_time, modified_ip', 'length', 'max'=>10),
 			array('type', 'length', 'max'=>15),
 			array('next_subject, accessory, note', 'length', 'max'=>255),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+
 			array('itemid, fromid, manageid, clienteleid, prsonid, type, stage, contact_time, next_contact_time, next_subject, accessory, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status', 'safe', 'on'=>'search'),
 
 			array('next_contact_time,contact_time','checkTime'),
@@ -202,9 +193,7 @@ class Contact extends ModuleRecord
 
          // 更新客户最后联系时间
         Clientele::model()->updateByPk($this->clienteleid,array('last_time'=>$this->contact_time),$c);
-
         // contact_time
-
 	}
 
 	public function del(){
@@ -231,4 +220,5 @@ class Contact extends ModuleRecord
 		$result = parent::getNP($isid,$top);
 		return $result;
 	}
+
 }

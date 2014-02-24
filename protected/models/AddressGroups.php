@@ -1,54 +1,22 @@
 <?php
-
-/**
- * 这个模块来自表 "{{address_groups}}".
- *
- * 数据表的字段 '{{address_groups}}':
- * @property string $address_groups_id
- * @property string $fromid
- * @property string $name
- * @property integer $display
- * @property string $add_time
- * @property string $add_us
- * @property string $add_ip
- * @property string $modified_time
- * @property string $modified_us
- * @property string $modified_ip
- * @property string $note
- * @property integer $listorder
- * @property integer $status
- */
 class AddressGroups extends ModuleRecord
 {
-	
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{address_groups}}';
-	}
+	public static $table = '{{address_groups}}';
 
 	public function primaryKey()
 	{
 		return 'address_groups_id';
 	} 	
 
-	/**
-	 * @return array validation rules for model attributes.字段校验的结果
-	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('name', 'required'),
 			array('display, listorder, status', 'numerical', 'integerOnly'=>true),
 			array('address_groups_id, add_us, modified_us', 'length', 'max'=>25),
 			array('fromid, add_time, add_ip, modified_time, modified_ip', 'length', 'max'=>10),
 			array('name, note', 'length', 'max'=>255),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+
 			array('address_groups_id, fromid, name, display, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, listorder, status', 'safe', 'on'=>'search'),
 			array('name','authenticate'),
 		);
@@ -74,20 +42,6 @@ class AddressGroups extends ModuleRecord
 		}
 	}	
 
-	/**
-	 * @return array relational rules. 表的关系，外键信息
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
-	}
-
-	/**
-	 * @return array customized attribute labels (name=>label) 字段显示的
-	 */
 	public function attributeLabels()
 	{
 		return array(

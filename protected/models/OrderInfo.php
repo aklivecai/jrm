@@ -1,30 +1,5 @@
 <?php
 
-/**
- * 这个模块来自表 "{{order_info}}".
- *
- * 数据表的字段 '{{order_info}}':
- * @property string $itemid
- * @property string $date_time
- * @property integer $detype
- * @property integer $pay_type
- * @property integer $earnest
- * @property integer $few_day
- * @property integer $delivery_before
- * @property integer $remaining_day
- * @property integer $packing
- * @property integer $taxes
- * @property integer $convey
- * @property string $area
- * @property string $address
- * @property string $people
- * @property string $tel
- * @property string $phone
- * @property string $purchasconsign
- * @property string $contactphone
- * @property string $note
- * @property string $add_ip
- */
 class OrderInfo extends MRecord
 {
 		public $earnest = '';
@@ -32,13 +7,7 @@ class OrderInfo extends MRecord
 		public $delivery_before = '';
 		public $remaining_day = '';
 	
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{order_info}}';
-	}
+	public static $table = '{{order_info}}';
 
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果

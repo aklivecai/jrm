@@ -4,13 +4,8 @@ class Clientele extends ModuleRecord
 	
 	public $linkName = 'clientele_name'; /*连接的显示的字段名字*/
 	public $profession = 4;
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{clientele}}';
-	}
+
+	public static $table = '{{clientele}}';
 
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果

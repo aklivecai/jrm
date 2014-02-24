@@ -38,9 +38,9 @@ class SysCrypt{
         $this->crypt_key=NULL;
     }
 }
-    $m = new SysCrypt();
-    $t = $m->encrypt('53788158634402140');
-    $t2 = $m->decrypt($t);
+    // $m = new SysCrypt();
+    // $t = $m->encrypt('53788158634402140');
+    // $t2 = $m->decrypt($t);
     
     // echo sprintf("%s\n", $t);
     // echo sprintf("%s\n", $t2);
@@ -49,3 +49,5 @@ class SysCrypt{
 
     // $t2 = $m->decrypt('UmwGYQNmDGkAbVs0CWUAaw9mVGBYZQE0AjYAMAIwVjJQaw==');
     // echo $t2;
+
+    // echo sprintf("%s\n%s%s", 1,2);

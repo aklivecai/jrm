@@ -1,36 +1,11 @@
 <?php
-
-/**
- * 这个模块来自表 "{{order}}".
- *
- * 数据表的字段 '{{order}}':
- * @property string $itemid
- * @property string $fromid
- * @property string $manageid
- * @property string $add_time
- * @property string $total
- * @property integer $status
- * @property string $pay_time
- * @property string $delivery_time
- * @property string $u_time
- * @property string $invoice_number
- * @property string $note
- */
 class Order extends MRecord
 {
-
 	private $_orderinfo = null;
-
 	public $status = 1; /*订单默认状态*/
-
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{order}}';
-	}
-
+	
+	public static $table = '{{order}}';
+	
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果
 	 */

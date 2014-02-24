@@ -1,26 +1,4 @@
 <?php
-
-/**
- * This is the model class for table "{{Manage}}".
- *
- * The followings are the available columns in table '{{Manage}}':
- * @property string $fromid
- * @property long $manageid
- * @property string $user_name
- * @property string $user_pass
- * @property string $salt
- * @property string $user_nicename
- * @property string $user_email
- * @property string $add_time
- * @property string $add_ip
- * @property string $last_login_time
- * @property string $last_login_ip
- * @property integer $login_count
- * @property string $user_status
- * @property string $note
- * @property string $activkey
- * @property integer $active_time
- */
 class Manage extends ModuleRecord
 {
 	public $linkName = 'user_name'; /*连接的显示的字段名字*/
@@ -29,19 +7,12 @@ class Manage extends ModuleRecord
 
 	private $oldbranch = false;
 
-	public static $table = '{{manage}}';
-
 	public function primaryKey()
 	{
 		return 'manageid';
 	} 	
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return self::$table;
-	}
+
+	public static $table = '{{manage}}';
 
 	/*记录修改过部门*/
 	public function  changeBranch(){
@@ -213,7 +184,7 @@ class Manage extends ModuleRecord
 			'salt' => '登录检验码',
 			'user_nicename' => '名字',
 			'user_email' => '邮箱',
-			'isbranch' => '?部门经理',
+			'isbranch' => '职位',
 			'branch' => '部门',
 			'add_time' => '添加时间',
 			'add_ip' => '添加IP',

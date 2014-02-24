@@ -1,14 +1,5 @@
 <?php
 
-/**
- * This is the model class for table "{{setting}}".
- *
- * The followings are the available columns in table '{{setting}}':
- * @property string $itemid
- * @property string $manageid
- * @property string $item_key
- * @property string $item_value
- */
 class Setting extends CActiveRecord
 {
 	/**

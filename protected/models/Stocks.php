@@ -1,32 +1,8 @@
 <?php
-
-/**
- * 这个模块来自表 "{{stocks}}".
- *
- * 数据表的字段 '{{stocks}}':
- * @property string $itemid
- * @property string $fromid
- * @property string $product_id
- * @property integer $stocks
- * @property string $add_time
- * @property string $add_us
- * @property string $add_ip
- * @property string $modified_time
- * @property string $modified_us
- * @property string $modified_ip
- * @property string $note
- */
 class Stocks extends ModuleRecord
 {
 
 	public static $table = '{{stocks}}';
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return self::$table;
-	}
 
 	public function init(){
 		parent::init();

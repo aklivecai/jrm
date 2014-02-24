@@ -17,6 +17,14 @@ class MRecord extends CActiveRecord
 		$this->sName = Tk::g($this->mName);
 	}
 
+
+	public static $table = null;
+	public function tableName()
+	{
+		$m = get_class($this);
+		 return $m::$table;
+	}	
+
 	public function primaryKey()
 	{
 		return 'itemid';
@@ -348,6 +356,9 @@ class MRecord extends CActiveRecord
 		// $sqlWhere = array_filter($sqlWhere);
 		$sql1 = ':itemid :opt :current_id';
 		$sqlWhere = array($this->getDefaultScopeSql());
+		// Tak::KD($sqlWhere);
+		// Tak::KD($this->getCu());
+		// Tak::KD($this->_bycu);
 		
 		foreach ($_arr as $key => $value) {
 		  $sqlWhere['w'] = str_replace(':opt',$value['opt'],$sql1);

@@ -38,7 +38,7 @@ class Controller extends RController
 	public function init()  
 	{  
  		parent::init();
-    $this->isAjax  = Yii::app()->request->isAjaxRequest;
+    		$this->isAjax  = Yii::app()->request->isAjaxRequest;
 		if($this->isAjax){
 			$this->_setLayout('//layouts/columnAjax');
 			Yii::app()->clientScript->enableJavaScript = false;
@@ -55,10 +55,12 @@ class Controller extends RController
 
 		$this->returnUrl = Yii::app()->request->getParam('returnUrl',null);
 	}	
+
 	protected function _setLayout($layout='column2')
 	{
 		$this->layout = $layout;
 	}	
+
 	public function afterRender($view, &$output){
 		if ($this->isAjax) {
 			Yii::app()->clientScript->reset();
@@ -107,12 +109,14 @@ class Controller extends RController
 			$filterChain->removeAt(1);
 		$filterChain->run();
 	}	
-
 	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
+	 * [loadModel description]
+	 * @param  [type]  $id
+	 * @param  boolean $recycle 状态
+	 * @param  boolean $notcu 是否限制为当前用户
+	 * @return [type] $model
 	 */
-	public function loadModel($id,$recycle=false)
+	public function loadModel($id,$recycle=false,$notcu=false)
 	{
 		if($this->_model===null)
 		{
@@ -121,17 +125,21 @@ class Controller extends RController
 			if ($recycle) {
 				$m->setRecycle();
 			}
-			$this->_model = $m->findByPk($id);
-			if($this->_model===null)
+			if ($notcu) {
+				$m->setGetCU();
+			}
+			$m  = $m->findByPk($id);
+			if($m===null){
 				$this->error();
+			}
+			if ($notcu) {
+				$m->setGetCU();	
+			}
+			$this->_model = $m;
 		}
 		return $this->_model;
 	}
 
-	/**
-	 * Performs the AJAX validation.
-	 * @param Manage $model the model to be validated
-	 */
 	protected function performAjaxValidation($model)
 	{
 
@@ -157,9 +165,6 @@ class Controller extends RController
 
 	public function actionView($id)
 	{
-		if (condition) {
-			# code...
-		}
 		$this->render($this->templates['view'],array(
 			'model' => $this->loadModel($id),
 		));
@@ -171,13 +176,17 @@ class Controller extends RController
 			'model' => $this->loadModel($id),
 		));
 	}	
-	public function actionPreview($id)
+	public function actionPreview($id,$uuid=false,$status=false,$not=false)
 	{
 		if(!$this->isAjax){
 			$this->_setLayout('//layouts/columnPreview');
 		}		
+		if ($uuid&&Tak::getEid($uuid)!=$id) {
+			// $not = false;
+			// $status = false;
+		}
 		$this->render($this->templates['preview'],array(
-			'model' => $this->loadModel($id),
+			'model' => $this->loadModel($id,$status,$not),
 		));
 	}	
 
@@ -230,17 +239,12 @@ class Controller extends RController
 		$this->render($this->templates['create'],array(
 			'model' => $model,
 		));
-
 	}
 
 	public function actionUpdate($id)
 	{
-		$model = $this->loadModel($id);
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-		
-		$m = $this->modelName;
-		
+		$model = $this->loadModel($id);	
+		$m = $this->modelName;		
 		if(isset($_POST[$m]))
 		{
 			$model->attributes=$_POST[$m];
@@ -253,6 +257,7 @@ class Controller extends RController
 		));
 	}
 
+	// 回收站
 	public function actionRecycle(){
 		$m = $this->modelName;
 		$model = new $m('search');
@@ -267,7 +272,7 @@ class Controller extends RController
 		));
 	}
 
-	
+	// 还原
 	public function actionRestore($id)
 	{
 		$model = $this->loadModel($id,true);
@@ -282,6 +287,7 @@ class Controller extends RController
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('recycle'));
 	}	
+
 	public function actionAdmin()
 	{
 		$m = $this->modelName;
@@ -294,14 +300,6 @@ class Controller extends RController
 			'model'=>$model,
 		));
 	}
-
-	public function writeData($data){
-		header('Content-Type: application/json');
-		$callback = $_GET['callback'];
-		$str = $callback.'('.$data.');';
-		echo($str);
-		exit;
-	}
 	
 	public function actionPrint($id){
 		$this->layout = '//layouts/colummPrint';
@@ -310,36 +308,81 @@ class Controller extends RController
 		));		
 	}
 
-	public function actionSelectById($id=false){
+	public function actionSelectById($id=false,$_modelName=false){
 		if (!is_numeric($id)) {
 			$message = Tk::g('Illegal operation');
-			throw new CHttpException(403, $message);
+			$this->error(403, $message);
 			exit;
 		}
-		$m = $this->modelName;
-
+		// 通过方法传递,对应的模块名字
+		if (!$_modelName) {
+			$m = $_modelName;
+		}else{
+			$m = $this->modelName;
+		}
 		$msg = $this->loadModel($id);
+		$data = $msg->attributes;
+		$data['itemid'] = $msg->primaryKey;
+		$data['title'] = $msg->{$msg->linkName};		
 		if ($msg!=null) {
-			$str = json_encode($msg->attributes);
+			$str = json_encode($data);
 			$this->writeData('{data:['.$str.']}');
 		}
-		exit;
+	}
+
+	public function actionSelect($id=0,$page_limit=10,$q='*',$not=false){
+		 (int)$id>0&&$this->actionSelectById($id);
+		 $pageSize = (int)$page_limit>0?$page_limit:10;		 
+		 $q = Yii::app()->request->getQuery('q',false);
+		 $data = $this->getSelectOption($q,$not);
+		 $data['data']['pagination']['pageSize'] = $pageSize;
+		 $dataProvider = new JSonActiveDataProvider($data['name'],$data['data']); 
+		 $rs = $dataProvider->getArrayCountData();
+		 $str = '{"total":'.$rs['totalItemCount'].',"link_template":"movies.json?q={search-term}&page_limit={results-per-page}&page={page-number}"';
+
+		// $this->render('/site/ie6',array(
+		// 	'model'=>$model,
+		// ));exit;
+
+		 $this->writeData($dataProvider->getJsonData());
+	}
+
+	public function actionGetTop($id,$top=5,$view='view'){
+		
+		$top = (int)$top>0?(int)$top:10;
+		$msg = $this->loadModel($id);
+		$tags = $msg->getNP(false,$top);
+		
+		$this->_setLayout('//layouts/columnAjax');
+		Yii::app()->clientScript->enableJavaScript = false;
+
+		$this->render('/chip/list-top',array(
+			'model'=>$msg,
+			'tags' => $tags,
+			'view' => $view
+		));		
 	}
 
 	protected function getSelectOption($q,$not=false){
 		$m = $this->modelName;
 		$model = new $m;
+
+		$key = $model->primaryKey();
+		$linkName = $model->linkName;
+
+		$attributes = array($key, $model->linkName);
 		$result = array('name'=>$m,
 			'data'=>array(
-				'attributes' => array($model->primaryKey(), $model->linkName),
+				'attributes' => $attributes,
+				'attributeAliases' => array($key=>'itemid', $linkName=>'title'),
 				'sort'=>array(
-					'defaultOrder'=>'add_time DESC,'.$model->linkName.' ASC', 
+					'defaultOrder'=>'add_time DESC,'.$linkName.' ASC', 
 				),
 			)
 		);
 		$criteria = new CDbCriteria;
-		if ($q) {			
-			$criteria->addSearchCondition($model->linkName,$q,true);
+		if ($q) {
+			$criteria->addSearchCondition('user_name',$q,true);
 		}
 		if ($not) {
 			$_not = explode(',',$not);
@@ -350,32 +393,6 @@ class Controller extends RController
 		$result['data']['criteria'] = $criteria;
 		return $result;
 	}
-	public function actionSelect($id=0,$page_limit=10,$q='*'){
-		 (int)$id>0&&$this->actionSelectById($id);
-		 $pageSize = (int)$page_limit>0?$page_limit:10;		 
-		 $q = Yii::app()->request->getQuery('q',false);
-		 $data = $this->getSelectOption($q);
-		 $data['data']['pagination']['pageSize'] = $pageSize;
-		 $dataProvider = new JSonActiveDataProvider($data['name'],$data['data']); 
-		 $rs = $dataProvider->getArrayCountData();
-		 $str = '{"total":'.$rs['totalItemCount'].',"link_template":"movies.json?q={search-term}&page_limit={results-per-page}&page={page-number}"';
-		 $this->writeData($dataProvider->getJsonData());
-	}
-	public function actionGetTop($id,$top=5,$view='view'){
-		
-		$top = (int)$top>0?(int)$top:10;
-		$msg = $this->loadModel($id);
-		$tags = $msg->getNP(false,$top);
-		
-			$this->_setLayout('//layouts/columnAjax');
-			Yii::app()->clientScript->enableJavaScript = false;
-
-		$this->render('/chip/list-top',array(
-			'model'=>$msg,
-			'tags' => $tags,
-			'view' => $view
-		));		
-	}
 
 	protected function errorE($msg='非法操作'){
 		$this->error(202,$msg);
@@ -383,6 +400,14 @@ class Controller extends RController
 	protected function error($code=404,$msg='所请求的页面不存在。'){
 		throw new CHttpException($code,$msg);
 	}
+
+	public function writeData($data){
+		header('Content-Type: application/json');
+		$callback = $_GET['callback'];
+		$str = $callback.'('.$data.');';
+		echo($str);
+		exit;
+	}	
 
 }
 

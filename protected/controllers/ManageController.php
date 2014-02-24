@@ -81,7 +81,6 @@ class ManageController extends Controller
 
 		if( $assignSelectOptions!==array() )
 		{
-
 			$crypt = new SysCrypt();
 			$formModel = new AssignmentForm();
 		    // Form is submitted and data is valid, redirect the user
@@ -96,12 +95,10 @@ class ManageController extends Controller
 					}
 					$m = $this->loadJurisdiction($name);
 					Jurisdiction::create($model->primaryKey,$model->fromid,$name);
-
 					// Tak::setFlash(
 					// 	Rights::t('core', 'Permission :name assigned.', array(':name'=>$m['description'])),
 					// 	'success'
 					// );
-
 					$this->redirect($this->getJUrl());
 				}
 			}	
@@ -139,7 +136,14 @@ class ManageController extends Controller
 
 		} else {
 		 	$formModel = null;
-		}				
+		}
+
+		$formSub = new Subordinate;
+
+		if (isset($_POST['Subordinate'])) {
+			
+		}
+
 
 		$this->render('view',array(
 			'model'=>$model,

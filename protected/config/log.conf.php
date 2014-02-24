@@ -27,7 +27,7 @@ if( YII_DEBUG )
         'config'=>'alignLeft, opaque, runInDebug, fixedPos, collapsed, yamlStyle',
         'levels'=>'error, warning, trace, profile, info',
         'levels'=>'error, warning, trace, info',
-        'categories'=>'cool.*,system.db.*',
+        'categories'=>'cool.*,system.db.CDbCommand',
         'allowedIPs'=>array(
             '127.0.0.1',
             '192.168.1.201X',

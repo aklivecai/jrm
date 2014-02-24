@@ -1,32 +1,9 @@
 <?php
 
-/**
- * 这个模块来自表 "{{order_product}}".
- *
- * 数据表的字段 '{{order_product}}':
- * @property string $itemid
- * @property string $order_id
- * @property string $fromid
- * @property string $name
- * @property string $model
- * @property string $standard
- * @property string $color
- * @property string $unit
- * @property string $amount
- * @property string $price
- * @property string $sum
- * @property string $note
- */
 class OrderProduct extends MRecord
 {
 	
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{order_product}}';
-	}
+	public static $table = '{{order_product}}';
 
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果

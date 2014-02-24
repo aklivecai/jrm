@@ -1,32 +1,38 @@
     var page_limit = 10
     , defaultID = 'itemid'
+    , defaultTitle = 'title'
     , formatMange = function(data){
         var result = "<table class='movie-result'><tr>";
         result += "<td class='movie-info'><div class='movie-title'>" + data.user_nicename + "</div></td>";
-        result += "<td> ("+data.user_name+")</td>"
-        result += "</tr></table>";       
+        result += "<td> ("+data.title+")</td>"
+        result += "</tr></table>";
         return result;
+    }
+    , __arrFun = {
+            'Manage':{'func':formatMange}
     }
     , getSwitch = function(type){
         var result = false
           , format = arguments.length>=2?arguments[1]:false
-         , arr = {
-            'Clientele':{'s1':'clientele_name'},
-            'Memeber':{'s1':'company'},
-            'ContactpPrson':{'s1':'nicename'},
-            'Manage':{'func':formatMange,'id':'manageid'}
-        };
-        if (typeof arr[type]!='undefined'){
+        ;
+        if (typeof __arrFun[type]!='undefined'){
             if(format){
-                if(typeof arr[type][format]!='undefined')
+                if(typeof __arrFun[type][format]!='undefined')
                 {
-                    result = arr[type][format];
+                    result = __arrFun[type][format];
                 }else if(format=='id'){
                     result = defaultID;
                 }
             }else{
-                result = arr[type];
+                result = __arrFun[type];
             }
+        }
+        if (!result){
+         if(format=='id') {
+            result = defaultID;
+          }else{
+            result = defaultTitle;
+          }
         }
         return result;
     }
@@ -34,30 +40,30 @@
         var result = ''
          , arr =  getSwitch(type)
         ;
-        if (arr){
-            if(typeof arr['s1']!='undefined'){
-                result = data[arr['s1']];  
-            }else if(typeof arr['func']!='undefined'){
+            if(typeof arr['func']!='undefined'){
                 result = arr['func'](data);
+            }else{
+                result = typeof arr['s1']!='undefined' ? data[arr['s1']] : data[defaultTitle];
+                _temp = "<table class='movie-result'><tr>";
+                _temp += "<td class='movie-info'><div class='movie-title'>" + result + "</div>";
+                _temp += "</td></tr></table>";
+                result = _temp;
             }
-        }
         return result;
     } 
     , mFormatResult = function(data,type) {
         var result = ''
          , arr =  getSwitch(type)
         ;
-        if (arr){
-            if(typeof arr['s1']!='undefined'){
-                result = data[arr['s1']];  
+            if(typeof arr['func']!='undefined'){
+                result = arr['func'](data);
+            }else{
+                result = typeof arr['s1']!='undefined' ? data[arr['s1']] : data[defaultTitle];
                 _temp = "<table class='movie-result'><tr>";
                 _temp += "<td class='movie-info'><div class='movie-title'>" + result + "</div>";
                 _temp += "</td></tr></table>";
                 result = _temp;
-            }else if(typeof arr['func']!='undefined'){
-                result = arr['func'](data);
             }
-        }
         return result;
      }
      , mFormatID = function(data,type){
@@ -86,8 +92,11 @@
         var __t = $(elem);
         if (__t.length==0) {return false;};
         (function(t){
-            var sType = t.attr('data-select')
-            , ajaxUrl = sType+"/select"
+            var sType = iType = t.attr('data-select')
+                if (t.attr('data-get')&&typeof __arrFun[t.attr('data-get')]!='undefined') {
+                    sType = t.attr('data-get');
+                };
+            var ajaxUrl = iType+"/select"
             , result = {
                 placeholder: "搜索",
                 allowClear: true,//显示取消按钮
@@ -99,7 +108,9 @@
                 dropdownCssClass: "bigdrop",
                 createSearchChoice: function (term) {},
                 escapeMarkup: function (m) { return m; } ,
-                formatResult:function(data){return mFormatResult(data,sType)},
+                formatResult:function(data){
+                    return mFormatResult(data,sType)
+                },
                 formatSelection: function(data){ return mFormatSelection(data,sType)},
                 id:function(data){ return mFormatID(data,sType); },
                 ajax: { 
@@ -116,7 +127,8 @@
                         };
                         var _not = [];
                         if (t.attr('data-not')&&t.attr('data-not')!='') {
-                           result.push(t.attr('data-not'));
+                           _not.push(t.attr('data-not'));
+
                         };
 
                         // data-notbyel
@@ -129,6 +141,9 @@
                                 };                                  
                            });
                         }
+                        if (t.attr('data-get')) {
+                            result['get'] = t.attr('data-get');
+                        };
                         result['not'] = _not.join(',');
                         return result;
                     },
@@ -138,9 +153,18 @@
                     }
                 },
                 initSelection: function(element, callback) {
-                    var id= element.val();
+                    var t = $(element) 
+                        , id = t.val() 
+                        , get = t.attr('data-get')
+                        ;
+                        log(get);
                     if (id!=="") {
-                        $.ajax(createUrl(ajaxUrl,['id='+id])
+                        var pars = ['id='+id];
+                        if (get) {
+                            pars.push('get='+get);
+                        };                        
+
+                        $.ajax(createUrl(ajaxUrl,pars)
                             , {dataType: "jsonp"}
                             ).done(function(data) {
                             if (data!=''&&typeof data=='object') {
@@ -149,27 +173,32 @@
                        });
                     }
                 }
-            };            
+            }; 
+
              t.select2(result).trigger('select-load');
         })(__t);
            
       }
     ;
-jQuery(function($){
 
-    $('#list-grid,body').on('takLoad',function(){ /*tselect();*/});
+var initSelect = function(dom){
+    var clientele = dom.find(".select-clientele").attr({'data-select':'Clientele','placeholder':'搜索客户'})
+    , prson = dom.find(".select-prsonid").attr({'data-select':'ContactpPrson','placeholder':'搜索联系人','data-selectby':'input.select-clientele:clienteleid'})
 
-    var clientele = $(".select-clientele").attr({'data-select':'Clientele','placeholder':'搜索客户'})
-    , prson = $(".select-prsonid").attr({'data-select':'ContactpPrson','placeholder':'搜索联系人','data-selectby':'input.select-clientele:clienteleid'})
+    , manage = dom.find(".select-manageid").attr({'data-select':'Manage'})
 
-    , manage = $(".select-manageid,.select-mvuser").attr({'data-select':'Manage'})
+    , fromidS = dom.find(".select-fromid").attr({'data-select':'Memeber'})
 
-    , fromidS = $(".select-fromid").attr({'data-select':'Memeber'})
+    , selectAjax = dom.find('.select-ajax')
     ;
     prson.on('select-load',function(){
         clientele.on("change", function(e) { 
             prson.select2('val','');
         })        
     });
-    loadSelects([clientele,prson,manage,fromidS]);  
+    loadSelects([clientele,prson,manage,fromidS,selectAjax]);  
+}
+jQuery(function($){
+    initSelect($(document));
+    // $('#list-grid,body').on('takLoad',function(){ /*tselect();*/});
 });

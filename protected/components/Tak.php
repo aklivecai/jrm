@@ -241,60 +241,78 @@ class Tak extends Ak{
         $items = array(
             array(
               'icon' =>'isw-grid',
-              'url' => array('/site/index'),
+              'url' => array('/Site/Index'),
               'label'=>'<span class="text">主页</span>',
             ),
             array(
               'icon' =>'isw-grid',
-              'url' => array('/site/wizard'),
+              'url' => array('/Site/Wizard'),
               'label'=>'<span class="text">测试</span>',
               'visible'=>self::getAdmin(),
             ),
             array(
               'icon' =>'isw-user',
-              'url' => array('/subordinate/'),
+              'url' => array('/Subordinate/'),
               'label'=>'<span class="text">'.Tk::g(array('Subordinate','Admin')).'</span>',
               'visible'=> self::getState('isbranch',false)||self::getAdmin(),
+              'items'=>array(
+                    array(
+                      'icon' =>'user`',
+                      'label'=>'<span class="text">'.Tk::g(array('Subordinate')).'</span>', 
+                      'url'=>array('/Subordinate/'), 
+                    ), 
+                    array(
+                      'icon' =>'retweet',
+                      'label'=>'<span class="text">'.Tk::g(array('Clienteles')).'</span>', 
+                      'url'=>array('/Subordinate/Clienteles'), 
+                    ), 
+                    array(
+                      'icon' =>'user',
+                      'label'=>'<span class="text">'.Tk::g(array('Log')).'</span>', 
+                      'url'=>array('/Subordinate/Log'), 
+                      'visible'=>self::checkSuperuser()&&YII_DEBUG,
+                    ), 
+                )              
             ),
             'manage' => array(
               'icon' =>'isw-users',
               'label'=>'<span class="text">'.Tk::g(array('Manage','Setting')).'</span>',
-              'url'=>array('/manage/admin'),
+              'url'=>array('/Manage/Admin'),
                'visible'=>self::checkAccess('Manage.*'),
               'items'=>array(
                     array(
                        'icon' =>'user',
                       'label'=>'<span class="text">'.Tk::g(array('Permissions','Admin')).'</span>', 
-                      'url'=>array('/rights/assignment/view'), 
+                      'url'=>array('/Rights/Assignment/View'), 
                       'visible'=>self::checkSuperuser()&&YII_DEBUG,
                       'linkOptions'=>array('id'=>'tak-permissions'),
                     ), 
                     array(
                        'icon' =>'user',
                       'label'=>'<span class="text">'.Tk::g(array('Permissions','Admin')).'</span>', 
-                      'url'=>array('/permission/admin'), 
+                      'url'=>array('/Permission/Admin'), 
                     ), 
 
-                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Create','Manage')).'</span>',  'url'=>array('/manage/create'),),               
-                array('icon'=>'th','label'=>'<span class="text">'.Tk::g(array('Manage','Admin')).'</span>',  'url'=>array('/manage/admin'),),
+                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Create','Manage')).'</span>',  'url'=>array('/Manage/Create'),),               
+                array('icon'=>'th','label'=>'<span class="text">'.Tk::g(array('Manage','Admin')).'</span>',  'url'=>array('/Manage/Admin'),),
                 // array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/manage/recycle'),),
               ),
             ), 
             'clientele' => array(
               'icon' =>'isw-bookmark',
               'label'=>'<span class="text">我的客户</span>',
-              'url'=>array('/clientele/admin'),
+              'url'=>array('/Clientele/Admin'),
               'visible'=>self::checkAccess('Market')||self::checkAccess('Clientele.*'),
               'items'=>array(
-                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Clientele','Create')).'</span>',  'url'=>array('/clientele/create'),),
-                array('icon'=>'th','label'=>'<span class="text">'.Tk::g(array('Clientele','Admin')).'</span>',  'url'=>array('/clientele/admin'),
+                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Clientele','Create')).'</span>',  'url'=>array('/Clientele/Create'),),
+                array('icon'=>'th','label'=>'<span class="text">'.Tk::g(array('Clientele','Admin')).'</span>',  'url'=>array('/Clientele/Admin'),
                 ),
-                array('icon'=>'th','label'=>'<span class="text">联系人管理</span>',  'url'=>array('/contactpPrson/admin'),),
-                array('icon'=>'th','label'=>'<span class="text">联系记录</span>',  'url'=>array('/contact/adminGroup'),),
-                array('icon'=>'th','label'=>'<span class="text">所有客户</span>',  'url'=>array('/clienteles/'),'visible'=>self::checkAccess('Clienteles.*')),
-                array('icon'=>'th','label'=>'<span class="text">客户转移</span>',  'url'=>array('/moves/clienteles'),'visible'=>self::checkSuperuser()),
-                array('icon'=>'th','label'=>'<span class="text">公海</span>',  'url'=>array('/clientele/seas'),'visible'=>self::checkAccess('Clientele.*')),
-                array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/clientele/recycle'),'visible'=>self::checkSuperuser()),
+                array('icon'=>'th','label'=>'<span class="text">联系人管理</span>',  'url'=>array('/ContactpPrson/Admin'),),
+                array('icon'=>'th','label'=>'<span class="text">联系记录</span>',  'url'=>array('/Contact/AdminGroup'),),
+                array('icon'=>'th','label'=>'<span class="text">所有客户</span>',  'url'=>array('/Clienteles/'),'visible'=>self::checkAccess('Clienteles.*')),
+                array('icon'=>'th','label'=>'<span class="text">客户转移</span>',  'url'=>array('/Moves/Clienteles'),'visible'=>self::checkSuperuser()),
+                array('icon'=>'th','label'=>'<span class="text">公海</span>',  'url'=>array('/Clientele/Seas'),'visible'=>self::checkAccess('Clientele.*')),
+                array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/Clientele/Recycle'),'visible'=>self::checkSuperuser()),
               ),
             ), 
             'addressbook' => array(
@@ -302,10 +320,10 @@ class Tak extends Ak{
               'label'=>'<span class="text">通讯录</span>',
               'visible'=>self::checkAccess('Addressbook.Index'),
               'items'=>array(
-                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g('Create').'部门</span>',  'url'=>array('/AddressGroups/admin'),'visible'=>self::checkAccess('Addressgroups.*'),),
-                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Create','AddressBook')).'</span>',  'url'=>array('/AddressBook/create'),'visible'=>self::checkAccess('Addressbook.*'),),
-                array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('Admin','AddressBook')).'</span>', 'url'=>array('/AddressBook/admin'),'visible'=>self::checkAccess('Addressbook.*'),),
-                array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('View','AddressBook')).'</span>', 'url'=>array('/AddressBook/index'),'visible'=>self::checkAccess('AddressBook.Index'),),
+                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g('Create').'部门</span>',  'url'=>array('/AddressGroups/Admin'),'visible'=>self::checkAccess('Addressgroups.*'),),
+                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Create','AddressBook')).'</span>',  'url'=>array('/AddressBook/Create'),'visible'=>self::checkAccess('Addressbook.*'),),
+                array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('Admin','AddressBook')).'</span>', 'url'=>array('/AddressBook/Admin'),'visible'=>self::checkAccess('Addressbook.*'),),
+                array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('View','AddressBook')).'</span>', 'url'=>array('/AddressBook/Index'),'visible'=>self::checkAccess('AddressBook.Index'),),
               ),
             ),
             'events' => array(
@@ -314,8 +332,8 @@ class Tak extends Ak{
               'label'=>'<span class="text">'.Tk::g('Events').'事项</span>',
               'url'=>array('/events/index'),
               'items'=>array(
-                array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('Events','Admin')).'</span>', 'url'=>array('/events/admin')),
-                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g('Events').'事项</span>',  'url'=>array('/events/create'),),
+                array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('Events','Admin')).'</span>', 'url'=>array('/Events/Admin')),
+                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g('Events').'事项</span>',  'url'=>array('/Events/Create'),),
                 // array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/events/recycle'),),
               ),
             ), 
@@ -339,27 +357,27 @@ class Tak extends Ak{
               'visible'=>self::checkAccess('Pss.*')||self::checkAccess('Product.*'),
               'icon' =>'isw-list',
               'label'=>'<span class="text">库存管理</span>',
-              'url'=>array('/pss/index'),
+              'url'=>array('/Pss/Index'),
               'items'=>array(
-                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product Type').'</span>',  'url'=>array('takType/admin?type=product'),),
-                 array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product').'</span>',  'url'=>array('/product/admin'),),
+                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product Type').'</span>',  'url'=>array('TakType/Admin?type=product'),),
+                 array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product').'</span>',  'url'=>array('/Product/Admin'),),
 
-                array('icon'=>'th','label'=>'<span class="text">入库录入</span>', 'url'=>array('/purchase/admin')),
-                array('icon'=>'th','label'=>'<span class="text">出库录入</span>',  'url'=>array('/sell/admin'),),
-                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Stocks').'</span>',  'url'=>array('/stocks/index'),),
+                array('icon'=>'th','label'=>'<span class="text">入库录入</span>', 'url'=>array('/Purchase/Admin')),
+                array('icon'=>'th','label'=>'<span class="text">出库录入</span>',  'url'=>array('/Sell/Admin'),),
+                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Stocks').'</span>',  'url'=>array('/Stocks'),),
               ),
             ), 
            'order' => array(
               'visible'=>self::checkAccess('Order.*'),
               'icon' =>'isw-list',
               'label'=>'<span class="text">'.Tk::g('Order').'</span>',
-              'url'=>array('/order/index'),
+              'url'=>array('/Order/Index'),
               'items'=>array(
-                array('icon'=>'certificate','label'=>'<span class="text">订单流程</span>',  'url'=>array('/order/config'),),
-                array('icon'=>'shopping-cart','label'=>'<span class="text">'.Tk::g(array('Order','Admin')).'</span>', 'url'=>array('/order/admin')),
-                array('icon'=>'th-large','label'=>'<span class="text">订单变更</span>',  'url'=>array('/site/order'),'visible'=>YII_DEBUG),
+                array('icon'=>'certificate','label'=>'<span class="text">订单流程</span>',  'url'=>array('/Order/Config'),),
+                array('icon'=>'shopping-cart','label'=>'<span class="text">'.Tk::g(array('Order','Admin')).'</span>', 'url'=>array('/Order/Admin')),
+                array('icon'=>'th-large','label'=>'<span class="text">订单变更</span>',  'url'=>array('/Site/Order'),'visible'=>YII_DEBUG),
                 
-                array('icon'=>'certificate','label'=>'<span class="text">协议</span>',  'url'=>array('/order/config'),'visible'=>YII_DEBUG),
+                array('icon'=>'certificate','label'=>'<span class="text">协议</span>',  'url'=>array('/Order/Config'),'visible'=>YII_DEBUG),
                 array('icon'=>'pencil','label'=>'<span class="text">自助下单</span>',  'url'=>'http://u.9juren.com/order/cart/'.self::getFormid(),'linkOptions'=>array('target'=>'_blank')),
               ),
             ), 
@@ -368,23 +386,23 @@ class Tak extends Ak{
               'visible'=>self::checkAccess('Minvite.*'),
               'icon' =>'isb-tag',
               'label'=>'<span class="text">招标</span>',
-              'url'=>array('/invite/index'),
+              'url'=>array('/Invite'),
               'items'=>array(
-                array('icon'=>'th-list','label'=>'<span class="text">招标管理</span>', 'url'=>array('/invite/index')),
-                array('icon'=>'plus','label'=>'<span class="text">招标录入</span>',  'url'=>array('/invite/create'),),
-                array('icon'=>'star','label'=>'<span class="text">投标记录</span>',  'url'=>array('/invite/create'),),
-                array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/invite/recycle'),),
+                array('icon'=>'th-list','label'=>'<span class="text">招标管理</span>', 'url'=>array('/Invite/Index')),
+                array('icon'=>'plus','label'=>'<span class="text">招标录入</span>',  'url'=>array('/Invite/Create'),),
+                array('icon'=>'star','label'=>'<span class="text">投标记录</span>',  'url'=>array('/Invite/Create'),),
+                array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/Invite/Recycle'),),
               ),
             ),   
            'job' => array(
               'visible'=>self::checkAccess('Mjob.*'),
               'icon' =>'isb-graph',
               'label'=>'<span class="text">招聘</span>',
-              'url'=>array('/job/index'),
+              'url'=>array('/Job'),
               'items'=>array(
-                array('icon'=>'th-list','label'=>'<span class="text">招聘管理</span>', 'url'=>array('/job/index')),
-                array('icon'=>'plus','label'=>'<span class="text">招聘录入</span>',  'url'=>array('/job/create'),),
-                array('icon'=>'bookmark','label'=>'<span class="text">收藏的简历</span>',  'url'=>array('/job/create'),),
+                array('icon'=>'th-list','label'=>'<span class="text">招聘管理</span>', 'url'=>array('/Job/Index')),
+                array('icon'=>'plus','label'=>'<span class="text">招聘录入</span>',  'url'=>array('/Job/Create'),),
+                array('icon'=>'bookmark','label'=>'<span class="text">收藏的简历</span>',  'url'=>array('/Job/create'),),
                 array('icon'=>'fire','label'=>'<span class="text">收到的简历</span>',  'url'=>array('/job/create'),),
                 array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/file/recycle'),),
               ),
@@ -407,20 +425,20 @@ class Tak extends Ak{
               'visible'=>self::checkAccess('Msell.*'),
               'icon' =>'isb-graph',
               'label'=>'<span class="text">供应</span>',
-              'url'=>array('/msell/index'),
+              'url'=>array('/Msell'),
               'items'=>array(
-                array('icon'=>'th-list','label'=>'<span class="text">供应管理</span>', 'url'=>array('/msell/admin')),
-                array('icon'=>'plus','label'=>'<span class="text">供应录入</span>',  'url'=>array('/msell/create'),),
+                array('icon'=>'th-list','label'=>'<span class="text">供应管理</span>', 'url'=>array('/Msell/Admin')),
+                array('icon'=>'plus','label'=>'<span class="text">供应录入</span>',  'url'=>array('/Msell/Create'),),
               ),
         );
         $items['mbuy'] = array(
               'visible'=>self::checkAccess('Mbuy.*'),
               'icon' =>'isb-graph',
               'label'=>'<span class="text">求购</span>',
-              'url'=>array('/msell/index'),
+              'url'=>array('/Msell'),
               'items'=>array(
-                array('icon'=>'th-list','label'=>'<span class="text">求购管理</span>', 'url'=>array('/msell/admin')),
-                array('icon'=>'plus','label'=>'<span class="text">求购录入</span>',  'url'=>array('/msell/create'),),
+                array('icon'=>'th-list','label'=>'<span class="text">求购管理</span>', 'url'=>array('/Mbuy/Admin')),
+                array('icon'=>'plus','label'=>'<span class="text">求购录入</span>',  'url'=>array('/Mbuy/Create'),),
               ),
         );
 
@@ -436,7 +454,7 @@ class Tak extends Ak{
          $items[] = array(
                        'icon' =>'isw-zoom',
                       'label'=>'<span class="text">帮助中心</span>', 
-                      'url'=>array('/site/help'), 
+                      'url'=>array('/Site/Help'), 
                     );
          $items[] = array(
                       'icon' => 'isw-chat',
@@ -461,10 +479,10 @@ class Tak extends Ak{
                       'label'=>'<span class="text">管理中心</span>',
                       'items'=>array(
                         // array('icon'=>'wrench','label'=>'<span class="text">网站设置</span>', 'url'=>array('/settin/index')),
-                        array('icon'=>'list-alt','label'=>'<span class="text">网站日志</span>',  'url'=>array('/adminLog/admin'),),
-                         array('icon'=>'fire','label'=>'<span class="text">网站备份</span>',  'url'=>array('/site/Database'),'visible'=>YII_DEBUG),
-                         array('icon'=>'fire','label'=>'<span class="text">导入VIP</span>',  'url'=>array('/site/tak'),'visible'=>YII_DEBUG||self::getAdmin()),
-                         array('icon'=>'','label'=>'<span class="text">Member</span>',  'url'=>array('/site/tak'),'visible'=>YII_DEBUG),
+                        array('icon'=>'list-alt','label'=>'<span class="text">网站日志</span>',  'url'=>array('/AdminLog/Admin'),),
+                         array('icon'=>'fire','label'=>'<span class="text">网站备份</span>',  'url'=>array('/Site/Database'),'visible'=>YII_DEBUG),
+                         array('icon'=>'fire','label'=>'<span class="text">导入VIP</span>',  'url'=>array('/Site/Tak'),'visible'=>YII_DEBUG||self::getAdmin()),
+                         array('icon'=>'','label'=>'<span class="text">Member</span>',  'url'=>array('/Site/Tak'),'visible'=>YII_DEBUG),
                       ),
                     );
          $items[] = array(
@@ -665,5 +683,39 @@ class Tak extends Ak{
         $badges[]=$type;
       }
       return CHtml::tag('span',array('class'=>join(' ',$badges)),$text);
+    }
+
+    public static function creaetPreviewUrl($data){
+      $result = array();
+      $url = 'Preview';
+      if (!is_array($data)) {
+        $result['id'] = $data;          
+        $result = Yii::app()->getController()->createUrl($url,$result);
+      }else{        
+        $result['id'] = $data['id'];
+        isset($data['status'])&&$result['status'] = K;
+        isset($data['not'])&&$result['not'] = K;
+        if(isset($data['url'])){          
+          $url = strpos($data['url'], '/')>0 ? $data['url'] : sprintf("/%s/%s", $data['url'],$url);
+        }
+        if (count($result)>1) {
+           $result['uuid'] = self::setEid($result['id']);
+        }
+        $result = Yii::app()->createUrl($url,$result);
+      }      
+      return $result;
+    }
+
+    public static function setEid($id,$str='i'){
+      if (!$str) {
+       $str = self::createCode(4);
+      }
+      return self::setCryptNum($id,$str);
+    }
+    public static function getEid($id,$str='i'){
+      if (!$str) {
+        $str = 'abcd';
+      }
+      return self::getCryptNum($id,$str);
     }
 }  

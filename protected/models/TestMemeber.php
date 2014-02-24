@@ -1,34 +1,12 @@
 <?php
 
-/**
- * 这个模块来自表 "{{test_memeber}}".
- *
- * 数据表的字段 '{{test_memeber}}':
- * @property string $itemid
- * @property string $manageid
- * @property string $company
- * @property string $email
- * @property string $active_time
- * @property string $add_time
- * @property string $add_us
- * @property string $add_ip
- * @property string $modified_time
- * @property string $modified_us
- * @property string $modified_ip
- * @property string $note
- */
 class TestMemeber extends ModuleRecord
 {
 
 	public $status = 1;
 	public $linkName = 'company';
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{test_memeber}}';
-	}
+	public static $table = '{{test_memeber}}';
+	
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果
 	 */

@@ -23,4 +23,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
   $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'button', 'label'=>Tk::g('Reset'),'htmlOptions'=>array('class'=>'btn-reset'))); 
   echo CHtml::button(Tk::g('Reset'),array('type'=>'reset','class'=>'hide'));
 ?>
+
+<?php 
+  echo $form->hiddenField($model,'manageid'); 
+?>
 <?php $this->endWidget(); ?>   

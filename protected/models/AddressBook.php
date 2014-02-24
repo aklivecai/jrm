@@ -1,51 +1,10 @@
 <?php
-
-/**
- * 这个模块来自表 "{{address_book}}".
- *
- * 数据表的字段 '{{address_book}}':
- * @property string $itemid
- * @property string $groups_id
- * @property string $fromid
- * @property string $name
- * @property string $email
- * @property string $phone
- * @property string $address
- * @property string $department
- * @property string $position
- * @property integer $sex
- * @property string $longitude
- * @property string $latitude
- * @property string $location
- * @property integer $display
- * @property string $add_time
- * @property string $add_us
- * @property string $add_ip
- * @property string $modified_time
- * @property string $modified_us
- * @property string $modified_ip
- * @property string $note
- * @property integer $status
- */
 class AddressBook extends ModuleRecord
 {
-	public $linkName = 'name';
-	
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{address_book}}';
-	}
-
-	/**
-	 * @return array validation rules for model attributes.字段校验的结果
-	 */
+	public $linkName = 'name';	
+	public static $table = '{{address_book}}';
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('name', 'required'),
 			array('sex, display, status', 'numerical', 'integerOnly'=>true),
@@ -54,15 +13,11 @@ class AddressBook extends ModuleRecord
 			array('name', 'length', 'max'=>64),
 			array('telephone,email, phone, address, location, note', 'length', 'max'=>255),
 			array('department, position', 'length', 'max'=>100),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+	
 			array('itemid, groups_id, fromid, name, email, phone, address, department, position, sex, longitude, latitude, location, display, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status', 'safe', 'on'=>'search'),
 		);
 	}
 
-	/**
-	 * @return array relational rules. 表的关系，外键信息
-	 */
 	public function relations()
 	{
 		return array(
@@ -75,9 +30,6 @@ class AddressBook extends ModuleRecord
 		);
 	}
 
-	/**
-	 * @return array customized attribute labels (name=>label) 字段显示的
-	 */
 	public function attributeLabels()
 	{
 		return array(
