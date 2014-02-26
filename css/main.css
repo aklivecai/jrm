@@ -227,3 +227,8 @@ div.search-form
 {
 	background: #80CFFF;
 }
+
+td hr{
+	margin:2px 0;
+	line-height: 15px;
+}

@@ -17,7 +17,7 @@
 		<?php echo $form->error($model,'company'); ?>
 	</div>
 	
-	<?php if($model->active_time>0&&Tak::getAdmin()):?>
+	<?php if($model->active_time>0):?>
 	<div class="row">
 		<?php echo $form->label($model,'active_time'); ?>
 		<?php echo $form->textField($model,'active_time',array('size'=>10,'maxlength'=>10,'class'=>'date')); ?>

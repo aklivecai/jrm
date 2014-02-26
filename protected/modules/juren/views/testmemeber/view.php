@@ -29,7 +29,8 @@ array(
 			'type'=>'raw',
 			'value'=>$model->getHtmlLink(),
 		),	
-		array('name'=>'active_time', 'value'=>Tak::timetodate($model->active_time,6),),			
+		array('name'=>'active_time', 'value'=>Tak::timetodate($model->active_time,6),),
+		array('name'=>'start_time', 'value'=>Tak::timetodate($model->start_time,6),),			
 
 		array('name'=>'add_time', 'value'=>Tak::timetodate($model->add_time,6),),	
 

@@ -37,19 +37,22 @@ $this->breadcrumbs=array(
 		,'htmlOptions'=>array('class'=>'')
 	),
 	'columns'=>array(	
-array(  
-'class'=>'bootstrap.widgets.TbButtonColumn'
-,'header' => '' 
-,'template'=>'{view},{delete}'
- ),		
+		array(  
+			'class'=>'bootstrap.widgets.TbButtonColumn'
+			,'header' => '' 
+			,'template'=>'{view},{delete}'
+		 ),		
 		'user_name'	
 
-,		'info'
+,		array(
+			'name'=>'info',
+			'type'=>'raw',
+		)
 ,		array(
 			'name'=>'ip',
 			'type'=>'raw',
 			 'value' => 'Tak::Num2IP($data->ip)',
-            'filter' => false,
+            	'filter' => false,
 		)	
 ,		array(
 			'name'=>'add_time',

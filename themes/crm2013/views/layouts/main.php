@@ -43,12 +43,14 @@ $jss = array(
   'k-load-select.js',
   //Guid
   'plugins/intro/intro.js',
-
   'plugins/stepywizard/jquery.stepy.js',
   // 'plugins/validate/jquery.validate.min.js',
+  // 
+  'plugins/jstree/jstree.min.js',
 );
 
-  $this->regCssFile(array('stylesheets.css','introjs.css','ak.css?2014'))->regScriptFile($jss);
+  $this->regCssFile(
+        array('stylesheets.css','introjs.css','ak.css?2014','jstree/default/style.min.css'))->regScriptFile($jss);
 
   $scrpitS = array('_ak/js/modernizr.js');
   $cssS = array();

@@ -2,7 +2,7 @@
 /* @var $this ManageController */
 /* @var $model Manage */
 
-$this->breadcrumbs=array(
+$this->breadcrumbs = array(
 	Tk::g('Manages')=>array('admin'),
 	$model->getLinkName(),
 );
@@ -49,7 +49,6 @@ $items['Delete']['linkOptions']['class'] = 'revoke-link';
 
 $_itemis = array(
 	'---',
-	'Permissions' => array('label'=>Tk::g('Permissions'), 'icon'=>'user','url'=>array('rights/assignment/user','id'=>$model->manageid)),
 	'log' => array('label'=>Tk::g('AdminLog'), 'icon'=>'indent-left','url'=>array('AdminLog/admin','AdminLog[user_name]'=>$model->user_name)),
 
 		array('label'=>Tk::g(array('More','Manages')), 'url'=>'#', 'icon'=>'list','itemOptions'=>array('data-geturl'=>$model->getLink(false,'gettop'),'class'=>'more-list'),'submenuOptions'=>array('class'=>'more-load-info'),'items'=>array(

@@ -1,5 +1,5 @@
 <?php
-class Buy extends JRecord
+class Buy extends Jb2bRecord
 {
 	public $moduleid = 6;
 	public function init(){

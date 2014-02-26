@@ -27,7 +27,9 @@
     			'header'=>Rights::t('core', 'Name'),
     			'type'=>'raw',
     			'htmlOptions'=>array('class'=>'name-column'),
-    			'value'=>'$data->getGridNameLink()',
+    			// 'value'=>'$data->getGridNameLink()',
+                         'value'=>'CHtml::link($data->name,array("update","name"=>Tak::encrypt($data->name)))',
+
     		),
     		array(
     			'name'=>'description',

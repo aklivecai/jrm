@@ -15,7 +15,7 @@ class Subordinate extends CActiveRecord
 
 	public static function getSubManageSql()
 	{
-		$sql = strtr('manageid IN (SELECT manageid FROM :tabl WHERE fromid=:fromid AND branch=:branch AND isbranch=0)',
+		$sql = strtr('manageid IN (SELECT manageid FROM :tabl WHERE fromid=:fromid AND branch=:branch)',
 			array(':tabl'=>Manage::$table
 				, ':fromid' =>Tak::getFormid()
 				, ':branch' =>Tak::getState('branch',-1)
@@ -29,7 +29,6 @@ class Subordinate extends CActiveRecord
     {
     	$condition = array();
     	$condition[] = 'fromid='.Tak::getFormid();
-    	// $condition[] = 'manageid='.Tak::getManageid();
     	$arr['condition'] = join(" AND ",$condition);
     	return $arr;
     }
@@ -65,7 +64,7 @@ class Subordinate extends CActiveRecord
 	
 	public static function getUsers()
 	{
-		$sql = strtr('SELECT manageid,user_nicename FROM :tabl WHERE fromid=:fromid AND branch=:branch AND isbranch=0',
+		$sql = strtr('SELECT manageid,user_nicename FROM :tabl WHERE fromid=:fromid AND branch=:branch ',
 			array(':tabl'=>Manage::$table
 				, ':fromid' =>Tak::getFormid()
 				, ':branch' =>Tak::getState('branch',53763899612601129)

@@ -19,12 +19,22 @@ if ($msg) {
 	'model'=>$model,
 )); ?>
 </div><!-- search-form -->
+<hr />
+<?php
+	$get = Yii::app()->request->getQuery('t',false);
+	if (!$get) {
+		echo CHtml::link('过期会员',Yii::app()->createUrl($this->route,array('t'=>1)),array('class'=>'button'));
+	}else{
+		echo CHtml::link('全部会员',Yii::app()->createUrl($this->route,array('t'=>0)),array('class'=>'button'));
+	}
+?>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'list-grid',
 	'dataProvider'=>$model->search(),
-	'ajaxUpdate' => true,
-	'enableHistory'=>true,
+	'enableSorting' => false,
+	'ajaxUpdate' => false,
+	'enableHistory'=>false,
 	'afterAjaxUpdate'=>'kloadGridview',
 	'columns'=>array(
 		array(
@@ -56,7 +66,7 @@ if ($msg) {
 		),
 		array(
 			'name'=>'itemid',
-            'headerHtmlOptions' => array('style'=>'width:80px;'),
+            		'headerHtmlOptions' => array('style'=>'width:80px;'),
 		),		
 		array(
 			'name'=>'company',
@@ -73,9 +83,9 @@ if ($msg) {
 			'value'=>'$data->getHtmlLink()',
 		),		
 		array(
-			'name'=>'active_time',
-			'value'=>'Tak::timetodate($data->active_time,5)',
-            'headerHtmlOptions' => array('style'=>'width:120px;'),
+			'name'=>'start_time',
+			'value'=>'Tak::timetodate($data->start_time,5)',
+            	'headerHtmlOptions' => array('style'=>'width:120px;'),
 		),		
 	),
 )); ?>

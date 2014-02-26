@@ -132,6 +132,3 @@ $script .=";";
 Tak::regScript('bodyend',$script,CClientScript::POS_END);
 ?>
 </div>
-66849000-2
-<!-- 域名已被 musiaiya.com (DNSZone)占用 -->
-01:30miao

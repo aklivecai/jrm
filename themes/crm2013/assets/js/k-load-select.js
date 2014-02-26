@@ -128,7 +128,6 @@
                         var _not = [];
                         if (t.attr('data-not')&&t.attr('data-not')!='') {
                            _not.push(t.attr('data-not'));
-
                         };
 
                         // data-notbyel
@@ -157,10 +156,9 @@
                         , id = t.val() 
                         , get = t.attr('data-get')
                         ;
-                        log(get);
                     if (id!=="") {
                         var pars = ['id='+id];
-                        if (get) {
+                        if (get!='undefined') {
                             pars.push('get='+get);
                         };                        
 

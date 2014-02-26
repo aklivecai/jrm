@@ -1,12 +1,12 @@
 <?php
-
 class TakTypeController extends Controller
 {
 	public $type = false;
 	public $_model;
 	public $typeUrl = false;
+	
 	public function init()  
-	{     
+	{
 		parent::init();
 	    	$this->modelName = 'TakType';
 	    	$this->primaryName = 'typeid';
@@ -23,7 +23,7 @@ class TakTypeController extends Controller
 	}
 	public function loadModel($id=false,$not=false)
 	{
-		if($this->_model===null)
+		if($this->_model === null)
 		{
 			if ($id) {
 				$m = $this->modelName;
@@ -45,7 +45,6 @@ class TakTypeController extends Controller
 
 	public function actionDelete($id)
 	{
-
 		$this->loadModel($id)->delete();
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : $this->typeUrl);

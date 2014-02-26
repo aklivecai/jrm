@@ -10,9 +10,9 @@ $this->breadcrumbs=array(
 $items = array(
 	'moves' => array(
               'icon' =>'isw-sync',
-              'url' => array('ClienteleMove'),
+              'url' => array('ClientelesMove'),
               'label'=>Tk::g('Move'),		
-              'linkOptions' =>array('class'=>'data-ajax','title'=>Tk::g(array('Move','Clienteles'))),
+              'linkOptions' =>array('class'=>'data-ajax','title'=>Tk::g(array('Subordinate','Clienteles','Move'))),
 	),
 );
 ?>
@@ -69,7 +69,7 @@ $listOptions['dataProvider'] = $model->search();
 $listOptions['columns'] = array(
 		array(
 			 'class'=>'bootstrap.widgets.TbButtonColumn'
-			  , 'template'=>' {show} '
+			  , 'template'=>' {show} | {move} '
 
 	            , 'buttons'=>array(
 						'show' => array
@@ -78,6 +78,12 @@ $listOptions['columns'] = array(
 							 'url'=>'Yii::app()->createUrl("Subordinate/ClientelesView", array("id"=>$data->primaryKey))',
 							 'options'=>array('class'=>'icon-eye-open'),
 						),
+		                    'move' => array
+		                    (
+		                        'label'=>'',
+		                         'url'=>'Yii::app()->controller->createUrl("Subordinate/ClienteleMove", array("id"=>$data->primaryKey))',
+		                         'options'=>array('title'=>Tk::g(array('Move','Clientele')),'class'=>'icon-share-alt data-ajax'),
+		                    ),						
 			)			  
 			  ,'header' => CHtml::dropDownList('pageSize'
 					,Yii::app()->user->getState('pageSize')

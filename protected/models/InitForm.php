@@ -141,7 +141,7 @@ class InitForm extends CFormModel
 		    $sqls[] = " INSERT INTO :tab_admin_log (`itemid`, `fromid`, `manageid`, `user_name`, `qstring`, `info`, `ip`, `add_time`) VALUES (:itemid, :fromid, :userid, ':uname', '', '激活初始化数据', :ip, :time);";
 
 		    //开始激活用户时间
-		    $sqls[] = " UPDATE :tab_test_memeber SET  `active_time` =  ':time' WHERE `itemid` = :fromid;";
+		    $sqls[] = " UPDATE :tab_test_memeber SET   `start_time`=':time' , `active_time` =  ':time' WHERE `itemid` = :fromid;";
 
 		    foreach ($sqls as $value) {
 		    	$sql = strtr($value,$arr);

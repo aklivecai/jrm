@@ -387,7 +387,7 @@ class Controller extends RController
 		if ($not) {
 			$_not = explode(',',$not);
 			if (is_array($_not)&&count($_not)>0) {
-				$criteria->addNotInCondition($model->primaryKey(),$_not);	
+				$criteria->addNotInCondition($model->primaryKey(),$_not);
 			}
 		}
 		$result['data']['criteria'] = $criteria;

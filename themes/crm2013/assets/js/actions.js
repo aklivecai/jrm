@@ -281,12 +281,14 @@ $(document).on('click','.data-ajax', function(event){
             ;
             mhead.text(_thead);
             modC.html('...').addClass('load-content');
-            $.ajax(url).done(function(data) {
+            $.ajax({
+                    url:url,
+                }).done(function(data) {                    
                 modC.html(data);
                 initSelect(modC);
             }) .fail(function(error,i,s) {
                 mhead.text('请求错误:'+s);
-                 modC.html('<div class="alert alert-error">'+error.responseText+'</div>');
+                 modC.append('<div class="alert alert-error">'+error.responseText+'</div>');
               })
               .always(function() {
                     modC.removeClass('load-content');

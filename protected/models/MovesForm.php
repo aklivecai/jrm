@@ -66,13 +66,12 @@ class MovesForm extends CFormModel
 		 	 $_sql  = "UPDATE :$value SET manageid = :tmid WHERE manageid = :fmid ";
 		 	if ($clienteleid) {
 		 		$_sql .= ' AND ';
-		 		$_sql .= $key==0?'itemid':'clienteleid';
+		 		$_sql .= $key==0 ? 'itemid' : 'clienteleid';
 		 		$_sql.="=$clienteleid";
 		 	}
 		 	$_sql.=';';
 		 	$sqls[$value] = $_sql;
 		 }
-		 // Tak::KD($sqls);
 		try
 		{		 
 		    foreach ($sqls as $key=>$value) {

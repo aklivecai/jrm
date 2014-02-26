@@ -145,12 +145,14 @@ class Clientele extends ModuleRecord
 
 	public function move(){
 		$tags = $this->getProsons();
-		$manageid = $tihs->manageid;
+		$manageid = $this->manageid;
 		foreach ($tags as $key => $value) {
 			$value->move($manageid);
 		}
 		return true;
 	}
+
+
 
 	protected function _del(){
 		$tags = $this->getProsons();

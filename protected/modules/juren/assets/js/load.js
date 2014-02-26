@@ -54,7 +54,7 @@ $('.search-button').click(function(){
   return false;
 });
 
-$('.search-form form').submit(function(){
+$('---.search-form form').submit(function(){
   $('#list-grid').yiiGridView('update', {
     data: $(this).serialize()
   });

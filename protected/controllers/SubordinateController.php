@@ -99,10 +99,12 @@ class SubordinateController extends Controller
 		}
 			
 		$result['data']['criteria'] = $criteria;
+
 		return $result;
 	}
 
-	public function actionClienteleMove(){
+	public function actionClientelesMove()
+	{
 		$m = 'MovesForm';
 		$model = new $m;
 		if(isset($_POST[$m])){
@@ -123,6 +125,45 @@ class SubordinateController extends Controller
 			'model' => $model,
 		));		
 	}
+
+	public function actionClienteleMove($id){
+		$model = $this->loadModel($id,'SubClientele');
+		$uname = $model->iManage->user_nicename;
+		$uid = $model->manageid;
+		$m = $this->modelName;
+
+		$mF = 'MovesForm';
+		$modelF = new $mF;
+		$modelF->fMid = $uid;
+		if(isset($_POST[$mF])){
+			$modelF->attributes = $_POST[$mF];
+			if($modelF->validate()){
+				foreach (array($modelF->fMid,$modelF->tMid) as  $value) {
+					$this->loadModel($value,'SubManage',true);
+				}
+
+
+				$arr = $modelF->moveClienteles($model->primaryKey);
+				if ($arr&&count($arr)>0) {
+					if ($this->isAjax) {
+						exit;
+					}else{
+						$arr[':clientele_name'] = $model->clientele_name;
+						$str = '成功转移 客户 - :clientele_name <br /> 联系人<span class="red">:cp</span>, <br />联系记录<span class="red">:cc</span>';
+						$str = strtr($str,$arr);
+						Tak::msg('',$str);
+						$this->redirect(array('Clienteles'));						
+					}
+				}
+			}
+		}
+		$this->render('clientelemove',array(
+			'model' => $model,
+			'uname' => $uname,
+			'uid' => $uid,
+			'modelF' => $modelF,
+		));		
+	}	
 	
 	public function actionClientelesView($id)
 	{

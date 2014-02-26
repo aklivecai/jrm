@@ -14,7 +14,7 @@ $this->breadcrumbs=array(
 		'fromid',
 		'user_name',
 		'qstring',
-		'info',
+		array('name'=>'info','type'=>"raw"),
 		array('name'=>'ip', 'value'=>Tak::Num2IP($model->ip),),
 		array('name'=>'add_time', 'value'=>Tak::timetodate($model->add_time,6),),
 	),

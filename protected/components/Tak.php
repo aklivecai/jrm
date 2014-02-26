@@ -260,6 +260,7 @@ class Tak extends Ak{
                       'icon' =>'user`',
                       'label'=>'<span class="text">'.Tk::g(array('Subordinate')).'</span>', 
                       'url'=>array('/Subordinate/'), 
+                      'visible'=> self::getAdmin(),
                     ), 
                     array(
                       'icon' =>'retweet',
@@ -302,7 +303,7 @@ class Tak extends Ak{
               'icon' =>'isw-bookmark',
               'label'=>'<span class="text">我的客户</span>',
               'url'=>array('/Clientele/Admin'),
-              'visible'=>self::checkAccess('Market')||self::checkAccess('Clientele.*'),
+              'visible'=>self::checkAccess('Clientele.*'),
               'items'=>array(
                 array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Clientele','Create')).'</span>',  'url'=>array('/Clientele/Create'),),
                 array('icon'=>'th','label'=>'<span class="text">'.Tk::g(array('Clientele','Admin')).'</span>',  'url'=>array('/Clientele/Admin'),
@@ -717,5 +718,14 @@ class Tak extends Ak{
         $str = 'abcd';
       }
       return self::getCryptNum($id,$str);
+    }
+
+    public static function encrypt($str){
+       $m = new SysCrypt();
+       return $m->encrypt($str);
+    }
+    public static function decrypt($str){
+      $m = new SysCrypt();
+      return $m->decrypt($str);
     }
 }  

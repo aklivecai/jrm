@@ -9,7 +9,6 @@ class SubManage extends Manage
 		$sql = Subordinate::getSubManageSql();
 		$condition = array(
 			'branch='.Tak::getState('branch',-1),
-			'isbranch=0'
 		);
 		if (isset($arr['condition'])) {
 			$condition[] = $arr['condition'];

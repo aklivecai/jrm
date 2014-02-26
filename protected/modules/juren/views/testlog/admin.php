@@ -19,8 +19,8 @@ $this->breadcrumbs=array(
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'list-grid',
 	'dataProvider' => $model->search(),
-	'ajaxUpdate' => true,
-	'enableHistory'=>true,
+	'ajaxUpdate' => false,
+	'enableHistory'=>false,
 	'columns'=>array(	
 		array(
 			'class'=>'CButtonColumn',
@@ -39,7 +39,7 @@ $this->breadcrumbs=array(
 			'value' => 'CHtml::link($data->fromid,array("testMemeber/view","id"=>$data->fromid))'
 		),
 		'user_name',
-		'info',
+		array('name'=>'info','type'=>"raw"),
 		array(
 			'name'=>'ip',
 			'value'=>'Tak::Num2IP($data->ip)',

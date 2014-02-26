@@ -395,6 +395,7 @@ class AuthItemController extends RController
 		if( Yii::app()->request->isPostRequest===true )
 		{
 			$itemName = $this->getItemName();
+
 			
 			// Load the item and save the name for later use
 			$item = $this->_authorizer->authManager->getAuthItem($itemName);
@@ -518,6 +519,13 @@ class AuthItemController extends RController
 	*/
 	public function getItemName()
 	{
+		$itemName = Yii::app()->request->getQuery('name',null);
+		if ($itemName&&strlen($itemName)>20) {
+			$itemName = Tak::decrypt($itemName);	
+		}
+		
+		return $itemName;
+		
 		return isset($_GET['name'])===true ? urldecode($_GET['name']) : null;
 	}
 	

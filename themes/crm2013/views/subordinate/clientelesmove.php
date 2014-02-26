@@ -36,7 +36,7 @@ $this->breadcrumbs=array(
 				<?php echo $form->error($model,'tMid'); ?>
 				</div>
 			</li>       
-			<li >
+ 			<li >
 				<div class="title"><?php echo $model->getAttributeLabel('note')?>:</div> 
 				<div class="text">&nbsp;
 				<?php 

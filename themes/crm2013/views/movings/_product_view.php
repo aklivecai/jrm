@@ -1,4 +1,4 @@
-<tr data-url='<?php echo $data->iProduct->getLink(false,'preview'); ?>' class="data-preview" title="<?php echo $data->iProduct->name; ?>">
+<tr <?php if (isset($data->iProduct)) {echo sprintf(' class="data-preview" data-url="%s"  title="%s"',$data->iProduct->getLink(false,'preview'),$data->iProduct->name); }?>>
 	<td><?php echo $data->iProduct->name; ?></td>
 	<td><?php echo CHtml::encode($data->iProduct->spec); ?></td>
 	<td><?php echo CHtml::encode($data->iProduct->material); ?></td>

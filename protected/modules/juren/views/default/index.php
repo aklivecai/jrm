@@ -42,8 +42,8 @@
 			'value'=>'$data->getHtmlLink()',
 		),		
 		array(
-			'name'=>'active_time',
-			'value'=>'Tak::timetodate($data->active_time,5)',
+			'name'=>'start_time',
+			'value'=>'Tak::timetodate($data->start_time,5)',
             'headerHtmlOptions' => array('style'=>'width:120px;'),
             'filter'=> false
 		),		
@@ -62,7 +62,15 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	'columns'=>array(	
 		array(
 			'class'=>'CButtonColumn',
-			'template' => '{view}', 		
+			'template' => '{viewlog}', 		
+             'buttons'=>array(
+					'viewlog' => array
+					(
+						'label'=>'日志',
+						 'url'=>'Yii::app()->createUrl("juren/testLog/view", array("id"=>$data->itemid))',
+						 'linkOptions'=>array('style'=>'width: 50px'),
+					),
+			  ), 			
 		),
 		array(
 			'name'=>'fromid',
@@ -70,11 +78,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
 			'value' => 'CHtml::link($data->fromid,Yii::app()->createUrl("juren/testMemeber/view",array("id"=>$data->fromid)))'
 		),
 		'user_name',
-		'info',
+		array('type'=>'raw','name'=>'info'),
 		array(
 			'name'=>'ip',
 			'value'=>'Tak::Num2IP($data->ip)',
-            'headerHtmlOptions' => array('style'=>'width:85px;')
+            	'headerHtmlOptions' => array('style'=>'width:85px;')
 		),	
 		array(
 			'name'=>'add_time',

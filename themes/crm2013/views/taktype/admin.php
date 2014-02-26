@@ -7,11 +7,11 @@
 	);
 	$action = $model->isNewRecord?'Create':'Update';
 ?>
-		<?php 
-			if ($this->type&&$this->type['file']) {
-				$this->renderPartial("//{$this->type['file']}/type",array('model'=>$model,)); 
-			}
-		?>
+<?php 
+	if ($this->type&&$this->type['file']) {
+		$this->renderPartial("//{$this->type['file']}/type",array('model'=>$model,)); 
+	}
+?>
 <div class="tab-content">
    <div class="row-fluid">
                     <div class="span6">
