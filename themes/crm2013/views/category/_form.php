@@ -1,6 +1,5 @@
 <?php  
 $action = $model->isNewRecord?'Create':'Update';
- $items = Tak::getEditMenu($model->itemid,$model->isNewRecord);
 ?>
 <div class="row-fluid">
 <div class="span12">
@@ -8,13 +7,12 @@ $action = $model->isNewRecord?'Create':'Update';
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'clientele-form',
 	 'type'=>'horizontal',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
-
 <?php echo $form->errorSummary($model); ?>
-
 <div class="head clearfix">
-	<i class="isw-documents"></i> <h1><?php echo Tk::g(array('Clientele',$action));?></h1>
+	<i class="isw-documents"></i> 
+	<h1><?php echo Tk::g(array('Clientele',$action));?></h1>
 <?php 
 $this->widget('application.components.MyMenu',array(
       'htmlOptions'=>array('class'=>'buttons'),

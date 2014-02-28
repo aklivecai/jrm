@@ -253,7 +253,7 @@ class MRecord extends CActiveRecord
 			,':itemid' => $this->primaryKey()
 		));	
 		 // Tak::KD($sql,1);
-		$command = Yii::app()->db->createCommand($sql);
+		$command = self::$db->createCommand($sql);
 		$dataReader = $command->query();
 		$tags = array();
 		foreach($dataReader as $row) {
@@ -305,8 +305,8 @@ class MRecord extends CActiveRecord
 		$m = $this->mName;
 		$result = null;
 		$arr = array(
-			'pre'=>array('opt'=>'>','order'=>'ASC'),
-			'next'=>array('opt'=>'<','order'=>'DESC'),
+			'pre'=>array('opt'=>'<','order'=>'DESC'),
+			'next'=>array('opt'=>'>','order'=>'ASC'),
 		);
 		if ($this->primaryKey>0
 			&&isset($arr[$opt])
@@ -321,7 +321,8 @@ class MRecord extends CActiveRecord
 		$sqlWhere = array_filter($sqlWhere);
 		$sqlWhere = join(" AND ",$sqlWhere);
 
-		$sql  = "SELECT $col FROM :tableName WHERE $sqlWhere ORDER BY :itemid :order";
+		$sql  = "SELECT $col FROM :tableName WHERE $sqlWhere ORDER BY :itemid :order ";
+		// LIMIT 1
 
 		$sql = strtr($sql,array(
 			':tableName'=>$this->tableName()
@@ -332,11 +333,9 @@ class MRecord extends CActiveRecord
 			,':opt' => $t['opt']
 			,':order' => $t['order']
 		));	
-		$dataReader = Yii::app()->db->createCommand($sql)->query();
-		$tags = array();
-		$tags = $dataReader->readAll();
-		if (count($tags)>0) {
-			$result = $tags ;
+		$dataReader = self::$db->createCommand($sql)->queryRow();
+		if (count($dataReader)>0) {
+			$result = $dataReader ;
 		}
 	    return $result;
 	}
@@ -378,7 +377,7 @@ class MRecord extends CActiveRecord
 		if ($this->tableAlias) {
 			$sql = str_replace(' '.$this->tableAlias.'.', ' ', $sql);
 		}
-		$dataReader = Yii::app()->db->createCommand($sql)->query();
+		$dataReader = self::$db->createCommand($sql)->query();
 		
 		foreach($dataReader as $row) {
 			$tags[$row['ikey']][$row[$this->primaryKey()]] = $row;

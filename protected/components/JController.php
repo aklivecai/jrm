@@ -165,12 +165,9 @@ class JController extends CController
 		}elseif(isset($_GET[$m])){
 			$model->attributes = $_GET[$m] ;
 		}
-
-
 		$this->render('create',array(
 			'model' => $model,
 		));
-
 	}
 
 	public function actionUpdate($id)

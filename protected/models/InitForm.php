@@ -40,6 +40,22 @@ class InitForm extends CFormModel
 		}
 	}
 
+	public function authenticate($attribute,$params)
+	{
+		$m = TestMemeber::model()->getMmeber($this->fromid);
+	
+		if ($m['user_name']!='') {
+			$ch = $m['user_name'];
+		}else{
+			$ch = 'admin';
+		}
+
+		if($this->username!=$this->password||$this->username!=$ch){
+			$str = '激活帐号或者密码错误！';
+			$this->addError('password',$str);
+		}
+	}	
+
 	/**
 	 * Declares attribute labels.
 	 */
@@ -50,15 +66,6 @@ class InitForm extends CFormModel
 			'password'=>'密码',
 			'fromid'=>'商铺编号',
 		);
-	}
-
-	public function authenticate($attribute,$params)
-	{
-		if($this->username!=$this->password||$this->username!='admin'){
-			$str = '激活帐号或者密码错误！';
-			$this->addError('password',$str);
-		}
-			
 	}
 
 	public function install($admin='admin',$password=false){
@@ -101,8 +108,8 @@ class InitForm extends CFormModel
 				':tab_admin_log'=>'{{admin_log}}',
 				':tab_test_memeber'=>'{{test_memeber}}',
 				':salt' =>$salt,
+				':password' =>$password,
 			);
-
 
 			if (is_string($admin)) {
 				$admin = array($admin);
@@ -119,7 +126,7 @@ class InitForm extends CFormModel
 				}				
 				$arr[":admin$key"] = $value;
 			//插入管理帐号
-		    $sqls[] = "INSERT INTO :tab_Manage VALUES(:fromid,:userid$key,0,0,':admin$key','$password',':salt','管理员:admin$key','',:time,0,0,0,0,1,'','',0);";
+		    $sqls[] = "INSERT INTO :tab_Manage VALUES(:fromid,:userid$key,0,0,':admin$key',':password',':salt','管理员:admin$key','',:time,0,0,0,0,1,'','',0);";
 
 		    //插入权限
 		    $sqls[] = "INSERT INTO :tab_rabc (`itemname`,`fromid`,`userid`,`bizrule`,`data`) VALUES ('Admin',:fromid, :userid$key, '', 'N;');";

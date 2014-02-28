@@ -5,6 +5,13 @@
 $this->breadcrumbs=array(
 	'发送邮件',
 );
+
+
+
+$items =  $msg->getItems(5);
+$this->widget('zii.widgets.CMenu', array(
+    'items'=>$items ,
+));
 ?>
 
 <!-- ▼显示提示信息▼ -->  

@@ -50,8 +50,8 @@ class Jb2bCompany extends Jb2bRecord
 	{
 
 		$cActive = parent::search();
-		$criteria = $cActive->criteria;
-	
+		$criteria = $cActive->criteria;	
+
 		$criteria->compare('userid',$this->userid);
 		$criteria->compare('username',$this->username,1);
 		$criteria->compare('company',$this->company,1);

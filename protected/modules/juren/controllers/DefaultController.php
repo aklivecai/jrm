@@ -32,28 +32,30 @@ class DefaultController extends JController
 		}
 	}
 
+
 	/*发送邮件*/
 	public function actionEmail($email='',$itemid='')
 	{
 
         $model = new MailForm();  
+        $items = array();
         $msg = array();
         if ($itemid>0) {
-        	$msg = TestMemeber::model()->findByPk($itemid);
-        	$model->to = $msg->email;
+        	$msg = Test9Memeber::model()->findByPk($itemid);
+        	if ($msg!=null) {
+        		$model->to = $msg->email;
+        		$model->from = Manage::model()->findByPk(Tak::getManageid())->user_nicename;
+        	}        	
+        }          
 
-        	$model->from = Manage::model()->findByPk(Tak::getManageid())->user_nicename;
-        }
-          
         if (isset($_POST["MailForm"])){  
-            $model->attributes=$_POST['MailForm'];  
-              
+            $model->attributes=$_POST['MailForm'];                
             if($model->validate()) {     
 				
 				Yii::app()->mailer->CharSet = "UTF-8";  
 				Yii::app()->mailer->IsHTML(true);
 				Yii::app()->mailer->IsSMTP();
-				Yii::app()->mailer->SMTPAuth = true;				
+				Yii::app()->mailer->SMTPAuth = true;
 				Yii::app()->mailer->Port = '25';
 				Yii::app()->mailer->Host = 'smtp.vip.163.com';
 				Yii::app()->mailer->Username = '9juren002';
@@ -75,16 +77,23 @@ class DefaultController extends JController
 				// Tak::KD($model->body);
 				$sendmail = Yii::app()->mailer->Send();            	
                 if ($sendmail) {  
-                	Yii::app()->user->setState('esubject',$model->subject);
-                    Yii::app()->user->setFlash("success", "邮件发送成功! \n" );  
-                    $this->refresh();  
+                	  Tak::setState('esubject',$model->subject);
+                    
+                    $nex = $msg->getNext(false);
+                    if ($nex) {
+                    	Tak::setFlash("邮件发送成功! \n<br />下一个..","success");  
+                    	$this->redirect(array('email','itemid'=>$nex['itemid']));
+                    }else{
+                    	Tak::setFlash("邮件发送成功! \n<br />没有下一个..","success");  
+                    	$this->refresh();  	
+                    }                    
                 } else {  
-                    Yii::app()->user->setFlash("failed", "邮件发送失败！ \n");  
+                    Tak::setFlash("邮件发送失败！ \n","failed");  
                 }  
             }  
         }  
 
-        $model->subject = Yii::app()->user->getState('esubject','');
+        $model->subject = Tak::getState('esubject','');
 
         $this->render('email',   
                 array(  
@@ -123,7 +132,6 @@ class DefaultController extends JController
 			$_POST['LoginForm']['fromid'] = $fromid;
 			$model->attributes = $_POST['LoginForm'];
 			if($model->validate() && $model->login()){
-
 				 $this->redirect(array('index'));
 			}
 		}

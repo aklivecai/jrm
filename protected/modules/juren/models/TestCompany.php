@@ -4,9 +4,9 @@ class TestCompany extends Jb2bCompany
 {
 	public static $types = array('0'=>'已激活','1'=>'全部','11'=>'未激活','2'=>'已过期','3'=>'未过期');
 
+
 	public function search()
 	{		
-
 		$cActive = parent::search();
 		$criteria = $cActive->criteria;
 		$get = Yii::app()->request->getQuery('t',0);
@@ -22,9 +22,9 @@ class TestCompany extends Jb2bCompany
 				$criteria->addNotInCondition('userid',array_keys($data));	
 			}
 			if($get==2||$get==3){
-				$condition = array('active_time>0');
+					$condition = array('active_time>0');
 		                	$active_time = Tak::now();
-		                	$t = mktime(23,59,59,date("m",$active_time),date("d",$active_time)-15,date("Y",$active_time));	
+		                	$t = mktime(23,59,59,date("m",$active_time),date("d",$active_time)-15,date("Y",$active_time));
 		               if ($get==2) {
 		                   $condition[] = "active_time<$t"; 
 		               }else{
@@ -35,7 +35,6 @@ class TestCompany extends Jb2bCompany
 			}		
 			
 		}
-
 		return $cActive;
 	}
 
@@ -82,7 +81,9 @@ class TestCompany extends Jb2bCompany
 		if($active_time>0){
 			$str[] = CHtml::link('日志',array("/juren/testLog/admin", "TestLog[fromid]"=>$m->itemid));
 
-			$str[] = CHtml::link('查看',array("/juren/testMemeber/view", "id"=>$m->itemid));			
+			$str[] = CHtml::link('查看',array("/juren/testMemeber/view", "id"=>$m->itemid));
+		}else{
+			$str[] = CHtml::link(Tk::g('Import'),array("/juren/Company/import", "id"=>$this->userid));			
 		}
 
 		return join(' , ',$str);
@@ -96,7 +97,6 @@ class TestCompany extends Jb2bCompany
 	public static function getMs($condition=false)
 	{
 		$sql = sprintf('SELECT *  FROM %s WHERE itemid BETWEEN 3 AND 10000 ',TestMemeber::$table);
-
 		if ($condition) {
 			$sql.= ' AND '.$condition;
 		}

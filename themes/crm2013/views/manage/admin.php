@@ -13,11 +13,6 @@ $items = array(
       'url' => array('create'),
       'label'=>Tk::g('Create'),
     )    
-    ,array(
-      'icon' =>'isw-user',
-      'url' => array('/rights/'),
-      'label'=>Tk::g(array('Permissions','Admin')),
-    ) 
 );
 ?>
 

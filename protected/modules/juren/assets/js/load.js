@@ -44,7 +44,7 @@ window.kloadGridview = function(){
 }
 copyInit();
 
-$('td a[target="_blank"]').on('click',function(event){
+$('td a[title="点击打开"]').on('click',function(event){
   event.preventDefault();
 })
 

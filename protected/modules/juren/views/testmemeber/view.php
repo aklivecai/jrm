@@ -23,6 +23,7 @@ array(
 	'attributes'=>array(
 		'itemid',
 		'company',
+		'user_name',
 		'email',
 		array(
 			'name'=>'连接地址',

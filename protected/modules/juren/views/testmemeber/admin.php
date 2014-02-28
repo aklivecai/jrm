@@ -14,7 +14,7 @@ if ($msg) {
 ?>
 
 <?php echo CHtml::link(Tk::g('Advanced Search'),'#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
+<div class="search-form" style="<?php echo isset($_GET['search'])?'':'display:none'; ?>">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
 )); ?>

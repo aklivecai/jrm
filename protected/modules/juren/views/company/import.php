@@ -1,7 +1,11 @@
 <?php
 /* @var $this TestMemeberController */
 /* @var $model TestMemeber */
-/* @var $form CActiveForm */
+
+$this->breadcrumbs=array(
+	'平台会员' => array('admin'),
+	Tk::g('Import'),
+);
 ?>
 
 <div class="form">
@@ -9,16 +13,7 @@
 	'id'=>'test-memeber-form',
 	'enableAjaxValidation'=>false,
 )); ?>
-
 	<?php echo $form->errorSummary($model); ?>
-	<?php if (Tak::getAdmin()&&!$model->isNewRecord) :?>
-	<div class="row">
-		<?php echo $form->labelEx($model,'manageid'); ?>
-		<?php echo $form->dropDownList($model,'manageid',$manages); ?>
-		<?php echo $form->error($model,'manageid'); ?>
-	</div>
-	<?php endif ?>
-
 	<div class="row">
 		<?php echo $form->labelEx($model,'company'); ?>
 		<?php echo $form->textField($model,'company',array('size'=>60,'maxlength'=>64)); ?>
@@ -51,7 +46,7 @@
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? Tk::g('添加') : Tk::g('Save')); ?>
 	</div>
-
+<?php echo $form->hiddenField($model,'itemid');?>
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->

@@ -117,6 +117,7 @@ class ManageController extends Controller
 
 			// $childSelectOptions['部门'] = $_arr;
 			unset($assignSelectOptions['部门']);
+			// Tak::KD($assignSelectOptions);
 			foreach ($assignSelectOptions as $key => $value) {
 				$t = array();
 				foreach ($value as $k1 => $v1) {
@@ -124,6 +125,10 @@ class ManageController extends Controller
 						||$k1=='Setting.*'
 						||$k1=='PostUpdateOwn'
 						||$k1=='Site.Logout'
+						||$k1=='AddressBook.View'
+						||$k1=='Subordinate.*'
+						||$k1=='ContactpPrson.*'
+						||$k1=='Contact.*'
 					) {
 						unset($childSelectOptions[$key][$k1]);
 					}else{
@@ -138,7 +143,7 @@ class ManageController extends Controller
 		 	$formModel = null;
 		}
 
-		$formSub = new Subordinate;
+		// $formSub = new Subordinate;
 
 		if (isset($_POST['Subordinate'])) {
 			

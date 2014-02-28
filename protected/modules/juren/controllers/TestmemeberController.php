@@ -15,6 +15,35 @@ class TestMemeberController extends JController
 		);
 	}
 
+	public function actionUpdate($id)
+	{
+		$model = $this->loadModel($id);
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);		
+		$m = $this->modelName;		
+		if(isset($_POST[$m]))
+		{
+			$model->attributes = $_POST[$m];
+			if($model->save()){
+				$manageid = $_POST[$m]['manageid'];
+				if ($model->manageid!=$manageid) {
+					$model->moveManage($manageid);
+				}
+				$this->redirect($this->returnUrl?$this->returnUrl:array('view','id'=>$model->primaryKey));
+			}
+		}
+
+		$label =  $model->getAttributeLabel('manageid');
+		$manages = array('0'=>$label);
+		foreach(Manage::model()->findAllByAttributes(array("fromid"=>Tak::getFormid())) as $record){
+			$manages[$record->primaryKey] = $record->user_name.' - '. $record->user_nicename;
+		}	
+		$this->render('update',array(
+			'model'=>$model,
+			'manages'=>$manages,
+		));
+	}	
+
 	public function actionVolume(){
 		$model = new VolumeForm();
 		if(isset($_POST['VolumeForm']))

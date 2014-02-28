@@ -73,6 +73,8 @@ $this->widget('bootstrap.widgets.TbMenu', array(
 </div>
 </div>
 
+
+
 <div class="row-fluid" id="userAssignments">
 <div class="head clearfix">
 	<i class="isw-documents"></i> <h1><?php echo Tk::g(array('Jurisdiction'));?></h1>
@@ -83,27 +85,6 @@ $this->widget('bootstrap.widgets.TbMenu', array(
 
 <div class="block-fluid clearfix">
 	<div class="assignments span6">
-    <div class="block-fluid nm without-head">
-		<?php if( $formModel!==null ): ?>
-			 <div class="">
-		<?php 
-		$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-		    'id'=>'horizontalForm',
-		    'type'=>'horizontal',
-		)); 
-		echo JHtml::tag('label',Rights::t('core', 'Assign item'));
-		echo $form->dropDownList($formModel, 'itemname', $assignSelectOptions); 
-		echo $form->error($formModel, 'itemname'); 
-		$this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Rights::t('core', 'Assign'))); 
-		$this->endWidget(); 
-		?>
-
-			</div>
-		<?php else: ?>
-			<p class="info">
-			<?php echo Rights::t('core', 'No assignments available to be assigned to this user.'); ?>
-		</p>
-		<?php endif; ?>    
 <table cellpadding="0" cellspacing="0" width="100%" class="table">
   <thead>
       <tr>
@@ -125,7 +106,7 @@ $this->widget('bootstrap.widgets.TbMenu', array(
 			}
 
 			if ($value['type']==2&&is_numeric($value['name'])) {
-				
+
 				echo JHtml::link('<i class="icon-eye-open"></i>'.Tk::g('View'),array('permission/preview','id'=>$value['name']),array('class'=>'data-ajax','title'=>Tk::g(array('View',' 「'.$value['title'].'」','Jurisdiction'))));				
 			}
 		?>          
@@ -134,10 +115,37 @@ $this->widget('bootstrap.widgets.TbMenu', array(
     <?php endforeach ?>
       </tbody>
 </table>
-</div>
-
 	</div>
     <div class="span5 add-assignment">
-    
+        <div class="block-fluid nm without-head">
+            <div class="toolbar nopadding-toolbar clear clearfix">
+                <h4><?php echo Rights::t('core', 'Assign item'); ?></h4>
+            </div>                                  
+        </div>
+		<?php if( $formModel!==null ): ?>
+			 <div class="block uploads">
+
+		<?php 
+		$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+		    'id'=>'horizontalForm',
+		    'type'=>'horizontal',
+		)); 
+
+		echo $form->dropDownList($formModel, 'itemname', $assignSelectOptions); 
+		echo $form->error($formModel, 'itemname'); 
+		$this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Rights::t('core', 'Assign'))); 
+		$this->endWidget(); 
+
+		?>
+
+			</div>
+		<?php else: ?>
+			<p class="info">
+			<?php echo Rights::t('core', 'No assignments available to be assigned to this user.'); ?>
+			</p>
+		<?php endif; ?>
+
 	</div>
+	</div>
+
 </div>

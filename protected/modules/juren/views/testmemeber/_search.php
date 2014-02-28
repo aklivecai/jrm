@@ -7,7 +7,8 @@
 <div class="wide form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'action'=>Yii::app()->createUrl($this->route),
+	
+	'action'=>Yii::app()->createUrl($this->route,array('t'=>Yii::app()->request->getQuery('t',0))),
 	'method'=>'get',
 )); ?>
 
@@ -37,7 +38,8 @@
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('搜索'); ?>
+
+		<?php echo CHtml::submitButton(Tk::g('Search'),array('name'=>'search')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

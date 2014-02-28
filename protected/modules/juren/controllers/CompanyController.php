@@ -27,14 +27,41 @@ class CompanyController extends JController
 	{
 		throw new CHttpException(404,'所请求的页面不存在。');
 	}
+	public function actionImport($id)
+	{
+		$mcompany = $this->loadModel($id);
+		$m = 'Test9Memeber';
+		$model = new $m;
+		if(isset($_POST[$m])){
+			$model->attributes = $_POST[$m];
+			if($model->validate()&&$model->save()){
+				$itemid = $mcompany->userid;
+				$model->upPKey($itemid);
+				$this->redirect(array('/juren/testMemeber/View','id'=>$itemid));	
+			}
+		}else{
+			$model->attributes = array(
+				'itemid'=> $mcompany->userid,
+				'user_name'=>$mcompany->username,
+				'company'=>$mcompany->company,
+			) ;
+			$model->itemid = $mcompany->userid;
+		}
+		$this->render('import',array(
+			'model' => $model,
+		));	
+
+	}
 
 	public function actionAdmin()
 	{
 		$m = $this->modelName;
-		$model=new $m;
+		$model = new $m('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET[$m]))
-			$model->attributes = $_GET[$m];
+		if(isset($_GET[$m])){
+			$model->attributes = $_GET[$m] ;
+		}
+			
 		$this->render('admin',array(
 			'model'=>$model,
 		));

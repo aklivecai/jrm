@@ -1,17 +1,29 @@
 <?php
 $this->breadcrumbs=array(
-	Tk::g(array('Product Category'))
+	Tk::g($this->getType().' Category')=>$this->cateUrl,
+	Tk::g('Admin'),
 );
-$action = $model->isNewRecord?'Create':'Update';
+
+$items = array(  
+    array(
+      'icon' =>'isw-plus',
+      'url' => $this->getLink('Create'),
+      'label'=>Tk::g('Create'),
+    )    
+);
+
 ?>
-<div class="tab-content">
    <div class="row-fluid">
-                    <div class="span7">
                         <div class="head clearfix">
                             <div class="isw-list"></div>
                             <h1><?php echo Tk::g('List'); ?></h1>
+<?php 
+$this->widget('application.components.MyMenu',array(
+      'htmlOptions'=>array('class'=>'buttons'),
+      'items'=> $items ,
+));
+?>                                      
                         </div>
-
                         <div class="block-fluid clearfix">
 					<?php 
 					$widget = $this->widget('bootstrap.widgets.TbGridView', array(
@@ -47,32 +59,8 @@ $action = $model->isNewRecord?'Create':'Update';
 							)); 
 							?>
 				</div>
-			</div>
-	<div class="span5">
-                        <div class="head clearfix">
-                            <div class="isw-grid"></div>
-                            <h1><?php echo Tk::g($action); ?></h1>
-                        </div>
-                        <div class="block  clearfix">        
-						<?php 
-						$form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
-							'id'=>'address-groups-form',
-							 'type'=>'verticalForm ',
-							 'enableAjaxValidation'=>false,
-							 'htmlOptions'=>array('class'=>'well'),
-							 'focus'=>array($model,'catename'),
-						)); ?>
-						<?php echo $form->errorSummary($model); ?>
-						<?php echo $form->hiddenField($model,'model'); ?>
-						<?php echo $form->textFieldRow($model,'parentid',array('size'=>60,'maxlength'=>255)); ?>
-						<?php echo $form->textFieldRow($model,'catename',array('size'=>60,'maxlength'=>255)); ?>
-						<?php echo $form->textFieldRow($model,'listorder',array('size'=>60,'maxlength'=>255)); ?>
-						<div class="">
-							<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Tk::g($action),'htmlOptions'=>array())); ?>
-						</div>
-						<?php $this->endWidget(); ?></div>
-				</div>
-			</div>			
+
+            
 			<div class="dr"><span></span></div>
 		</div>
 	</div>

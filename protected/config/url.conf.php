@@ -8,5 +8,8 @@ return array(
         '<controller:\w+>/<id:\d+>'=>'<controller>/view',
         '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
         '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+
+        'juren/<controller:\w+>/<id:\d+>'=>'juren/<controller>/view',
+        'juren/<controller:\w+>/<action:\w+>'=>'juren/<controller>/<action>',
     ),
 );

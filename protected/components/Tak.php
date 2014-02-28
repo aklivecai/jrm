@@ -327,17 +327,6 @@ class Tak extends Ak{
                 array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('View','AddressBook')).'</span>', 'url'=>array('/AddressBook/Index'),'visible'=>self::checkAccess('AddressBook.Index'),),
               ),
             ),
-            'events' => array(
-              'visible'=>self::checkAccess('Events.*'),
-              'icon' =>'isw-calendar',
-              'label'=>'<span class="text">'.Tk::g('Events').'事项</span>',
-              'url'=>array('/events/index'),
-              'items'=>array(
-                array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('Events','Admin')).'</span>', 'url'=>array('/Events/Admin')),
-                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g('Events').'事项</span>',  'url'=>array('/Events/Create'),),
-                // array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/events/recycle'),),
-              ),
-            ), 
            'file' => array(
               'visible'=>self::checkAccess('File.*'),
               'icon' =>'isb-cloud',
@@ -355,17 +344,27 @@ class Tak extends Ak{
             ), 
             
            'pss' => array(
-              'visible'=>self::checkAccess('Pss.*')||self::checkAccess('Product.*'),
+              'visible'=>
+                (self::checkAccess('Pss.*')
+                    ||self::checkAccess('Product.*')
+                    ||self::checkAccess('TakType.*')
+                    ||self::checkAccess('Category.*')
+                    ||self::checkAccess('Purchase.*')
+                    ||self::checkAccess('Product.*')
+                    ||self::checkAccess('Sell.*')
+                    ||self::checkAccess('Stocks.*')
+                ),
               'icon' =>'isw-list',
               'label'=>'<span class="text">库存管理</span>',
               'url'=>array('/Pss/Index'),
               'items'=>array(
-                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product Type').'</span>',  'url'=>array('TakType/Admin?type=product'),),
-                 array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product').'</span>',  'url'=>array('/Product/Admin'),),
+                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product Type').'</span>',  'url'=>array('/TakType/Admin?type=product'),'visible'=>self::checkAccess('Taktype.*'),),
+                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product Type').'</span>',  'url'=>array('/Category/Admin?m=product'),'visible'=>self::checkAccess('Category.*')&&YII_DEBUG,),
+                 array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Product').'</span>',  'url'=>array('/Product/Admin'),'visible'=>self::checkAccess('Product.*'),),
 
-                array('icon'=>'th','label'=>'<span class="text">入库录入</span>', 'url'=>array('/Purchase/Admin')),
-                array('icon'=>'th','label'=>'<span class="text">出库录入</span>',  'url'=>array('/Sell/Admin'),),
-                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Stocks').'</span>',  'url'=>array('/Stocks'),),
+                array('icon'=>'th','label'=>'<span class="text">入库录入</span>', 'url'=>array('/Purchase/Admin'),'visible'=>self::checkAccess('Purchase.*'),),
+                array('icon'=>'th','label'=>'<span class="text">出库录入</span>',  'url'=>array('/Sell/Admin'),'visible'=>self::checkAccess('Sell.*'),),
+                    array('icon'=>'th','label'=>'<span class="text">'.Tk::g('Stocks').'</span>',  'url'=>array('/Stocks'),'visible'=>self::checkAccess('Stocks.*'),),
               ),
             ), 
            'order' => array(
@@ -442,7 +441,17 @@ class Tak extends Ak{
                 array('icon'=>'plus','label'=>'<span class="text">求购录入</span>',  'url'=>array('/Mbuy/Create'),),
               ),
         );
-
+        $items['events'] = array(
+              // 'visible'=> self::checkAccess('Events.*'),
+              'icon' =>'isw-calendar',
+              'label'=>'<span class="text">'.Tk::g('Events').'事项</span>',
+              'url'=>array('/events/index'),
+              'items'=>array(
+                array('icon'=>'th-list','label'=>'<span class="text">'.Tk::g(array('Events','Admin')).'</span>', 'url'=>array('/Events/Admin')),
+                array('icon'=>'plus','label'=>'<span class="text">'.Tk::g('Events').'事项</span>',  'url'=>array('/Events/Create'),),
+                // array('icon'=>'trash','label'=>'<span class="text">'.Tk::g('Recycle').'</span>',  'url'=>array('/events/recycle'),),
+              ),
+            );
 
         unset($items['file']);
         unset($items['job']);
@@ -617,6 +626,7 @@ class Tak extends Ak{
             'template' => '{pager}{summary}<div class="dr"><span></span></div>{items}{pager}',
             'ajaxUpdate'=>true,    //禁用AJAX
             'enableSorting'=>true,
+            'selectableRows'=>false,
             'summaryText' => '共 <span class="badge">{pages}</span> 页,当前 <span class="badge badge-success">{page}</span> 页,总数 <span class="badge badge-info">{count}</span> ',
             'pager'=>array(
                 'header'=>'',

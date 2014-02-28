@@ -2,28 +2,27 @@
 class CategoryController extends Controller
 {
 	protected $m = null;
-
 	protected $cateUrl = false;
-
 	public function init()  
 	{  
-
-		$m = $this->getType();
+		$this->m = $this->getType();
 		$this->modelName = 'Category';
 		$this->primaryName = 'catid';
-
-		$this->cateUrl = $this->createUrl('Admin',array('m'=>$m));
-
+		$this->cateUrl = $this->getLink();
  		parent::init();
 	}
 
-	private function getType()
+	protected function getLink($action='Admin')
+	{
+		return $this->createUrl($action,array('m'=>$this->m));
+	}
+
+	protected function getType()
 	{
 		$m = Yii::app()->request->getQuery('m',false);
 		if (!$m||!Category::getModel($m)) {
 			$this->error();
 		}
-
 		return ucwords($m);
 	}
 
@@ -44,7 +43,32 @@ class CategoryController extends Controller
 
 	public function actionCreate()
 	{
-		
+		$m = $this->modelName;
+		$model = new $m;
+		if(isset($_POST[$m]))
+		{
+			$this->performAjaxValidation($model);
+			$model->attributes = $_POST[$m];
+			if($model->save()){
+				if ($this->returnUrl) {
+					$this->redirect($this->returnUrl);
+				}else{
+					if ($this->isAjax) {
+						if (isset($_POST['getItemid'])) {
+							echo $model->primaryKey;
+							exit;
+						}
+					}else{
+						$this->redirect(array('view','id'=>$model->primaryKey));
+					}					
+				}				
+			}
+		}elseif(isset($_GET[$m])){
+			$model->attributes = $_GET[$m] ;
+		}
+		$this->render($this->templates['create'],array(
+			'model' => $model,
+		));		
 	}
 
 	public function actionList($m,$id=false)

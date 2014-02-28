@@ -6,6 +6,8 @@ class TestMemeber extends ModuleRecord
 	public $status = 1;
 	public $linkName = 'company';
 	public static $table = '{{test_memeber}}';
+
+	public $user_name = 'admin';
 	
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果
@@ -16,8 +18,9 @@ class TestMemeber extends ModuleRecord
 		// will receive user inputs.
 		return array(
 			array('company', 'required'),
-			array('active_time, add_time, add_ip, modified_time, modified_ip', 'length', 'max'=>10),
+			array('active_time, start_time, add_time, add_ip, modified_time, modified_ip', 'length', 'max'=>20),
 			array('company', 'length', 'max'=>64),
+			array('user_name', 'length', 'max'=>60),
 			array('email', 'length', 'max'=>100),
 			array('add_us, modified_us', 'length', 'max'=>25),
 			array('note', 'length', 'max'=>255),
@@ -25,7 +28,7 @@ class TestMemeber extends ModuleRecord
 			// @todo Please remove those attributes that should not be searched.
 			array('itemid, manageid, company, email, active_time, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note', 'safe', 'on'=>'search'),
 			
-			array('active_time','checkTime'),
+			array('active_time,start_time','checkTime'),
 		);
 	}
 
@@ -48,6 +51,7 @@ class TestMemeber extends ModuleRecord
 		return array(
 				'itemid' => '会员编号',
 				'manageid' => '管理员编号',
+				'user_name' => '默认登陆帐号',
 				'company' => '公司名字',
 				'email' => '邮箱',
 				'active_time' => '开始计算日期',

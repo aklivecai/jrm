@@ -10,14 +10,16 @@ class Category extends CActiveRecord
 	public $model = '';
 
 	public function setModel($module){
-		$this->model = $module;
+		if (self::$models[$module]) {
+			$this->model = $module;
+		}		
 	}
 
 	public static function getModel($module=false)
 	{
-		$model = strtolower($model);
+		$module = strtolower($module);		
 		$result = isset(self::$models[$module])?$module:'';
-		return  $result?strtolower($result):false;
+		return  $result?$result:false;
 	}
 
 	public function getTypeName($module){
@@ -60,7 +62,10 @@ class Category extends CActiveRecord
 		$arr = array('order'=>'listorder DESC');
 		$condition = array();    	
 		$condition[] = 'fromid='.Tak::getFormid();
-		$condition[] = "module='".$this->module."'";
+		if ($this->module) {
+			$condition[] = "module='".$this->module."'";
+		}
+		
 		$arr['condition'] = join(" AND ",$condition);
 
 		return $arr;	
@@ -87,7 +92,6 @@ class Category extends CActiveRecord
 	{
 		$criteria = new CDbCriteria;
 		$criteria->compare('catename',$this->catename,1);
-		$criteria->compare('model',$this->model);
 		if ($this->parentid>0) {
 			$criteria->compare('parentid',$this->parentid);
 		}		

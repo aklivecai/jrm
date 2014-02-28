@@ -146,7 +146,6 @@ class ModuleRecord extends MRecord
 	protected function beforeSave(){
 
 	    $isok = func_num_args()>0&&func_get_arg(0);
-
 	    $result = parent::beforeSave($isok);
 	    if(!$isok&&$result){
 	        //添加数据时候

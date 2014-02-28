@@ -193,7 +193,7 @@ class SiteController extends Controller
 		$m = 'InitForm';
 		$this->model = new $m();
 		if ($this->setForm($m)) {
-			if($this->model->install()){
+			if($this->model->install($this->model->username,$this->model->password)){
 				$model = new LoginForm();
 				$model->attributes = $this->model->attributes;
 			}else{
