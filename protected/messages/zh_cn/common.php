@@ -142,6 +142,7 @@ return array (
   'Lock' => '锁定',
 
   'Product Category' => '货物分类',
+  'Creategory' => '分类',
  );
 
 

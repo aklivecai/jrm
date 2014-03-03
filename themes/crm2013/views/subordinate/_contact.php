@@ -1,5 +1,5 @@
   <tr>
-  	<td><?php echo Tak::timetodate($data->contact_time,5); ?></td>  	
+  	<td><?php echo Tak::timetodate($data->contact_time,5); ?></td> 
   	<td title="联系人详情" class="data-ajax" data-url="<?php echo Tak::creaetPreviewUrl(array('id'=>$data->prsonid,'url'=>'ContactpPrson','not'=>true)) ?>"><?php echo CHtml::encode($data->iContactpPrson->nicename)?></td>  	
 
   	<td><?php echo TakType::getStatus('contact-type',$data->type)?></td>

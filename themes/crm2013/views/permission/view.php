@@ -66,6 +66,8 @@ if (count($this->tabs)<=1) {
 }
 ?>    
 <?php endif?>          
+
+
                         </div>
                     </div>                
                     <div class="span6">
@@ -79,6 +81,7 @@ if (count($this->tabs)<=1) {
 						'model'=>$childFormModel,
 						'itemnameSelectOptions'=>$childSelectOptions,
 					)); ?>
+
 				<?php else: ?>
 					<p class="info"><?php echo Rights::t('core', 'No children available to be added to this item.'); ?>
 				<?php endif; ?>                        
@@ -87,9 +90,5 @@ if (count($this->tabs)<=1) {
                 </div>            
                 <div class="dr"><span></span></div>
 </div>
-<?php
-Tak::regScript('bodyend',
-"
-");
-?>
+
 </div>

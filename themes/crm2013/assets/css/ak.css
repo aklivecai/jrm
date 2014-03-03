@@ -10,6 +10,7 @@
 }
 
 
+
 #ibody .red{
   color: #F00;
 }
@@ -603,4 +604,8 @@ form.active .wap-flow-content{
 
 #ibody .unedit td{
   background-color: #ffffdd;
+}
+
+.label-horizontal{
+  margin-right: 8px;
 }

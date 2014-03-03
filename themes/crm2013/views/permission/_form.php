@@ -2,21 +2,24 @@
 /* @var $this ClienteleController */
 /* @var $model Clientele */
 /* @var $form bootstrap.widgets.TbActiveForm */
+
 ?>
 <?php  
 $action = $model->isNewRecord ? 'Create':'Update';
+
 if (!$this->isAjax) {
 	$this->renderPartial('_tabs', array('model'=>$model,'action'=>$action));	
 }
+
  ?>
-<div class="row-fluid">
-<div class="span12">
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
-	'id'=>'mod-form',
-	 'type'=>'horizontal',
-		'enableAjaxValidation'=>true,
+ <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+  'id'=>'mod-form',
+   'type'=>'horizontal',
+    'enableAjaxValidation'=>true,
 )); ?>
 
+<div class="row-fluid">
+<div class="span12">
 <div class="block-fluid">
 	<div class="row-form clearfix" style="border-top-width: 0px;">
 		<?php echo $form->textFieldRow($model,'description',array('size'=>60,'maxlength'=>100)); ?>
@@ -28,11 +31,13 @@ if (!$this->isAjax) {
     <?php $this->widget('bootstrap.widgets.TbButton', array('size'=>'large','buttonType'=>'submit', 'label'=>Tk::g($action))); ?>
     <?php $this->widget('bootstrap.widgets.TbButton', array('size'=>'large','buttonType'=>'reset', 'label'=>Tk::g('Reset'))); ?>    
 </div>
+</div>
+</div>
 <?php $this->endWidget(); ?>
-</div>
-</div>
 <?php
+
 if (!$this->tabs) {
+
     Tak::regScript('bodyend',
     "   intro =new  introJs();
            intro.setOptions({

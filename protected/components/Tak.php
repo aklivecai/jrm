@@ -319,7 +319,7 @@ class Tak extends Ak{
             'addressbook' => array(
               'icon' =>'isw-archive',
               'label'=>'<span class="text">通讯录</span>',
-              'visible'=>self::checkAccess('Addressbook.Index'),
+              'visible'=> self::checkAccess('Addressbook.Index')||self::checkAccess('Addressbook'),
               'items'=>array(
                 array('icon'=>'plus','label'=>'<span class="text">'.Tk::g('Create').'部门</span>',  'url'=>array('/AddressGroups/Admin'),'visible'=>self::checkAccess('Addressgroups.*'),),
                 array('icon'=>'plus','label'=>'<span class="text">'.Tk::g(array('Create','AddressBook')).'</span>',  'url'=>array('/AddressBook/Create'),'visible'=>self::checkAccess('Addressbook.*'),),
@@ -700,7 +700,7 @@ class Tak extends Ak{
       $result = array();
       $url = 'Preview';
       if (!is_array($data)) {
-        $result['id'] = $data;          
+        $result['id'] = $data;
         $result = Yii::app()->getController()->createUrl($url,$result);
       }else{        
         $result['id'] = $data['id'];

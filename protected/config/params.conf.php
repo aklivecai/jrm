@@ -2,7 +2,7 @@
 return array(
 		'adminEmail'=>'webmaster@example.com',
 		'defaultPageSize' => '20',
-		'staticUrl' => 'http://i.9juren.com/',
+		'staticUrl' => '/',
 		'upload' => 'upload/',
 		'uploadUser' => '/upload/users/',
 		'help' => '有问题请联系 <strong>400 0168 488</strong>',

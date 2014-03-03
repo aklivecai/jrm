@@ -5,6 +5,8 @@ class PermissionController extends Controller
 	private  $_authorizer = null;
 	private $_mods = null;
 
+	public $defaultAction='admin';
+
 	public function init()  
 	{     
 		parent::init();
@@ -70,6 +72,7 @@ class PermissionController extends Controller
 	public function actionAdmin()
 	{
 		$len = count($this->tabs);
+
 		if ($len==0) {
 			$this->redirect(array('create'));
 		}else{
@@ -136,6 +139,10 @@ class PermissionController extends Controller
 
 		$crypt = new SysCrypt();
 
+		$type = Rights::getValidChildTypes($model->type);
+		$exclude = array(Rights::module()->superuserName);
+		$childSelectOptions = Rights::getParentAuthItemSelectOptions($model, $type, $exclude);
+
 		if( $childSelectOptions!==array() )
 		{
 			$childFormModel = new AuthChildForm();		
@@ -166,14 +173,12 @@ class PermissionController extends Controller
 		{
 			$childFormModel = null;
 		}
-		$type = Rights::getValidChildTypes($model->type);
-		$exclude = array(Rights::module()->superuserName);
-		$childSelectOptions = Rights::getParentAuthItemSelectOptions($model, $type, $exclude);
 
 		// 取消部门选择
 		if(isset($childSelectOptions['部门'])===true){
 			unset($childSelectOptions['部门']);				
 		}
+
 		foreach ($childSelectOptions as $key => $value) {
 			if ($key=='部门') {
 				unset($childSelectOptions[$key]);
@@ -184,6 +189,10 @@ class PermissionController extends Controller
 						||$k1=='Setting.*'
 						||$k1=='PostUpdateOwn'
 						||$k1=='Site.Logout'
+						||$k1=='Manage.Select'
+						||$k1=='AddressBook.View'
+						||$k1=='AddressBook.Index'
+						||$k1=='Clientele.Index'
 					) {
 						unset($childSelectOptions[$key][$k1]);
 
@@ -194,15 +203,10 @@ class PermissionController extends Controller
 				$childSelectOptions[$key] = $t;
 			}
 		}		
-	
-
 		$parentDataProvider = new RAuthItemParentDataProvider($_model);
 		$childDataProvider = new RAuthItemChildDataProvider($_model);
-
-
 		 $childDataProvider = $_model->getChild();
 		 $data = $childDataProvider->getData();
-
 
 		$this->render($this->templates['view'],array(
 			'model' => $_model,
@@ -214,6 +218,7 @@ class PermissionController extends Controller
 			'childSelectOptions'=>$childSelectOptions,
 			
 			'data'=> $data,
+			
 		));
 	}
 

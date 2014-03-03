@@ -89,7 +89,7 @@ class Manage extends ModuleRecord
 		    	if($this->hasAttribute('fromid')){
 		    		$fromid = Tak::getFormid();
 				if($fromid>0){
-					if (Tak::getAdmin()) {
+					if (Tak::getAdmin()&&false) {
 						 $condition[] = '1=1';	
 					}else{
 						$condition[] = 'fromid='.Tak::getFormid();	

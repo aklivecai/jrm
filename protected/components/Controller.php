@@ -23,6 +23,9 @@ class Controller extends RController
 	public $breadcrumbs = array();
 
 	public $_model = null;
+
+	protected $_modes = array();
+
 	public $primaryName = 'itemid';
 	public $modelName = '';
 
@@ -59,6 +62,32 @@ class Controller extends RController
 	protected function _setLayout($layout='column2')
 	{
 		$this->layout = $layout;
+	}	
+
+	/**
+	 * [loadModel description]
+	 * @param  [type]  $id     [description]
+	 * @param  boolean $m      [模块]
+	 * @param  boolean $isload [是否保存加载]
+	 * @return [type]          [返回查找的信息]
+	 */
+	public function loadModels($id,$m=false,$isload=false)
+	{
+		if (!$m) {
+			$m = $this->modelName;
+		}
+		if($isload||!isset($this->_modes[$m]))
+		{
+			$model = $m::model();
+			$model = $model->setGetCU()->findByPk($id);
+			if($model===null){
+				return null;
+			}else{
+				$model->setGetCU();
+			}
+			$this->_modes[$m] = $model;
+		}
+		return $this->_modes[$m];	
 	}	
 
 	public function afterRender($view, &$output){
@@ -145,7 +174,7 @@ class Controller extends RController
 
 		$_tname = strtolower($this->modelName.'-form');
 
-		if(isset($_POST['ajax']) && ($_POST['ajax']===$_tname)||$_POST['ajax']=='mod-form')
+		if(isset($_POST['ajax']) && ($_POST['ajax']===$_tname||$_POST['ajax']=='mod-form'))
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -213,12 +242,14 @@ class Controller extends RController
 
 	public function actionCreate()
 	{
+
 		$m = $this->modelName;
 		$model = new $m;
 		if(isset($_POST[$m]))
 		{
 			$this->performAjaxValidation($model);
 			$model->attributes = $_POST[$m];
+
 			if($model->save()){
 				if ($this->returnUrl) {
 					$this->redirect($this->returnUrl);

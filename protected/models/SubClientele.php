@@ -9,12 +9,12 @@ class SubClientele extends Clientele
 		$arr = parent::defaultScope();
 		$sql = Subordinate::getSubManageSql();
 		$condition = array(
+			'status=1',
 			$sql
 		);
 		if (false&&isset($arr['condition'])) {
 			$condition[] = $arr['condition'];
 		}
-		$condition[] = 'status=1';
 
 		$arr['condition'] = join(" AND ",$condition);
 		

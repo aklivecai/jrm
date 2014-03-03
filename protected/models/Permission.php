@@ -98,7 +98,6 @@ class Permission extends CActiveRecord
 		}
 		return $result;
 	}
-
 	// 删除部门,清空部门下的所有权限
 	protected function afterDelete(){
 		parent::afterDelete();
@@ -106,7 +105,13 @@ class Permission extends CActiveRecord
 		$arr = array(
 			':parent'=>$this->name,
 		);		
-		Tak::getDb('db')->createCommand(strtr($sql,$arr))->query();
+		$sql = "DELETE FROM {{rbac_authitemchild}} WHERE parent=:parent";
+		self::$db->createCommand($sql)->execute($arr);
+
+		$arr[':fromid']=$this->getFid();
+
+		$sql = "DELETE FROM {{rbac_authassignment}} WHERE itemname=:parent  AND  fromid=:fromid";
+		self::$db->createCommand($sql)->execute($arr);
 	}	
 
 	public static function getList()
@@ -126,7 +131,7 @@ class Permission extends CActiveRecord
 			':fromid'=>$this->fromid,
 		);
 		$sql = "SELECT count(`parent`) FROM {{rbac_authitemchild}} WHERE `parent`=:parent";
-		$count = Tak::getDb('db')->createCommand(strtr($sql,$arr))->queryScalar();
+		$count = self::$db->createCommand(strtr($sql,$arr))->queryScalar();
 		$sql = 'SELECT C.*,P.* FROM {{rbac_authitemchild}} C,{{rbac_authitem}} P WHERE  C.child = P.name AND C.`parent`=:parent ORDER BY P.type DESC,P.description ASC';
 		$dataProvider=new CSqlDataProvider(strtr($sql,$arr), array(
 		     'keyField' => 'child',

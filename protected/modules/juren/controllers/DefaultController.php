@@ -52,34 +52,35 @@ class DefaultController extends JController
             $model->attributes=$_POST['MailForm'];                
             if($model->validate()) {     
 				
-				Yii::app()->mailer->CharSet = "UTF-8";  
-				Yii::app()->mailer->IsHTML(true);
-				Yii::app()->mailer->IsSMTP();
-				Yii::app()->mailer->SMTPAuth = true;
-				Yii::app()->mailer->Port = '25';
-				Yii::app()->mailer->Host = 'smtp.vip.163.com';
-				Yii::app()->mailer->Username = '9juren002';
-				Yii::app()->mailer->Password = 'juren002';
+				$mailer = Yii::app()->mailer;
+				$mailer->CharSet = "UTF-8";  
+				$mailer->IsHTML(true);
+				$mailer->IsSMTP();
+				$mailer->SMTPAuth = true;
+				$mailer->Port = '25';
+				$mailer->Host = 'smtp.vip.163.com';
+				$mailer->Username = '9juren002';
+				$mailer->Password = 'juren002';
 
-				Yii::app()->mailer->From = '9juren002@vip.163.com';
+				$mailer->From = '9juren002@vip.163.com';
 
-				// Yii::app()->mailer->Host = 'smtp.126.com';
-				// Yii::app()->mailer->Username = 'z01926';
-				// Yii::app()->mailer->Password = 'cb19880627';
-				// Yii::app()->mailer->From = 'z01926@126.com';
+				// $mailer->Host = 'smtp.126.com';
+				// $mailer->Username = 'z01926';
+				// $mailer->Password = 'cb19880627';
+				// $mailer->From = 'z01926@126.com';
 
-				Yii::app()->mailer->FromName = $model->from;
-				Yii::app()->mailer->AddReplyTo($model->from);
-				Yii::app()->mailer->AddAddress($model->to);
-				Yii::app()->mailer->Subject = ($model->subject);
-				Yii::app()->mailer->Body =  ($model->body);
+				$mailer->FromName = $model->from;
+				$mailer->AddReplyTo($model->from);
+				$mailer->AddAddress($model->to);
+				$mailer->Subject = ($model->subject);
+				$mailer->Body =  ($model->body);
 
 				// Tak::KD($model->body);
-				$sendmail = Yii::app()->mailer->Send();            	
+				$sendmail = $mailer->Send();            	
                 if ($sendmail) {  
                 	  Tak::setState('esubject',$model->subject);
                     
-                    $nex = $msg->getNext(false);
+                    $nex = $msg->getPrevious(false);
                     if ($nex) {
                     	Tak::setFlash("邮件发送成功! \n<br />下一个..","success");  
                     	$this->redirect(array('email','itemid'=>$nex['itemid']));

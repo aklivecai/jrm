@@ -92,11 +92,15 @@
         var __t = $(elem);
         if (__t.length==0) {return false;};
         (function(t){
-            var sType = iType = t.attr('data-select')
+            var sType = iType = t.attr('data-select');
                 if (t.attr('data-get')&&typeof __arrFun[t.attr('data-get')]!='undefined') {
                     sType = t.attr('data-get');
-                };
-            var ajaxUrl = iType+"/select"
+                }                
+            var action = '/'+(t.attr('data-action')?t.attr('data-action'):'select');
+            if (t.attr('data-path')) {
+                action+= '?'+t.attr('data-path');
+            };                     
+            var ajaxUrl = iType+action
             , result = {
                 placeholder: "搜索",
                 allowClear: true,//显示取消按钮
@@ -143,7 +147,7 @@
                         if (t.attr('data-get')) {
                             result['get'] = t.attr('data-get');
                         };
-                        result['not'] = _not.join(',');
+                        result['not'] = _not.join(',');               
                         return result;
                     },
                     results: function (data, page) { 

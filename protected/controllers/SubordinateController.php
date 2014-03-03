@@ -3,9 +3,7 @@ class SubordinateController extends Controller
 {
 	public $defaultAction = 'index';
 	protected $users = array();
-	protected $modes = array();
-
-
+	
 	public function init()  
 	{     
     		parent::init();
@@ -13,31 +11,6 @@ class SubordinateController extends Controller
 		$this->users = Subordinate::getUsers();
     		// $this->users = Manage::model()->findAllByAttributes(array('branch' => Tak::getState('isbranch',-1)));
 		// Tak::KD($this->users);
-	}
-
-	/**
-	 * [loadModel description]
-	 * @param  [type]  $id     [description]
-	 * @param  boolean $m      [模块]
-	 * @param  boolean $isload [是否保存加载]
-	 * @return [type]          [返回查找的信息]
-	 */
-	public function loadModel($id,$m=false,$isload=false)
-	{
-		if (!$m) {
-			$m = $this->modelName;
-		}
-		if(!isset($this->modes[$m])||$isload)
-		{
-			$model = $m::model();
-			$model = $model->setGetCU()->findByPk($id);
-			$model->setGetCU();
-			if($model===null)
-				$this->error();
-			$this->modes[$m] = $model;
-		}
-		return $this->modes[$m];	
-
 	}
 
 	public function actionIndex()
@@ -76,33 +49,87 @@ class SubordinateController extends Controller
 		if (!isset($_models[$m])) {
 			exit;
 		}		
-		return $m;			
+		return $m;
 	}
 
 	protected function getSelectOption($q,$not=false){
 		$m = $this->getM();
-
 		$_tempname  = $this->modelName;
 		$this->modelName = 'Sub'.$m;
-
 		$result = parent::getSelectOption($q,$not);
 
 		$this->modelName = $_tempname;
-
 		$criteria = $result['data']['criteria'];
-		
 		if ($m==='Manage') {
 			$result['data']['attributes'][] = 'user_nicename';
 			if ($q) {
 				$criteria->addSearchCondition('user_nicename',$q,true,'OR');
 			}				
 		}
-			
 		$result['data']['criteria'] = $criteria;
-
 		return $result;
 	}
 
+	public function actionUsers($id)
+	{
+		$model = $this->loadModels($id,'Manage');
+		$subusers = new Subordinate;
+		// $subusers->unsetAttributes();
+		$subusers->initMos($model->attributes);
+		
+		$q = Yii::app()->request->getQuery('q',false);
+		$data = $subusers->getNotUser($q);
+		$total = count($data);
+		$json  = array(
+			'itemCount'=>5,
+			'totalItemCount'=>5,
+			'currentPage'=>0,
+			'pageCount'=>1,
+			'pageSize'=>999,
+			'data'=>$data
+		);
+
+		$jobj = new stdclass(); 
+		foreach($json as $key=>$value){ 
+			$jobj->$key = $value; 
+		 } 		
+		 // echo json_encode($jobj);
+		$this->writeData(json_encode($json));
+	}	
+
+	public function actionUsersx($id,$page_limit=10)
+	{
+		$model = $this->loadModels($id,'Manage');
+		$subusers = new SubUsers;
+		// $subusers->unsetAttributes();
+		$subusers->attributes = $model->attributes;
+		$q = Yii::app()->request->getQuery('q',false);
+		$contion = array(
+			$subusers->getSql(true),
+		);
+		$where = join(' AND ',$contion);
+		$criteria = new CDbCriteria;
+		$criteria->addCondition($where);
+		if ($q) {
+			$criteria->addSearchCondition('user_name',$q,'OR');
+			$criteria->addSearchCondition('user_nicename',$q,true,'OR');
+		}		
+		 
+		 $dataProvider = new JSonActiveDataProvider('Manage',
+			array(
+				'attributes' => array('manageid','user_name','user_nicename'),
+				'attributeAliases' => array('manageid'=>'itemid', 'user_name'=>'title'),
+				'sort'=>array(
+					'defaultOrder'=>'add_time DESC,user_nicename ASC', 
+				),
+				'pagination'=>array(
+					'pageSize'=> 999
+				),
+				'criteria'=>$criteria
+			)		 	
+		 	); 	
+		 $this->writeData($dataProvider->getJsonData());
+	}
 	public function actionClientelesMove()
 	{
 		$m = 'MovesForm';
@@ -111,7 +138,7 @@ class SubordinateController extends Controller
 			$model->attributes = $_POST[$m];
 			if($model->validate()){
 				foreach (array($model->fMid,$model->tMid) as  $value) {
-					$this->loadModel($value,'SubManage',true);
+					$this->loadModels($value,'SubManage',true);
 				}
 				$arr = $model->moveClienteles();
 				if ($arr&&count($arr)>0) {
@@ -127,7 +154,7 @@ class SubordinateController extends Controller
 	}
 
 	public function actionClienteleMove($id){
-		$model = $this->loadModel($id,'SubClientele');
+		$model = $this->loadModels($id,'SubClientele');
 		$uname = $model->iManage->user_nicename;
 		$uid = $model->manageid;
 		$m = $this->modelName;
@@ -139,7 +166,7 @@ class SubordinateController extends Controller
 			$modelF->attributes = $_POST[$mF];
 			if($modelF->validate()){
 				foreach (array($modelF->fMid,$modelF->tMid) as  $value) {
-					$this->loadModel($value,'SubManage',true);
+					$this->loadModels($value,'SubManage',true);
 				}
 
 
@@ -167,7 +194,7 @@ class SubordinateController extends Controller
 	
 	public function actionClientelesView($id)
 	{
-		$model = $this->loadModel($id,'SubClientele');
+		$model = $this->loadModels($id,'SubClientele');
 		$strView = 'clientelesview';
 		$m = 'Contact';
 		$mContact = new $m('search');

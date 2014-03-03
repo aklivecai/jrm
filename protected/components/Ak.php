@@ -377,7 +377,7 @@ class Ak {
     }
     public static function  regScript($id,$script,$position=null,array $htmlOptions=array()){
         Yii::app()->clientScript->registerScript($id,$script,$position,$htmlOptions);
-        return $this;
+        return __CLASS__;
     }
 
     public function regCssFile($arrUrl,$pf='base',$path=null,$media='')

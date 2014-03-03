@@ -48,4 +48,5 @@ $template ="{pager}".CHtml::dropDownList('pageSize'
         'htmlOptions'=>array('class'=>''),
         'emptyText'=>'<tr><td colspan="7" class="not-data"></td></tr>',
   ));
+
      ?>    	

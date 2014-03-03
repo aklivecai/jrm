@@ -22,7 +22,8 @@ if (count($nps)>0) {
 <div class="block-fluid">
 	<div class="row-fluid">
 		<div class="span10">
-			<?php $this->renderPartial('_view',array('model'=>$model,)); ?></div>
+			<?php $this->renderPartial('_view',array('model'=>$model,)); ?>
+		</div>
 		<div class="span2">
 			<?php $this->widget('bootstrap.widgets.TbMenu', array(
 		    		'type'=>'list',
