@@ -380,7 +380,7 @@ class Ak {
         return __CLASS__;
     }
 
-    public function regCssFile($arrUrl,$pf='base',$path=null,$media='')
+    public static function regCssFile($arrUrl,$pf='base',$path=null,$media='')
     {
         if (!is_array($arrUrl)) {
             $arrUrl = array($arrUrl);

@@ -92,8 +92,10 @@ class MovingsController extends Controller
 	public function actionAdmin()
 	{
 		$m = $this->modelName;
+		
 		$model = new $m('search');
 		$model->initak($this->type);
+
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET[$m])){
 			$model->attributes = $_GET[$m] ;

@@ -7,6 +7,7 @@
 // CWebApplication properties can be configured here.
 $tshiPatch = dirname(__FILE__) ;
 
+
 Yii::setPathOfAlias('bootstrap', $tshiPatch.'/../extensions/bootstrap');
 
 return array(
@@ -93,10 +94,15 @@ return array(
        	 ),	
 	       'session' => array(
        		 'timeout' => 86400,
+       		     // 'autoStart' => true,
+			    // 'sessionName' => 'Site Access',
+			    // 'cookieMode' => 'only',
+			    'savePath' => $tshiPatch.'/../../assets/8&ETonz^jk@H',
    		 ),
 	    'request'=>array(  
 	        // Enable Yii Validate CSRF Token  
 	        // 'enableCsrfValidation' => true,  
+	        // 
 	    ),  	       
 	),
 

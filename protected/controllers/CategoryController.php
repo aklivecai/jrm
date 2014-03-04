@@ -26,6 +26,7 @@ class CategoryController extends Controller {
     
     public function actionAdmin($id = false) {
         $m = $this->modelName;
+
         $model = new $m('search');
         $model->unsetAttributes();
         if (isset($_GET[$m])) {

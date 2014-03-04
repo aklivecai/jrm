@@ -192,7 +192,7 @@ class Subordinate extends CActiveRecord
 		$mos = self::initMos();
 		return array(
 			'fromid' => '平台会员ID',
-			'manageid'=>$mos['branch']==0?'管理员':'员工',
+			'manageid'=>$mos['isbranch']==0?'管理员':'员工',
 			'mid' => '下属',
 		);
 	}	

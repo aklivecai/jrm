@@ -132,8 +132,8 @@ class Events extends ModuleRecord
 	        }
 	        if (!$this->end_time) {
 	        	 // 没有结束时间以当天为最后
-				$dayEnd = Tak::getDayEnd($this->start_time);
-	        	$this->end_time = $dayEnd ;
+				$dayEnd = Tak::getDayEnd($this->start_time);				
+	        		$this->end_time = $dayEnd ;
 	        }
 	    }
 	    return $result;

@@ -234,7 +234,6 @@ class Tak extends Ak{
             ,'job'=>',job,'
             ,'order'=>',order,'
             ,'training'=>',training,'
-            ,'training'=>',training,'
             ,'clientele'=>',clientele,contactpPrson,contact,clienteles,'
             ,'Pss'=>',purchase,stocks,product,sell,'
             );
@@ -505,7 +504,7 @@ class Tak extends Ak{
 
         // Tak::KD(Yii::app()->getController(),1);
         // Tak::KD(Yii::app(),1);
-        // Tak::KD($controlName);
+        // Tak::KD($controlName,1);
         $tname = '';
         foreach ($arr as $key=>$value)
         {
@@ -515,7 +514,12 @@ class Tak extends Ak{
             {
                 $tname = $key;
                 break;
-                
+            }
+        }
+        if ($tname==''&&$controlName=='category'&&isset($_GET['m'])) {
+            if($_GET['m'] = 'product')
+            {
+              $tname = 'pss';
             }
         }
         if ($tname==''&&count(Yii::app()->getController()->breadcrumbs)>0

@@ -175,6 +175,7 @@ class Contact extends ModuleRecord
 	protected function afterSave(){
 		parent::afterSave();	
 		//插入到行程中	
+
 	if ($this->next_contact_time>0) {
         $event = new Events;
         $event->deleteByPk($this->itemid);
@@ -187,8 +188,8 @@ class Contact extends ModuleRecord
         $event->save();
 	}
 
-        $c =new CDbCriteria;
-		$c->condition ='last_time<'.$this->contact_time;
+       $c =new CDbCriteria;
+	$c->condition ='last_time<'.$this->contact_time;
 
 		 // 更新联系人最后联系时间
         ContactpPrson::model()->updateByPk($this->prsonid,array('last_time'=>$this->contact_time),$c);

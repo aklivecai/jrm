@@ -10,6 +10,7 @@ class Category extends CActiveRecord {
     public $model = '';
     
     public function setModel($module) {
+        $module = strtolower($module);
         if (self::$models[$module]) {
             $this->model = $module;
         }
