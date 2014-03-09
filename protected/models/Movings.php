@@ -11,6 +11,8 @@ class Movings extends ModuleRecord {
     private $products = null;    
     public $time = '';    
     public static $table = '{{movings}}';    
+    public $tableAlias = false;
+    public $warehouse_id = 0;
     public function init() {
         parent::init();
         $this->setSName();
@@ -89,7 +91,7 @@ class Movings extends ModuleRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array(
-                'itemid, fromid, type, numbers, time, typeid, enterprise, us_launch, time_stocked, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status',
+                'itemid, fromid, type, numbers, time, typeid, enterprise, us_launch, time_stocked, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status,warehouse_id',
                 'safe',
                 'on' => 'search'
             ) ,
@@ -141,6 +143,7 @@ class Movings extends ModuleRecord {
         return array(
             'itemid' => '编号',
             'fromid' => '平台会员ID',
+            'warehouse_id' => '仓库',
             'type' => '类型', /*(1:入库|2:出库)*/
             'numbers' => $numbers,
             'time' => $time,
@@ -166,6 +169,10 @@ class Movings extends ModuleRecord {
         $criteria->compare('itemid', $this->itemid);
         $criteria->compare('fromid', $this->fromid);
         $criteria->compare('type', $this->type);
+        if ($this->warehouse_id>0) {
+           $criteria->compare('warehouse_id', $this->warehouse_id);
+        }
+        
         if ($this->typeid >= 0) {
             $criteria->compare('typeid', $this->typeid);
         }
@@ -205,7 +212,7 @@ class Movings extends ModuleRecord {
         // $condition[] = 'display>0';
         $sql = join(" AND ", $condition);
         $t = explode("AND type = '1'", $sql);
-        if (strpos($t[1], 'type') !== false) {
+        if (count($t)>1&&strpos($t[1], 'type') !== false) {
             $sql = join($t);
         }
         

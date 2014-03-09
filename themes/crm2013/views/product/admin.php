@@ -35,7 +35,7 @@ $columns = array(
 		,array(
 			'name'=>'typeid',
 			'type'=>'raw',
-			'value'=>'$data->iType->typename',
+			'value'=>'Category::getProductName($data->typeid)',
 		)
 		,array(
 			'name'=>'material',

@@ -142,10 +142,22 @@ ul.yiiPager .first, ul.yiiPager .last {
    padding:2px;
 }
 
-
 /*弹窗*/
+.modal-header{
+  color: #FFF;
+}
 .modal-header h4{
   margin: 0;
+}
+
+.modal .control-label{
+  width:100px;
+}
+.modal .controls{
+  margin-left: 110px;
+}
+.modal .row-form{
+  padding-top:10px;
 }
 
 .content .workplace .head{
@@ -608,4 +620,15 @@ form.active .wap-flow-content{
 
 .label-horizontal{
   margin-right: 8px;
+}
+
+.cursorPointer{
+  cursor: pointer;
+}
+.form-search .input-prepend  input{
+  margin-right: 0;
+}
+
+.jstree-default .jstree-clicked{
+  width:50%;
 }

@@ -5,51 +5,61 @@
 ?>
 <?php
 $itemid = $model->itemid;
-$this->breadcrumbs=array(
-	Tk::g($model->sName) => array('admin'),
-	$itemid,
+$this->breadcrumbs = array(
+    Tk::g($model->sName) => array(
+        'admin'
+    ) ,
+    $itemid,
 );
-  $orderInfo = $model->getOrderInfo();
-  $listStatus = $model->getListStatus();
+$orderInfo = $model->getOrderInfo();
+$listStatus = $model->getListStatus();
 ?>
 
 
 <div class="tak-order-status">
-	<?php echo CHtml::image($this->getAssetsUrl().'img/tak/'.$model->status.'.png') ?>
+	<?php echo CHtml::image($this->getAssetsUrl() . 'img/tak/' . $model->status . '.png') ?>
 </div>
 
 <div class="well">
-<strong><?php echo $model->getAttributeLabel('itemid');?></strong>：
+<strong><?php echo $model->getAttributeLabel('itemid'); ?></strong>：
 	<?php echo $model->itemid; ?>
 	，
-<strong><?php echo $model->getAttributeLabel('status');?></strong>：
-	<?php echo OrderType::item('order-status',$model->status); ?>
+<strong><?php echo $model->getAttributeLabel('status'); ?></strong>：
+	<?php echo OrderType::item('order-status', $model->status); ?>
 <p>
-	<?php echo $model->getAttributeLabel('add_time');?>：
-	<?php echo Tak::timetodate($model->add_time,6); ?>
+	<?php echo $model->getAttributeLabel('add_time'); ?>：
+	<?php echo Tak::timetodate($model->add_time, 6); ?>
 	，
-	<?php echo $model->getAttributeLabel('total');?>：
+	<?php echo $model->getAttributeLabel('total'); ?>：
 	<strong class="price-strong">￥
 		<?php echo $model->total; ?>
 	</strong>
 	，
-	<?php echo $model->getAttributeLabel('manageid');?>：
-	<?php 
-	echo CHtml::link($model->iManage->company,Yii::app()->createUrl('/Site/PreviewTestMember',array('id'=>$model->manageid)),array('class'=>'data-preview'));
-	 ?>
+	<?php echo $model->getAttributeLabel('manageid'); ?>：
+	<?php
+if (isset($model->iManage)) {
+    echo CHtml::link($model->iManage->company, Yii::app()->createUrl('/Site/PreviewTestMember', array(
+        'id' => $model->manageid
+    )) , array(
+        'class' => 'data-ajax'
+    ));
+} else {
+    echo '未知';
+}
+?>
 	，
-	<?php echo $model->getAttributeLabel('add_ip');?>：
+	<?php echo $model->getAttributeLabel('add_ip'); ?>：
 	<?php echo Tak::Num2IP($model->add_ip); ?>
 </p>
 <p>
 	<?php
-	 	if ($model->pay_time>0) {
-	 		echo $model->getAttributeLabel('pay_time').'：'.Tak::timetodate($model->pay_time,6).'，';
-	 	}
-	 	if ($model->delivery_time>0) {
-	 		echo $model->getAttributeLabel('delivery_time').'：'.Tak::timetodate($model->delivery_time,6);
-	 	}
-	 ?>
+if ($model->pay_time > 0) {
+    echo $model->getAttributeLabel('pay_time') . '：' . Tak::timetodate($model->pay_time, 6) . '，';
+}
+if ($model->delivery_time > 0) {
+    echo $model->getAttributeLabel('delivery_time') . '：' . Tak::timetodate($model->delivery_time, 6);
+}
+?>
 </p> 
 <table class="tak-table action-fold">
 	<caption>订单跟踪</caption>
@@ -68,29 +78,29 @@ $this->breadcrumbs=array(
 	</tr>
 	</thead>
 	<tbody class="wap-products">
-	<?php 
-	$list = $model->getFlows();
-	$result = '';
-	$strHtml = '<tr>
+	<?php
+$list = $model->getFlows();
+$result = '';
+$strHtml = '<tr>
 	<td>:add_time</td>
 	<td>:action_user</td>
 	<td>:name</td>
 	<td>:pics</td>
 	<td>:note</td>
 	</tr>';
-	$arr = false;
-	foreach ($list as $key => $value) {
-		$arr = array(
-			':pics'=>$value->getFilesImg(),
-			':add_time'=>Tak::timetodate($value->add_time,6),
-			':action_user'=>$value->action_user,
-			':name'=>$value->getName(),
-			':note'=>$value->note,
-		);
-		$result .= strtr($strHtml,$arr);
-	}
-	echo $result;
-	?>
+$arr = false;
+foreach ($list as $key => $value) {
+    $arr = array(
+        ':pics' => $value->getFilesImg() ,
+        ':add_time' => Tak::timetodate($value->add_time, 6) ,
+        ':action_user' => $value->action_user,
+        ':name' => $value->getName() ,
+        ':note' => $value->note,
+    );
+    $result.= strtr($strHtml, $arr);
+}
+echo $result;
+?>
 	</tbody>	
 </table>
 
@@ -100,42 +110,42 @@ $this->breadcrumbs=array(
 	<caption>详细信息</caption>
 	<tbody>
 	<tr>
-		<th><?php echo $orderInfo->getAttributeLabel('date_time');?>:</th>
-		<td><?php echo Tak::timetodate($orderInfo->date_time,3); ?></td>
-		<th><?php echo $orderInfo->getAttributeLabel('packing');?>:</th>
-		<td><?php echo OrderType::item('packing',$orderInfo->packing); ?></td>
+		<th><?php echo $orderInfo->getAttributeLabel('date_time'); ?>:</th>
+		<td><?php echo Tak::timetodate($orderInfo->date_time, 3); ?></td>
+		<th><?php echo $orderInfo->getAttributeLabel('packing'); ?>:</th>
+		<td><?php echo OrderType::item('packing', $orderInfo->packing); ?></td>
 	</tr>
 	<tr>
-		<th><?php echo $orderInfo->getAttributeLabel('taxes');?>:</th>
-		<td><?php echo OrderType::item('taxes',$orderInfo->taxes); ?></td>
-		<th><?php echo $orderInfo->getAttributeLabel('convey');?>:</th>
-		<td><?php echo OrderType::item('convey',$orderInfo->convey); ?></td>
+		<th><?php echo $orderInfo->getAttributeLabel('taxes'); ?>:</th>
+		<td><?php echo OrderType::item('taxes', $orderInfo->taxes); ?></td>
+		<th><?php echo $orderInfo->getAttributeLabel('convey'); ?>:</th>
+		<td><?php echo OrderType::item('convey', $orderInfo->convey); ?></td>
 	</tr>
 	<tr>
-		<th><?php echo $orderInfo->getAttributeLabel('pay_type');?>:</th>
+		<th><?php echo $orderInfo->getAttributeLabel('pay_type'); ?>:</th>
 		<td colspan="3">
-			<?php 
-				echo OrderType::getStatus('pay_type',$orderInfo->pay_type); 
-				echo $orderInfo->getPayInfo();
-			?>
+			<?php
+echo OrderType::getStatus('pay_type', $orderInfo->pay_type);
+echo $orderInfo->getPayInfo();
+?>
 		</td>		
 	</tr>
 	<tr>
-		<th><?php echo $orderInfo->getAttributeLabel('detype');?>:</th>
+		<th><?php echo $orderInfo->getAttributeLabel('detype'); ?>:</th>
 		<td colspan="3">
-		<?php 
-			echo OrderType::getStatus('detype',$orderInfo->detype); 
-			
-			echo $orderInfo->getContactp();
-		?>
+		<?php
+echo OrderType::getStatus('detype', $orderInfo->detype);
+
+echo $orderInfo->getContactp();
+?>
 		</td>
 	</tr>
 	<tr>
-		<th><?php echo $orderInfo->getAttributeLabel('note');?>:</th>
+		<th><?php echo $orderInfo->getAttributeLabel('note'); ?>:</th>
 		<td colspan="3">
-		<?php 
-			echo $orderInfo->note;
-		?>
+		<?php
+echo $orderInfo->note;
+?>
 		</td>
 	</tr>
 	</tbody>
@@ -153,10 +163,10 @@ $this->breadcrumbs=array(
 		</tr>
 	</thead>
 	<tbody class="wap-products">
-	<?php 
-	 $list = $model->getProducts();
-	$result = '';
-	$strHtml = '<tr>
+	<?php
+$list = $model->getProducts();
+$result = '';
+$strHtml = '<tr>
 	<td>:name</td>
 	<td>
 		<dl>
@@ -177,27 +187,39 @@ $this->breadcrumbs=array(
 	<td>:amount &nbsp;</td>
 	<td class="price-strong">￥:sum &nbsp;</td>
 	</tr>';
-	$arr = false;
-	foreach ($list as $key => $value) {
-		$arr = array(':pics'=>$value->getFilesImg());
-		$icount = 0;
-		foreach (array('name','amount','price','sum','unit','model','standard','color','note') as  $v1) {
-			$arr[':'.$v1] = $value->{$v1};
-			if ($icount>3) {
-				$arr['$'.$v1] = $value->getAttributeLabel($v1);
-			}
-			$icount++;
-		}
-		$result .= strtr($strHtml,$arr);
-	}
-	echo $result;
-	?>
+$arr = false;
+foreach ($list as $key => $value) {
+    $arr = array(
+        ':pics' => $value->getFilesImg()
+    );
+    $icount = 0;
+    foreach (array(
+        'name',
+        'amount',
+        'price',
+        'sum',
+        'unit',
+        'model',
+        'standard',
+        'color',
+        'note'
+    ) as $v1) {
+        $arr[':' . $v1] = $value->{$v1};
+        if ($icount > 3) {
+            $arr['$' . $v1] = $value->getAttributeLabel($v1);
+        }
+        $icount++;
+    }
+    $result.= strtr($strHtml, $arr);
+}
+echo $result;
+?>
 	</tbody>
 	<tfoot>
 		<tr>
 			<td colspan="5">合计:
 			<strong  class="price-strong">￥
-			<?php echo $model->total;  ?>
+			<?php echo $model->total; ?>
 			</strong>
 			</td>
 		</tr>

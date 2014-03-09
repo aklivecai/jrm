@@ -29,12 +29,32 @@ $this->widget('application.components.MyMenu',array(
 	<div class="row-form clearfix" >
 		<?php echo $form->textFieldRow($model,'name',array('size'=>60,'maxlength'=>100)); ?>
 	</div>
-	<div class="row-form clearfix">
-	<?php 
-		$types = TakType::items('product',true);
-		echo $form->dropDownListRow($model,'typeid',TakType::items('product',true));
-	?>
-	</div>
+ <div class="row-form clearfix">
+  <div class="control-group ">
+    <label class="control-label">
+    		<?php echo $model->getAttributeLabel('typeid')?>
+    </label>
+    <div class="controls">
+                <span class="span10">
+                    <div class="row-fluid input-prepend input-append">
+                    <?php echo $form->hiddenField($model,'typeid',array('class'=>'sourceField'))?>
+                    <input name="popupReferenceModule" type="hidden" value="product">
+                    <span class="add-on clearReferenceSelection cursorPointer">
+                        <i class='icon-remove-sign' title="清除"></i>
+                    </span>
+                        <input  name="vendor_id_display" type="text" class="span7" value="" placeholder="请选择" readonly="readonly" />
+                    <span class="add-on relatedPopup cursorPointer">
+                        <i class="icon-search relatedPopup" title="Select" ></i>
+                    </span>
+                    <span class="add-on cursorPointer hide" data-url="/">
+                        <i class='icon-plus' title="添加"></i>
+                    </span>
+                    <span class="help-inline error" id="Category_parentid_em_" style="display: none"></span>
+                </div>
+        </span>
+    </div>
+</div>
+</div>	
 	<div class="row-form clearfix" >
 		<?php echo $form->textFieldRow($model,'price',array('size'=>60,'maxlength'=>100)); ?>
 	</div>

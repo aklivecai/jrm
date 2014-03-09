@@ -41,7 +41,7 @@ $this->breadcrumbs=array(
 	  	if ($model->status<999
 	  		&&$key!=$model->status
 	  		&&$model->status>100
-	  		&&!$listStatus[$key]
+	  		&&!isset($listStatus[$key])
 	  	) {
 	  		$temp['url'] = 'javascript:setStatus('.$key.',"'.$value.'");';
 	  	}
@@ -90,7 +90,11 @@ $this->breadcrumbs=array(
 	，
 	<?php echo $model->getAttributeLabel('manageid');?>：
 	<?php 
-	echo CHtml::link($model->iManage->company,Yii::app()->createUrl('/Site/PreviewTestMember',array('id'=>$model->manageid)),array('class'=>'data-preview'));
+	if (isset($model->iManage)) {
+		echo CHtml::link($model->iManage->company,Yii::app()->createUrl('/Site/PreviewTestMember',array('id'=>$model->manageid)),array('class'=>'data-preview'));
+	}else{
+		echo '未知';
+	}
 	 ?>
 	，
 	<?php echo $model->getAttributeLabel('add_ip');?>：
@@ -291,6 +295,8 @@ $tempscript = "
 
 </div>
 
+<?php if($orderInfo):?>
+
 <table class="tak-table action-fold">
 	<caption>详细信息</caption>
 	<tbody>
@@ -334,6 +340,8 @@ $tempscript = "
 	</tr>
 	</tbody>
 </table>
+
+<?php endif?>
 
 <table class="tak-table action-fold">
 	<caption>商品清单</caption>

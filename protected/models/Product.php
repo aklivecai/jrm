@@ -150,16 +150,16 @@ class Product extends ModuleRecord
     }  
 
     public function getConAlias($sql){
-    	$alias = false;
-    	if (property_exists($this,'tableAlias')&&$this->tableAlias) {
-    		$alias = $this->tableAlias;
-    	}else{
-    		// $alias = 't';
-    	}
-    	if ($alias) {
-    		$sql = $alias.'.'.$sql;
-    	}
-    	return $sql;
+	    	$alias = false;
+	    	if (property_exists($this,'tableAlias')&&$this->tableAlias) {
+	    		$alias = $this->tableAlias;
+	    	}else{
+	    		// $alias = 't';
+	    	}
+	    	if ($alias) {
+	    		$sql = $alias.'.'.$sql;
+	    	}
+	    	return $sql;
     }      
 
 	//保存数据前
@@ -267,7 +267,7 @@ class Product extends ModuleRecord
 		$sql = strtr($sql,array(
 			':stock'=> Stocks::$table,
 			':product'=> self::$table,
-			':productid'=>$productid,
+			// ':productid'=>$productid,
 			':condition' => $condition?$condition:' 1=1 '
 		));
 		

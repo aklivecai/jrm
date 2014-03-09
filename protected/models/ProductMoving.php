@@ -12,15 +12,13 @@
  */
 class ProductMoving extends CActiveRecord
 {
-	private $products = null; 
+	private $products = null;
+	public static $table = '{{product_moving}}';
 
-	/**
-	 * @return string 数据表名字
-	 */
-	public function tableName()
-	{
-		return '{{product_moving}}';
-	}
+    public function tableName() {
+        $m = get_class($this);
+        return $m::$table;
+    }
 
 	/**
 	 * @return array validation rules for model attributes.字段校验的结果

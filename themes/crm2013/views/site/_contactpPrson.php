@@ -1,8 +1,7 @@
 <div class="item">
 <?php echo $data->getHtmlLink() ;?>
 <p>
-	
-	公司：<?php echo  $data->iClientele->clientele_name;?>
+	公司：<?php echo $data->iClientele?$data->iClientele->clientele_name:'';?>
 	<br />
 	联系方式：<?php echo $data->mobile.' / '.$data->phone;?>  
 </p>

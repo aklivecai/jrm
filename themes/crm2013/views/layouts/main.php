@@ -8,8 +8,9 @@
 
 <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 <link rel="icon" type="image/ico" href="/favicon.ico"/>
-<!--[if lt IE 8]>
+<!--[if lt IE 7]> 
         <link href="<?php echo $this->getAssetsUrl();?>css/ie7.css" rel="stylesheet" type="text/css" />
+        <meta http-equiv="refresh" content="0; url=<?php echo Yii::app()->createUrl('/site/ie6'); ?>" />
 <![endif]-->
 <link rel='stylesheet' type='text/css' href='<?php echo $this->getAssetsUrl();?>css/fullcalendar.print.css' media='print' />
 
@@ -43,14 +44,12 @@ $jss = array(
   'k-load-select.js',
   //Guid
   'plugins/intro/intro.js',
+
   'plugins/stepywizard/jquery.stepy.js',
   // 'plugins/validate/jquery.validate.min.js',
-  // 
-  'plugins/jstree/jstree.min.js',
 );
 
-  $this->regCssFile(
-        array('stylesheets.css','introjs.css','ak.css?2014','jstree/default/style.min.css'))->regScriptFile($jss);
+  $this->regCssFile(array('stylesheets.css','introjs.css','ak.css?2014'))->regScriptFile($jss);
 
   $scrpitS = array('_ak/js/modernizr.js');
   $cssS = array();

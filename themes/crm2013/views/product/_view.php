@@ -2,7 +2,7 @@
 	'data'=>$model,
 	'attributes'=>array(
 		'name',
-		array('name'=>'typeid', 'value'=>$model->iType->typename,),
+		array('name'=>'typeid', 'value'=>Category::getProductName($model->typeid,' - '),),
 		array('name'=>'price', 'value'=>Tak::format_price($model->price),),
 		'material',
 		'spec',

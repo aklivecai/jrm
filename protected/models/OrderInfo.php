@@ -23,8 +23,12 @@ class OrderInfo extends MRecord
 			array('itemid', 'length', 'max'=>25),
 			array('date_time, add_ip', 'length', 'max'=>10),
 			array('area, people, tel, phone, purchasconsign, contactphone', 'length', 'max'=>50),
+			
 			array('address', 'length', 'max'=>100),
 			array('note', 'length', 'max'=>255),
+
+			array('earnest, few_day, delivery_before, remaining_day', 'length', 'max'=>3),
+
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('itemid, date_time, detype, pay_type, earnest, few_day, delivery_before, remaining_day, packing, taxes, convey, area, address, people, tel, phone, purchasconsign, contactphone, note, add_ip', 'safe', 'on'=>'search'),

@@ -8,6 +8,7 @@ class MovingsController extends Controller
 	
 	public function init()  
 	{     
+
 		$this->dir = '//movings/';
 	    	parent::init();
 	    	$this->modelName = 'Movings';
@@ -21,7 +22,7 @@ class MovingsController extends Controller
 		if($this->_model===null)
 		{
 			if ($id) {
-				$m = $this->modelName;			
+				$m = $this->modelName;
 				$model = $m::model();
 				if ($recycle) {
 					$model->setRecycle();
@@ -29,7 +30,7 @@ class MovingsController extends Controller
 				$this->_model = $model->findByPk($id);
 			}
 			if($this->_model===null){
-					throw new CHttpException(404,'所请求的页面不存在。');
+					$this->error();
 			}else{				
 				$this->_model->initak($this->type);
 			}
@@ -83,6 +84,7 @@ class MovingsController extends Controller
 	}	
 
 	public function actionView($id,$affirm=false){
+		$m =  $this->loadModel($id);
 		$this->render($this->templates['view'],array(
 			'model' => $this->loadModel($id),
 			'affirm' =>$affirm,
@@ -93,13 +95,14 @@ class MovingsController extends Controller
 	{
 		$m = $this->modelName;
 		
+
 		$model = new $m('search');
 		$model->initak($this->type);
-
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET[$m])){
 			$model->attributes = $_GET[$m] ;
 		}
+
 		$this->render($this->templates['admin'],array(
 			'model'=>$model,
 		));

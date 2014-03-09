@@ -86,7 +86,8 @@ $this->widget('application.components.MyMenu',array(
     </div><div class="row-form clearfix">    
     <?php echo $form->dropDownListRow($model,'isbranch',TakType::items('isbranch')); ?>
 
-  </div><div class="row-form">
+  </div>
+  <div class="row-form">
   <div class="controls">
       <?php 
           echo CHtml::checkBox('Manage[user_status]',$model->user_status==1, array('class'=>'ibtn','value'=>1)); 

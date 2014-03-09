@@ -12,9 +12,8 @@ foreach ($cates as $key => $value) {
 	$types[$key] =  $value;
 }
   echo $form->dropDownList($model,'typeid',$types);
-  echo $form->textFieldRow($model,'enterprise',array('size'=>10,'maxlength'=>10)); 
-
-  
+  echo $form->dropDownList($model,'warehouse_id',Warehouse::toSelects($model->getAttributeLabel('warehouse_id')));
+  echo $form->textFieldRow($model,'enterprise',array('size'=>10,'maxlength'=>10));   
  echo $form->textFieldRow($model,'time_stocked',array('size'=>10,'maxlength'=>10,'class'=>'type-date')); 
 ?>
 

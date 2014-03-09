@@ -4,10 +4,11 @@ $db = array(
             'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/db.db3',
             // 表前缀
             'tablePrefix'=>'Tak_',
+            'password' => 'aklivecai',
         );
         // uncomment the following to use a MySQL database
 $db = array(
-            'connectionString' => 'mysql:host=192.168.1.222;dbname=_b2b_ak',
+            'connectionString' => 'mysql:host=192.168.0.222;dbname=_b2b_ak',
             'emulatePrepare' => true,
             'username' => 'ak',
             'password' => 'aklivecai',

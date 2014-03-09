@@ -1,7 +1,8 @@
 <?php
 // <!-- #!/usr/bin/php -->
 // change the following paths if necessary
-// error_reporting(E_ALL & ~ E_NOTICE);
+// E_ALL | E_STRICT
+// error_reporting(E_ALL);
 $yii=dirname(__FILE__).'/../Yii/framework/yii.php';
 
 // $yii=dirname(__FILE__).'/../yii/framework/yiilite.php';

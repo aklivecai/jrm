@@ -85,6 +85,10 @@ var createUrl = function(route)
      }
      return false;
 }
+, sCF  = function(msg){
+     return !confirm(msg);
+}
+;
 
 jQuery(function($){
 var wapConct = $('#content');
@@ -129,20 +133,6 @@ searchForm.find('.btn-reset').on('click',function(){
     searchForm.find('input[type=reset]').trigger('click');
     searchForm.trigger('submit');
 })
-
-window.kloadCGridview = function(action,data){
-    var t = $('#' + action)
-    ;
-        if ($(document.body).attr('data-'+action)) {
-            var url = t.yiiGridView('getUrl'),
-            params = $.deparam.querystring($.param.querystring(url));
-
-            _turl = decodeURIComponent($.param.querystring(url.substr(0, url.indexOf('?')), params));
-            
-            window.History.pushState(null, document.title, _turl); 
-           $(document.body).attr('data-'+action,false);
-        };
-}
 searchForm.on('submit',function(event){
     event.preventDefault();
     var action = searchForm.attr('to-view')?searchForm.attr('to-view'):'list-grid'
@@ -163,54 +153,21 @@ searchForm.on('submit',function(event){
     return false;
 });
 
-// 
-var  modid = 'myModal'
-, strMod =  '<div id="'+modid+'" class="modal hide fade"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> <h4 class="mhead"></h4> </div> <div class="modal-body"> </div> </div> '
-, mod,modc,mhead
-;
-
-if($('#'+modid).length==0){
-    mod = $(strMod).appendTo(document.body);
-    mod.modal('hide');  
-    modC = mod.find('.modal-body');
-    mhead = mod.find('.mhead');
-    mod.on('k-load',function(){
-             modC.find('input[class*=select-]').each(function(i,el){
-                    loadSelects($(el));
-             });  
-    });
-}
-
-var sCF  = function(msg){
-     return !confirm(msg);
+window.kloadCGridview = function(action,data){
+    var t = $('#' + action)
+    ;
+        if ($(document.body).attr('data-'+action)) {
+            var url = t.yiiGridView('getUrl'),
+            params = $.deparam.querystring($.param.querystring(url));
+            _turl = decodeURIComponent($.param.querystring(url.substr(0, url.indexOf('?')), params));            
+            window.History.pushState(null, document.title, _turl); 
+           $(document.body).attr('data-'+action,false);
+        };
 }
 
 $(document).on('click','#list-views tbody tr',function(){
     var t = $(this);
     t.toggleClass('active');
-}).on('click','.data-preview',function(event){
-    event.preventDefault();
-    var t = $(this)
-        , url = t.attr('data-url')?t.attr('data-url'):t.attr('href')
-    ;
-    if (mod.length==0) {
-        mod = $(strMod).appendTo(document.body);
-        mod.modal({});
-    }    
-    if (mod.attr('data-url')==url) {
-        mod.modal('show');
-    }else{
-        var _thead = t.attr('title')!=''?t.attr('title'):t.text();
-            ;
-        mhead.text(_thead);
-        modC.html('...').addClass('load-content');
-        $.ajax(url).done(function(data) {
-            modC.removeClass('load-content');
-            modC.html(data);
-            mod.attr('data-url',url).trigger('k-load').modal('show');
-            t.trigger('click');          
-        })
-    }
 }).on('click','li a.delete',function(event){
         var str = '你确定要删除'+($(this).attr('data-title') ? ' ['+$(this).attr('data-title')+'] ' : '这个信息');        
         if(sCF(str)){
@@ -261,19 +218,26 @@ $('[data-preview]').on('click',function(){
 
 (function(){
 var modid = 'ajax-modal'
-, strMod =  '<div id="'+modid+'" class="modal hide fade"  tabindex="-1"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> <h4 class="mhead"></h4> </div> <div class="modal-body"> </div> </div> '
+, strMod =  '<div id="'+modid+'" class="modal hide fade"  tabindex="-1"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> <h4 class="mhead"></h4> </div> <div id="ajax-modal-body"> </div> </div> '
 ,mod,mhead,modC
 ; 
+// <div class="modal-footer"><button class="btn btn-warning" >确认</button><button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button></div>
 $(document).on('click','.data-ajax', function(event){
     event.preventDefault();
         var t = $(this)
         , url = t.attr('data-url')?t.attr('data-url'):t.attr('href')
     ;
     if (!mod) {
-        mod = $(strMod).appendTo(document.body);
-        modC = mod.find('.modal-body');
+        // mod = $(strMod).appendTo(document.body);
+        mod = $(strMod).appendTo($('.content').eq(0));
+        modC = mod.find('#'+modid+'-body');
         mhead = mod.find('.mhead');
     }
+        if (t.attr('role')=='view') {
+            modC.addClass('modal-body');
+        }else{
+            modC.removeClass('modal-body');
+        }
     if (mod.attr('data-url')==url) {
         
     }else{
@@ -283,52 +247,23 @@ $(document).on('click','.data-ajax', function(event){
             modC.html('...').addClass('load-content');
             $.ajax({
                     url:url,
-                }).done(function(data) {                    
+                }).done(function(data) {
                 modC.html(data);
                 initSelect(modC);
             }) .fail(function(error,i,s) {
-                mhead.text('请求错误:'+s);
-                 modC.append('<div class="alert alert-error">'+error.responseText+'</div>');
+                 mhead.text('请求错误:'+s);
+                 modC.html('<div class="alert alert-error">'+error.responseText+'</div>');
               })
               .always(function() {
                     modC.removeClass('load-content');
                     mod.attr('data-url',url).trigger('k-load');
-                    t.trigger('click');
+                    // t.trigger('click');
                     t.trigger('tak-over');
               });
     }
     mod.modal('show');
 });
 }());
-
-
-$(document).on('submit','#'+modid+' form',function(event){
-    event.preventDefault();
-    var t = $(this)
-    ;
-    if (!sCF('是否确认 '+ mhead.text() +'?')){ 
-        return false;
-    }
-
-    $.ajax({
-            url: t.attr('action'),
-            type: t.attr('method'),
-            data: t.serialize() ,
-            success: function (data) {
-                if (data!='') {
-                    modC.html(data).trigger('k-load');
-                }else{
-                    mod.attr('data-url','').modal('hide').trigger('k-over');
-                }
-                return false;
-                if (data !== null && typeof data === 'object') {
-                    
-                } else {
-                    mod.show();    
-                }
-            }
-        });    
-})
 
 var btnAffirm = $('#btn-affirm');
 if (btnAffirm.length>0) {      
@@ -338,7 +273,6 @@ if (btnAffirm.length>0) {
     }).trigger('click');
 };
     
-
     if (!Modernizr.input.required) {
         $('form').on('submit',function(event){
             var t = $(this)
@@ -440,7 +374,7 @@ if (btnAffirm.length>0) {
 
    var  afterDelete = function(){}
    , refreshGridView = function(){
-     jQuery('#list-grid').yiiGridView('update');
+        jQuery('#list-grid').yiiGridView('update');
    }
    ;
 
@@ -448,8 +382,7 @@ if (btnAffirm.length>0) {
         event.preventDefault();
         var arr = $.fn.yiiGridView.getSelection('list-grid');
         if (arr.length==0) {
-            alert('请选则需要删除的信息!');
-           
+            alert('请选则需要删除的信息!');           
         }else if(!sCF('你确定要删除选择的'+arr.length+'信息')){
 
         }else{        
@@ -480,7 +413,7 @@ if (btnAffirm.length>0) {
     })
 
     $("div[class^='span']").find(".row-form:first").css('border-top', '0px');
-    $("div[class^='span']").find(".row-form:last").css('border-bottom', '0px');            
+    $("div[class^='span']").find(".row-form:last").css('border-bottom', '0px');
     
     // collapsing widgets    
         $(".toggle a").click(function(){            
@@ -532,9 +465,7 @@ if (btnAffirm.length>0) {
             $('.admin').fadeIn(300);            
             $(this).addClass('active');
         }
-        
     });
-
     
     $(".alert").on('click',function(){
         $(this).fadeOut(300, function(){            
@@ -560,10 +491,8 @@ if (btnAffirm.length>0) {
     // Wizard
     
     if($("#wizard_validate").length > 0){
-        
         // $.fn.stepy.defaults.validate = true;
         // $.fn.stepy.defaults.titleClick = true;
-
         $('#wizard_validate').stepy({
             duration  : 400,
             // validate  : true,
@@ -582,15 +511,57 @@ if (btnAffirm.length>0) {
         });
     }
     // eof wizard     
+    // 
+    // 
+    // 
+    window.popupCate = function(data){
+        $('input[name=vendor_id_display]').val(data.text);
+        $('.sourceField').val(data.id);
+    }
+    window.popups = {};
+    var getPopups = function(elem){
+        var  data = {}
+        , name = $(elem).attr('name')
+        ;
+        if (typeof window.popups[name]==='undefined') {
+             data.val = $(elem);
+             parent = data.val.parent();
+             data.txt = parent.find('input[name=vendor_id_display]');
+             data.mod = parent.find('input[name=popupReferenceModule]');
+             data.parent =  parent;
+             window.popups[name] = data;
+        }else{
+          data =  window.popups[name];
+        }
+        return data;
+    }
+    $(document).on('click','.relatedPopup,.clearReferenceSelection',function(){
+        var t = $(this)
+        , data = getPopups(t.parent().find('.sourceField'));
+        if (t.hasClass('relatedPopup')) {
+            url = createUrl('Category/admin',['m='+data.mod.val(),'action=select']);
+            wurl = url;
+            if (data.val.val()>0) {
+                wurl+='&id='+data.val.val();
+            };
+            window.open(wurl, "windowName" ,"width=800,height=650,resizable=0,scrollbars=1");
+        }else if(t.hasClass('clearReferenceSelection')){
+            data.txt.val(data.txt.attr('placeholder'));
+            data.val.val('');
+        }   
+    }).on('click','.clearReferenceSelection',function(){
+        var data = getPopups($(this).parent().find('.sourceField'));
+    });
 
 });
 
 $(window).load(function(){
     headInfo();    
 });
+
 $(window).resize(function(){
     headInfo();    
-    if($("body").width() > 980){        
+    if($("body").width() > 900){        
         $("body .wrapper .menu").show();
         $("body > .modal-backdrop").remove();
     }else{

@@ -2,7 +2,7 @@
 $log = array(
         array(
             'class'=>'CFileLogRoute',//这表示把日志输出到文件中，下方有详细的
-            'levels'=>'error, warning',
+            'levels'=>'error, warning,trace',
             'filter'=>'CLogFilter',
         ),
         /*
@@ -26,8 +26,8 @@ if( YII_DEBUG )
         'class'=>'XWebDebugRouter',
         'config'=>'alignLeft, opaque, runInDebug, fixedPos, collapsed, yamlStyle',
         'levels'=>'error, warning, trace, profile, info',
-        'levels'=>'error, warning, trace, info',
-        'categories'=>'cool.*,system.db.CDbCommand',
+        'levels'=>'error, warning, trace',
+        'categories'=>'cool.*,system.db.CDbCommand,php',
         'allowedIPs'=>array(
             '127.0.0.1',
             '192.168.1.201X',

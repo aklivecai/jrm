@@ -1,8 +1,34 @@
 <?php
+
+/**
+ * 这个模块来自表 "{{stocks}}".
+ *
+ * 数据表的字段 '{{stocks}}':
+ * @property string $itemid
+ * @property string $fromid
+ * @property string $product_id
+ * @property integer $stocks
+ * @property string $add_time
+ * @property string $add_us
+ * @property string $add_ip
+ * @property string $modified_time
+ * @property string $modified_us
+ * @property string $modified_ip
+ * @property string $note
+ */
 class Stocks extends ModuleRecord
 {
 
 	public static $table = '{{stocks}}';
+
+	public $warehouse_id = 0;
+	/**
+	 * @return string 数据表名字
+	 */
+	public function tableName()
+	{
+		return self::$table;
+	}
 
 	public function init(){
 		parent::init();
@@ -54,6 +80,7 @@ class Stocks extends ModuleRecord
 				'itemid' => '编号',
 				'fromid' => '平台会员ID',
 				'product_id' => '产品',
+				'warehouse_id' => '仓库',
 				'stocks' => '结存数量', /*(可负)*/
 				'add_time' => '添加时间',
 				'add_us' => '添加人',
@@ -62,6 +89,7 @@ class Stocks extends ModuleRecord
 				'modified_us' => '修改人',
 				'modified_ip' => '修改IP',
 				'note' => '备注',
+				
 				'status' => '状态', /*(0:回收站,1:正常)*/
 		);
 	}

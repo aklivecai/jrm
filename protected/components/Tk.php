@@ -13,7 +13,7 @@ class Tk
 	* @return string the translated message.
 	*/
 	
-	public static function g( $message="",$category="common", $params=array(), $source=null, $language=null)
+	public static function g( $message="", $params=array(),$category="common", $source=null, $language=null)
 	{
 		$str = '';
 		if (is_array($message)) {

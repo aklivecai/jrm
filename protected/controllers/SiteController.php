@@ -17,12 +17,13 @@ class SiteController extends Controller
 	}
 
 	protected function beforeRender($view){
+		return true;
 		// Tak::KD(Yii::app()->getController()->getAction()->id,1);
 		$uage = $_SERVER['HTTP_USER_AGENT'];
 		$aid = Yii::app()->getController()->getAction()->id;
 		if(
 			(
-				$aid!='ie6' && $aid!='error'
+				$aid!='ie6'
 			)
 			&&
 			(
@@ -30,6 +31,14 @@ class SiteController extends Controller
 				|| strpos($uage,'MSIE 7.0;') !== false
 			)
 			){
+			preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
+			$version = 0;
+			if (count($matches)>1){
+  			//Then we're using IE
+  				$version = $matches[1];
+  			}
+  				Tak::KD($version);
+				Tak::KD($uage,1);
 				$this->redirect(array('/site/ie6'));
 		}
 		return true;
@@ -73,8 +82,10 @@ class SiteController extends Controller
 
 	public function actionIe6()
 	{
+		$uage = $_SERVER['HTTP_USER_AGENT'];
+		$v = 	strpos($uage,'MSIE 6.0;') !== false ?'6':'7'	;
 		$this->_setLayout('/layouts/columnAjax');
-		$this->render('ie6',array());
+		$this->render('ie6',array('v'=>$v));
 	}
 
 	public function actionHelp()

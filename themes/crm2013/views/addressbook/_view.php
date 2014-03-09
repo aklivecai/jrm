@@ -12,7 +12,7 @@ $items = array(
                 'value'=> TakType::getStatus('sex',$data->sex),),
 	);
 
-if (!$isportion) {
+if (isset($isportion)) {
 	$items1 = array(
 		// 'longitude',
 		// 'latitude',

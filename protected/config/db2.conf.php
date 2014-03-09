@@ -8,7 +8,7 @@ $db = array(
         // uncomment the following to use a MySQL database
 $db = array(
             'class'=>'CDbConnection',
-            'connectionString' => 'mysql:host=192.168.1.222;dbname=akb2b',
+            'connectionString' => 'mysql:host=192.168.0.222;dbname=akb2b',
             'emulatePrepare' => true,
             'username' => 'ak',
             'password' => 'aklivecai',

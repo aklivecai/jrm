@@ -122,7 +122,7 @@ class Order extends MRecord
 	//保存数据前
 	protected function beforeSave(){
 	    $result = parent::beforeSave(true);
-	    if(!$isok&&$result){
+	    if($result){
 	        //添加数据时候
 	        $arr = Tak::getOM();
 	        if ( $this->isNewRecord ){

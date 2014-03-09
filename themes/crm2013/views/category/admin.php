@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/_/_/jstree/dist/themes/default/style.min.css" />
+<script src="/_/_/jstree/dist/jstree.min.js"></script>
 <?php
 $this->breadcrumbs = array(
     Tk::g($this->getType() . ' Category') => $this->cateUrl,
@@ -11,57 +13,88 @@ $items = array(
     )
 );
 ?>
-   <div class="row-fluid">
-                        <div class="head clearfix">
-                            <div class="isw-list"></div>
-                            <h1><?php echo Tk::g('List'); ?></h1>
-<?php
-$this->widget('application.components.MyMenu', array(
-    'htmlOptions' => array(
-        'class' => 'buttons'
-    ) ,
-    'items' => $items,
-));
-?>                                      
-                        </div>
-                        <div class="block-fluid clearfix">
-					<?php
-$widget = $this->widget('bootstrap.widgets.TbGridView', array(
-    'type' => 'striped bordered condensed',
-    'id' => 'list-grid',
-    'dataProvider' => $model->search() ,
-    'template' => '{summary}<div class="dr"><span></span></div>{items}',
-    'summaryCssClass' => 'dataTables_info',
-    'pagerCssClass' => 'pagination dataTables_paginate',
-    'columns' => array(
+
+<div class="block-fluid">
+    <div class="row-fluid">
+<?php $this->widget('bootstrap.widgets.TbNavbar', array(
+    'brand'=>'',
+    'brandUrl'=>'#',
+    'fixed'=>'false',
+    'fixed'=>'true',
+    'collapse'=>true, // requires bootstrap-responsive.css
+
+    'items'=>array(
         array(
-            'name' => 'listorder',
-            'type' => 'raw',
-            'headerHtmlOptions' => array(
-                'style' => 'width: 85px'
-            ) ,
-        ) ,
-        array(
-            'name' => 'catename',
-            'type' => 'raw',
-        ) ,
-        array(
-            'name' => 'item',
-            'type' => 'raw',
-        ) ,
-        array(
-            'class' => 'bootstrap.widgets.TbButtonColumn',
-            'htmlOptions' => array(
-                'style' => 'width: 85px'
-            ) ,
-            'template' => '{update} {delete}',
-            'deleteButtonUrl' => '$data->getDelLink()',
-            'updateButtonUrl' => '$data->getEidtLink()'
-        ) ,
-    ) ,
-));
+            'class'=>'bootstrap.widgets.TbMenu',
+            'items'=>array(
+                array('label'=>Tk::g(array('Add',$modelName)), 'url'=>$this->getLink('Create'), 'active'=>true,'linkOptions'=>array('class'=>"data-ajax",'id'=>'create-category','title'=>Tk::g(array('Add',$modelName)))),
+                array('label'=>Tk::g(array('Update',$modelName)), 'url'=>$this->getLink('Update'),'linkOptions'=>array('title'=>Tk::g(array('Update',$modelName)),'class'=>'data-ajax','id'=>"ajax-update")),
+
+                array('label'=>Tk::g(array('Delete',$modelName)), 'url'=>$this->getLink('Delete'),'linkOptions'=>array('id'=>"data-deletd")),
+            ),
+        ),
+    ),
+)); 
+$this->renderPartial('_show', array(
+        'model' => $model,
+        'id' => $id,
+        'action' => $action,
+)); 
+Tak::regScript('','
+    var CURL = "'.$this->getLink('Admin').'";
+    var caction = function(){
+        var data = jstrss.jstree("get_selected");
+        if ( data.length == 0) {
+            alert("未选择要操作的分类");
+            return false;
+        }    
+        return data[0];          
+    }
+$("#create-category").on("click",function(event){
+    var data = jstrss.jstree("get_selected")
+    , t = $(this)
+    ;
+    if (data.length>0) {
+        url = t.attr("href")+"&Category[parentid]="+data[0];
+        t.attr("href",url);        
+    }
+});
+$("#data-deletd").on("click",function(event){
+        event.preventDefault();
+        var t = $(this)
+            , data = caction()
+            ;
+        if (!data) {
+            return false;
+        }
+        if (sCF("确定删除该分类？")) {
+            return false;
+        }                      
+        url = t.attr("href")+"&id="+data;
+        $.ajax({url:url}).done(function(data) {
+            if(data==""||data=="ok"){
+                window.location.href = CURL;
+            }else{
+                alert(data);
+            }
+        });
+});
+$("#ajax-update").on("click",function(event){
+     event.preventDefault();
+     var t = $(this)
+    var data = caction();
+        if (!data) {
+            event.preventDefault();
+            return false;
+        }
+        url = t.attr("href")+"&id="+data;
+        t.attr("href",url);
+});     
+');
 ?>
-				</div>            
-			<div class="dr"><span></span></div>
-		</div>
-	</div>
+
+</div>
+</div>
+
+
+

@@ -29,10 +29,10 @@ $items['Create']['url'] = array('create','Contact[clienteleid]'=>$model->cliente
         </div>
         <div class="block-fluid">
             <div class="row-form clearfix" >
-                <?php echo $form->textFieldRow($model,'clienteleid',array('class'=>'select-clientele','size'=>10,'maxlength'=>10,'style'=>'width:100%')); ?>
+                <?php echo $form->textFieldRow($model,'clienteleid',array('class'=>'select-clientele','size'=>20,'maxlength'=>20,'style'=>'width:100%')); ?>
             </div>
             <div class="row-form clearfix">
-                <?php echo $form->textFieldRow($model,'prsonid',array('class'=>'select-prsonid','size'=>10,'maxlength'=>10,'style'=>'width:100%')); ?>
+                <?php echo $form->textFieldRow($model,'prsonid',array('class'=>'select-prsonid','size'=>20,'maxlength'=>20,'style'=>'width:100%')); ?>
             </div>
             <div class="clear"></div>
             <div class="row-form clearfix">
@@ -42,10 +42,10 @@ $items['Create']['url'] = array('create','Contact[clienteleid]'=>$model->cliente
                 <?php echo $form->dropDownListRow($model,'stage',TakType::items('contact-stage')); ?>
             </div>
             <div class="row-form clearfix" >
-                <?php echo $form->textFieldRow($model,'contact_time',array('size'=>10,'maxlength'=>10,'class'=>'type-date','data-type'=>'now','data-type'=>'time','data-date-max'=>'now')); ?>
+                <?php echo $form->textFieldRow($model,'contact_time',array('class'=>'type-date','data-type'=>'now','data-type'=>'time','data-date-max'=>'now')); ?>
             </div>
             <div class="row-form clearfix" >
-                <?php echo $form->textFieldRow($model,'next_contact_time',array('size'=>10,'maxlength'=>10,'class'=>'type-date','data-type'=>'time','data-date-min'=>'now')); ?>
+                <?php echo $form->textFieldRow($model,'next_contact_time',array('class'=>'type-date','data-type'=>'time','data-date-min'=>'now')); ?>
             </div>
             <div class="row-form clearfix" >
                 <?php echo $form->textFieldRow($model,'next_subject',array('size'=>60,'maxlength'=>255)); ?>

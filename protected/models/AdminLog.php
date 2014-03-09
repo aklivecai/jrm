@@ -138,7 +138,7 @@ class AdminLog extends CActiveRecord
     public function defaultScope()
     {
     	$arr = array();
-    	if ($isOrder||true) {
+    	if (true) {
     		$arr['order'] = 'add_time DESC';
     	}
     	$condition = array();

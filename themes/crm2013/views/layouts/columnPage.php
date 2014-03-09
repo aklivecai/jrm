@@ -6,6 +6,10 @@
 <!--[if IE]>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <![endif]-->
+<!--[if lt IE 7]> 
+<meta http-equiv="refresh" content="0; url=<?php echo Yii::app()->createUrl('/site/ie6'); ?>" />
+<![endif]-->
+
     <link rel="icon" type="image/ico" href="favicon.ico"/>
         <title><?php echo CHtml::encode($this->pageTitle); ?></title>
     <link rel="icon" type="image/ico" href="favicon.ico"/>

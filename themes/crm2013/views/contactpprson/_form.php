@@ -33,7 +33,7 @@ $this->widget('application.components.MyMenu',array(
 </div>
 <div class="block-fluid">
 	<div class="row-form clearfix" >
-		<?php echo $form->textFieldRow($model,'clienteleid',array('class'=>'select-clientele','size'=>10,'maxlength'=>10,'style'=>'width:100%')); ?>
+		<?php echo $form->textFieldRow($model,'clienteleid',array('class'=>'select-clientele','size'=>20,'maxlength'=>20,'style'=>'width:100%')); ?>
 
 	</div>
 

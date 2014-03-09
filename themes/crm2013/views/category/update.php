@@ -3,8 +3,7 @@
 /* @var $model Clientele */
 
 $this->breadcrumbs=array(
-	Tk::g($this->getType().' Category')=>array('Admin'),
-	$model->getLinkName()=>array('View','id'=>$model->itemid),
+	Tk::g($this->getType().' Category')=>$this->cateUrl,
 	Tk::g('Update'),
 );
 ?>	

@@ -3,11 +3,8 @@ $this->pageTitle=Yii::app()->name . ' - '.Tk::g('Login');
 $this->breadcrumbs=array(
 	Tk::g('Login'),
 );
-
 Yii::app()->user->setFlash('info', '<strong>'.$msg['company'].'</strong> <br />欢迎使用 '.Yii::app()->name);
-
 Yii::app()->user->setFlash('warning', Yii::app()->params['help']);
-
 ?>      
 
 <div class="container">

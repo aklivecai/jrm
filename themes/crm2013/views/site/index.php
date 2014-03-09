@@ -154,3 +154,8 @@ foreach ($items as $value) {
   echo Tak::fastUuid()+1;
 ?>
 -->
+
+
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>403.</b> <ins>That’s an error.</ins>
+  <p>Your client does not have permission to get URL <code>/api/appversion/rollback</code> from this server.  <ins>That’s all we know.</ins>
