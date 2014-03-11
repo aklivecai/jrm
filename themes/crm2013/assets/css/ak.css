@@ -125,6 +125,9 @@ ul.yiiPager .first, ul.yiiPager .last {
   padding:0;
   margin-bottom:8px;
  }
+ .block-fluid .navbar .nav{
+  margin-bottom: 0;
+ }
  .grid-view .filters .filter-container{
     margin:0;
     padding:0;
@@ -563,34 +566,6 @@ form.active .wap-flow-content{
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=20)";
 } 
 
-#ibody .menu .navigation > li,
-#ibody .menu .navigation > li.openable{
-  background-color: #CCC;
-}
-
-#ibody .silver .navigation > li.openable{
-  background-color: #576774;
-}
-#ibody .dark .navigation > li.openable{
-  background-color: #1C1C1C;
-}
-#ibody .marble .navigation > li.openable{
-  background-color: #74837C;
-}
-#ibody .red .navigation > li.openable{
-  background-color: #5B1E0C;
-}
-#ibody .green .navigation > li.openable{
-  background-color: #476608;
-}
-#ibody .lime .navigation > li.openable{
-  background-color: #95B611;
-}
-#ibody .purple .navigation > li.openable{
-  background-color: #913F7F;
-}
-
-
 .modal-body .form-horizontal .control-label{
   width:100px;
 }
@@ -631,4 +606,8 @@ form.active .wap-flow-content{
 
 .jstree-default .jstree-clicked{
   width:50%;
+}
+
+.row-form .input-prepend input[type="text"]{
+  height: 25px;   
 }

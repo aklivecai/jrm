@@ -1,42 +1,111 @@
+<link href="/_/_/smart-wizard/styles/smart_wizard.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/_/_/smart-wizard/js/jquery.smartWizard-2.0.min.js"></script>
 <?php
-$this->pageTitle=Yii::app()->name . ' - 帮助中心';
-$this->breadcrumbs=array(
-  '帮助中心 ',
-);
+  $this->pageTitle = Yii::app()->name . ' - 帮助中心';
+  $this->breadcrumbs=array(
+    '帮助中心 ',
+  );
 
-$model = new Movings;
+  $model = new Movings;
+  $types = TakType::items('Sell-type');
+  $warehouses =  Warehouse::getSelect();
 ?>
-<div class="row-fluid">
-        <div class="head clearfix">
-            <div class="isw-chats"></div>
-            <h1>销售提货出库</h1>
-
-<ul class="buttons" id="yw0"><li><a class="save" href="javascript:;" id="yt0"><i class="isw-edit"></i> 保存</a></li><li><a href="javascript:;"><i class="isw-refresh"></i> 刷新</a></li><li><a href="javascript:;"><i class="isw-left"></i> 返回</a></li></ul>             
-        </div>
-        <div class="block-fluid clearfix">
     <?php $form=$this->beginWidget('CActiveForm', array(
-        'id'=>'wizard_validate',
-        'enableAjaxValidation'=>true,
-        'enableClientValidation'=>true,
+        'id'=>'takllist',
+        'enableAjaxValidation'=>false,
+        'enableClientValidation'=>false,
     )); ?>
 
-                <fieldset title="第一步">
-                    <legend>产品明细</legend>        
-                    <div class="row-form clearfix">
-                        <div class="span3">选择仓库</div>
-                        <div class="span9">
-                            <select>
-                            <option>广州仓库1</option>
-                            <option>广州仓库2</option>
-                            <option>深圳仓库1</option>
-                            <option>深圳仓库2</option>                                
-                            </select>
-                            <span class="bottom">出库的仓库</span>
-                        </div>
-                    </div>
-                    <div class="row-form clearfix">
-                        <div class="span3">产品信息</div>
-                    </div>
+        <!-- Smart Wizard -->
+        <div id="wizard" class="swMain">
+            <ul>
+                <li><a href="#step-1">
+                    <span class="stepNumber">第</span>
+                    <span class="stepDesc">
+                    一步<br />
+                    <small>单据信息</small>
+                    </span>
+                </a></li>
+                <li><a href="#step-2">
+                    <span class="stepNumber">第</span>
+                    <span class="stepDesc">
+                    二步<br />
+                    <small>产品明细</small>
+                    </span>
+                </a></li>
+                <li><div class="steps-finish">
+                  完成
+                </li>
+            </ul>
+            <div id="step-1">
+
+            <div class="">
+                            <div class="toolbar nopadding-toolbar clearfix">
+                                <h4>单据信息</h4>
+                            </div>               
+                            <div class="row-form clearfix">
+                              <div class="span2">
+                                <?php echo $form->labelEx($model,'typeid');?>
+                              </div>
+                              <div class="span5">
+                                <?php echo $form->dropDownList($model,'typeid',$types);?>
+                              </div>
+                            </div>
+                            <div class="row-form clearfix">
+                               <div class="span2">
+                                 <?php echo $form->labelEx($model,'warehouse_id');?>
+                               </div>
+                               <div class="span5">
+                                 <?php echo $form->dropDownList($model,'warehouse_id',$warehouses);?>
+                               </div>
+                            </div>
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model,'time'); ?>
+                                </div>
+                                <div class="span5">
+                                <?php echo $form->dateField($model,'time',array('required'=>'required','size'=>10,'maxlength'=>10,'value'=>($model->time>0?Tak::timetodate($model->time):''))); ?>
+                                </div>
+                            </div>              
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model,'numbers'); ?>
+                                </div>
+                                <div class="span5">
+                                <?php echo $form->textField($model,'numbers',array('size'=>60,'maxlength'=>100)); ?>
+                                </div>
+                            </div>
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model,'enterprise'); ?>
+                                </div>
+                                <div class="span5">
+                                <?php echo $form->textField($model,'enterprise',array('size'=>60,'maxlength'=>100)); ?>
+                                </div>
+                            </div>
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model,'us_launch'); ?>
+                                </div>
+                                <div class="span5">
+                                <?php echo $form->textField($model,'us_launch',array('size'=>60,'maxlength'=>100)); ?>
+                                </div>
+                            </div>
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model,'note'); ?>
+                                </div>
+                                <div class="span5">
+                                <?php echo $form->textArea($model,'note',array('size'=>60,'maxlength'=>255)); ?>
+                                </div>
+                            </div>
+                            <div class="row-form clearfix">
+                            </div>
+                      </div>
+          
+          </div>
+            <div id="step-2">
+
                         <div class="row-form clearfix">
       <table cellpadding="0" cellspacing="0" width="100%" class="table" >
           <thead>
@@ -67,28 +136,38 @@ $model = new Movings;
         </table>
                             <span class="bottom">显示对应仓库的产品(库存不大于0的标记<span class="red">红色.</span>不能选择)</span>
                         </div>
-                </fieldset>
+          </div>
+      </div>
 
-                <fieldset title="第二步">
-                    <legend>单据信息</legend>
-      <div class="row-form clearfix" style="border-top-width: 0px;"> <span class="span3">
-        <?php echo $form->labelEx($model,'time'); ?></span> <span class="span9">
-        <?php echo $form->dateField($model,'time',array('required'=>'required','size'=>10,'maxlength'=>10,'value'=>($model->time>0?Tak::timetodate($model->time):''))); ?>
-        </span> </div>
-        <div class="row-form clearfix"> <span class="span3"><?php echo $form->labelEx($model,'numbers'); ?></span> <span class="span9"><?php echo $form->textField($model,'numbers',array('size'=>60,'maxlength'=>100)); ?></span> </div>
-        <div class="row-form clearfix"> <span class="span3"><?php echo $form->labelEx($model,'enterprise'); ?></span> <span class="span9"><?php echo $form->textField($model,'enterprise',array('required'=>'required','size'=>60,'maxlength'=>100)); ?></span> </div>
-        <div class="row-form clearfix"> <span class="span3"><?php echo $form->labelEx($model,'us_launch'); ?></span> <span class="span9"><?php echo $form->textField($model,'us_launch',array('size'=>60,'maxlength'=>100)); ?></span> </div>
-        <div class="row-form clearfix"> <span class="span3"><?php echo $form->labelEx($model,'note'); ?></span> <span class="span9"><?php echo $form->textArea($model,'note',array('size'=>60,'maxlength'=>255)); ?></span> </div>
-                </fieldset>
 
-                <input type="submit" class="btn finish" value="提交" />
 <?php
 
   $this->endWidget(); 
-  $this->regScriptFile('k-load-movings.js?t=1', CClientScript::POS_END);
+  // $this->regScriptFile('k-load-movings.js?t=1', CClientScript::POS_END);
+Tak::regScript('end','
+        $("#wizard").smartWizard({
+              selected: 0,  
+              errorSteps:[2],
+              labelNext:"下一步", 
+              labelPrevious:"上一步",
+              labelFinish:"提交", 
+              onFinish:submitAction,
+              transitionEffect:"slideleft",
+              onLeaveStep:leaveAStepCallback,
+              // onFinish:onFinishCallback,
+              enableFinishButton:true
+        });
+      function leaveAStepCallback(obj){
+        var step_num= obj.attr("rel");
+        return true;
+        // return validateSteps(step_num);
+      }
+
+// smartWizard({transitionEffect:"slideleft",onLeaveStep:leaveAStepCallback,onFinish:onFinishCallback,enableFinishButton:true});
+
+        function submitAction(){
+            $("#wizard").smartWizard("showMessage","Finish Clicked");
+            $("#wizard").smartWizard("setError","0");
+        }
+  ');
 ?>
-
-        </div>
-    </div>
-
-</div>

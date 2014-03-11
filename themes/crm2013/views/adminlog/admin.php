@@ -37,13 +37,7 @@ $this->breadcrumbs=array(
 		,'htmlOptions'=>array('class'=>'')
 	),
 	'columns'=>array(	
-		array(  
-			'class'=>'bootstrap.widgets.TbButtonColumn'
-			,'header' => '' 
-			,'template'=>'{view},{delete}'
-		 ),		
 		'user_name'	
-
 ,		array(
 			'name'=>'info',
 			'type'=>'raw',
@@ -53,11 +47,13 @@ $this->breadcrumbs=array(
 			'type'=>'raw',
 			 'value' => 'Tak::Num2IP($data->ip)',
             	'filter' => false,
+            	'headerHtmlOptions'=>array('style'=>'width: 85px'),
 		)	
 ,		array(
 			'name'=>'add_time',
 			'value'=>'Tak::timetodate($data->add_time,5)',
-            'filter' => false
+            	'filter' => false,
+            	'headerHtmlOptions'=>array('style'=>'width: 85px'),
 		),		
 	),
 )); 

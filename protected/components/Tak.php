@@ -328,7 +328,7 @@ class Tak extends Ak {
                         'url' => array(
                             '/Warehouse/Admin'
                         ) ,
-                        'visible' => true,
+                        'visible' => self::checkAccess('Warehouse.*'),
                     ) ,
                     array(
                         'icon' => 'th',
@@ -336,14 +336,15 @@ class Tak extends Ak {
                         'url' => array(
                             '/Category/Admin?m=product'
                         ) ,
-                        'visible' => self::checkAccess('Category.*') && YII_DEBUG,
+                        'visible' => self::checkAccess('Category.*'),
                     ) ,
                     array(
                         'icon' => 'certificate',
-                        'label' => sprintf($strSpan, Tk::g('Order')) ,
+                        'label' => sprintf($strSpan, Tk::g(array('Order','Config'))) ,
                         'url' => array(
                             '/Order/Config'
                         ) ,
+                        'visible' => self::checkAccess('Order.config'),
                     ) ,
                 )
             ) ,
@@ -630,7 +631,7 @@ class Tak extends Ak {
                 ) ,
             ) ,
             'pss' => array(
-                'visible' => (self::checkAccess('Pss.*') || self::checkAccess('Product.*') || self::checkAccess('TakType.*') || self::checkAccess('Category.*') || self::checkAccess('Purchase.*') || self::checkAccess('Product.*') || self::checkAccess('Sell.*') || self::checkAccess('Stocks.*')) ,
+                'visible' => (self::checkAccess('Pss.*') || self::checkAccess('Product.*') || self::checkAccess('Purchase.*') || self::checkAccess('Product.*') || self::checkAccess('Sell.*') || self::checkAccess('Stocks.*')) ,
                 'icon' => 'isw-list',
                 'label' => sprintf($strSpan, Tk::g(array(
                     'Admin',
@@ -640,14 +641,6 @@ class Tak extends Ak {
                     '/Pss/Index'
                 ) ,
                 'items' => array(
-                    array(
-                        'icon' => 'th',
-                        'label' => sprintf($strSpan, Tk::g('Product Type')) ,
-                        'url' => array(
-                            '/TakType/Admin?type=product'
-                        ) ,
-                        'visible' => self::checkAccess('Taktype.*') ,
-                    ) ,
                     array(
                         'icon' => 'th',
                         'label' => sprintf($strSpan, Tk::g('Product')) ,

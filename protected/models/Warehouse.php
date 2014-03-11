@@ -57,6 +57,16 @@ class Warehouse extends LRecord
 		return self::$datas;
 	}
 
+	public static function getSelect()
+	{
+		$data = self::getDatas();
+		$result = array();
+		foreach ($data as $key => $value) {
+			$result[$value['itemid']] = $value['name'];
+		}
+		return $result;
+	}
+
 	public static function toSelects($label=false){
 		$data = self::getDatas();
 		$result = array();
@@ -159,8 +169,9 @@ class Warehouse extends LRecord
         } else {
             return null;
         }
+        $s1 = $this->defaultScope();
         $sqlWhere = array(
-            $this->defaultScope()['condition']
+            $s1['condition']
         );
         $sqlWhere[] = ':itemid <> :current_id';
 

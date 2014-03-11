@@ -10,4 +10,5 @@
 	<td class="txt-center"><?php echo Tak::timetodate($data->iMovings->time,3); ?></td>
 	<td class="txt-center"><?php echo CHtml::encode($data->iMovings->us_launch); ?></td>
 	<td class="txt-center"><?php echo Tak::timetodate($data->time_stocked,6); ?></td>
+	<td class="txt-center"><?php echo Tak::timetodate($data->note); ?></td>
 </tr>

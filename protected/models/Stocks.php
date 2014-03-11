@@ -112,8 +112,11 @@ class Stocks extends ModuleRecord
 		return $cActive;
 	}
 
-	public  static function getStocks($productid){
+	public  static function getStocks($productid,$warehouse_id=false){
 		$sql = 	'SELECT SUM(stocks) FROM :tabl WHERE product_id=:productid';
+		if ($warehouse_id>0) {
+			$sql .= " AND  warehouse_id ='$warehouse_id' ";
+		}
 		$sql = strtr($sql,array(
 			':tabl'=> self::$table,
 			':productid'=>$productid,

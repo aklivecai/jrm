@@ -1,5 +1,6 @@
 <?php
 class Category extends LRecord {
+    
     private $scondition = false; /*默认搜索条件*/
     public static $table = '{{category}}';
     public static $models = array(
@@ -29,27 +30,27 @@ class Category extends LRecord {
         return self::$cates[$module];
     }
     
-    public static function getName($catid, $type,$isall = false) {
+    public static function getName($catid, $type, $isall = false) {
         $data = self::getCates($type);
         $result = '';
         if (isset($data[$catid])) {
-            if ($isall&&$data[$catid]['arrparentid']) {
+            if ($isall && $data[$catid]['arrparentid']) {
                 $list = explode(",", $data[$catid]['arrparentid']);
                 $arr = array();
                 foreach ($list as $value) {
                     if (isset($data[$value])) {
-                        $arr[] =  $data[$value]['catename'];
+                        $arr[] = $data[$value]['catename'];
                     }
                 }
-               $result = join("  - ",$arr) ;
-            }else{
-                $result = $data[$catid]['catename'];    
-            }            
+                $result = join("  - ", $arr);
+            } else {
+                $result = $data[$catid]['catename'];
+            }
         }
         return $result;
     }
-    public static function getProductName($catid,$isall=false) {
-        return self::getName($catid,'product',$isall);
+    public static function getProductName($catid, $isall = false) {
+        return self::getName($catid, 'product', $isall);
     }
     public static function getCatsProduct() {
         return self::getCates('product');
@@ -105,6 +106,7 @@ class Category extends LRecord {
                 'numerical',
                 'integerOnly' => true
             ) ,
+            array('parentid','checkParentid','on'=>'update'),
             
             array(
                 'catid, fromid',
@@ -133,7 +135,12 @@ class Category extends LRecord {
             ) ,
         );
     }
-    
+    public function checkParentid($attribute,$params){        
+        if(strpos(','.$this->arrchildid.',', ','.$this->parentid.',') !== false){
+            $err = $this->getAttributeLabel($attribute) . '不允许选择子分类!';
+            $this->addError($attribute, $err);
+        }
+    }
     public function formCatid($attribute, $params) {
         $this->arrparentid = $this->catid;
     }
@@ -187,8 +194,6 @@ class Category extends LRecord {
         if ($result) {
             if ($this->isNewRecord) {
                 // Tak::KD($this->attributes,1);
-                
-                
             }
         }
         return $result;
@@ -200,23 +205,22 @@ class Category extends LRecord {
     
     protected function afterSave() {
         parent::afterSave();
-        $CATEGORY = self::getCatsProduct();
-        $catid = $this->catid;
-        $arr = array(
-            ':table' => self::$table,
-            ':module' => $this->module,
-            ':fromid' => Tak::getFormid() ,
-            ':catid' => $catid,
-        );
         if ($this->isNewRecord) {
+            $CATEGORY = self::getCatsProduct();
+            $catid = $this->catid;
+            $arr = array(
+                ':table' => self::$table,
+                ':module' => $this->module,
+                ':fromid' => Tak::getFormid() ,
+                ':catid' => $catid,
+            );            
             $childs = '';
             $childs.= ',' . $catid;
             if ($this->parentid) {
                 //update cure
                 $CATEGORY[$catid] = $this->attributes;
-                $arrparentid = $this->get_arrparentid($catid, $CATEGORY);
-                // Tak::KD($arrparentid,1);
-                
+                $arrparentid = self::get_arrparentid($catid, $CATEGORY);
+                // Tak::KD($arrparentid,1);               
             } else {
                 $arrparentid = 0;
             }
@@ -246,47 +250,152 @@ class Category extends LRecord {
                     self::$db->createCommand($sql)->execute();
                 }
             }
+        }elseif($this->oldParentid!=null){
+            $CATEGORY = self::getCatsProduct();
+            $sql = $this->catid;
+            $temps = array($this->oldParentid,$this->parentid);
+            foreach ($temps as $value) {
+                    $sql.=",".$value;
+                     if ($CATEGORY[$value]['arrparentid']) {
+                            $sql.=",".$CATEGORY[$value]['arrparentid'];
+                    }
+            }
+            if ($this->arrchildid) {
+                $sql.=','.$this->arrchildid;
+            }
+            $data = explode(',',$sql);    
+            $data = array_unique($data);
+            $data = array_filter($data);            
+            // Tak::KD($sql);
+            // Tak::KD($data);
+            if (count($data)>0) {
+                $sql = sprintf(' catid in (%s)',join(',',$data));
+            }else{
+                $sql = '';
+            }       
+            self::repair($this->module,$sql);
         }
     }
 
+    public static function repair($module,$sql=false) {
+            $_sqldata = array(
+                ':table' => self::$table,
+                ':module' => $module,
+                ':fromid' => Tak::getFormid() ,
+                ':where' => ""
+            );
+            if ($sql) {
+                $_sqldata[':where'] = sprintf(" AND %s",$sql);
+            }    
+            $sql  = "SELECT * FROM :table WHERE fromid=:fromid AND module=':module' :where ORDER BY listorder,catid";
 
-    public function isDel()
-    {
+        $sql = strtr($sql, $_sqldata);
+        // Tak::KD($sql);
+
+        $comm = self::$db->createCommand();
+        
+        $data = $comm->setText($sql)->queryAll(true);
+
+        $CATEGORY = array();
+        foreach ($data as  $r) {
+            $CATEGORY[$r['catid']] = $r;
+        }
+        $childs = array();
+        foreach($CATEGORY as $catid => $category) {
+            $CATEGORY[$catid]['arrparentid'] = $arrparentid = self::get_arrparentid($catid, $CATEGORY);
+            $sql = "arrparentid='$arrparentid'";
+                    $_sqldata[':catid'] = $catid;
+                    $sql = "UPDATE :table SET $sql WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
+                    $sql = strtr($sql, $_sqldata);
+                    // Tak::KD($sql);
+                    $comm->setText($sql)->execute();
+
+            if($arrparentid) {
+                $arr = explode(',', $arrparentid);
+                foreach($arr as $a) {
+                    if($a == 0) continue;
+                    isset($childs[$a]) or $childs[$a] = '';
+                    $childs[$a] .= ','.$catid;
+                }
+            }
+        }
+        foreach($CATEGORY as $catid => $category) {
+            if(isset($childs[$catid])) {
+                $CATEGORY[$catid]['arrchildid'] = $arrchildid = $catid.$childs[$catid];
+                $CATEGORY[$catid]['child'] = 1;
+                    $_sqldata[':catid'] = $catid;
+                    $sql = "UPDATE :table SET arrchildid='$arrchildid',child=1 WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
+                    $sql = strtr($sql, $_sqldata);
+                    // Tak::KD($sql);
+                    $comm->setText($sql)->execute();
+
+            } else {
+                $CATEGORY[$catid]['arrchildid'] = $catid;
+                $CATEGORY[$catid]['child'] = 0;
+                    $_sqldata[':catid'] = $catid;
+                    $sql = "UPDATE :table SET arrchildid='$catid',child=0 WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
+                    $sql = strtr($sql, $_sqldata);
+                    // Tak::KD($sql);
+                    $comm->setText($sql)->execute();
+            }
+        }
+        // exit;
+        return true;
+    }    
+    
+    public function isDel() {
         $data = self::getCates($this->module);
         // Tak::KD($data);
-        $ids = self::get_arrchildid($this->catid,$data);
+        $ids = self::get_arrchildid($this->catid, $data);
         $sql = " SELECT count(s.itemid) FROM :table  AS s
                       WHERE typeid in(:ids) ";
-             $sql = strtr($sql, array(
-                ':table' => Product::$table,
-                ':fromid' => Tak::getFormid(),
-                ':ids' => $ids,
-             ));
-             // Tak::KD($sql,1);
-             $count = self::$db->createCommand($sql)->queryScalar();
-             // Tak::KD($count);
-             // exit;
-             return $count;
-    }    
-
+        $sql = strtr($sql, array(
+            ':table' => Product::$table,
+            ':fromid' => Tak::getFormid() ,
+            ':ids' => $ids,
+        ));
+        // Tak::KD($sql,1);
+        $count = self::$db->createCommand($sql)->queryScalar();
+        // Tak::KD($count);
+        // exit;
+        return $count;
+    }
+    
     public function del() {
         $result = false;
         $count = $this->isDel();
-        if ($count>0) {
-            $result =  '分类下已经有产品，不能进行删除';
-        }else{
-            if ($this->parentid) {
+        if ($count > 0) {
+            $result = '分类下已经有产品，不能进行删除';
+        } else {
+            if ($this->child) {
                 $data = self::getCates($this->module);
-                $ids = self::get_arrchildid($this->catid,$data);
+                $ids = self::get_arrchildid($this->catid, $data);
                 $this->deleteAll("catid in($ids)");
-            }else{
+            } else {
                 $this->delete();
             }
+            $CATEGORY = self::getCatsProduct();
+            $sql = $this->catid;
+            $sql.=",".$this->parentid;
+             if ($CATEGORY[$this->parentid]['arrparentid']) {
+                    $sql.=",".$CATEGORY[$this->parentid]['arrparentid'];
+            }    
+            $data = explode(',',$sql);    
+            $data = array_unique($data);
+            $data = array_filter($data);            
+            // Tak::KD($sql);
+            // Tak::KD($data);
+            if (count($data)>0) {
+                $sql = sprintf(' catid in (%s)',join(',',$data));
+            }else{
+                $sql = '';
+            }       
+            self::repair($this->module,$sql);                        
         }
-        return $result;        
-    }    
+        return $result;
+    }
     
-    public function get_arrparentid($catid, $CATEGORY) {
+    public static function get_arrparentid($catid, $CATEGORY) {
         if ($CATEGORY[$catid]['parentid'] && $CATEGORY[$catid]['parentid'] != $catid) {
             $parents = array();
             $cid = $catid;
@@ -303,11 +412,12 @@ class Category extends LRecord {
             return '0';
         }
     }
-    public function get_arrchildid($catid, $CATEGORY) {
+    public static function get_arrchildid($catid, $CATEGORY) {
         $arrchildid = '';
         foreach ($CATEGORY as $category) {
             if (strpos(',' . $category['arrparentid'] . ',', ',' . $catid . ',') !== false) $arrchildid.= ',' . $category['catid'];
         }
         return $arrchildid ? $catid . $arrchildid : $catid;
     }
+
 }

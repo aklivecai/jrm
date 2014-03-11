@@ -9,8 +9,10 @@
 <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 <link rel="icon" type="image/ico" href="/favicon.ico"/>
 <!--[if lt IE 7]> 
-        <link href="<?php echo $this->getAssetsUrl();?>css/ie7.css" rel="stylesheet" type="text/css" />
         <meta http-equiv="refresh" content="0; url=<?php echo Yii::app()->createUrl('/site/ie6'); ?>" />
+<![endif]-->
+<!--[if IE 8]>
+<link href="<?php echo $this->getAssetsUrl();?>css/ie8.css" rel="stylesheet" type="text/css" />
 <![endif]-->
 <link rel='stylesheet' type='text/css' href='<?php echo $this->getAssetsUrl();?>css/fullcalendar.print.css' media='print' />
 
@@ -38,8 +40,8 @@ $jss = array(
   // 向上滚动的图标
   'plugins/scrollup/jquery.scrollUp.min.js',
   'cookies.js',
-  'actions.js?2014-01-14',
-  'plugins.js?2014-01-14',
+  'actions.js?2014-03-10',
+  'plugins.js?2014-03-10',
   'settings.js',
   'k-load-select.js',
   //Guid

@@ -220,36 +220,39 @@ $('[data-preview]').on('click',function(){
 var modid = 'ajax-modal'
 , strMod =  '<div id="'+modid+'" class="modal hide fade"  tabindex="-1"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> <h4 class="mhead"></h4> </div> <div id="ajax-modal-body"> </div> </div> '
 ,mod,mhead,modC
-; 
-// <div class="modal-footer"><button class="btn btn-warning" >确认</button><button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button></div>
-$(document).on('click','.data-ajax', function(event){
-    event.preventDefault();
-        var t = $(this)
-        , url = t.attr('data-url')?t.attr('data-url'):t.attr('href')
-    ;
+;
+window.modShow = function(url,title){
+    var role = false,elem=false;
+    if (typeof arguments[2]!='undefined') {
+        role = arguments[2];
+    };
+    if (typeof arguments[3]!='undefined') {
+            elem = arguments[3];
+    }
     if (!mod) {
         // mod = $(strMod).appendTo(document.body);
         mod = $(strMod).appendTo($('.content').eq(0));
         modC = mod.find('#'+modid+'-body');
         mhead = mod.find('.mhead');
-    }
-        if (t.attr('role')=='view') {
+    }    
+        if (role=='view') {
             modC.addClass('modal-body');
         }else{
             modC.removeClass('modal-body');
-        }
+        }    
     if (mod.attr('data-url')==url) {
         
     }else{
-        var _thead = t.attr('title')!=''?t.attr('title'):t.text();
+        var _thead = title;
             ;
             mhead.text(_thead);
             modC.html('...').addClass('load-content');
             $.ajax({
                     url:url,
                 }).done(function(data) {
-                modC.html(data);
-                initSelect(modC);
+                    modC.html(data);
+                    initSelect(modC);
+                    // modC.find('input[autofocus]').val('xx').focus();
             }) .fail(function(error,i,s) {
                  mhead.text('请求错误:'+s);
                  modC.html('<div class="alert alert-error">'+error.responseText+'</div>');
@@ -258,10 +261,25 @@ $(document).on('click','.data-ajax', function(event){
                     modC.removeClass('load-content');
                     mod.attr('data-url',url).trigger('k-load');
                     // t.trigger('click');
-                    t.trigger('tak-over');
+                    if (elem) {
+                        elem.trigger('tak-over');
+                    };
+                    
               });
     }
-    mod.modal('show');
+    mod.modal('show');        
+}
+; 
+// <div class="modal-footer"><button class="btn btn-warning" >确认</button><button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button></div>
+$(document).on('click','.data-ajax', function(event){
+    event.preventDefault();
+        var t = $(this)
+        , url = t.attr('data-url')?t.attr('data-url'):t.attr('href')
+        , title = t.attr('title')!=''?t.attr('title'):t.text()
+        , role = t.attr('role')?t.attr('role'):false
+    ;
+    modShow(url,title,role,t);
+    return false;
 });
 }());
 
@@ -525,7 +543,7 @@ if (btnAffirm.length>0) {
         ;
         if (typeof window.popups[name]==='undefined') {
              data.val = $(elem);
-             parent = data.val.parent();
+             var parent = $(elem).parent();
              data.txt = parent.find('input[name=vendor_id_display]');
              data.mod = parent.find('input[name=popupReferenceModule]');
              data.parent =  parent;
@@ -551,7 +569,11 @@ if (btnAffirm.length>0) {
         }   
     }).on('click','.clearReferenceSelection',function(){
         var data = getPopups($(this).parent().find('.sourceField'));
-    });
+    }).on('click','.createPopup',function(){
+        var data = getPopups($(this).parent().find('.sourceField'));
+        wurl = createUrl('Category/create',['m='+data.mod.val(),'action=select']);
+        modShow(wurl,$(this).attr('title'));
+    })
 
 });
 

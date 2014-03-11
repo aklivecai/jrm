@@ -9,19 +9,19 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 
                 <span class="span2">
-                    <div class="row-fluid input-prepend input-append">
-                    <?php echo $form->hiddenField($model,'typeid',array('class'=>'sourceField'))?>
-                      <input name="popupReferenceModule" type="hidden" value="product">
-                    <span class="add-on clearReferenceSelection cursorPointer">
-                        <i class='icon-remove-sign' title="清除"></i>
-                    </span>
-                        <input  name="vendor_id_display" type="text" class="span7" value="" placeholder="请选择分类" readonly="readonly" />
-                    <span class="add-on relatedPopup cursorPointer">
-                        <i class="icon-search relatedPopup" title="请选择分类" ></i>
-                    </span>
-                </div>
+<?php
+$this->renderPartial('/category/select', array(
+        'id' => sprintf("%s[typeid]", $model->mName),
+        'value' => $model->typeid,
+)); 
+?>
         </span>
 <?php 
+  if ($warehouse) {
+    echo JHtml::dropDownList('warehouse_id',$_GET['warehouse_id'],Warehouse::toSelects(Tk::g('Warehouse')));
+  }
+  
+
   echo $form->textFieldRow($model,'name',array('size'=>10,'maxlength'=>10)); 
 ?>
 

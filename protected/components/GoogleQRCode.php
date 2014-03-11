@@ -34,7 +34,7 @@ class GoogleQRCode extends CWidget
         );
 
         $src = sprintf("https://chart.googleapis.com/chart?%s", http_build_query($data));
-        // $src = sprintf("https://127.0.0.1/chart?%s", http_build_query($data));
+        $src = sprintf("https://127.0.0.1/chart?%s", http_build_query($data));
         $_htmlOptions = array(
             'src' => $src,
             'width' => $this->size,

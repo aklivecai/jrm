@@ -95,7 +95,6 @@ class Product extends ModuleRecord
 	{
 		$cActive = parent::search();
 		$criteria = $cActive->criteria;
-
 		$criteria->compare('itemid',$this->itemid);
 		$criteria->compare('fromid',$this->fromid);
 		$criteria->compare('name',$this->name,true);
@@ -114,6 +113,13 @@ class Product extends ModuleRecord
 		$criteria->compare('note',$this->note,true);
 
 		$criteria->compare('status',$this->status);
+
+		$warehouse_id = Tak::getQuery('warehouse_id',false);
+		if($warehouse_id>0){
+			$sql = sprintf("itemid in (SELECT product_id FROM %s WHERE fromid=%s AND warehouse_id='$warehouse_id'  GROUP BY itemid)",Stocks::$table,Tak::getFormid());
+			$criteria->addCondition($sql);
+		}
+
 
 		return $cActive;
 	}
@@ -242,7 +248,8 @@ class Product extends ModuleRecord
 		return $result;
 	}
 	public function getStock(){
-		$result = Stocks::getStocks($this->itemid);
+		$warehouse_id = Tak::getQuery('warehouse_id',false);
+		$result = Stocks::getStocks($this->itemid,$warehouse_id);
 		return $result;		
 	}
 

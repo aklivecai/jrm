@@ -2,6 +2,7 @@
 class CategoryController extends Controller {
     protected $m = null;
     protected $cateUrl = false;
+    public $defaultAction = 'admin';
     public function init() {
         $this->m = $this->getType();
         $this->modelName = 'Category';
@@ -68,12 +69,16 @@ class CategoryController extends Controller {
 
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        $model->scenario = 'update';
         $m = $this->modelName;
         if (isset($_POST[$m])) {
+            if ($model->parentid!=$_POST[$m]['parentid']) {
+                $model->setChangePid($model->parentid);
+            }
             $model->attributes = $_POST[$m];
              $model->setModel($this->m);
             if ($model->save()) {
-                   $this->redirect($this->getLink());
+                   $this->redirect($this->getLink().'&id='.$model->getItemid());
             }
         }
         $this->render($this->templates['update'], array(
@@ -98,7 +103,7 @@ class CategoryController extends Controller {
                             exit;
                         }
                     } else {
-                        $this->redirect($this->getLink());
+                        $this->redirect($this->getLink().'&id='.$model->getItemid());
                     }
                 }
             }

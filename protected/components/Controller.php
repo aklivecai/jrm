@@ -262,6 +262,7 @@ class Controller extends RController {
     
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        $model->scenario = 'update';
         $m = $this->modelName;
         if (isset($_POST[$m])) {
             $model->attributes = $_POST[$m];

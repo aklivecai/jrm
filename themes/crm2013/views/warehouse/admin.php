@@ -51,7 +51,7 @@ $options = array(
                             'selectableRows'=>1,
                             'headerTemplate'=>Tk::g('Select'),
                             'selectableRows' => 2,
-                            'headerHtmlOptions' => array('width'=>'25px','align'=>'center'),
+                            'headerHtmlOptions' => array('width'=>'45px','align'=>'center'),
                             'checkBoxHtmlOptions' => array(
                                 'name' => 'itemid[]',
                                 'align'=>'center',

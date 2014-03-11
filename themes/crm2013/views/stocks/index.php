@@ -21,7 +21,8 @@ $items = Tak::getListMenu();
 	<div class="block-fluid clearfix">
 
 <?php $this->renderPartial('/product/_search', array(
-    'model' => $model
+    'model' => $model,
+    'warehouse' => true
 )); ?>
 
 <?php

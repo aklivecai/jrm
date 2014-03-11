@@ -19,6 +19,10 @@
                 .header .header_menu li.list_icon{ background: url("../img/styles/default/header_menu_list.png") left top no-repeat; display: none;}
                 .header .header_menu li.settings_icon{ background: url("../img/styles/default/header_menu_settings.png") left top no-repeat;}
 
+
+    .wrapper ul.rows li.heading,
+    .wrapper .modal-header{background-image: url("../img/styles/default/backgrounds/box-head.jpg"); border-color: #315680;}                  
+
     .header .header_menu li .popup{right: 14px; top: 40px;}
     .header .header_menu li .popup .head .arrow{width: 17px; height: 12px; left: auto; right: 10px !important; top: -11px; background: url("../img/styles/default/arrow-top.png") left top no-repeat transparent;}                
         .header .header_menu li .popup .checker{padding-left: 0px; cursor: pointer;}

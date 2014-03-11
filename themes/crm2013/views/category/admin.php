@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="/_/_/jstree/dist/themes/default/style.min.css" />
-<script src="/_/_/jstree/dist/jstree.min.js"></script>
 <?php
 $this->breadcrumbs = array(
     Tk::g($this->getType() . ' Category') => $this->cateUrl,
@@ -13,7 +11,6 @@ $items = array(
     )
 );
 ?>
-
 <div class="block-fluid">
     <div class="row-fluid">
 <?php $this->widget('bootstrap.widgets.TbNavbar', array(
@@ -89,7 +86,15 @@ $("#ajax-update").on("click",function(event){
         }
         url = t.attr("href")+"&id="+data;
         t.attr("href",url);
-});     
+});   
+
+$(document).on("dblclick","#jstree_category a",function(){
+  var id = caction();
+  if (id>0) {
+      $("#ajax-update").trigger("click");
+  }
+});
+
 ');
 ?>
 

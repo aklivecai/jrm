@@ -70,9 +70,8 @@ class RController extends CController
         foreach ($arrUrl as $url) {
                 $url = $assetsUrl.$url;
             Yii::app()->clientScript->registerScriptFile($url,$position,$htmlOptions);
-        }       	
-
-
+        }
+        return $this;
 	}
     public function regCssFile($arrUrl,$media='',$dir='css')
     { 

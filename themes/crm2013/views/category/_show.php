@@ -19,7 +19,7 @@ foreach ($data as $key => $value) {
 }
 
 $js = '
-	var jstrss = $("#jstree_demo_div").jstree({ "core" : {
+	var jstrss = $("#jstree_category").jstree({ "core" : {
 	        "multiple" : true,
 	        "animation" : 0,
 	        "data" : '.json_encode($tags).'
@@ -38,4 +38,4 @@ if ($action=='select') {
 
 Tak::regScript('bodyend-',$js);
 ?>
- <div id="jstree_demo_div"><div>
+ <div id="jstree_category"><div>

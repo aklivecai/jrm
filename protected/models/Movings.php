@@ -60,11 +60,11 @@ class Movings extends ModuleRecord {
         // will receive user inputs.
         return array(
             array(
-                'typeid, time, enterprise',
+                'typeid, time, enterprise, warehouse_id',
                 'required'
             ) ,
             array(
-                'type, status',
+                'type, status, warehouse_id',
                 'numerical',
                 'integerOnly' => true
             ) ,

@@ -36,21 +36,14 @@ $this->widget('application.components.MyMenu',array(
     </label>
     <div class="controls">
                 <span class="span10">
-                    <div class="row-fluid input-prepend input-append">
-                    <?php echo $form->hiddenField($model,'typeid',array('class'=>'sourceField'))?>
-                    <input name="popupReferenceModule" type="hidden" value="product">
-                    <span class="add-on clearReferenceSelection cursorPointer">
-                        <i class='icon-remove-sign' title="清除"></i>
-                    </span>
-                        <input  name="vendor_id_display" type="text" class="span7" value="" placeholder="请选择" readonly="readonly" />
-                    <span class="add-on relatedPopup cursorPointer">
-                        <i class="icon-search relatedPopup" title="Select" ></i>
-                    </span>
-                    <span class="add-on cursorPointer hide" data-url="/">
-                        <i class='icon-plus' title="添加"></i>
-                    </span>
-                    <span class="help-inline error" id="Category_parentid_em_" style="display: none"></span>
-                </div>
+
+<?php
+$this->renderPartial('/category/select', array(
+        'id' => sprintf("%s[typeid]", $model->mName),
+        'value' => $model->typeid,
+        'add' => true
+)); 
+?>                
         </span>
     </div>
 </div>

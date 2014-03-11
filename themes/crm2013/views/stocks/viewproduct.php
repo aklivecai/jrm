@@ -42,6 +42,7 @@ foreach (array(
 				<th>{$m->getAttributeLabel('time') }</th>
 				<th>{$m->getAttributeLabel('us_launch') }</th>
 				<th>{$m->getAttributeLabel('time_stocked') }</th>
+                                        <th>{$m->getAttributeLabel('note') }</th>
 				</tr> </thead> <tbody>{items}</tbody> </table>\n<div class=\"list-view\">{pager}</div>";
     $content = $this->widget('bootstrap.widgets.TbListView', array(
         'dataProvider' => $tags,
@@ -50,7 +51,7 @@ foreach (array(
         'htmlOptions' => array(
             'class' => ''
         ) ,
-        'emptyText' => '<tr><td colspan="7">没有数据!</td></tr>',
+        'emptyText' => '<tr><td colspan="8">没有数据!</td></tr>',
         'viewData' => array(
             'cates' => $cates
         )

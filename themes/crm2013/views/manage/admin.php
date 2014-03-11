@@ -156,7 +156,7 @@ $listOptions['columns'] = array(
 		array(
 			'name' => 'login_count',
 			'type'=>'raw',		
-			'headerHtmlOptions'=>array('style'=>'width: 85px'),	
+			'headerHtmlOptions'=>array('style'=>'width: 85px'),
 		),
 		array(
 			'name'=>'last_login_time',

@@ -6,8 +6,8 @@
 <div class="row-fluid">
 <?php 
 $items = array(
-	'product' => array('label'=>Tk::g('Product'), 'url'=>Yii::app()->createUrl('product/admin')),
-	'taktype' => array('label'=>Tk::g('Product Type'), 'url'=>Yii::app()->createUrl('taktype/admin',array('type'=>'product'))
+	'product' => array('label'=>Tk::g('Product'), 'url'=>Yii::app()->createUrl('Product/Admin')),
+	'taktype' => array('label'=>Tk::g('Product Type'), 'url'=>Yii::app()->createUrl('Category/Admin',array('m'=>'product'))
 	),
 );
 if (isset($items[$this->getId()])) {
