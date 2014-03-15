@@ -10,6 +10,7 @@
 <link rel="icon" type="image/ico" href="favicon.ico"/>
 <?php
   Yii::app()->bootstrap->register();
+    $this->regCssFile('window.css');
 ?>
 </head>
 <body>

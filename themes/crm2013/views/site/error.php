@@ -1,6 +1,8 @@
 <?php
-if (isset($error) && $error['code']) {
+if (isset($error) && isset($error['code'])) {
     $this->pageTitle = ' - ' . $error['code'];
+}else{
+    $this->pageTitle = ' - 错误';
 }
 ?>
 <div class="errorPage">

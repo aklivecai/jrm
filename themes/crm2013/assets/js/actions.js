@@ -88,6 +88,14 @@ var createUrl = function(route)
 , sCF  = function(msg){
      return !confirm(msg);
 }
+,  gotoElem = function(elem){
+    /*
+        $("body,html").animate({
+            scrollTop:$(elem).offset().top //让body的scrollTop等于pos的top，就实现了滚动
+        },0);
+    */
+    $(window).scrollTop($(elem).offset().top);
+}
 ;
 
 jQuery(function($){

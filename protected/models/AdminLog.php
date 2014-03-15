@@ -15,6 +15,7 @@
 class AdminLog extends CActiveRecord
 {
 	
+	public static $isLog = true;	
 	/**
 	 * @return string the associated database table name
 	 */
@@ -22,7 +23,6 @@ class AdminLog extends CActiveRecord
 	{
 		return '{{admin_log}}';
 	}
-
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -157,14 +157,14 @@ class AdminLog extends CActiveRecord
 	//保存日志操作
 	public static function log($info='')
 	{
-
-		$m = new self;
+		if (!self::$isLog) {
+			return false;
+		}
+		$m = new self('create');
 		$m->info = $info; 
 		$m->qstring = Yii::app()->request->getUrl(); 
-
 		$arr = Tak::getOM();
 		$arr['user_name'] = Tak::getManame();
-
 		if (func_num_args()>1&&is_array(func_get_arg(1))) {
 			 foreach (func_get_arg(1) as $key => $value) {
 					if (isset($arr[$key])) {

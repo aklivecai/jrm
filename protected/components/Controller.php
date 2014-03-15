@@ -53,6 +53,7 @@ class Controller extends RController {
             Yii::app()->clientScript->enableJavaScript = false;
         } else {
             // Yii::app()->bootstrap->register();
+            
         }
         if ($this->dir) {
             $templates = $this->templates;
@@ -61,10 +62,9 @@ class Controller extends RController {
             }
             $this->templates = $templates;
         }
-        if ($this->returnUrl==null) {
+        if ($this->returnUrl == null) {
             $this->returnUrl = Yii::app()->request->getParam('returnUrl', null);
         }
-        
     }
     
     protected function _setLayout($layout = 'column2') {
@@ -200,8 +200,7 @@ class Controller extends RController {
         }
         if ($uuid && Tak::getEid($uuid) != $id) {
             // $not = false;
-            // $status = false;
-            
+            // $status = false;            
         }
         $this->render($this->templates['preview'], array(
             'model' => $this->loadModel($id, $status, $not) ,
@@ -358,7 +357,7 @@ class Controller extends RController {
         $rs = $dataProvider->getArrayCountData();
         $str = '{"total":' . $rs['totalItemCount'] . ',"link_template":"movies.json?q={search-term}&page_limit={results-per-page}&page={page-number}"';
         // $this->render('/site/ie6',array(
-        // 	'model'=>$model,
+        //  'model'=>$model,
         // ));exit;
         
         $this->writeData($dataProvider->getJsonData());

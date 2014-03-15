@@ -19,7 +19,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 <?php 
  if (Tak::getAdmin()) {
-  echo $form->textFieldRow($model,'manageid',array('class'=>'select-manageid','size'=>10,'style'=>'width:150px')); 
+  echo $form->textFieldRow($model,'manageid',array('class'=>'select-manageid','size'=>20,'style'=>'width:150px')); 
  }
 ?>
 

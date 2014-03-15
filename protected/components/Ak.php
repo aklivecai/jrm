@@ -1,7 +1,7 @@
 <?php  
 $tak_time = time();
 class Ak {  
-    public static function KD($msg,$isexit=false){
+    public static function KD($msg,$exit=false){
         if (!YII_DEBUG) {
             $debug=" class='hide' style='display:none;'";
         }else{
@@ -20,7 +20,7 @@ class Ak {
             // $str = mb_convert_encoding($str,'gbk','UTF-8');
             echo "<h1 $debug>$str</h1>";
         }
-        if ($isexit) exit;
+        if ($exit>0) exit;
     }    
     /*
         trace: 这是在 Yii::trace 中使用的级别。它用于在开发中 跟踪程序的执行流程。
@@ -547,7 +547,10 @@ class Ak {
         return false;
     }
     public static function getUserDir($uid=false){
-        $dir = Yii::app()->getBaseUrl().Yii::app()->params['uploadUser'];
+        $dir = Yii::app()->params['uploadUser'];
+        if (YII_DEBUG&&false) {
+            $dir = Yii::app()->getBaseUrl().$dir;
+        }
         if (!$uid) {
             $uid = self::getFormid();
         }
@@ -557,4 +560,57 @@ class Ak {
     public static function getDb($type='db2'){
         return Yii::app()->$type;
     }    
+
+   public static function category_select($name = 'catid', $title = '', $catid = 0, $moduleid = 1, $extend = '') {
+        $option = self::cache_read('catetree-'.$moduleid.'.php', '', true);
+        if($option) {
+            if($catid) $option = str_replace('value="'.$catid.'"', 'value="'.$catid.'" selected', $option);
+            $select = '<select name="'.$name.'" '.$extend.' id="catid_1">';
+            if($title) $select .= '<option value="0">'.$title.'</option>';
+            $select .= $option ? $option : '</select>';
+            return $select;
+        } 
+    }    
+
+   public static function modulesToJson(array $models, $attributeNames=false) {
+        if (count($models)==0) {
+            return '[]';
+        }
+        if ($attributeNames) {
+           $attributeNames = explode(',', $attributeNames);
+        }else{
+            $m = current($models);
+            $attributeNames =  array_keys($m->getAttributes());
+        }
+     
+     $rows = array(); //the rows to output
+     foreach ($models as $model) {
+       $row = array(); //you will be copying in model attribute values to this array 
+       foreach ($attributeNames as $name) {
+         $name = trim($name); //in case of spaces around commas
+         $row[$name] = CHtml::value($model, $name); //this function walks the relations 
+       }
+       $rows[] = $row;
+     }
+     return  CJSON::encode($rows);
+   }
+    public static function isNumeric($var){
+        $result = false;
+        if ((is_numeric($var)&&(intval($var)==floatval($var)))) {
+            $result = intval($var);
+        }
+      return $result;
+    }       
+    public static function isPrice($str){
+        // $pattern = '/^\d+(:?[.]\d{1,2})$/';
+        $pattern = '/^\d{0,8}\.{0,1}(\d{1,2})?$/';
+        $result = true;        
+        if (preg_match($pattern, $str) == '0'||
+            (strpos($str, '.')!==false
+                &&strpos($str, '.')==(strlen($str)-1))
+        ) {
+           $result = false;
+        }
+        return $result;
+    }
 }   

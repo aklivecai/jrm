@@ -1,0 +1,248 @@
+.kclear{visibility: hidden;display: block;font-size: 0;content: " ";height:0;clear: both;}
+.kr{float: right;}
+.grid-view-loading,
+.load-content{
+  -webkit-text-size-adjust:none
+  -moz-user-select:none;
+  -ms-user-select:none;  
+  -webkit-user-select:none;    
+  cursor:wait;
+}
+.row-form .required span{color: #F00;} 
+.row-form{
+  padding:0 16px;
+  padding-top:8px;
+}
+.row-form input[type="text"],
+.row-form input[type="password"], 
+.row-form textarea{height: 35px;}
+
+.form-horizontal .control-group{margin-bottom:8px;}
+
+.block-fluid .grid-view{
+  padding-top:0;
+} 
+
+.admin ul.control{
+  width:120px;
+  float: right;
+}
+.admin .image{
+  width:80px;
+}
+.img-polaroid{
+  padding:0;
+}
+
+ul.yiiPager .first, ul.yiiPager .last {
+  display: inline;
+}
+.pagination .first,
+.pagination .last{
+  display: none;
+}
+.pagination .previous a{ 
+  border-left-width:1px;
+}
+.grid-view select{
+  height:20px;
+  line-height: 20px;
+  min-width: 25px;
+  padding:0;
+  margin:0;
+}
+.button-column select{
+  width:auto !important;
+  max-width: 120px;
+}
+
+.grid-view{
+  margin:12px;
+
+}
+.grid-view .pagination  .disabled > span,
+.grid-view .pagination  .disabled > a,
+.grid-view .pagination  .disabled > a:hover,
+.grid-view .pagination  .disabled > a:focus {
+  color: #999999;
+  cursor: not-allowed;
+  border-color: #dddddd;
+}
+#list-grid{
+}
+.grid-view-loading {
+  background:#FFF url(../img/tak/loading.gif) no-repeat center 8px;
+  opacity: .5;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=50)";  
+}
+.grid-view-loading table{
+  opacity: .3;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=30)";  
+}
+.grid-view .filters input[type="text"]{
+  margin:0;
+  padding:0;
+}
+ .grid-view .dataTables_info{
+    font-size: 11px;
+    color: #333;
+    line-height: 45px;
+}
+
+.list-view .pagination,
+.grid-view .pagination {
+  margin:0;
+  padding: 5px;
+  text-align: right;
+  float: right;
+ }
+
+ .grid-view .maxw-title{
+    max-width: 80px;
+ }
+
+ .block-fluid .nav{
+  margin:0;
+  padding:0;
+  margin-bottom:8px;
+ }
+ .block-fluid .navbar .nav{
+  margin-bottom: 0;
+ }
+ .grid-view .filters .filter-container{
+    margin:0;
+    padding:0;
+ }
+
+
+@media (max-width: 767px) {
+  body {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .row {
+    margin-left: -30px;
+    *zoom: 1;
+  }
+  .row:before,
+  .row:after {
+    display: table;
+    line-height: 0;
+    content: "";
+  }
+  .row:after {
+    clear: both;
+  }
+  [class*="span"] {
+    float: left;
+    min-height: 1px;
+    margin-left: 30px;
+  }
+  .container,
+  .navbar-static-top .container,
+  .navbar-fixed-top .container,
+  .navbar-fixed-bottom .container {
+    width: 1000px;
+  }
+  .span12 {
+    width: 1000px;
+  }
+  .span11 {
+    width: 970px;
+  }
+  .span10 {
+    width: 970px;
+  }
+  .span9 {
+    width: 870px;
+  }
+  .span8 {
+    width: 770px;
+  }
+  .span7 {
+    width: 670px;
+  }
+}
+
+
+.span2 .nav-list > .active > a
+,.span2 .nav-list .nav-header{
+    margin-right: 0;
+}
+
+
+input[type=date]{
+  width:128px;  
+  width:85px\0; 
+}
+
+.stor-date{
+  width:80px;
+}
+.stor-txt{
+  width:90%;
+}
+
+/*TbListView*/
+
+#list-views .pagination{
+  margin:0;
+  float: right;
+}
+#list-views .summary{
+  text-indent: 2em;
+}
+
+.select-page{
+  width: auto !important;
+  min-width: 65px;
+  width:65px;
+  float: left;
+  line-height: 25px;
+  height: 25px;
+}
+
+#list-views .more-info{
+  height: 16px;
+  width:100%;
+  overflow: hidden;
+  border:1px solid #FFF;
+  padding: 3px;
+  
+}
+#list-views tbody tr{
+  cursor: pointer;
+}
+#list-views tr.active td,
+#list-views tbody tr:hover td{
+  background-color: #FCFCFC;
+}
+#list-views tr.active .more-info,
+#list-views tbody tr:hover .more-info{
+  height: auto;
+  overflow:visible;
+  border-color: red;
+  text-indent: 2em;
+  background-color: #FFF;
+}
+
+.more-list .more-load-info{
+  height: 45px;
+  background:#FFF url(img/loading.gif) no-repeat center center;
+}
+#content>.block-fluid{
+  /*transition: all 8s;*/
+}
+
+.load-content{
+  min-height: 200px;
+  background:#FFF url(../img/tak/loading.gif) no-repeat center center;
+}
+.load-content>.block-fluid,
+.load-content>.row-fluid{
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=20)";
+} 

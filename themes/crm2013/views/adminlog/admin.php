@@ -37,7 +37,11 @@ $this->breadcrumbs=array(
 		,'htmlOptions'=>array('class'=>'')
 	),
 	'columns'=>array(	
-		'user_name'	
+		array(		
+			'name'=>'user_name',
+			'type'=>'raw',
+            	'headerHtmlOptions'=>array('style'=>'width: 180px'),
+)
 ,		array(
 			'name'=>'info',
 			'type'=>'raw',
@@ -53,7 +57,7 @@ $this->breadcrumbs=array(
 			'name'=>'add_time',
 			'value'=>'Tak::timetodate($data->add_time,5)',
             	'filter' => false,
-            	'headerHtmlOptions'=>array('style'=>'width: 85px'),
+            	'headerHtmlOptions'=>array('style'=>'width: 120px'),
 		),		
 	),
 )); 

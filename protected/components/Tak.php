@@ -1,5 +1,24 @@
 <?php
 class Tak extends Ak {
+    public static function getU($id) {
+        $result = sprintf("%s-%s", self::getManageid() , $id);
+        return $result;
+    }
+    public static function getUCache($id) {
+        $id = self::getU($id);
+        $result = Yii::app()->cache->get($id);
+        return $result;
+    }
+    public static function deleteUCache($id){
+        $id = self::getU($id);
+        $result = Yii::app()->cache->delete($id);
+        return $result;
+    }
+    public static function setUCache($id, $value, $expire = 0, $dependency = null) {
+        $id = self::getU($id);
+        $result = Yii::app()->cache->set($id,$value,$expire,$dependency);
+        return $result;
+    }
     /*获取操作数*/
     public static function getOM() {
         $ip = Yii::app()->user->getState('ip') != '' ? Yii::app()->user->getState('ip') : false;
@@ -303,6 +322,30 @@ class Tak extends Ak {
                 'label' => sprintf($strSpan, Tk::g('测试')) ,
                 'visible' => self::getAdmin() ,
             ) ,
+            'product' => array(
+                'icon' => 'isw-grid',
+                'url' => array(
+                    '/Import/Product'
+                ) ,
+                'label' => sprintf($strSpan, Tk::g(array('Import','Product'))) ,
+                'visible' => self::getAdmin() ,
+            ) ,
+            'iClientele' => array(
+                'icon' => 'isw-grid',
+                'url' => array(
+                    '/Import/Clientele'
+                ) ,
+                'label' => sprintf($strSpan, Tk::g(array('Import','Clientele'))) ,
+                'visible' => self::getAdmin() ,
+            ) ,
+            'iaddressbook' => array(
+                'icon' => 'isw-grid',
+                'url' => array(
+                    '/Import/AddressBook'
+                ) ,
+                'label' => sprintf($strSpan, Tk::g(array('Import','AddressBook'))) ,
+                'visible' => self::getAdmin() ,
+            ) ,
             'setting' => array(
                 'icon' => 'isw-sync',
                 'label' => sprintf($strSpan, Tk::g('Setting')) ,
@@ -324,11 +367,11 @@ class Tak extends Ak {
                     ) ,
                     array(
                         'icon' => 'th',
-                        'label' => sprintf($strSpan, Tk::g('Warehouse')) ,
+                        'label' => sprintf($strSpan, Tk::g(array('Warehouse','Admin'))) ,
                         'url' => array(
                             '/Warehouse/Admin'
                         ) ,
-                        'visible' => self::checkAccess('Warehouse.*'),
+                        'visible' => self::checkAccess('Warehouse.*') ,
                     ) ,
                     array(
                         'icon' => 'th',
@@ -336,15 +379,18 @@ class Tak extends Ak {
                         'url' => array(
                             '/Category/Admin?m=product'
                         ) ,
-                        'visible' => self::checkAccess('Category.*'),
+                        'visible' => self::checkAccess('Category.*') ,
                     ) ,
                     array(
                         'icon' => 'certificate',
-                        'label' => sprintf($strSpan, Tk::g(array('Order','Config'))) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Order',
+                            'Config'
+                        ))) ,
                         'url' => array(
                             '/Order/Config'
                         ) ,
-                        'visible' => self::checkAccess('Order.config'),
+                        'visible' => self::checkAccess('Order.config') ,
                     ) ,
                 )
             ) ,
@@ -527,10 +573,7 @@ class Tak extends Ak {
                 'items' => array(
                     array(
                         'icon' => 'plus',
-                        'label' => sprintf($strSpan, Tk::g(array(
-                            'Create',
-                            '部门'
-                        ))) ,
+                        'label' => sprintf($strSpan, Tk::g('AddressGroups')) ,
                         'url' => array(
                             '/AddressGroups/Admin'
                         ) ,
@@ -929,342 +972,353 @@ class Tak extends Ak {
                 ) ,
             )
         );
-
-
-                
-                unset($items['file']);
-                unset($items['job']);
-                unset($items['invite']);
-                unset($items['training']);
-                unset($items['msell']);
-                unset($items['mbuy']);
-                // unset($items['events']);
-                
-                $items[] = array(
-                    'icon' => 'isw-zoom',
-                    'label' => '<span class="text">帮助中心</span>',
-                    'url' => array(
-                        '/Site/Help'
-                    ) ,
-                );
-                $items[] = array(
-                    'icon' => 'isw-chat',
-                    'label' => '<span class="text">系统其他功能</span>',
-                    'url' => Yii::app()->getBaseUrl() . '/upload/functionality.jpg',
-                    'linkOptions' => array(
-                        'target' => '_blank'
-                    )
-                );
-                
-                $items[] = array(
-                    'icon' => 'isw-target',
-                    'label' => '<span class="text">客户案例</span>',
-                    'url' => 'http://www.9juren.net/',
-                    'linkOptions' => array(
-                        'target' => '_blank'
-                    )
-                );
-                
-                $controlName = Yii::app()->getController()->id;
-                $controlName = strtolower($controlName);
-                
-                if (self::checkSuperuser()) {
-                    $items[] = array(
-                        'icon' => 'isw-settings',
-                        'label' => '<span class="text">管理中心</span>',
-                        'items' => array(
-                            // array('icon'=>'wrench','label'=>'<span class="text">网站设置</span>', 'url'=>array('/settin/index')),
-                            array(
-                                'icon' => 'list-alt',
-                                'label' => '<span class="text">网站日志</span>',
-                                'url' => array(
-                                    '/AdminLog/Admin'
-                                ) ,
-                            ) ,
-                            array(
-                                'icon' => 'fire',
-                                'label' => '<span class="text">网站备份</span>',
-                                'url' => array(
-                                    '/Site/Database'
-                                ) ,
-                                'visible' => YII_DEBUG
-                            ) ,
-                            array(
-                                'icon' => 'fire',
-                                'label' => '<span class="text">导入VIP</span>',
-                                'url' => array(
-                                    '/Site/Tak'
-                                ) ,
-                                'visible' => YII_DEBUG || self::getAdmin()
-                            ) ,
-                            array(
-                                'icon' => '',
-                                'label' => '<span class="text">Member</span>',
-                                'url' => array(
-                                    '/Site/Tak'
-                                ) ,
-                                'visible' => YII_DEBUG
-                            ) ,
-                        ) ,
-                    );
-                    $items[] = array(
-                        'icon' => 'isw-calc',
-                        'label' => '<span class="text">具人同行商务中心</span>',
-                        'url' => 'http://www.9juren.com/member/',
-                        'linkOptions' => array(
-                            'target' => '_blank'
-                        )
-                    );
-                }
-                // Tak::KD(Yii::app()->getController(),1);
-                // Tak::KD(Yii::app(),1);
-                // Tak::KD($controlName,1);
-                $tname = '';
-                foreach ($arr as $key => $value) {
-                    $key = strtolower($key);
-                    $value = strtolower($value);
-                    if ($controlName == $key || strpos($value, ",$controlName,") !== false) {
-                        $tname = $key;
-                        break;
-                    }
-                }
-                if ($tname == '' && $controlName == 'category' && isset($_GET['m'])) {
-                    if ($_GET['m'] = 'product') {
-                        $tname = 'pss';
-                    }
-                }
-
-                if (isset($items[$tname])) {
-                    $items[$tname]['active'] = true;
-                }
-                return $items;
-            }
-            
-            public static function isRecycle() {
-                $result = Yii::app()->getController()->getAction()->id == 'recycle';
-                return $result;
-            }
-            
-            public static function getAdminPageCol($arr = false, $gid = 'list-grid', $width = '60px') {
-                
-                $items = array(
-                    'class' => 'bootstrap.widgets.TbButtonColumn',
-                    'header' => CHtml::dropDownList('pageSize', Yii::app()->user->getState('pageSize') , TakType::items('pageSize') , array(
-                        'onchange' => "$.fn.yiiGridView.update('" . $gid . "',{data:{setPageSize: $(this).val()}})",
-                        'style' => 'width: ' . $width . ' !important',
-                    ))
-                );
-                if (is_array($arr)) {
-                    // self::KD($arr);
-                    $items = array_merge_recursive($items, $arr);
-                }
-                // '.Tk::g('Recycle').'
-                // self::KD($control->id);
-                if (self::isRecycle()) {
-                    $newItems = array(
-                        'template' => '{restore} | {del}',
-                        'buttons' => array(
-                            'restore' => array(
-                                'label' => '',
-                                'url' => 'Yii::app()->controller->createUrl("restore", array("id"=>$data->primaryKey))',
-                                'options' => array(
-                                    'title' => '还原',
-                                    'class' => 'icon-repeat'
-                                ) ,
-                            ) ,
-                            'del' => array(
-                                'label' => '',
-                                'url' => 'Yii::app()->controller->createUrl("del", array("id"=>$data->primaryKey))',
-                                'options' => array(
-                                    'title' => '彻底删除',
-                                    'class' => 'icon-remove'
-                                ) ,
-                            ) ,
-                        ) ,
-                    );
-                    // 'imageUrl'=>$this->{$id.'ButtonImageUrl'},
-                    $items = array_merge_recursive($items, $newItems);
-                }
-                return $items;
-            }
-            
-            public static function getTakTypes() {
-                $arr = array();
-                $arr['product'] = array(
-                    'name' => 'Product',
-                    'file' => 'product',
-                    'type' => 'product',
-                );
-                
-                return $arr;
-            }
-            public static function getMovingsType($type) {
-                
-                $types = array(
-                    1 => 'Purchase',
-                    2 => 'Sell'
-                );
-                if (isset($types[$type])) {
-                    $type = $types[$type];
-                } else {
-                    $type = current($types);
-                }
-                return $type;
-            }
-            
-            public static function msg($msg, $title = '', $type = 'palert') {
-                Yii::app()->clientScript->registerScript('bodyend', "show_stack('$title','$msg','$type')");
-            }
-            
-            public static function copyright() {
-                $arr = array(
-                    '<div class="hide">'
-                );
-                $arr[] = Yii::app()->params['copyright'];
-                $arr[].= '<script type="text/javascript">
-            var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-            document.write(unescape("%3Cscript src=\'" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd98411661088365a052727ec01efb9d8\' type=\'text/javascript\'%3E%3C/script%3E"));
-        </script></div>';
-                echo join($arr);
-            }
-            
-            public static function gredViewOptions($btnColumn = true) {
-                $arr = array(
-                    'type' => 'striped bordered condensed',
-                    'id' => 'list-grid',
-                    'dataProvider' => null,
-                    'enableHistory' => true,
-                    'afterAjaxUpdate' => 'kloadCGridview',
-                    'loadingCssClass' => 'grid-view-loading',
-                    'summaryCssClass' => 'dataTables_info',
-                    'pagerCssClass' => 'pagination dataTables_paginate',
-                    'template' => '{pager}{summary}<div class="dr"><span></span></div>{items}{pager}',
-                    'ajaxUpdate' => true, //禁用AJAX
-                    'enableSorting' => true,
-                    'selectableRows' => false,
-                    'summaryText' => '共 <span class="badge">{pages}</span> 页,当前 <span class="badge badge-success">{page}</span> 页,总数 <span class="badge badge-info">{count}</span> ',
-                    'pager' => array(
-                        'header' => '',
-                        'maxButtonCount' => '5',
-                        'hiddenPageCssClass' => 'disabled',
-                        'selectedPageCssClass' => 'active disabled',
-                        'htmlOptions' => array(
-                            'class' => ''
-                        )
-                    ) ,
-                    'columns' => array()
-                );
-                if ($btnColumn) {
-                    $arr['columns'] = self::getAdminPageCol();
-                }
-                return $arr;
-            }
-            
-            public static function submitButton($label = 'submit', $htmlOptions = array()) {
-                $htmlOptions['type'] = 'submit';
-                $class = 'btn';
-                if (isset($htmlOptions['class'])) {
-                    $class.= ' ' . $htmlOptions['class'];
-                }
-                $htmlOptions['class'] = $class;
-                
-                return CHtml::tag('button', $htmlOptions, $label);
-            }
-            
-            public static function writeInfo($key = 'source', $defaultValue = null) {
-                $result = '';
-                $html = self::getFlash($key, $defaultValue, true);
-                if ($html) {
-                    $result = CHtml::tag('div', array(
-                        'class' => 'alert alert-block alert-success'
-                    ) , $html);
-                }
-                return $result;
-            }
-            
-            public static function getNP($nps, $view = 'view') {
-                $result = array();
-                if (!is_array($nps)) {
-                    return false;
-                }
-                foreach ($nps as $key => $value) {
-                    $result[$key] = array(
-                        'label' => Tk::g($key) ,
+        
+        unset($items['file']);
+        unset($items['job']);
+        unset($items['invite']);
+        unset($items['training']);
+        unset($items['msell']);
+        unset($items['mbuy']);
+        // unset($items['events']);
+        
+        $items[] = array(
+            'icon' => 'isw-zoom',
+            'label' => '<span class="text">帮助中心</span>',
+            'url' => array(
+                '/Site/Help'
+            ) ,
+        );
+        $items[] = array(
+            'icon' => 'isw-chat',
+            'label' => '<span class="text">系统其他功能</span>',
+            'url' => Yii::app()->getBaseUrl() . '/upload/functionality.jpg',
+            'linkOptions' => array(
+                'target' => '_blank'
+            )
+        );
+        
+        $items[] = array(
+            'icon' => 'isw-target',
+            'label' => '<span class="text">客户案例</span>',
+            'url' => 'http://www.9juren.net/',
+            'linkOptions' => array(
+                'target' => '_blank'
+            )
+        );
+        
+        $controlName = Yii::app()->getController()->id;
+        $controlName = strtolower($controlName);
+        
+        if (self::checkSuperuser()) {
+            $items[] = array(
+                'icon' => 'isw-settings',
+                'label' => '<span class="text">管理中心</span>',
+                'items' => array(
+                    // array('icon'=>'wrench','label'=>'<span class="text">网站设置</span>', 'url'=>array('/settin/index')),
+                    array(
+                        'icon' => 'list-alt',
+                        'label' => '<span class="text">网站日志</span>',
                         'url' => array(
-                            $view,
-                            'id' => $value
+                            '/AdminLog/Admin'
                         ) ,
-                        'icon' => 'chevron-right',
-                        'linkOptions' => array(
-                            'class' => 'ajax-content'
-                        )
-                    );
-                }
-                return $result;
+                    ) ,
+                    array(
+                        'icon' => 'fire',
+                        'label' => '<span class="text">网站备份</span>',
+                        'url' => array(
+                            '/Site/Database'
+                        ) ,
+                        'visible' => YII_DEBUG
+                    ) ,
+                    array(
+                        'icon' => 'fire',
+                        'label' => '<span class="text">导入VIP</span>',
+                        'url' => array(
+                            '/Site/Tak'
+                        ) ,
+                        'visible' => YII_DEBUG || self::getAdmin()
+                    ) ,
+                    array(
+                        'icon' => '',
+                        'label' => '<span class="text">Member</span>',
+                        'url' => array(
+                            '/Site/Tak'
+                        ) ,
+                        'visible' => YII_DEBUG
+                    ) ,
+                ) ,
+            );
+            $items[] = array(
+                'icon' => 'isw-calc',
+                'label' => '<span class="text">具人同行商务中心</span>',
+                'url' => 'http://www.9juren.com/member/',
+                'linkOptions' => array(
+                    'target' => '_blank'
+                )
+            );
+        }
+        // Tak::KD(Yii::app()->getController(),1);
+        // Tak::KD(Yii::app(),1);
+        // Tak::KD($controlName,1);
+        $tname = '';
+        foreach ($arr as $key => $value) {
+            $key = strtolower($key);
+            $value = strtolower($value);
+            if ($controlName == $key || strpos($value, ",$controlName,") !== false) {
+                $tname = $key;
+                break;
             }
-            
-            public static function showMsg() {
-                $result = self::getFlashes();
-                if ($result) {
-                    foreach ($result as $key => $value) {
-                        self::msg($value, '', $key);
-                    }
-                }
-            }
-            
-            public static function tagNum($text, $type = '') {
-                $badges = array(
-                    'badge'
-                );
-                if ($type) {
-                    $badges[] = $type;
-                }
-                return CHtml::tag('span', array(
-                    'class' => join(' ', $badges)
-                ) , $text);
-            }
-            
-            public static function creaetPreviewUrl($data) {
-                $result = array();
-                $url = 'Preview';
-                if (!is_array($data)) {
-                    $result['id'] = $data;
-                    $result = Yii::app()->getController()->createUrl($url, $result);
-                } else {
-                    $result['id'] = $data['id'];
-                    isset($data['status']) && $result['status'] = K;
-                    isset($data['not']) && $result['not'] = K;
-                    if (isset($data['url'])) {
-                        $url = strpos($data['url'], '/') > 0 ? $data['url'] : sprintf("/%s/%s", $data['url'], $url);
-                    }
-                    if (count($result) > 1) {
-                        $result['uuid'] = self::setEid($result['id']);
-                    }
-                    $result = Yii::app()->createUrl($url, $result);
-                }
-                return $result;
-            }
-            
-            public static function setEid($id, $str = 'i') {
-                if (!$str) {
-                    $str = self::createCode(4);
-                }
-                return self::setCryptNum($id, $str);
-            }
-            public static function getEid($id, $str = 'i') {
-                if (!$str) {
-                    $str = 'abcd';
-                }
-                return self::getCryptNum($id, $str);
-            }
-            
-            public static function encrypt($str) {
-                $m = new SysCrypt();
-                return $m->encrypt($str);
-            }
-            public static function decrypt($str) {
-                $m = new SysCrypt();
-                return $m->decrypt($str);
+        }
+        if ($tname == '' && $controlName == 'category' && isset($_GET['m'])) {
+            if ($_GET['m'] = 'product') {
+                $tname = 'pss';
             }
         }
         
+        if (isset($items[$tname])) {
+            $items[$tname]['active'] = true;
+        }
+        return $items;
+    }
+    
+    public static function isRecycle() {
+        $result = Yii::app()->getController()->getAction()->id == 'recycle';
+        return $result;
+    }
+    
+    public static function getAdminPageCol($arr = false, $gid = 'list-grid', $width = '60px') {
+        
+        $items = array(
+            'class' => 'bootstrap.widgets.TbButtonColumn',
+            'header' => CHtml::dropDownList('pageSize', Yii::app()->user->getState('pageSize') , TakType::items('pageSize') , array(
+                'onchange' => "$.fn.yiiGridView.update('" . $gid . "',{data:{setPageSize: $(this).val()}})",
+                'style' => 'width: ' . $width . ' !important',
+            ))
+        );
+        if (is_array($arr)) {
+            // self::KD($arr);
+            $items = array_merge_recursive($items, $arr);
+        }
+        // '.Tk::g('Recycle').'
+        // self::KD($control->id);
+        if (self::isRecycle()) {
+            $newItems = array(
+                'template' => '{restore} | {del}',
+                'buttons' => array(
+                    'restore' => array(
+                        'label' => '',
+                        'url' => 'Yii::app()->controller->createUrl("restore", array("id"=>$data->primaryKey))',
+                        'options' => array(
+                            'title' => '还原',
+                            'class' => 'icon-repeat'
+                        ) ,
+                    ) ,
+                    'del' => array(
+                        'label' => '',
+                        'url' => 'Yii::app()->controller->createUrl("del", array("id"=>$data->primaryKey))',
+                        'options' => array(
+                            'title' => '彻底删除',
+                            'class' => 'icon-remove'
+                        ) ,
+                    ) ,
+                ) ,
+            );
+            // 'imageUrl'=>$this->{$id.'ButtonImageUrl'},
+            $items = array_merge_recursive($items, $newItems);
+        }
+        return $items;
+    }
+    
+    public static function getTakTypes() {
+        $arr = array();
+        $arr['product'] = array(
+            'name' => 'Product',
+            'file' => 'product',
+            'type' => 'product',
+        );
+        
+        return $arr;
+    }
+    public static function getMovingsType($type) {
+        
+        $types = array(
+            1 => 'Purchase',
+            2 => 'Sell'
+        );
+        if (isset($types[$type])) {
+            $type = $types[$type];
+        } else {
+            $type = current($types);
+        }
+        return $type;
+    }
+    
+    public static function msg($msg, $title = '', $type = 'palert') {
+        Yii::app()->clientScript->registerScript('bodyend', "show_stack('$title','$msg','$type')");
+    }
+    
+    public static function copyright() {
+        $arr = array(
+            '<div class="hide">'
+        );
+        $arr[] = Yii::app()->params['copyright'];
+        $arr[].= '<script type="text/javascript">
+            var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cscript src=\'" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd98411661088365a052727ec01efb9d8\' type=\'text/javascript\'%3E%3C/script%3E"));
+        </script></div>';
+        echo join($arr);
+    }
+    
+    public static function gredViewOptions($btnColumn = true) {
+        $arr = array(
+            'type' => 'striped bordered condensed',
+            'id' => 'list-grid',
+            'dataProvider' => null,
+            'enableHistory' => true,
+            'afterAjaxUpdate' => 'kloadCGridview',
+            'loadingCssClass' => 'grid-view-loading',
+            'summaryCssClass' => 'dataTables_info',
+            'pagerCssClass' => 'pagination dataTables_paginate',
+            'template' => '{pager}{summary}<div class="dr"><span></span></div>{items}{pager}',
+            'ajaxUpdate' => true, //禁用AJAX
+            'enableSorting' => true,
+            'selectableRows' => false,
+            'summaryText' => '共 <span class="badge">{pages}</span> 页,当前 <span class="badge badge-success">{page}</span> 页,总数 <span class="badge badge-info">{count}</span> ',
+            'pager' => array(
+                'header' => '',
+                'maxButtonCount' => '5',
+                'hiddenPageCssClass' => 'disabled',
+                'selectedPageCssClass' => 'active disabled',
+                'htmlOptions' => array(
+                    'class' => ''
+                )
+            ) ,
+            'columns' => array()
+        );
+        if ($btnColumn) {
+            $arr['columns'] = self::getAdminPageCol();
+        }
+        return $arr;
+    }
+    
+    public static function submitButton($label = 'submit', $htmlOptions = array()) {
+        $htmlOptions['type'] = 'submit';
+        $class = 'btn';
+        if (isset($htmlOptions['class'])) {
+            $class.= ' ' . $htmlOptions['class'];
+        }
+        $htmlOptions['class'] = $class;
+        
+        return CHtml::tag('button', $htmlOptions, $label);
+    }
+    
+    public static function writeInfo($key = 'source', $defaultValue = null) {
+        $result = '';
+        $html = self::getFlash($key, $defaultValue, true);
+        if ($html) {
+            $result = CHtml::tag('div', array(
+                'class' => 'alert alert-block alert-success'
+            ) , $html);
+        }
+        return $result;
+    }
+    
+    public static function getNP($nps, $view = 'view') {
+        $result = array();
+        if (!is_array($nps)) {
+            return false;
+        }
+        foreach ($nps as $key => $value) {
+            $result[$key] = array(
+                'label' => Tk::g($key) ,
+                'url' => array(
+                    $view,
+                    'id' => $value
+                ) ,
+                'icon' => 'chevron-right',
+                'linkOptions' => array(
+                    'class' => 'ajax-content'
+                )
+            );
+        }
+        return $result;
+    }
+    
+    public static function showMsg() {
+        $result = self::getFlashes();
+        if ($result) {
+            foreach ($result as $key => $value) {
+                self::msg($value, '', $key);
+            }
+        }
+    }
+    
+    public static function tagNum($text, $type = '') {
+        $badges = array(
+            'badge'
+        );
+        if ($type) {
+            $badges[] = $type;
+        }
+        return CHtml::tag('span', array(
+            'class' => join(' ', $badges)
+        ) , $text);
+    }
+    
+    public static function creaetPreviewUrl($data) {
+        $result = array();
+        $url = 'Preview';
+        if (!is_array($data)) {
+            $result['id'] = $data;
+            $result = Yii::app()->getController()->createUrl($url, $result);
+        } else {
+            $result['id'] = $data['id'];
+            isset($data['status']) && $result['status'] = K;
+            isset($data['not']) && $result['not'] = K;
+            if (isset($data['url'])) {
+                $url = strpos($data['url'], '/') > 0 ? $data['url'] : sprintf("/%s/%s", $data['url'], $url);
+            }
+            if (count($result) > 1) {
+                $result['uuid'] = self::setEid($result['id']);
+            }
+            $result = Yii::app()->createUrl($url, $result);
+        }
+        return $result;
+    }
+
+    public static function createMUrl($arr,$module=false){
+        $urls = array();
+        foreach ($arr as $key => $value) {
+            if ($module) {
+                $url = sprintf('%s[%s]',$module,$key);
+            }else{
+                $url = $key;
+            }
+            $url .= sprintf('=%s',$value);            
+            $urls[] = $url;
+        }
+        return join('&',$urls);
+    }
+    
+    public static function setEid($id, $str = 'i') {
+        if (!$str) {
+            $str = self::createCode(4);
+        }
+        return self::setCryptNum($id, $str);
+    }
+    public static function getEid($id, $str = 'i') {
+        if (!$str) {
+            $str = 'abcd';
+        }
+        return self::getCryptNum($id, $str);
+    }
+    
+    public static function encrypt($str) {
+        $m = new SysCrypt();
+        return $m->encrypt($str);
+    }
+    public static function decrypt($str) {
+        $m = new SysCrypt();
+        return $m->decrypt($str);
+    }
+}

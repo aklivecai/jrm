@@ -86,7 +86,7 @@ class CategoryController extends Controller {
         ));
     }    
     
-    public function actionCreate() {
+    public function actionCreate($action=false) {
         $m = $this->modelName;
         $model = new $m('create');
         if (isset($_POST[$m])) {
@@ -96,6 +96,12 @@ class CategoryController extends Controller {
             if ($model->save()) {
                 if ($this->returnUrl) {
                     $this->redirect($this->returnUrl);
+                }elseif($action=='select'){
+                        $this->_setLayout('//layouts/columnWindows');
+                        $this->render('create', array(
+                            'model' => $model,
+                        ));
+                        exit;
                 } else {
                     if ($this->isAjax) {
                         if (isset($_POST['getItemid'])) {

@@ -5,19 +5,21 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'htmlOptions'=>array('class'=>'well'),
     'action' => Yii::app()->createUrl($this->route),
     'method'=>'get',
-)); ?>
-
-
-                <span class="span2">
+));
+if (!isset($notcate)) {
+ ?>
+<span class="span2">
 <?php
 $this->renderPartial('/category/select', array(
         'id' => sprintf("%s[typeid]", $model->mName),
         'value' => $model->typeid,
 )); 
 ?>
-        </span>
+</span>
+
 <?php 
-  if ($warehouse) {
+}
+  if (isset($warehouse)) {
     echo JHtml::dropDownList('warehouse_id',$_GET['warehouse_id'],Warehouse::toSelects(Tk::g('Warehouse')));
   }
   

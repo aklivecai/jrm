@@ -129,8 +129,7 @@ class MRecord extends CActiveRecord {
     /**
      * 检验重复
      */
-    public function checkRepetition($attribute, $params) {
-        
+    public function checkRepetition($attribute, $params) {        
         $sql = array(
             "LOWER(:col)=:val"
         );
@@ -156,12 +155,14 @@ class MRecord extends CActiveRecord {
             ':val' => strtolower($this->$attribute)
         ));
         // Tak::KD($m,1);
-        
+        $result = true;        
         if ($m != null) {
             $err = $this->getAttributeLabel($attribute) . ' 已经存在 :';
             $err.= $m->getHtmlLink();
             $this->addError($attribute, $err);
+            $result = false;
         }
+        return $result;
     }
     
     public static function getOne($itemid = false) {
@@ -200,10 +201,11 @@ class MRecord extends CActiveRecord {
     }
     
     protected function afterDelete() {
-        parent::afterDelete();
-        if ($this->isLog) {
+        $result = parent::afterDelete();
+        if ($result&&$this->isLog) {
             $this->logDel();
         }
+        return $result;
     }
     
     protected function getDefaultScopeSql() {

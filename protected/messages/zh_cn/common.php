@@ -75,8 +75,8 @@ return array(
     'Address Book' => '通讯录',
     'Address Books' => '通讯录',
     
-    'Address Groups' => '部门',
-    'AddressGroups' => '部门',
+    'Address Groups' => '通讯录组',
+    'AddressGroups' => '通讯录组',
     
     'Events' => '提醒',
     

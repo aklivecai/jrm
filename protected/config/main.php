@@ -103,7 +103,11 @@ return array(
 	        // Enable Yii Validate CSRF Token  
 	        // 'enableCsrfValidation' => true,  
 	        // 
-	    ),  	       
+	    ),
+		'cache'	=> array(
+			'class' => 'system.caching.CFileCache',
+			'directoryLevel' => 2,
+		)      
 	),
 
 );

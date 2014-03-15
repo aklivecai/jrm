@@ -1,6 +1,6 @@
 <div class="row-fluid input-prepend input-append">
     <?php  
-    		$parentname = Category::getProductName($value);
+    	$parentname = Category::getProductName($value);
 	    echo JHtml::hiddenField($id,$value,array(
 	        'class' => 'sourceField'
 	    ));    

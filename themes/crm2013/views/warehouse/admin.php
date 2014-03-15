@@ -1,80 +1,169 @@
 <?php
 $modelName = Tk::g($this->modelName);
 $this->breadcrumbs = array(
-     $modelName => array(
+    $modelName => array(
         'admin'
     )
 );
-
 ?>
 <div class="block-fluid">
     <div class="row-fluid">
 <?php $this->widget('bootstrap.widgets.TbNavbar', array(
-    'brand'=>'',
-    'brandUrl'=>'#',
-    'fixed'=>'false',
-    'fixed'=>'true',
-    'collapse'=>true, // requires bootstrap-responsive.css
-
-    'items'=>array(
+    'brand' => '',
+    'brandUrl' => '#',
+    'fixed' => 'false',
+    'fixed' => 'true',
+    'collapse' => true, // requires bootstrap-responsive.css
+    
+    'items' => array(
         array(
-            'class'=>'bootstrap.widgets.TbMenu',
-            'items'=>array(
-                array('label'=>Tk::g(array('Add',$modelName)), 'url'=>array($this->modelName.'/Create'), 'active'=>true,'linkOptions'=>array('class'=>"data-ajax",'title'=>Tk::g(array('Add',$modelName)))),
-                array('label'=>Tk::g(array('Update',$modelName)), 'url'=>array($this->modelName.'/Update'),'linkOptions'=>array('title'=>Tk::g(array('Update',$modelName)),'class'=>'data-ajax','id'=>"ajax-update")),
-
-                array('label'=>Tk::g(array('Delete',$modelName)), 'url'=>'Delete','linkOptions'=>array('id'=>"data-deletd")),
-
-                array('label'=>Tk::g(':name move up',array(':name'=>$modelName)), 'url'=>array($this->modelName.'/Listorder'),'linkOptions'=>array('data-action'=>"up",'class'=>"data-listorder")),
-                array('label'=>Tk::g(':name move dw',array(':name'=>$modelName)), 'url'=>array($this->modelName.'/Listorder'),'linkOptions'=>array('data-action'=>"dw",'class'=>"data-listorder")),
-            ),
-        ),
-    ),
-)); 
+            'class' => 'bootstrap.widgets.TbMenu',
+            'items' => array(
+                array(
+                    'label' => Tk::g(array(
+                        'Add',
+                        $modelName
+                    )) ,
+                    'url' => array(
+                        $this->modelName . '/Create'
+                    ) ,
+                    'active' => true,
+                    'linkOptions' => array(
+                        'class' => "data-ajax",
+                        'title' => Tk::g(array(
+                            'Add',
+                            $modelName
+                        ))
+                    )
+                ) ,
+                array(
+                    'label' => Tk::g(array(
+                        'Update',
+                        $modelName
+                    )) ,
+                    'url' => array(
+                        $this->modelName . '/Update'
+                    ) ,
+                    'linkOptions' => array(
+                        'title' => Tk::g(array(
+                            'Update',
+                            $modelName
+                        )) ,
+                        'class' => 'data-ajax',
+                        'id' => "ajax-update"
+                    )
+                ) ,
+                
+                array(
+                    'label' => Tk::g(array(
+                        'Delete',
+                        $modelName
+                    )) ,
+                    'url' => 'Delete',
+                    'linkOptions' => array(
+                        'id' => "data-deletd"
+                    )
+                ) ,
+                
+                array(
+                    'label' => Tk::g(':name move up', array(
+                        ':name' => $modelName
+                    )) ,
+                    'url' => array(
+                        $this->modelName . '/Listorder'
+                    ) ,
+                    'linkOptions' => array(
+                        'data-action' => "up",
+                        'class' => "data-listorder"
+                    )
+                ) ,
+                array(
+                    'label' => Tk::g(':name move dw', array(
+                        ':name' => $modelName
+                    )) ,
+                    'url' => array(
+                        $this->modelName . '/Listorder'
+                    ) ,
+                    'linkOptions' => array(
+                        'data-action' => "dw",
+                        'class' => "data-listorder"
+                    )
+                ) ,
+            ) ,
+        ) ,
+    ) ,
+));
 
 $options = array(
-                'type' => 'striped bordered condensed',
-                'id' => 'list-grid',
-                'dataProvider' => $data,
-                'enableHistory' => false,
-                'afterAjaxUpdate' => 'kloadCGridview',
-                'loadingCssClass' => 'grid-view-loading',
-                'template' => '{items}',
-                'ajaxUpdate' => false, //禁用AJAX
-                'enableSorting' => false,
-                'selectableRows' => false,
-                'summaryText' => '',
-                'columns' => array(
-                    array(
-                            'class'=>'CCheckBoxColumn',
-                            'name'=>'itemid',
-                            'selectableRows'=>1,
-                            'headerTemplate'=>Tk::g('Select'),
-                            'selectableRows' => 2,
-                            'headerHtmlOptions' => array('width'=>'45px','align'=>'center'),
-                            'checkBoxHtmlOptions' => array(
-                                'name' => 'itemid[]',
-                                'align'=>'center',
-                            ),        
+    'type' => 'striped bordered condensed',
+    'id' => 'list-grid',
+    'dataProvider' => $data,
+    'enableHistory' => false,
+    'afterAjaxUpdate' => 'kloadCGridview',
+    'loadingCssClass' => 'grid-view-loading',
+    'template' => '{items}',
+    'ajaxUpdate' => false, //禁用AJAX
+    'enableSorting' => false,
+    'selectableRows' => false,
+    'summaryText' => '',
+    'columns' => array(
+        array(
+            'class' => 'CCheckBoxColumn',
+            'name' => 'itemid',
+            'selectableRows' => 1,
+            'headerTemplate' => Tk::g('Select') ,
+            'selectableRows' => 2,
+            'headerHtmlOptions' => array(
+                'width' => '45px',
+                'align' => 'center'
+            ) ,
+            'checkBoxHtmlOptions' => array(
+                'name' => 'itemid[]',
+                'align' => 'center',
+            ) ,
+        ) ,
+        array(
+            'name' => $model->getAttributeLabel('name') ,
+            'type' => 'raw',
+            'value' => '$data[name]'
+        ) ,
+        array(
+            'name' => $model->getAttributeLabel('user_name') ,
+            'type' => 'raw',
+            'value' => '$data[user_name]'
+        ) ,
+        array(
+            'name' => $model->getAttributeLabel('telephone') ,
+            'type' => 'raw',
+            'value' => '$data[telephone]'
+        ) ,
+        array(
+            'name' => $model->getAttributeLabel('note') ,
+            'type' => 'raw',
+            'value' => '$data[note]'
+        ) ,
+    array(
+        'name' => Tk::g(
+            'Stocks'
+        ) ,
+        'type' => 'raw',
+        'value' => 'JHtml::link("",Yii::app()->createUrl("Stocks/index",array("warehouse_id"=>$data[itemid])),array("class"=>"icon-eye-open"))',
+        'headerHtmlOptions' => array(
+            'style' => 'width: 65px'
+        ) ,
+    ) ,
+    ) ,
+);
 
-                    ),
-                    array('name'=>$model->getAttributeLabel('name'),'type'=>'raw','value'=>'$data[name]'),
-                    array('name'=>$model->getAttributeLabel('user_name'),'type'=>'raw','value'=>'$data[user_name]'),
-                    array('name'=>$model->getAttributeLabel('telephone'),'type'=>'raw','value'=>'$data[telephone]'),                    
-                    array('name'=>$model->getAttributeLabel('note'),'type'=>'raw','value'=>'$data[note]'),
-                )
-            );
-
-    $widget = $this->widget('bootstrap.widgets.TbGridView', $options); 
+$widget = $this->widget('bootstrap.widgets.TbGridView', $options);
 ?>
 </div>
 </div>
 
 <?php
-
-Tak::regScript('bodyend-','
-    $("input[value='.$id.']").prop("checked");
-    var CURL = "'.Yii::app()->createUrl("Warehouse").'";
+Tak::regScript('bodyend-', '
+    $("input[value=' . $id . ']").prop("checked");
+    var CURL = "' . Yii::app()->createUrl("Warehouse") . '";
     var getRows = function(){
         var data = [];
             $("input:checkbox[name=\'itemid[]\']").each(function (){

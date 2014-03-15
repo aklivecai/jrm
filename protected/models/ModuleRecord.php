@@ -166,6 +166,7 @@ class ModuleRecord extends MRecord {
     }
     protected function afterDelete() {
         $result = parent::afterDelete();
+        return $result;
     }
     //
     protected function afterSave() {

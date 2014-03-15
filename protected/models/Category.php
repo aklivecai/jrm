@@ -106,7 +106,11 @@ class Category extends LRecord {
                 'numerical',
                 'integerOnly' => true
             ) ,
-            array('parentid','checkParentid','on'=>'update'),
+            array(
+                'parentid',
+                'checkParentid',
+                'on' => 'update'
+            ) ,
             
             array(
                 'catid, fromid',
@@ -135,10 +139,13 @@ class Category extends LRecord {
             ) ,
         );
     }
-    public function checkParentid($attribute,$params){        
-        if(strpos(','.$this->arrchildid.',', ','.$this->parentid.',') !== false){
+    public function checkParentid($attribute, $params) {
+        if (strpos(',' . $this->arrchildid . ',', ',' . $this->parentid . ',') !== false) {
             $err = $this->getAttributeLabel($attribute) . '不允许选择子分类!';
             $this->addError($attribute, $err);
+        } elseif ($this->parentid==$this->catid) {
+            $err = $this->getAttributeLabel($attribute) . '不允许是分类自己!';
+            $this->addError($attribute, $err);            
         }
     }
     public function formCatid($attribute, $params) {
@@ -194,6 +201,7 @@ class Category extends LRecord {
         if ($result) {
             if ($this->isNewRecord) {
                 // Tak::KD($this->attributes,1);
+                
             }
         }
         return $result;
@@ -213,14 +221,15 @@ class Category extends LRecord {
                 ':module' => $this->module,
                 ':fromid' => Tak::getFormid() ,
                 ':catid' => $catid,
-            );            
+            );
             $childs = '';
             $childs.= ',' . $catid;
             if ($this->parentid) {
                 //update cure
                 $CATEGORY[$catid] = $this->attributes;
                 $arrparentid = self::get_arrparentid($catid, $CATEGORY);
-                // Tak::KD($arrparentid,1);               
+                // Tak::KD($arrparentid,1);
+                
             } else {
                 $arrparentid = 0;
             }
@@ -250,98 +259,100 @@ class Category extends LRecord {
                     self::$db->createCommand($sql)->execute();
                 }
             }
-        }elseif($this->oldParentid!=null){
+        } elseif ($this->oldParentid != null) {
             $CATEGORY = self::getCatsProduct();
             $sql = $this->catid;
-            $temps = array($this->oldParentid,$this->parentid);
+            $temps = array(
+                $this->oldParentid,
+                $this->parentid
+            );
             foreach ($temps as $value) {
-                    $sql.=",".$value;
-                     if ($CATEGORY[$value]['arrparentid']) {
-                            $sql.=",".$CATEGORY[$value]['arrparentid'];
-                    }
+                $sql.= "," . $value;
+                if ($CATEGORY[$value]['arrparentid']) {
+                    $sql.= "," . $CATEGORY[$value]['arrparentid'];
+                }
             }
             if ($this->arrchildid) {
-                $sql.=','.$this->arrchildid;
+                $sql.= ',' . $this->arrchildid;
             }
-            $data = explode(',',$sql);    
+            $data = explode(',', $sql);
             $data = array_unique($data);
-            $data = array_filter($data);            
+            $data = array_filter($data);
             // Tak::KD($sql);
             // Tak::KD($data);
-            if (count($data)>0) {
-                $sql = sprintf(' catid in (%s)',join(',',$data));
-            }else{
+            if (count($data) > 0) {
+                $sql = sprintf(' catid in (%s)', join(',', $data));
+            } else {
                 $sql = '';
-            }       
-            self::repair($this->module,$sql);
+            }
+            self::repair($this->module, $sql);
         }
     }
-
-    public static function repair($module,$sql=false) {
-            $_sqldata = array(
-                ':table' => self::$table,
-                ':module' => $module,
-                ':fromid' => Tak::getFormid() ,
-                ':where' => ""
-            );
-            if ($sql) {
-                $_sqldata[':where'] = sprintf(" AND %s",$sql);
-            }    
-            $sql  = "SELECT * FROM :table WHERE fromid=:fromid AND module=':module' :where ORDER BY listorder,catid";
-
+    
+    public static function repair($module, $sql = false) {
+        $_sqldata = array(
+            ':table' => self::$table,
+            ':module' => $module,
+            ':fromid' => Tak::getFormid() ,
+            ':where' => ""
+        );
+        if ($sql) {
+            $_sqldata[':where'] = sprintf(" AND %s", $sql);
+        }
+        $sql = "SELECT * FROM :table WHERE fromid=:fromid AND module=':module' :where ORDER BY listorder,catid";
+        
         $sql = strtr($sql, $_sqldata);
         // Tak::KD($sql);
-
+        
         $comm = self::$db->createCommand();
         
         $data = $comm->setText($sql)->queryAll(true);
-
+        
         $CATEGORY = array();
-        foreach ($data as  $r) {
+        foreach ($data as $r) {
             $CATEGORY[$r['catid']] = $r;
         }
         $childs = array();
-        foreach($CATEGORY as $catid => $category) {
+        foreach ($CATEGORY as $catid => $category) {
             $CATEGORY[$catid]['arrparentid'] = $arrparentid = self::get_arrparentid($catid, $CATEGORY);
             $sql = "arrparentid='$arrparentid'";
-                    $_sqldata[':catid'] = $catid;
-                    $sql = "UPDATE :table SET $sql WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
-                    $sql = strtr($sql, $_sqldata);
-                    // Tak::KD($sql);
-                    $comm->setText($sql)->execute();
-
-            if($arrparentid) {
+            $_sqldata[':catid'] = $catid;
+            $sql = "UPDATE :table SET $sql WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
+            $sql = strtr($sql, $_sqldata);
+            // Tak::KD($sql);
+            $comm->setText($sql)->execute();
+            
+            if ($arrparentid) {
                 $arr = explode(',', $arrparentid);
-                foreach($arr as $a) {
-                    if($a == 0) continue;
+                foreach ($arr as $a) {
+                    if ($a == 0) continue;
                     isset($childs[$a]) or $childs[$a] = '';
-                    $childs[$a] .= ','.$catid;
+                    $childs[$a].= ',' . $catid;
                 }
             }
         }
-        foreach($CATEGORY as $catid => $category) {
-            if(isset($childs[$catid])) {
-                $CATEGORY[$catid]['arrchildid'] = $arrchildid = $catid.$childs[$catid];
+        foreach ($CATEGORY as $catid => $category) {
+            if (isset($childs[$catid])) {
+                $CATEGORY[$catid]['arrchildid'] = $arrchildid = $catid . $childs[$catid];
                 $CATEGORY[$catid]['child'] = 1;
-                    $_sqldata[':catid'] = $catid;
-                    $sql = "UPDATE :table SET arrchildid='$arrchildid',child=1 WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
-                    $sql = strtr($sql, $_sqldata);
-                    // Tak::KD($sql);
-                    $comm->setText($sql)->execute();
-
+                $_sqldata[':catid'] = $catid;
+                $sql = "UPDATE :table SET arrchildid='$arrchildid',child=1 WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
+                $sql = strtr($sql, $_sqldata);
+                // Tak::KD($sql);
+                $comm->setText($sql)->execute();
             } else {
                 $CATEGORY[$catid]['arrchildid'] = $catid;
                 $CATEGORY[$catid]['child'] = 0;
-                    $_sqldata[':catid'] = $catid;
-                    $sql = "UPDATE :table SET arrchildid='$catid',child=0 WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
-                    $sql = strtr($sql, $_sqldata);
-                    // Tak::KD($sql);
-                    $comm->setText($sql)->execute();
+                $_sqldata[':catid'] = $catid;
+                $sql = "UPDATE :table SET arrchildid='$catid',child=0 WHERE  catid=:catid AND  fromid=:fromid AND module=':module'";
+                $sql = strtr($sql, $_sqldata);
+                // Tak::KD($sql);
+                $comm->setText($sql)->execute();
             }
         }
         // exit;
         return true;
-    }    
+    }
     
     public function isDel() {
         $data = self::getCates($this->module);
@@ -376,21 +387,21 @@ class Category extends LRecord {
             }
             $CATEGORY = self::getCatsProduct();
             $sql = $this->catid;
-            $sql.=",".$this->parentid;
-             if ($CATEGORY[$this->parentid]['arrparentid']) {
-                    $sql.=",".$CATEGORY[$this->parentid]['arrparentid'];
-            }    
-            $data = explode(',',$sql);    
+            $sql.= "," . $this->parentid;
+            if ($CATEGORY[$this->parentid]['arrparentid']) {
+                $sql.= "," . $CATEGORY[$this->parentid]['arrparentid'];
+            }
+            $data = explode(',', $sql);
             $data = array_unique($data);
-            $data = array_filter($data);            
+            $data = array_filter($data);
             // Tak::KD($sql);
             // Tak::KD($data);
-            if (count($data)>0) {
-                $sql = sprintf(' catid in (%s)',join(',',$data));
-            }else{
+            if (count($data) > 0) {
+                $sql = sprintf(' catid in (%s)', join(',', $data));
+            } else {
                 $sql = '';
-            }       
-            self::repair($this->module,$sql);                        
+            }
+            self::repair($this->module, $sql);
         }
         return $result;
     }
@@ -419,5 +430,13 @@ class Category extends LRecord {
         }
         return $arrchildid ? $catid . $arrchildid : $catid;
     }
-
+    
+    public static function toHtmlSelect() {
+        $tree = new JTree;
+        $tree->JTree($categorys);
+        $content = $tree->get_tree(0, "<option value=\\\"\$id\\\">\$spacer\$name</option>") . '</select>';
+        Tak::KD($content);
+        // cache_write('catetree-'.$moduleid.'.php', $content);
+        
+    }
 }

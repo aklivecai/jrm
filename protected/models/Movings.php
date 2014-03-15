@@ -7,7 +7,7 @@ class Movings extends ModuleRecord {
     );
     public $type = null;
     private $_typename = '';
-    private $product_movings = null;    
+    private $product_movings = null;
     private $products = null;    
     public $time = '';    
     public static $table = '{{movings}}';    
@@ -52,12 +52,8 @@ class Movings extends ModuleRecord {
         // Tak::KD($this->product_movings,1);
         return $this->product_movings;
     }
-    /**
-     * @return array validation rules for model attributes.字段校验的结果
-     */
+
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array(
                 'typeid, time, enterprise, warehouse_id',
@@ -88,8 +84,6 @@ class Movings extends ModuleRecord {
                 'length',
                 'max' => 255
             ) ,
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array(
                 'itemid, fromid, type, numbers, time, typeid, enterprise, us_launch, time_stocked, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status,warehouse_id',
                 'safe',
@@ -106,8 +100,6 @@ class Movings extends ModuleRecord {
      * @return array relational rules. 表的关系，外键信息
      */
     public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         $condition = array(
             "item='" . strtolower($this->_typename) . "-type'"
         );
@@ -122,9 +114,6 @@ class Movings extends ModuleRecord {
             ) ,
         );
     }
-    /**
-     * @return array customized attribute labels (name=>label) 字段显示的
-     */
     public function attributeLabels() {
         $stype = Yii::app()->getController()->id;
         if ($stype == 'purchase') {
@@ -165,34 +154,27 @@ class Movings extends ModuleRecord {
     public function search() {
         $cActive = parent::search();
         $criteria = $cActive->criteria;
-        
         $criteria->compare('itemid', $this->itemid);
         $criteria->compare('fromid', $this->fromid);
         $criteria->compare('type', $this->type);
         if ($this->warehouse_id>0) {
            $criteria->compare('warehouse_id', $this->warehouse_id);
-        }
-        
+        }        
         if ($this->typeid >= 0) {
             $criteria->compare('typeid', $this->typeid);
-        }
-        
-        $criteria->compare('numbers', $this->numbers);
-        
+        }        
+        $criteria->compare('numbers', $this->numbers);        
         $this->setCriteriaTime($criteria, array(
             'time',
             'add_time',
             'modified_time'
         ));
         
-        $criteria->compare('enterprise', $this->enterprise, true);
-        
+        $criteria->compare('enterprise', $this->enterprise, true);        
         $criteria->compare('us_launch', $this->us_launch, true);
-        $criteria->compare('time_stocked', $this->time_stocked, true);
-        
+        $criteria->compare('time_stocked', $this->time_stocked, true);        
         $criteria->compare('add_us', $this->add_us, true);
-        $criteria->compare('add_ip', $this->add_ip, true);
-        
+        $criteria->compare('add_ip', $this->add_ip, true);        
         $criteria->compare('modified_us', $this->modified_us, true);
         $criteria->compare('modified_ip', $this->modified_ip, true);
         $criteria->compare('note', $this->note, true);

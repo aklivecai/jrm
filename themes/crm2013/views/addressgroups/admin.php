@@ -1,7 +1,4 @@
 <?php
-/* @var $this AddressGroupsController */
-/* @var $model AddressGroups */
-
 $this->breadcrumbs = array(
     Tk::g('Address Groups') => array(
         'admin'
@@ -12,120 +9,210 @@ $this->breadcrumbs = array(
 <div class="page-header">
       <h1><?php echo Tk::g('Address Groups'); ?> <small>显示状态，表示是否在前台显示的组</small></h1>
 </div>
-<div class="row-fluid">
-
-<div class="span5">
-<div class="block-fluid without-head">
-<div class="toolbar nopadding-toolbar clear clearfix">
-	<h4><?php echo Tk::g('Action'); ?></h4>  
-</div>
-<?php $widget = $this->widget('bootstrap.widgets.TbGridView', array(
-    'type' => 'striped bordered condensed',
-    'id' => 'list-grid',
-    'dataProvider' => $model->search() ,
-    'template' => "{items}",
-    'enableHistory' => true,
-    'loadingCssClass' => 'grid-view-loading',
-    'summaryCssClass' => 'dataTables_info',
-    'pagerCssClass' => 'pagination dataTables_paginate',
-    'template' => '{items}{pager}',
-    'ajaxUpdate' => true, //禁用AJAX
-    'enableSorting' => true,
-    'summaryText' => '<span>共{pages}页</span> <span>当前:{page}页</span> <span>总数:{count}</span> ',
-    'filter' => $model,
-    'pager' => array(
-        'header' => '',
-        'maxButtonCount' => '5',
-        'hiddenPageCssClass' => 'disabled',
-        'selectedPageCssClass' => 'active disabled',
-        'htmlOptions' => array(
-            'class' => ''
-        )
-    ) ,
-    'columns' => array(
-        Tak::getAdminPageCol(array(
-            'template' => '{view} {update} {delete} <span>{AddressBook}</span>',
-            'buttons' => array(
-                'AddressBook' => array(
-                    'label' => Tk::g('AddressBook') ,
-                    'url' => 'Yii::app()->createUrl("addressBook/admin",array("AddressBook[groups_id]"=>$data->address_groups_id))',
-                    'linkOptions' => array(
-                        'style' => 'width: 50px'
+<div class="block-fluid">
+    <div class="row-fluid">
+<?php $this->widget('bootstrap.widgets.TbNavbar', array(
+    'brand' => '',
+    'brandUrl' => '#',
+    'fixed' => 'false',
+    'fixed' => 'true',
+    'collapse' => true, // requires bootstrap-responsive.css
+    
+    'items' => array(
+        array(
+            'class' => 'bootstrap.widgets.TbMenu',
+            'items' => array(
+                array(
+                    'label' => Tk::g(array(
+                        'Add',
+                        'Address Groups'
+                    )) ,
+                    'url' => array(
+                        $this->modelName . '/Create'
                     ) ,
+                    'active' => true,
+                    'linkOptions' => array(
+                        'class' => "data-ajax",
+                        'title' => Tk::g(array(
+                            'Add',
+                            'Address Groups'
+                        ))
+                    )
+                ) ,
+                array(
+                    'label' => Tk::g(array(
+                        'Update',
+                        'Address Groups'
+                    )) ,
+                    'url' => array(
+                        $this->modelName . '/Update'
+                    ) ,
+                    'linkOptions' => array(
+                        'title' => Tk::g(array(
+                            'Update',
+                            'Address Groups'
+                        )) ,
+                        'class' => 'data-ajax',
+                        'id' => "ajax-update"
+                    )
+                ) ,
+                
+                array(
+                    'label' => Tk::g(array(
+                        'Delete',
+                        'Address Groups'
+                    )) ,
+                    'url' => 'Delete',
+                    'linkOptions' => array(
+                        'id' => "data-deletd"
+                    )
                 ) ,
             ) ,
-        ) , 'list-grid', '180px') ,
-        array(
-            'name' => 'name',
-            'type' => 'raw',
-            'value' => '$data->getLink()',
         ) ,
-        'note',
+    ) ,
+));
+
+$options = array(
+    'type' => 'striped bordered condensed',
+    'id' => 'list-grid',
+    'dataProvider' => $data,
+    'enableHistory' => false,
+    'afterAjaxUpdate' => 'kloadCGridview',
+    'loadingCssClass' => 'grid-view-loading',
+    'template' => '{items}',
+    'ajaxUpdate' => false, //禁用AJAX
+    'enableSorting' => false,
+    'selectableRows' => false,
+    'summaryText' => '',
+    'columns' => array(
         array(
-            'name' => 'display',
-            'htmlOptions' => array(
-                'style' => 'width: 50px'
+            'class' => 'CCheckBoxColumn',
+            'name' => 'address_groups_id',
+            'selectableRows' => 1,
+            'headerTemplate' => Tk::g('Select') ,
+            'selectableRows' => 2,
+            'headerHtmlOptions' => array(
+                'width' => '45px',
+                'align' => 'center'
             ) ,
-            'value' => 'TakType::getStatus("display",$data->display)',
+            'checkBoxHtmlOptions' => array(
+                'name' => 'itemid[]',
+                'align' => 'center',
+            ) ,
+        ) ,
+        array(
+            'name' => $model->getAttributeLabel('display') ,
             'type' => 'raw',
-            'filter' => TakType::items('display') ,
-        )
-    ) ,
-));
+            'value' => 'TakType::getStatus("display",$data[display])',
+            'headerHtmlOptions' => array(
+                'style' => 'width: 45px'
+            ) ,
+        ) ,
+        array(
+            'name' => $model->getAttributeLabel('name') ,
+            'value' => '$data[name]',
+        ) ,
+        array(
+            'name' => $model->getAttributeLabel('note') ,
+            'type' => 'raw',
+            'value' => '$data[note]'
+        ) ,
+        array(
+            'name' => $model->getAttributeLabel('listorder') ,
+            'value' => '$data[listorder]',
+            'headerHtmlOptions' => array(
+                'style' => 'width: 45px'
+            ) ,
+        ) ,
+        array(
+            'name' => Tk::g(array(
+                'View',
+                'AddressBook'
+            )) ,
+            'type' => 'raw',
+            'value' => 'JHtml::link("",Yii::app()->createUrl("AddressBook/Admin",array("AddressBook[groups_id]"=>$data[address_groups_id])),array("class"=>"icon-eye-open"))',
+            'headerHtmlOptions' => array(
+                'style' => 'width: 85px'
+            ) ,
+        ) ,
+    )
+);
+
+$widget = $this->widget('bootstrap.widgets.TbGridView', $options);
 ?>
 </div>
-		</div>
-		<div class="span3">
-			<div class="block-fluid without-head">
-				<div class="toolbar nopadding-toolbar clear clearfix">
-					<h4><?php echo Tk::g('Create'); ?></h4>  
-				</div>
-				<div class="stream">
-<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-    'id' => 'address-groups-form',
-    'type' => 'verticalForm ',
-    'enableAjaxValidation' => false,
-    'htmlOptions' => array(
-        'class' => 'well'
-    ) ,
-    'focus' => array(
-        $model,
-        'name'
-    ) ,
-    'action' => $this->createUrl('create') ,
-));
-
-echo CHtml::hiddenField('returnUrl', isset($this->returnUrl) ? $this->returnUrl : $this->createUrl('admin'));
-
-echo $form->textFieldRow($model, 'name', array(
-    'size' => 60,
-    'maxlength' => 255
-));
-echo $form->textFieldRow($model, 'listorder', array(
-    'size' => 60,
-    'maxlength' => 255
-));
-
-echo $form->textAreaRow($model, 'note', array(
-    'size' => 60,
-    'maxlength' => 255
-));
-echo $form->radioButtonListRow($model, 'display', TakType::items('display') , array(
-    'class' => '',
-    'template' => '<label class="checkbox inline">{input}{label}</label>'
-));
-?>
-
-<div class="tar">
-    <?php $this->widget('bootstrap.widgets.TbButton', array(
-    'buttonType' => 'submit',
-    'label' => Tk::g('Create') ,
-    'htmlOptions' => array()
-)); ?>
 </div>
-<?php $this->endWidget(); ?>
-				</div>
-			</div>
-		</div>
-	</div>
-<div class="dr"><span></span></div>
+
+<?php
+Tak::regScript('bodyend-', '
+    $("input[value=' . $id . ']").prop("checked");
+    var CURL = "' . Yii::app()->createUrl("AddressGroups") . '";
+    var getRows = function(){
+        var data = [];
+            $("input:checkbox[name=\'itemid[]\']").each(function (){
+                if($(this).attr("checked")){
+                    data.push($(this).val());
+                }
+            });
+        return data;
+    }
+    , caction = function(){
+        var data = getRows();
+        if ( data.length == 0) {
+            alert("未选择要操作的组");
+            return false;
+        }      
+        if (data.length>=2) {
+            alert("只能选择1个组");
+            return false;
+        }      
+        return data[0];
+    }
+    ;
+    $("#ajax-update").on("click",function(event){
+        var t = $(this)
+            , data = caction()
+            ;
+        if (!data) {
+            event.preventDefault();
+            return false;
+        }
+        url = CURL+"/Update/"+data;
+        t.attr("href",url);
+    });
+
+    $("#data-deletd").on("click",function(event){
+        event.preventDefault();
+        var t = $(this)
+            , data = caction()
+            ;
+        if (!data) {
+            return false;
+        }
+        if (sCF("确定删除该组？")) {
+            return false;
+        }  
+        url = CURL+"/delete/"+data;
+        $.ajax({url:url}).done(function(data) {
+            if(data==""||data=="ok"){
+                window.location.href = CURL;
+            }else{
+                alert(data);
+            }
+        });
+    })
+        $(".data-listorder").on("click",function(event){
+            event.preventDefault();
+            var t = $(this)
+                , url = t.attr("href").split("?")
+                , data = caction()
+                ;
+            if (!data) {
+                return false;
+            }
+            url = CURL+"/listorder/"+data;
+            url+="?action="+t.attr("data-action");            
+            window.location.href = url;
+        })
+');
+?>

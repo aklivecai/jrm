@@ -45,7 +45,7 @@ if (count($nps)>0) {
 		'telephone',
 		'fax',
 		'web',
-		array('name'=>'display','type'=>'raw', 'value'=>TakType::getStatus('display',$model->display),),
+		// array('name'=>'display','type'=>'raw', 'value'=>TakType::getStatus('display',$model->display),),
 		array('name'=>'last_time', 'value'=>Tak::timetodate($model->last_time,6),),
 		array('name'=>'add_time', 'value'=>Tak::timetodate($model->add_time,6),),
 		array('name'=>'modified_time', 'value'=>Tak::timetodate($model->modified_time,6),),
