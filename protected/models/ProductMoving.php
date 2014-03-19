@@ -70,7 +70,7 @@ class ProductMoving extends CActiveRecord
     	}
 		$dataProvider = new CActiveDataProvider('ProductMoving', array(
 			'criteria'=>array(
-				'condition'=>join(" AND ",$condition),
+				'condition'=>implode(" AND ",$condition),
 			),
 		));		
 
@@ -126,7 +126,7 @@ class ProductMoving extends CActiveRecord
     	}
     	// $condition[] = 'display>0';
 
-    	$sql = join(" AND ",$condition);
+    	$sql = implode(" AND ",$condition);
     	str_replace(" type = '1' AND type","type",$sql);
     	$arr['condition'] = $sql;
     	return $arr;

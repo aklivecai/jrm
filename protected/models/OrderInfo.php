@@ -121,7 +121,7 @@ class OrderInfo extends MRecord
     		$condition[]=$arr['condition'];
     	}
     	// $condition[] = 'display>0';
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	return $arr;
     }
 

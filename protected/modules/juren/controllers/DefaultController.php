@@ -59,10 +59,10 @@ class DefaultController extends JController
 				$mailer->SMTPAuth = true;
 				$mailer->Port = '25';
 				$mailer->Host = 'smtp.vip.163.com';
-				$mailer->Username = '9juren002';
-				$mailer->Password = 'juren002';
+				$mailer->Username = '9juren001';
+				$mailer->Password = 'juren001';
 
-				$mailer->From = '9juren002@vip.163.com';
+				$mailer->From = '9juren001@vip.163.com';
 
 				// $mailer->Host = 'smtp.126.com';
 				// $mailer->Username = 'z01926';

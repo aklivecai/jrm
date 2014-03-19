@@ -21,7 +21,7 @@ $this->breadcrumbs=array(
 				<div class="title"><?php echo $model->getAttributeLabel('fMid')?>:</div>  
 				<div class="text">&nbsp;
 				<?php 
-				  echo $form->textField($model,'fMid',array('class'=>'select-ajax','data-select'=>'Manage','data-notbyel'=>true,'size'=>10,'style'=>'width:180px')); 
+				  echo $form->textField($model,'fMid',array('class'=>'select-ajax','data-select'=>'Manage','data-notbyel'=>true,'size'=>20,'style'=>'width:180px')); 
 				?>
 				<?php echo $form->error($model,'fMid'); ?>
 				</div>
@@ -30,7 +30,7 @@ $this->breadcrumbs=array(
 				<div class="title"><?php echo $model->getAttributeLabel('tMid')?>:</div> 
 				<div class="text">&nbsp;
 				<?php 
-				  echo $form->textField($model,'tMid',array('class'=>'select-ajax','data-select'=>'Manage','data-notbyel'=>true,'size'=>10,'style'=>'width:180px')); 
+				  echo $form->textField($model,'tMid',array('class'=>'select-ajax','data-select'=>'Manage','data-notbyel'=>true,'size'=>20,'style'=>'width:180px')); 
 				?>
 				<?php echo $form->error($model,'tMid'); ?>
 				</div>

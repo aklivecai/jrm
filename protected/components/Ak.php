@@ -527,7 +527,7 @@ class Ak {
     */
     public static function getPathBySplitStr($str) {
         $parts = str_split(substr($str,0,8), 2);
-        $path = join("/", $parts);
+        $path = implode("/", $parts);
         $path = $path . "/" . $str;
         return $path;
     }   

@@ -29,7 +29,7 @@ class Jb2bCompany extends Jb2bRecord
 		$arr = array('order'=>'vip DESC');
 		$condition = array();    	
 		$condition[] = 'groupid>5';
-		$arr['condition'] = join(" AND ",$condition);
+		$arr['condition'] = implode(" AND ",$condition);
 
 		return $arr;	
     }

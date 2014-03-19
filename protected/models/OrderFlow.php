@@ -108,7 +108,7 @@ class OrderFlow extends MRecord
     	if (isset($arr['condition'])) {
     		$condition[]=$arr['condition'];
     	}
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	// $condition[] = 'display>0';
     	$arr['order'] = ' add_time ASC ';
     	return $arr;

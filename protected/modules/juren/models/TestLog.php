@@ -75,7 +75,7 @@ class TestLog extends AdminLog
     	
     	$condition[] = "manageid!='$manageid'";
 
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	return $arr;
     }
 }

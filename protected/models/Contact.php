@@ -125,7 +125,7 @@ class Contact extends ModuleRecord
     		$condition[] = $arr['condition'];
     	}
     	$arr['order'] = 'contact_time DESC';
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	return $arr;
     }
    public function scopes()
@@ -219,7 +219,7 @@ class Contact extends ModuleRecord
 		if ($this->scondition) {
 			$arr[] = $this->scondition;
 		}
-		$this->scondition = join(' AND ',$arr);
+		$this->scondition = implode(' AND ',$arr);
 		$result = parent::getNP($isid,$top);
 		return $result;
 	}

@@ -42,11 +42,11 @@ class AppcacheController extends CController
 echo "CACHE MANIFEST
 # 2014-01-15:v3.4
 CACHE:\n".
-	join("\n",$files)
+	implode("\n",$files)
 ."\n\nNETWORK:\n".
-	join("\n",$NETWORK)
+	implode("\n",$NETWORK)
 ."\n\nFALLBACK:\n".
-	join("\n",$notArr)
+	implode("\n",$notArr)
 ;
 		// flush();
 		exit;

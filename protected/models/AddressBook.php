@@ -93,8 +93,8 @@ class AddressBook extends ModuleRecord {
         $cActive = parent::search();
         $criteria = $cActive->criteria;
         $criteria->compare('itemid', $this->itemid);
-        if ($this->groups_id>0) {
-        	$criteria->compare('groups_id', $this->groups_id);
+        if ($this->groups_id > 0) {
+            $criteria->compare('groups_id', $this->groups_id);
         }
         
         $criteria->compare('fromid', $this->fromid);
@@ -109,14 +109,14 @@ class AddressBook extends ModuleRecord {
         $criteria->compare('latitude', $this->latitude, true);
         $criteria->compare('location', $this->location, true);
         $criteria->compare('display', $this->display);
-
+        
         $criteria->compare('add_time', $this->add_time);
         $criteria->compare('add_us', $this->add_us);
         $criteria->compare('add_ip', $this->add_ip);
         $criteria->compare('modified_time', $this->modified_time);
         $criteria->compare('modified_us', $this->modified_us);
         $criteria->compare('modified_ip', $this->modified_ip);
-
+        
         $criteria->compare('note', $this->note, true);
         $criteria->compare('status', $this->status);
         
@@ -142,11 +142,9 @@ class AddressBook extends ModuleRecord {
         $result = parent::beforeSave();
         if ($result) {
             //添加数据时候
-           
+            
             if ($this->isNewRecord) {
-
             } else {
-
             }
         }
         return $result;

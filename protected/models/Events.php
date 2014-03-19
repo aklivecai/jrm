@@ -116,7 +116,7 @@ class Events extends ModuleRecord
     	$arr = parent::defaultScope();
     	$condition = array($arr['condition']);
     	// $condition[] = 'display>0';
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	return $arr;
     }
 

@@ -90,15 +90,15 @@ class Subordinate extends CActiveRecord
 		}else{
 			$contion[]=' branch =:branch';
 		}
-		$contion = sprintf(' (%s) ',join(' AND  ',$contion));
+		$contion = sprintf(' (%s) ',implode(' AND  ',$contion));
 		$sql = array($contion);
 
 		$sql[] = $this->getSqlSub($not);
 
 		if ($not) {
-			$sql = join(' AND ',$sql);
+			$sql = implode(' AND ',$sql);
 		}else{
-			$sql = join(' OR ',$sql);
+			$sql = implode(' OR ',$sql);
 		}
 		// Tak::KD(self::initMos());
 		// Tak::KD($sql);
@@ -112,7 +112,7 @@ class Subordinate extends CActiveRecord
 			'fromid='.$this->fromid,
 			$this->getSql(true),
 		);
-		$where = join(' AND ',$contion);
+		$where = implode(' AND ',$contion);
 		if ($q) {
 			$where.=' OR user_nicename LIKE :name OR  user_name LIKE :name ';
 		}
@@ -135,7 +135,7 @@ class Subordinate extends CActiveRecord
 		$contion = array(
 			$this->getSql(),
 		);
-		$where = join(' ADN ',$contion);
+		$where = implode(' ADN ',$contion);
 		$sql = strtr('SELECT manageid,user_nicename,branch FROM :tabl WHERE  :sql',
 			array(':tabl'=>Manage::$table
 				,':sql' => $where
@@ -177,7 +177,7 @@ class Subordinate extends CActiveRecord
     {
     	$condition = array();
     	$condition[] = 'fromid='.Tak::getFormid();
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	return $arr;
     }
 	public function rules()

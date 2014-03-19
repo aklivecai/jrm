@@ -12,7 +12,7 @@ $this->breadcrumbs=array(
 <?php foreach ($list as $model) :?>
 <li>
 <?php
-	echo join(' - ',array($model->company,$model->note));
+	echo implode(' - ',array($model->company,$model->note));
  ?>
  </li>
 <?php endforeach ?>
@@ -32,7 +32,7 @@ $this->breadcrumbs=array(
 <?php foreach ($tags as $model) :?>
 <li>
 <?php
-	echo join(' - ',array($model->company,$model->note));
+	echo implode(' - ',array($model->company,$model->note));
 	
  ?>
  </li>

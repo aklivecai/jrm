@@ -57,7 +57,7 @@ class SubUsers extends CActiveRecord
 		}else{
 			$contion[]=' branch ='.$this->branch;
 		}
-		$contion = sprintf(' (%s) ',join(' AND  ',$contion));
+		$contion = sprintf(' (%s) ',implode(' AND  ',$contion));
 		$sql = array($contion);
 
 		$tabl = Subordinate::$table;
@@ -77,9 +77,9 @@ class SubUsers extends CActiveRecord
 
 		$sql[] = $temp;
 		if ($not) {
-			$sql = join(' AND ',$sql);
+			$sql = implode(' AND ',$sql);
 		}else{
-			$sql = join(' OR ',$sql);
+			$sql = implode(' OR ',$sql);
 		}
 
 		return $sql;
@@ -87,7 +87,7 @@ class SubUsers extends CActiveRecord
 	public function checkMid($attribute,$params)
 	{
 		$sql = array();
-		$sql = join(' AND ',$sql);
+		$sql = implode(' AND ',$sql);
 		$sql = strtr($sql,$arr);
 		$m = $this->find($sql,array(':val' => strtolower($this->$attribute)));
 		if($m!=null){
@@ -103,7 +103,7 @@ class SubUsers extends CActiveRecord
 			'fromid='.$this->fromid,
 			$this->getSql(true),
 		);
-		$where = join(' AND ',$contion);
+		$where = implode(' AND ',$contion);
 		if ($q) {
 			$where.=' OR user_nicename LIKE :name OR  user_name LIKE :name ';
 		}
@@ -126,7 +126,7 @@ class SubUsers extends CActiveRecord
 		$contion = array(
 			$this->getSql(),
 		);
-		$where = join(' ADN ',$contion);
+		$where = implode(' ADN ',$contion);
 		$sql = strtr('SELECT manageid,user_nicename,branch FROM :tabl WHERE  :sql',
 			array(':tabl'=>Manage::$table
 				,':sql' => $where

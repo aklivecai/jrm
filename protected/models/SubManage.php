@@ -13,7 +13,7 @@ class SubManage extends Manage
 		if (isset($arr['condition'])) {
 			$condition[] = $arr['condition'];
 		}
-		$arr['condition'] = join(" AND ",$condition);
+		$arr['condition'] = implode(" AND ",$condition);
 		return $arr;
 	}	
 }

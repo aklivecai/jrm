@@ -179,23 +179,32 @@ class PermissionController extends Controller
 			unset($childSelectOptions['部门']);				
 		}
 
+		$_notArr = array(
+			'Site.*',
+			'Setting.*',
+			'PostUpdateOwn',
+			'Site.Logout',
+			'Manage.Select',
+			'AddressBook.View',
+			'AddressBook.Index',
+			'Clientele.Index',
+			'ContactpPrson.*',
+			'Contact.*',
+			'Subordinate.*',
+			'Events.*',
+			'Message.*',
+		);
+		$notstr = '~'.implode('~',$_notArr).'~';
+		// Tak::KD($notstr,1);
+
 		foreach ($childSelectOptions as $key => $value) {
 			if ($key=='部门') {
 				unset($childSelectOptions[$key]);
 			}else{
 				$t = array();
 				foreach ($value as $k1 => $v1) {
-					if ($k1=='Site.*'
-						||$k1=='Setting.*'
-						||$k1=='PostUpdateOwn'
-						||$k1=='Site.Logout'
-						||$k1=='Manage.Select'
-						||$k1=='AddressBook.View'
-						||$k1=='AddressBook.Index'
-						||$k1=='Clientele.Index'
-					) {
+					if (strpos($notstr, '~'.$k1.'~')!==false) {
 						unset($childSelectOptions[$key][$k1]);
-
 					}else{
 						$t[$crypt->encrypt($k1)]	 = $v1;
 					}					

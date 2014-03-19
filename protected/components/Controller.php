@@ -53,7 +53,6 @@ class Controller extends RController {
             Yii::app()->clientScript->enableJavaScript = false;
         } else {
             // Yii::app()->bootstrap->register();
-            
         }
         if ($this->dir) {
             $templates = $this->templates;
@@ -200,7 +199,8 @@ class Controller extends RController {
         }
         if ($uuid && Tak::getEid($uuid) != $id) {
             // $not = false;
-            // $status = false;            
+            // $status = false;
+            
         }
         $this->render($this->templates['preview'], array(
             'model' => $this->loadModel($id, $status, $not) ,

@@ -1,165 +1,182 @@
 <?php
-/* @var $this MovingsController */
-/* @var $model Movings */
-/* @var $form bootstrap.widgets.TbActiveForm */
-?>
-<?php $action = $model->isNewRecord ? 'Entering' : 'Update';
+$this->regCssFile('smart-wizard/styles/smart_wizard.css')->regScriptFile('plugins/smart-wizard/jquery.smartWizard2.js')->regScriptFile('doT.js');
 
-if ($model->isNewRecord) {
-    $model->initak($this->type);
-}
-$items = Tak::getEditMenu($model->itemid, $model->isNewRecord);
-?>
-
-<div class="page-header">
-  <h1><?php echo $model->sName ?> <small><?php echo Tk::g($this->cates[$model->typeid]); ?></small> </h1>
-</div>
-<div class="row-fluid">
-    <?php $form = $this->beginWidget('CActiveForm', array(
-    'id' => 'movings-form',
-    'enableAjaxValidation' => true,
-    'enableClientValidation' => true,
-)); ?>
-
-  <div class="head clearfix">
-    <i class="isw-documents"></i>
-    <h1><?php echo Tk::g($action); ?></h1>
-<?php
-$this->widget('application.components.MyMenu', array(
-    'htmlOptions' => array(
-        'class' => 'buttons'
-    ) ,
-    'items' => $items,
+$action = $model->isNewRecord ? 'Entering' : 'Update';
+$warehouses = Warehouse::getSelect();
+$form = $this->beginWidget('CActiveForm', array(
+    'id' => 'takllist',
+    'enableAjaxValidation' => false,
+    'enableClientValidation' => false,
 ));
-?>  
-  </div>
-
-  <div class="block-fluid clearfix">
-    <?php echo $form->hiddenField($model, 'typeid'); ?>
-    <div class="dr"><span></span></div>
-    <?php echo $form->errorSummary($model, null, null, array(
-    'class' => 'alert alert-error'
+?>
+        <!-- Smart Wizard -->
+        <div id="wizard" class="swMain">
+            <ul>
+                <li><a href="#step-1">
+                    <span class="stepNumber">第</span>
+                    <span class="stepDesc">
+                    一步<br />
+                    <small>单据信息</small>
+                    </span>
+                </a></li>
+                <li><a href="#step-2">
+                    <span class="stepNumber">第</span>
+                    <span class="stepDesc">
+                    二步<br />
+                    <small>产品明细</small>
+                    </span>
+                </a></li>
+                <li><div class="steps-finish">
+                  完成
+                </li>
+            </ul>
+            <div id="step-1" class="block-fluid">
+                            <div class="toolbar nopadding-toolbar clearfix">
+                                <h4>单据信息</h4>
+                            </div>               
+                            <div class="row-form clearfix">
+                              <div class="span2">
+                                <?php echo $form->labelEx($model, 'typeid'); ?>
+                              </div>
+                              <div class="span5">
+<?php echo $form->dropDownList($model, 'typeid', $this->cates, array(
+    "required" => "required"
 )); ?>
-    <div class="span4">
-      <div class="block-fluid without-head">
-        <div class="toolbar nopadding-toolbar clear clearfix">
-          <h4>单据信息</h4>
-        </div>
-        <div class="row-form clearfix" style="border-top-width: 0px;"> <span class="span3">
-        <?php echo $form->labelEx($model, 'time'); ?></span> <span class="span9">
-        <?php echo $form->dateField($model, 'time', array(
+                              </div>
+                            </div>
+                            <div class="row-form clearfix">
+                               <div class="span2">
+                                 <?php echo $form->labelEx($model, 'warehouse_id'); ?>
+                               </div>
+                               <div class="span5">
+<?php echo $form->dropDownList($model, 'warehouse_id', $warehouses, array(
+    "required" => "required"
+)); ?>
+                               </div>
+                            </div>
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model, 'time'); ?>
+                                </div>
+                                <div class="span5">
+<?php echo $form->dateField($model, 'time', array(
     'required' => 'required',
     'size' => 10,
     'maxlength' => 10,
     'value' => ($model->time > 0 ? Tak::timetodate($model->time) : '')
+) , array(
+    "required" => "required"
 )); ?>
-        </span> </div>
-        <div class="row-form clearfix"> <span class="span3"><?php echo $form->labelEx($model, 'numbers'); ?></span> <span class="span9"><?php echo $form->textField($model, 'numbers', array(
+                                </div>
+                            </div>              
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model, 'numbers'); ?>
+                                </div>
+                                <div class="span5">
+<?php echo $form->textField($model, 'numbers', array(
     'size' => 60,
     'maxlength' => 100
-)); ?></span> </div>
-        <div class="row-form clearfix"> <span class="span3"><?php echo $form->labelEx($model, 'enterprise'); ?></span> <span class="span9"><?php echo $form->textField($model, 'enterprise', array(
-    'required' => 'required',
+)); ?>
+                                </div>
+                            </div>
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model, 'enterprise'); ?>
+                                </div>
+                                <div class="span5">
+<?php echo $form->textField($model, 'enterprise', array(
+    'size' => 60,
+    'maxlength' => 100,
+    "required" => "required"
+)); ?>
+                                </div>
+                            </div>
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model, 'us_launch'); ?>
+                                </div>
+                                <div class="span5">
+<?php echo $form->textField($model, 'us_launch', array(
     'size' => 60,
     'maxlength' => 100
-)); ?></span> </div>
-        <div class="row-form clearfix"> <span class="span3"><?php echo $form->labelEx($model, 'us_launch'); ?></span> <span class="span9"><?php echo $form->textField($model, 'us_launch', array(
-    'size' => 60,
-    'maxlength' => 100
-)); ?></span> </div>
-        <div class="row-form clearfix"> <span class="span3"><?php echo $form->labelEx($model, 'note'); ?></span> <span class="span9"><?php echo $form->textArea($model, 'note', array(
+)); ?>
+                                </div>
+                            </div>
+                            <div class="row-form clearfix">
+                                <div class="span2">
+                                  <?php echo $form->labelEx($model, 'note'); ?>
+                                </div>
+                                <div class="span5">
+<?php echo $form->textArea($model, 'note', array(
     'size' => 60,
     'maxlength' => 255
-)); ?></span> </div>
-      </div>
-    </div>
-    <div class="span7">
-      <div class="block-fluid without-head">
-        <div class="toolbar nopadding-toolbar clearfix">
-          <h4>产品明细</h4>
-        </div>
-        <table cellpadding="0" cellspacing="0" width="100%" class="table" >
+)); ?>
+                                </div>
+                            </div>
+          </div>
+            <div id="step-2">
+          <div class="toolbar nopadding-toolbar clearfix">
+              <h4>产品明细</h4>
+          </div>               
+      <table cellpadding="0" cellspacing="0" width="100%" class="table" >
           <thead>
             <tr>
+            <th width="45">移除</th>
               <th>产品</th>
-              <th >规格</th>
-              <th >材料</th>
-              <th >颜色</th>
-              <th width="65">单价</th>
-              <th width="50">数量</th>            
-              <th width="50">备注</th>
-              <th width="30">移除</th>
+              <th width="80">规格</th>
+              <th width="80">材料</th>
+              <th width="80">颜色</th>
+              <th width="80">单价</th>
+              <th width="80">数量</th>
+              <th>备注</th>
             </tr>
           </thead>
           <tbody class="not-mpr" id="product-movings">
             <tr id="data-loading">
-              <td colspan="8" class="grid-view-loading">...</td>
+              <td colspan="8" class="grid-view-loading">请选择产品型号</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="6">
-                    <div>
-                            <input type="text" class="sele1ct-product" placeholder="搜索产品" />
-                    </div>
-              </td>
-            <td colspan="2" class="tar">
-            <span class="kr">
-      <?php $this->widget('bootstrap.widgets.TbButton', array(
+              <td colspan="3">
+            <span class="">
+<?php $this->widget('bootstrap.widgets.TbButton', array(
     'buttonType' => 'link',
-    'label' => Tk::g($action)
+    'label' => Tk::g(array(
+        'Add',
+        'Product'
+    )) ,
+    'htmlOptions' => array(
+        'id' => "addproduct"
+    )
 )); ?>
-      </span>
-            </td>
+      </span>              
+              </td>
+              <td colspan="5"></td>
             </tr>
           </tfoot>
         </table>
+          </div>
       </div>
-    </div>
-</div>
-<div class="footer tar">
-  <?php $this->widget('bootstrap.widgets.TbButton', array(
-    'size' => 'large',
-    'buttonType' => 'submit',
-    'label' => Tk::g($action)
-)); ?>
-  <?php $this->widget('bootstrap.widgets.TbButton', array(
-    'size' => 'large',
-    'buttonType' => 'reset',
-    'label' => Tk::g('Reset')
-)); ?>
-</div>
-
+<script id="data-row" type="text/x-dot-template">
+  {{~it.tags :v:index}}
+<tr id="{{=v.itemid}}">
+<td><a href="#" class="data-remove"><span class="icon-remove"></span></a></td>
+<td class="info">{{=v.name}}</td>
+<td class="info">{{=v.spec}}</td>
+<td class="info">{{=v.material}}</td>
+<td class="info">{{=v.color}}</td>
+<td><input type="number" class="stor-txt" name="Product[{{=v.itemid}}][price]" min="0.1" value="{{=v.price}}"/></td>
+<td class="info">
+  <input type="number" class="stor-txt" name="Product[{{=v.itemid}}][numbers]" required="required" value="{{#def.number || ''}}" min="1"/></td>
+  <td><input name="Product[{{=v.itemid}}][note]" type="text" class="stor-txt" value="{{=v.note}}"/></td>  
+  </tr>
+  {{~}}
+  </script>      
 <?php
 $this->endWidget();
 $this->regScriptFile('k-load-movings.js?t=1', CClientScript::POS_END);
-
-$strProducts = false;
-$products = isset($_POST['Product']) ? $_POST['Product'] : array();
-
-if (!$products && $model->itemid > 0) {
-    $products = ProductMoving::getListByMovingid($model->itemid);
-}
-
-$script = '';
-
-if ($products) {
-    $strProducts = array();
-    foreach ($products as $key => $value) {
-        $strProducts[] = array(
-            'itemid' => $key,
-            'spec' => $value['spec'],
-            'material' => $value['material'],
-            'number' => $value['number'],
-            'note' => $value['note'],
-            'name' => $value['name'],
-            'price' => $value['price'],
-        );
-    }
-    $script = 'takson =';
-    $script.= json_encode($strProducts);
-}
-$script.= ";";
-Tak::regScript('bodyend', $script, CClientScript::POS_END);
+Tak::regScript('end', '
+');
 ?>
-</div>

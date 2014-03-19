@@ -50,7 +50,7 @@ class Permission extends CActiveRecord
 			$arr[':ikey'] = 'name';
 			$arr[':itemid'] = $this->name;
 		}
-		$sql = join(' AND ',$sql);
+		$sql = implode(' AND ',$sql);
 		$sql = strtr($sql,$arr);
 		$m = $this->find($sql,array(':val'=>strtolower($this->$attribute)));
 		

@@ -6,20 +6,20 @@ $this->breadcrumbs=array(
 	Tk::g('Admin'),
 );
 $items = Tak::getListMenu();
+$this->regScriptFile('linq.js');
 ?>
-
 <div class="row-fluid">
 	<div class="block-fluid clearfix">
 <?php 
 $tags = $model->search();
 $m = $tags->getData();
-echo Tak::modulesToJson($m);
 
 $this->renderPartial("_search",array('model'=>$model,'notcate'=>true,'warehouse'=>true));
 $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'link', 'label'=>'选择产品','htmlOptions'=>array("id"=>"tak-select"))); 
 $options = Tak::gredViewOptions(false);
 $options["afterAjaxUpdate"]=null;
 $options['dataProvider'] = $tags;
+$options['ajaxUpdate'] = false;
 $columns = array(	
                     array(
                             'class'=>'CCheckBoxColumn',
@@ -84,10 +84,23 @@ $(document).on("click","#select_all",function(){
  	for (i=0; i <length ; i++) { 
  		data.push(list.eq(i).val());
  	}
+ 	dataObj = select(data); 
+ 	opener.addData(dataObj);
+ 	window.close();	
  })
 
 var select = function(data){
-	var list = "";
+	var qustr = ","+data.join(",")+",";	
+	queryResult = Enumerable.from(listData)
+	.where(function (x) {
+		return qustr.indexOf(","+x.itemid+",")>=0 ;
+	})
+	.select(function(x){
+		return x;
+	})
+	.toArray();
+	return queryResult;
 }
-');
+, listData = '.Tak::modulesToJson($m)
+);
 ?>

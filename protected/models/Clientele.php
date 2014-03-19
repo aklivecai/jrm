@@ -115,7 +115,7 @@ class Clientele extends ModuleRecord {
             $condition[] = $arr['condition'];
         }
         $arr['order'] = $this->getConAlias('last_time DESC ');
-        $arr['condition'] = join(" AND ", $condition);
+        $arr['condition'] = implode(" AND ", $condition);
         
         return $arr;
     }

@@ -61,7 +61,7 @@ class Jb2bMember extends Jb2bRecord
 		$condition = array();    	
 		$condition[] = 'fromid='.Tak::getFormid();
 		$condition[] = "module='".$this->module."'";
-		$arr['condition'] = join(" AND ",$condition);
+		$arr['condition'] = implode(" AND ",$condition);
 
 		return $arr;	
     }

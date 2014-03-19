@@ -170,6 +170,7 @@ window.kloadCGridview = function(action,data){
             _turl = decodeURIComponent($.param.querystring(url.substr(0, url.indexOf('?')), params));            
             window.History.pushState(null, document.title, _turl); 
            $(document.body).attr('data-'+action,false);
+           $(document.body).trigger('ajax-load');
         };
 }
 

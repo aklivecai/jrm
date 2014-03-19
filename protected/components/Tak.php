@@ -9,14 +9,14 @@ class Tak extends Ak {
         $result = Yii::app()->cache->get($id);
         return $result;
     }
-    public static function deleteUCache($id){
+    public static function deleteUCache($id) {
         $id = self::getU($id);
         $result = Yii::app()->cache->delete($id);
         return $result;
     }
     public static function setUCache($id, $value, $expire = 0, $dependency = null) {
         $id = self::getU($id);
-        $result = Yii::app()->cache->set($id,$value,$expire,$dependency);
+        $result = Yii::app()->cache->set($id, $value, $expire, $dependency);
         return $result;
     }
     /*获取操作数*/
@@ -322,30 +322,6 @@ class Tak extends Ak {
                 'label' => sprintf($strSpan, Tk::g('测试')) ,
                 'visible' => self::getAdmin() ,
             ) ,
-            'product' => array(
-                'icon' => 'isw-grid',
-                'url' => array(
-                    '/Import/Product'
-                ) ,
-                'label' => sprintf($strSpan, Tk::g(array('Import','Product'))) ,
-                'visible' => self::getAdmin() ,
-            ) ,
-            'iClientele' => array(
-                'icon' => 'isw-grid',
-                'url' => array(
-                    '/Import/Clientele'
-                ) ,
-                'label' => sprintf($strSpan, Tk::g(array('Import','Clientele'))) ,
-                'visible' => self::getAdmin() ,
-            ) ,
-            'iaddressbook' => array(
-                'icon' => 'isw-grid',
-                'url' => array(
-                    '/Import/AddressBook'
-                ) ,
-                'label' => sprintf($strSpan, Tk::g(array('Import','AddressBook'))) ,
-                'visible' => self::getAdmin() ,
-            ) ,
             'setting' => array(
                 'icon' => 'isw-sync',
                 'label' => sprintf($strSpan, Tk::g('Setting')) ,
@@ -367,7 +343,10 @@ class Tak extends Ak {
                     ) ,
                     array(
                         'icon' => 'th',
-                        'label' => sprintf($strSpan, Tk::g(array('Warehouse','Admin'))) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Warehouse',
+                            'Admin'
+                        ))) ,
                         'url' => array(
                             '/Warehouse/Admin'
                         ) ,
@@ -391,6 +370,39 @@ class Tak extends Ak {
                             '/Order/Config'
                         ) ,
                         'visible' => self::checkAccess('Order.config') ,
+                    ) ,                    
+                    'product' => array(
+                        'icon' => 'th',
+                        'url' => array(
+                            '/Import/Product'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Import',
+                            'Product'
+                        ))) ,
+                        'visible' => self::checkAccess('Import.Product') ,
+                    ) ,
+                    'iClientele' => array(
+                        'icon' => 'th',
+                        'url' => array(
+                            '/Import/Clientele'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Import',
+                            'Clientele'
+                        ))) ,
+                        'visible' => self::checkAccess('Import.Clientele') ,
+                    ) ,
+                    'iaddressbook' => array(
+                        'icon' => 'th',
+                        'url' => array(
+                            '/Import/AddressBook'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Import',
+                            'AddressBook'
+                        ))) ,
+                        'visible' => self::checkAccess('Import.Addressbook') ,
                     ) ,
                 )
             ) ,
@@ -1166,7 +1178,7 @@ class Tak extends Ak {
             var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
             document.write(unescape("%3Cscript src=\'" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd98411661088365a052727ec01efb9d8\' type=\'text/javascript\'%3E%3C/script%3E"));
         </script></div>';
-        echo join($arr);
+        echo implode($arr);
     }
     
     public static function gredViewOptions($btnColumn = true) {
@@ -1261,7 +1273,7 @@ class Tak extends Ak {
             $badges[] = $type;
         }
         return CHtml::tag('span', array(
-            'class' => join(' ', $badges)
+            'class' => implode(' ', $badges)
         ) , $text);
     }
     
@@ -1285,19 +1297,19 @@ class Tak extends Ak {
         }
         return $result;
     }
-
-    public static function createMUrl($arr,$module=false){
+    
+    public static function createMUrl($arr, $module = false) {
         $urls = array();
         foreach ($arr as $key => $value) {
             if ($module) {
-                $url = sprintf('%s[%s]',$module,$key);
-            }else{
+                $url = sprintf('%s[%s]', $module, $key);
+            } else {
                 $url = $key;
             }
-            $url .= sprintf('=%s',$value);            
+            $url.= sprintf('=%s', $value);
             $urls[] = $url;
         }
-        return join('&',$urls);
+        return implode('&', $urls);
     }
     
     public static function setEid($id, $str = 'i') {

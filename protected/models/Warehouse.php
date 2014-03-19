@@ -167,12 +167,26 @@ class Warehouse extends LRecord {
         $count = self::$db->createCommand($sql)->queryScalar();
         return $count;
     }
+
+    public function counts() {        
+        $sql = " SELECT count(itemid) FROM :table 
+                  WHERE fromid = :fromid ";
+        $sql = strtr($sql, array(
+            ':table' => self::$table,
+            ':fromid' => Tak::getFormid() ,
+        ));
+        $count = self::$db->createCommand($sql)->queryScalar();
+        return $count;
+    }    
+
     public function del() {
         $result = false;
         $count = $this->isDel();
         if ($count > 0) {
-            $result = '该仓库已经有出入库记录，不能进行删除';
-        } else {
+            $result = '该仓库已经有出入库记录，不能进行删除!';
+        } elseif($this->counts()==1) {
+            $result = '最后一个仓库不允许删除!';
+        }else{
             $this->delete();
         }
         return $result;
@@ -205,7 +219,7 @@ class Warehouse extends LRecord {
         
         $sqlWhere[] = 'listorder :opt :listorder';
         $sqlWhere = array_filter($sqlWhere);
-        $sqlWhere = join(" AND ", $sqlWhere);
+        $sqlWhere = implode(" AND ", $sqlWhere);
         
         $orderCol = " listorder :order ,:itemid DESC ";
         $col = $isid ? ':itemid' : '*';

@@ -10,8 +10,8 @@ class GoogleQRCode extends CWidget
 {
     public $htmlOptions;
     private $_htmlOptions = array(
-        'title' => 'qrcode',
-        'alt' => 'arcode',
+        'title' => '二维码',
+        'alt' => '二维码',
     );
     public $size = 150;
     public $content = 'Hello World';

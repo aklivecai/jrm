@@ -29,7 +29,7 @@ class Test9Memeber extends TestMemeber
                }
             }        
     	// $condition[] = 'display>0';
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	return $arr;
     }
 
@@ -79,7 +79,7 @@ class Test9Memeber extends TestMemeber
         if (count($keys)==0) {
             return $keys;
         }
-        $sql = sprintf('itemid in (%s)',join(',',$keys));
+        $sql = sprintf('itemid in (%s)',implode(',',$keys));
         $tags = $this->findAll($sql);
 
         foreach ($tags as $m) {

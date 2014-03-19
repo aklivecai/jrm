@@ -42,7 +42,7 @@ class Category extends LRecord {
                         $arr[] = $data[$value]['catename'];
                     }
                 }
-                $result = join("  - ", $arr);
+                $result = implode("  - ", $arr);
             } else {
                 $result = $data[$catid]['catename'];
             }
@@ -143,9 +143,9 @@ class Category extends LRecord {
         if (strpos(',' . $this->arrchildid . ',', ',' . $this->parentid . ',') !== false) {
             $err = $this->getAttributeLabel($attribute) . '不允许选择子分类!';
             $this->addError($attribute, $err);
-        } elseif ($this->parentid==$this->catid) {
+        } elseif ($this->parentid == $this->catid) {
             $err = $this->getAttributeLabel($attribute) . '不允许是分类自己!';
-            $this->addError($attribute, $err);            
+            $this->addError($attribute, $err);
         }
     }
     public function formCatid($attribute, $params) {
@@ -161,7 +161,7 @@ class Category extends LRecord {
         if ($this->module) {
             $condition[] = "module='" . $this->module . "'";
         }
-        $arr['condition'] = join(" AND ", $condition);
+        $arr['condition'] = implode(" AND ", $condition);
         return $arr;
     }
     
@@ -202,6 +202,7 @@ class Category extends LRecord {
             if ($this->isNewRecord) {
                 // Tak::KD($this->attributes,1);
                 
+                
             }
         }
         return $result;
@@ -229,6 +230,7 @@ class Category extends LRecord {
                 $CATEGORY[$catid] = $this->attributes;
                 $arrparentid = self::get_arrparentid($catid, $CATEGORY);
                 // Tak::KD($arrparentid,1);
+                
                 
             } else {
                 $arrparentid = 0;
@@ -281,7 +283,7 @@ class Category extends LRecord {
             // Tak::KD($sql);
             // Tak::KD($data);
             if (count($data) > 0) {
-                $sql = sprintf(' catid in (%s)', join(',', $data));
+                $sql = sprintf(' catid in (%s)', implode(',', $data));
             } else {
                 $sql = '';
             }
@@ -371,13 +373,27 @@ class Category extends LRecord {
         // exit;
         return $count;
     }
+
+    public function counts() {        
+        $sql = " SELECT count(catid) FROM :table 
+                  WHERE fromid = :fromid AND module=':module'";
+        $sql = strtr($sql, array(
+            ':table' => self::$table,
+            ':module' => $this->module,
+            ':fromid' => Tak::getFormid() ,
+        ));
+        $count = self::$db->createCommand($sql)->queryScalar();
+        return $count;
+    }        
     
     public function del() {
         $result = false;
         $count = $this->isDel();
         if ($count > 0) {
             $result = '分类下已经有产品，不能进行删除';
-        } else {
+        } elseif($this->counts()==1){
+            $result = '最后一个分类不允许删除!';
+        }else {
             if ($this->child) {
                 $data = self::getCates($this->module);
                 $ids = self::get_arrchildid($this->catid, $data);
@@ -397,7 +413,7 @@ class Category extends LRecord {
             // Tak::KD($sql);
             // Tak::KD($data);
             if (count($data) > 0) {
-                $sql = sprintf(' catid in (%s)', join(',', $data));
+                $sql = sprintf(' catid in (%s)', implode(',', $data));
             } else {
                 $sql = '';
             }
@@ -437,6 +453,7 @@ class Category extends LRecord {
         $content = $tree->get_tree(0, "<option value=\\\"\$id\\\">\$spacer\$name</option>") . '</select>';
         Tak::KD($content);
         // cache_write('catetree-'.$moduleid.'.php', $content);
+        
         
     }
 }

@@ -122,7 +122,7 @@ class History extends MRecord
     		$condition[] = $arr['condition'];
     	}
     	$condition[] = 'manageid='.Tak::getManageid();
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	return $arr;
     }
 

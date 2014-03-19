@@ -590,6 +590,7 @@ form.active .wap-flow-content {
     margin-top: 5px;
 }
 #progress {
+    min-width: 800px;
     position: relative;
 }
 .message {

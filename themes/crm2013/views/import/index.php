@@ -13,7 +13,7 @@ $file = '/k/GitHub/CRM/upload/users/JU1/temp/import/20140315-145106__clientele.x
 // $model->getTags();
 ?>
 <div class="page-header">
-	<h1><?php echo $title ?> <small>请先下载模板，然后按模板编辑货品信息并上传。</small></h1>
+	<h1><?php echo $title ?> <small>请先下载模板，然后按模板编辑信息并上传。</small></h1>
 </div>
 <h4>
 <a href="<?php echo $url ?>">【模板下载】</a>

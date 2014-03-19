@@ -105,7 +105,7 @@ class OrderProduct extends MRecord
     		$condition[]=$arr['condition'];
     	}
     	$arr['order'] = ' itemid ASC ';
-    	$arr['condition'] = join(" AND ",$condition);
+    	$arr['condition'] = implode(" AND ",$condition);
     	return $arr;
     }
 

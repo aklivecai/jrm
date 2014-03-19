@@ -111,7 +111,7 @@ class CompanyController extends JController
 				$temp[$value['userid']] = $value;
 			}		
 			$ids = array_keys($temp);
-			$sql = "itemid IN (".join(',',$ids).") ";
+			$sql = "itemid IN (".implode(',',$ids).") ";
 			$list = TestMemeber::model()->findAll(array('condition'=>$sql,'order'=>' itemid DESC '));
 			$ids = array_flip($ids);
 			foreach ($list as $key => $value) {
@@ -153,7 +153,7 @@ class CompanyController extends JController
 					// Tak::KD($sqls,1);
 				}				
 				$ids = array_flip($ids);
-				$sql = "itemid IN (".join(',',$ids).") ";
+				$sql = "itemid IN (".implode(',',$ids).") ";
 				// Tak::KD($sql);
 				$companys = TestMemeber::model()->findAll(array('condition'=>$sql,'order'=>' itemid DESC '));
 				foreach ($list as $key => $value) {

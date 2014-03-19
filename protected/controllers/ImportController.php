@@ -9,6 +9,9 @@ class ImportController extends Controller {
     public function init() {
         parent::init();
     }
+    public function allowedActions() {
+        return 'message,upload,import';
+    }    
     private function getType($action) {
         return isset($this->types[$action]) ? $this->types[$action] : null;
     }
@@ -20,21 +23,22 @@ class ImportController extends Controller {
         $model = new $m();
         return $model;
     }
-    public function getTemplate($action){
+    public function getTemplate($action) {
         $url = Yii::app()->createUrl('upload/importModel/');
         switch ($action) {
             case 'product':
-                    $url.='/商品资料导入模板.xls';
-                break;
+                $url.= '/商品资料导入模板.xls';
+            break;
             case 'addressBook':
-                      $url.='/通讯录导入模板.xls';  
-                    break;       
+                $url.= '/通讯录导入模板.xls';
+            break;
             case 'clientele':
-                      $url.='/客户资料导入模板.xls';  
-                    break;            
+                $url.= '/客户资料导入模板.xls';
+            break;
             default:
                 # code...
-                break;
+                
+            break;
         }
         return $url;
     }

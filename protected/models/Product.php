@@ -73,7 +73,7 @@ class Product extends ModuleRecord {
                 'TakType',
                 'typeid',
                 'select' => 'typename',
-                'condition' => join(" AND ", $condition)
+                'condition' => implode(" AND ", $condition)
             ) ,
             'iStocks' => array(
                 self::HAS_ONE,
@@ -170,7 +170,7 @@ class Product extends ModuleRecord {
             $condition[] = $this->getConAlias('manageid=' . Tak::getManageid());
         }
         
-        $arr['condition'] = join(" AND ", $condition);
+        $arr['condition'] = implode(" AND ", $condition);
         return $arr;
     }
     
@@ -293,7 +293,7 @@ class Product extends ModuleRecord {
         if ($sql) {
             $condition[] = $sql;
         }
-        $condition = join(' AND ', $condition);
+        $condition = implode(' AND ', $condition);
         $sql = ' SELECT  SUM(s.stotals) AS stotal,SUM(p.price*s.stotals) AS ptotal FROM :product p
 	       	,(SELECT SUM(stocks) AS stotals,product_id  FROM :stock WHERE product_id in ( 
 					SELECT itemid FROM :product WHERE :condition 

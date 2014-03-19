@@ -17,7 +17,7 @@ class SubContact extends Contact
 		if (isset($arr['condition'])) {
 			$condition[] = $arr['condition'];
 		}
-		$arr['condition'] = join(" AND ",$condition);
+		$arr['condition'] = implode(" AND ",$condition);
 		return $arr;
 	}	
 	public static function model($className=__CLASS__)

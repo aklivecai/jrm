@@ -16,7 +16,7 @@ class SubClientele extends Clientele
 			$condition[] = $arr['condition'];
 		}
 
-		$arr['condition'] = join(" AND ",$condition);
+		$arr['condition'] = implode(" AND ",$condition);
 		
 		return $arr;
 	}	

@@ -34,7 +34,7 @@ class ModuleRecord extends MRecord {
         if ($this->getCu() && Tak::getManageid()) {
             $condition[] = 'manageid=' . Tak::getManageid();
         }
-        $arr['condition'] = join(" AND ", $condition);
+        $arr['condition'] = implode(" AND ", $condition);
         return $arr;
     }
     
@@ -80,7 +80,7 @@ class ModuleRecord extends MRecord {
             $condition = array_merge_recursive($condition, $pcondition);
         }
         $_temps = array(
-            'condition' => join(" AND ", $condition) ,
+            'condition' => implode(" AND ", $condition) ,
         );
         if ($order) {
             $_temps['order'] = $order;
@@ -136,7 +136,8 @@ class ModuleRecord extends MRecord {
             //添加数据时候
             $arr = Tak::getOM();
             if ($this->isNewRecord) {
-                if ($this->hasAttribute('manageid')) {
+                // 导入客户时候，其他管理员可以选择业务员
+                if ($this->hasAttribute('manageid') && !$this->manageid) {
                     $this->manageid = $arr['manageid'];
                 }
                 if ($this->hasAttribute('fromid')) {

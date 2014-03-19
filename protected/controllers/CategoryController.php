@@ -31,7 +31,7 @@ class CategoryController extends Controller {
 
     public function allowedActions() {
         $result = array(parent::allowedActions(),'select');
-        return join(',',$result);
+        return implode(',',$result);
     }        
     protected function getLink($action = 'Admin') {
         return $this->createUrl($action, array(

@@ -166,7 +166,7 @@ class Jb2bRecord extends CActiveRecord
 	        		$t[]= $this->$v1;	
 	        	}
 	        }
-			$result = join('-',$t);	
+			$result = implode('-',$t);	
 		}
 		return $result;
 	}
@@ -205,7 +205,7 @@ class Jb2bRecord extends CActiveRecord
 		$sqlWhere = array($this->getDefaultScopeSql());
 		$sqlWhere[] = ':itemid :opt :current_id';
 		$sqlWhere = array_filter($sqlWhere);
-		$sqlWhere = join(" AND ",$sqlWhere);
+		$sqlWhere = implode(" AND ",$sqlWhere);
 
 		$sql  = "SELECT $col FROM :tableName WHERE $sqlWhere ORDER BY :itemid :order";
 
@@ -248,12 +248,12 @@ class Jb2bRecord extends CActiveRecord
 		
 		foreach ($_arr as $key => $value) {
 		  $sqlWhere['w'] = str_replace(':opt',$value['opt'],$sql1);
-		  $_sqlWhere = join(" AND ",$sqlWhere);
+		  $_sqlWhere = implode(" AND ",$sqlWhere);
 		  $arrSql[] = " SELECT * FROM (SELECT $col,'$key' AS `ikey` FROM :tableName WHERE $_sqlWhere ORDER BY :itemid {$value['order']} LIMIT $top) AS `$key` ";
 		  $tags[$key] = array();
 		}
 
-		$sql = join(' UNION ALL ',$arrSql);
+		$sql = implode(' UNION ALL ',$arrSql);
 
 		$sql = strtr($sql,array(
 			':tableName'=>$this->tableName()

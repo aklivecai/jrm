@@ -64,7 +64,7 @@ class LRecord extends CActiveRecord {
             $arr[':key'] = $this->primaryKey();
             $arr[':itemid'] = $itemid;
         }
-        $sql = join(' AND ', $sql);
+        $sql = implode(' AND ', $sql);
         $sql = strtr($sql, $arr);
         $m = $this->find($sql, array(
             ':val' => strtolower($this->$attribute)
@@ -79,7 +79,7 @@ class LRecord extends CActiveRecord {
         $arr = array();
         $condition = array();
         $condition[] = 'fromid=' . Tak::getFormid();
-        $arr['condition'] = join(" AND ", $condition);
+        $arr['condition'] = implode(" AND ", $condition);
         return $arr;
     }
     
@@ -110,7 +110,7 @@ class LRecord extends CActiveRecord {
         );
         $sqlWhere[] = ':itemid :opt :current_id';
         $sqlWhere = array_filter($sqlWhere);
-        $sqlWhere = join(" AND ", $sqlWhere);
+        $sqlWhere = implode(" AND ", $sqlWhere);
         
         $sql = "SELECT $col FROM :tableName WHERE $sqlWhere ORDER BY $orderCol :order ";
         // LIMIT 1

@@ -146,7 +146,7 @@ class MRecord extends CActiveRecord {
             $arr[':manageid'] = $this->manageid ? $this->manageid : Tak::getManageid();
         }
         
-        $sql = join(' AND ', $sql);
+        $sql = implode(' AND ', $sql);
         // Tak::KD(strtr($sql,$arr),1);
         // Tak::KD($arr,1);
         // 查找满足指定条件的结果中的第一行
@@ -211,7 +211,7 @@ class MRecord extends CActiveRecord {
     protected function getDefaultScopeSql() {
         $sqlWhere = $this->defaultScope(0);
         if (is_array($sqlWhere) && $sqlWhere['condition']) {
-            $sqlWhere = is_array($sqlWhere['condition']) ? join(' AND ', $sqlWhere['condition']) : $sqlWhere['condition'];
+            $sqlWhere = is_array($sqlWhere['condition']) ? implode(' AND ', $sqlWhere['condition']) : $sqlWhere['condition'];
         } else {
             $sqlWhere = '';
         }
@@ -234,7 +234,7 @@ class MRecord extends CActiveRecord {
             $sql = ' SELECT COUNT(:itemid) AS num, \'' . $key . 'Data\' AS ikey FROM  :tableName WHERE :sqlWhere AND :col BETWEEN ' . $value['start'] . ' AND ' . $value['end'];
             $arrSql[] = $sql;
         }
-        $sql = join(' UNION ALL ', $arrSql);
+        $sql = implode(' UNION ALL ', $arrSql);
         $sql = strtr($sql, array(
             ':tableName' => $this->tableName() ,
             ':yea' => $dtime['y']['start'],
@@ -273,7 +273,7 @@ class MRecord extends CActiveRecord {
                     $t[] = $this->$v1;
                 }
             }
-            $result = join('-', $t);
+            $result = implode('-', $t);
         }
         return $result;
     }
@@ -323,7 +323,7 @@ class MRecord extends CActiveRecord {
         );
         $sqlWhere[] = ':itemid :opt :current_id';
         $sqlWhere = array_filter($sqlWhere);
-        $sqlWhere = join(" AND ", $sqlWhere);
+        $sqlWhere = implode(" AND ", $sqlWhere);
         
         $sql = "SELECT $col FROM :tableName WHERE $sqlWhere ORDER BY :itemid :order ";
         // LIMIT 1
@@ -372,12 +372,12 @@ class MRecord extends CActiveRecord {
         
         foreach ($_arr as $key => $value) {
             $sqlWhere['w'] = str_replace(':opt', $value['opt'], $sql1);
-            $_sqlWhere = join(" AND ", $sqlWhere);
+            $_sqlWhere = implode(" AND ", $sqlWhere);
             $arrSql[] = " SELECT * FROM (SELECT $col,'$key' AS `ikey` FROM :tableName WHERE $_sqlWhere ORDER BY :itemid {$value['order']} LIMIT $top) AS `$key` ";
             $tags[$key] = array();
         }
         
-        $sql = join(' UNION ALL ', $arrSql);
+        $sql = implode(' UNION ALL ', $arrSql);
         
         $sql = strtr($sql, array(
             ':tableName' => $this->tableName() ,

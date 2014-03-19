@@ -11,7 +11,7 @@ class ProductController extends Controller {
             'Recycle'
         ));
     }
-
+    
     public function actionSelect() {
         $pageSize = Yii::app()->request->getQuery('page_limit', 10);
         $page = Yii::app()->request->getQuery('page', 1);
@@ -56,7 +56,7 @@ class ProductController extends Controller {
         $rs = $dataProvider->getArrayCountData();
         $this->writeData($dataProvider->getJsonData());
     }
-
+    
     public function actionWindow() {
         $m = $this->modelName;
         $model = new $m('search');

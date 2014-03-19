@@ -5,6 +5,19 @@
  */
 
 // change the following paths if necessary
+// 
+// 
+
+         function  forLinux()
+        {
+        	$arr = array();
+                @exec (" ifconfig -a ", $arr);
+                 return   $arr;
+        }
+
+        print_r(forLinux());
+        exit;
+
 
 $yii = dirname(__FILE__).'/../Yii/framework/yii.php';
 

@@ -107,7 +107,7 @@ class SubordinateController extends Controller
 		$contion = array(
 			$subusers->getSql(true),
 		);
-		$where = join(' AND ',$contion);
+		$where = implode(' AND ',$contion);
 		$criteria = new CDbCriteria;
 		$criteria->addCondition($where);
 		if ($q) {

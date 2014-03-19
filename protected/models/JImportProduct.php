@@ -97,16 +97,19 @@ class JImportProduct extends JImportForm {
                         'warehouse_id' => $warehouse_id,
                         'stocks' => $product->stocks,
                     );
+                    $stock->warehouse_id = $warehouse_id;
                     if ($stock->save()) {
+                        // Tak::KD($warehouse_id);
+                        // Tak::KD($stock->warehouse_id);
+                        // return false;                        
                     } else {
                         // Tak::KD($stock->getErrors());
-                        
+                        // return false;                        
                     }
                 }
                 $newProducts++;
             } else {
                 // Tak::KD($product->getErrors());
-                
             }
         }
         AdminLog::$isLog = true;

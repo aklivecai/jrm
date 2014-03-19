@@ -163,7 +163,7 @@ class TakType extends CActiveRecord
     	if ($this->scondition) {
     		$condition = array($this->scondition);
     		$condition[] = 'fromid='.Tak::getFormid();
-			$arr['condition'] = join(" AND ",$condition);
+			$arr['condition'] = implode(" AND ",$condition);
     	}
     	return $arr;
     }

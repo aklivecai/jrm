@@ -58,14 +58,14 @@ if (count($nps) > 0) {
             ) ,
         )
     );
-    array_splice($_itemis, count($_itemis) , 0, Tak::getNP($nps));
+    $_itemis = Tak::getNP($nps);
+    // array_splice($_itemis, count($_itemis) , 0, Tak::getNP($nps));
 }
 array_splice($items, count($items) - 2, 0, $_itemis);
 
 if ($model->time_stocked > 0) {
     unset($items['Update']);
-    unset($items['Delete']);
-    
+    unset($items['Delete']);    
     $items[] = array(
         'label' => Tk::g('Print') ,
         'icon' => 'print',
@@ -97,6 +97,8 @@ if ($model->time_stocked > 0) {
         );
     }
 }
+
+unset($tags['time_stocked']);
 ?>
 <div class="block-fluid without-head">
     <div class="row-fluid ">
@@ -119,7 +121,7 @@ foreach ($tags as $key => $value) {
         $value = $value['value'];
     }
     // Tak::KD($tags,1);
-    $str.= '<li><div class="title">' . CHtml::encode($model->getAttributeLabel($key)) . ":</div><div class=\"text\">&nbsp;$value </div></li>";
+    $str.= sprintf('<li><div class="title">%s:</div><div class="text">&nbsp;%s </div></li>',CHtml::encode($model->getAttributeLabel($key)),$value);
 }
 $str.= '</ul>';
 echo $str;
@@ -132,8 +134,7 @@ echo $str;
           <h4>产品明细</h4>
         </div>
  <?php $this->widget('bootstrap.widgets.TbListView', array(
-    'dataProvider' => $model->getProductMovings() ,
-    
+    'dataProvider' => $model->getProductMovings() ,    
     'itemView' => '//movings/_product_view',
     'template' => '<table class="table"> <thead> <tr> <th>物料名字</th> <th>产品规格</th> <th>材料</th> <th>单位</th>  <th>颜色</th><th>价格</th><th>数量</th> </tr> </thead> <tbody>{items}</tbody> </table>',
     'htmlOptions' => array(

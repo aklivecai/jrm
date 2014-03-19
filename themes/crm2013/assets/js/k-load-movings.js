@@ -1,124 +1,188 @@
-var tselect = function(){
-    var select = $(".sele1ct-product")
-    , wappmovings = $('#product-movings')
-    , page_limit = 20
-    , notids = ','
-    , str = '<tr id=":itemid"><td class="info"><span>:name</span></td><td class="info"><span>:spec</span></td><td class="info"><span>:material</span></td><td class="info"><span>:color</span></td><td><input type="number" class="stor-txt" name="Product[price][:itemid]" required="required" min="0.0" value=":price"/></td><td class="info"><input type="number" class="stor-txt" name="Product[number][:itemid]" required="required" value="1"/></td>  <td><input name="Product[note][:itemid]" type="text" class="stor-txt"/></td> <td><a href="#"><span class="icon-remove"></span></a></td> </tr>'
-    , removeIds = function(id){
-        notids = notids.replace(','+id+',',',');
-    }
-    , addIds = function(id){
-          notids += id+',';
-    }
-    , getIds = function(){
-        return notids.replace(/\,\,+/g,',');
-    }
-    , addTr = function(id,data){
-        var istr = str
-        , rstr;
-        for(var p in data){ 
-                rstr =new RegExp(':'+p+"","g");
-            istr = istr.replace(rstr,data[p]);
-            // log(typeof p);
-        }        
-        // var t = istr.replace(/:itemid+/g,id).replace(':name',data.name).replace(':spec',data.spec).replace(':material',data.material).replace(':color',data.color).replace('null','');
-        wappmovings.append(istr);
-    }
-    ,  movieFormatSelection = function(obj) {
-        return obj.name;
-    } 
-    , movieFormatResult = function(data) {
-        var markup = "<table class='movie-result'><tr>"
-        , material = data.material==null?'':data.material
-        , spec = data.spec==null?'':data.spec
-        , color = data.color==null?'':data.color
-        ;
-        markup += "<td class='movie-info'><div class='movie-title'>" + data.name + "</div>";
-         markup += "<div class='movie-title'>材料："+material+" </div>";
-         markup += "<div class='movie-title'>规格："+spec+" </div>";
-         markup += "<div class='movie-title'>颜色："+color+" </div>";
-        markup += "</td></tr></table>"
-        return markup;
-    }
+
+  $("#addproduct").on("click",function(){
+    var wurl = createUrl("Product/window",["warehouse_id="+$("#Movings_warehouse_id").val()]);
+      window.open(wurl, "windowName" ,"width=800,height=650,resizable=0,scrollbars=1");
+  });
+var data = []
+, dataObject = []
+, tempFn = doT.template(document.getElementById("data-row").innerHTML)
+, setObj = function(id){
+  if (getObj(id)) {
+    return false;
+  }else{
+    dataObject["x"+id] = true;  
+  }
+  return true;  
+}
+, getObj = function(id){
+  return  typeof dataObject["x"+id] != "undefined";
+}
+, delObj = function(id){
+  if (getObj(id)) {
+    delete dataObject["x"+id];
+  }
+}
+, countObj = function(){
+  return dataObject.length;
+}
+, loadData = function(_data){
+  var temp = tempFn({"tags":_data});
+  $("#product-movings").append(temp).find("#data-loading").remove();
+}
+;
+for (i=100; i <102 ; i++) { 
+  // setObj(i);
+  data.push({
+      "itemid":i,
+      "color":"绿色",
+      "note":"备注信息",
+      "number":500,
+      "price":"12.55",
+      "spec":"12x6"+i,
+      "name":"xxx...",
+      "material":"12*"
+  });
+}
+// loadData(data);
+  window.addData = function(odata){
+    var tdata = []
+    , len = odata.length
     ;
-     wappmovings.find('tr').each(function(){
-        var id = $(this).attr('id');
-            addIds(id);   
-    });
-    wappmovings.on('click', '.icon-remove', function (event) {
-        event.preventDefault();
-       if (confirm('是否确认移除?')) {
-         var p = $(this).parents('tr');
-            removeIds(p.attr('id'));
-            p.remove();
-       };
-    })
-    select.css('width','100%');
-
-     select.select2({
-            placeholder: "搜索产品",
-            allowClear: true,//显示取消按钮
-            minimumInputLength: 0,
-            loadMorePadding: 300,
-            quietMillis:100,
-            openOnEnter:true,
-            selectOnBlur:true,
-            ajax: { 
-                url: createUrl("product/select"),
-                dataType: 'jsonp',
-                data: function (term, page) {
-                    return {
-                        q: term, 
-                        page_limit: page_limit,
-                        page: page,
-                        'not':getIds()
-                    };
-                },
-                results: function (data, page) { 
-                    var more = (page * page_limit) < data.totalItemCount; 
-                    return {results: data['data'],more:more};
-                }
-            },
-            id:function(object){
-                return object.itemid;
-            },
-            initSelection: function(element, callback) {
-                var id = $(element).val();
-                if (id!=="") {
-                    $.ajax(
-                        createUrl("product/selectById",['id='+id])
-                        , {
-                        data: {
-                        },
-                        dataType: "jsonp"
-                    }).done(function(data) {
-                        if (data!=''&&typeof data=='object') {
-                            callback(data.data[0]);
-                        };
-                         
-                   });
-                }
-            },
-            formatResult:movieFormatResult,
-            formatSelection: movieFormatSelection,
-            dropdownCssClass: "bigdrop",
-        });
-
-    select.on('change',function(e){
-        if (e.val!=''&&e.added) {
-            addIds(e.val);    
-            addTr(e.val,e.added);  
-             // log("change "+JSON.stringify({val:e.val, added:e.added, removed:e.removed}));
-        };        
-    });            
-    wappmovings.find('#data-loading').remove();
-    if ( window.takson.length>0) {
-      for (var p in takson) { 
-            addTr(p,takson[p]);   
+    for (i=0; i < len; i++) { 
+      if (setObj(odata[i]["itemid"])) {
+        tdata.push(odata[i]);
       }
     }
-} 
+    if (tdata.length>0) {
+      loadData(tdata);
+    }
+    return true;
+  }
 
-jQuery(function($){
-    tselect();
+$(document).on("click","#product-movings .data-remove",function(){
+  if (sCF("是否确认移除?")) {
+    return false;
+  }
+  var id = $(this).attr("id");
+  delObj(id);
+  $(this).parents("tr").remove();
 });
+
+var getIfm = function(){
+  var ifmname = "ifm" + Math.random()
+  , ifm = $('<iframe src="about:blank" style="position: absolute;top:-9999;" width="2" height="1" frameborder="0" name="'+ ifmname +'">');
+  ifm.appendTo($(document.body));
+  return ifm;
+}
+
+var  wizard = $("#wizard")
+, leaveAStepCallback = function(obj){
+        var step_num= obj.attr("rel");
+        return validateSteps(step_num);
+      }
+, validateSteps = function(step){
+    var isStepValid = true;
+    if(step == 1){
+      if(validateStep1() == false ){
+          isStepValid = false; 
+          wizard.smartWizard("setError",{stepnum:step,iserror:true}); 
+        }else{
+          wizard.smartWizard("setError",{stepnum:step,iserror:false});
+        }
+    }
+    return isStepValid;
+}
+, validateStep1 = function(){
+  var isStepValid = false;
+    if (valdata($("#step-1"))) {
+      isStepValid = true;
+    }
+    return isStepValid;
+}
+, valdata = function(elem){
+  var isStepValid = true
+  , message = "";
+  ;
+  elem.find("[required]").each(function(i,el){
+    var t = $(el);
+    if (t.val()=="") {
+      t.addClass("error");
+      isStepValid = false;
+      message+="<li>"+$("label[for="+t.attr("id")+"]").text()+"</li>";
+    }else{
+      t.removeClass("error");
+    }
+  });
+  if (message!="") {
+    message = "<ul><li>下面内内容填写不正确！</li>"+message+"</ul>";
+    wizard.smartWizard("showMessage",message);
+  }else{
+    wizard.find(".close").trigger("click");
+  }  
+  return isStepValid;
+}
+;
+
+  function submitAction(){
+    if (countObj==0) {
+      alert("尚未添加产品型号！");
+      return false;
+    }
+    var message = ""
+    , priceMessage = ""
+     , reg =/(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;  
+    $("#product-movings input[name*=number]").each(function(){
+         var val = $(this).val();
+        if(val.search(/^[\+\-]?\d+\.?\d*$/)==0&&val>0){
+          $(this).removeClass("error");
+        }else{
+          $(this).addClass("error");
+          if (message=="") {
+            message = "<li>请输入正确的数量!</li>";
+          }
+        }
+    });
+    $("#product-movings input[name*=price]").each(function(){
+         var val = $(this).val();
+        if(reg.test(val)&&val>0){  
+          $(this).removeClass("error");
+        }else{
+          $(this).addClass("error");
+          if (priceMessage=="") {
+            priceMessage = "<li>价格必须为合法数字(正数，最多两位小数)！</li>";
+          }
+        }
+    });
+    message+=priceMessage;
+    if (message!="") {
+      message = "<ul>"+message+"</ul>";
+      wizard.smartWizard("showMessage",message);
+      wizard.smartWizard("setError","1");
+      return false;    
+    }
+  var ifm = getIfm()
+  , ifmname = ifm.attr("name")
+  ;
+  
+  wizard.parents("form").attr("target",ifmname);
+  wizard.parents("form").submit();
+  ifm.on("load",function(){
+    // ifm.remove();
+  });    
+     wizard.smartWizard("setError","0");
+  }
+
+  wizard.smartWizard({
+              // selected: 1,  
+              // errorSteps:[0],
+              labelNext:"下一步", 
+              labelPrevious:"上一步",
+              labelFinish:"提交", 
+              onFinish:submitAction,
+              // transitionEffect:"slideleft",
+              onLeaveStep:leaveAStepCallback,
+              // onFinish:onFinishCallback,
+              enableFinishButton:true
+        });
+
+$("#wizard .stepContainer").attr("style","");

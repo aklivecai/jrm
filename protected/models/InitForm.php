@@ -93,13 +93,14 @@ class InitForm extends CFormModel {
                 ':itemid' => $itemid,
                 ':uname' => $this->username,
                 ':fromid' => $this->fromid,
-                ':tab_Manage' => '{{manage}}',
+                ':tab_Manage' => Manage::$table,
                 ':tab_rabc' => '{{rbac_authassignment}}',
-                ':tab_AddressG' => '{{address_groups}}',
-                ':tab_AddressB' => '{{address_book}}',
-                ':tab_type' => '{{type}}',
-                ':tab_admin_log' => '{{admin_log}}',
-                ':tab_test_memeber' => '{{test_memeber}}',
+                ':tab_AddressG' => AddressGroups::$table,
+                ':tab_AddressB' => AddressBook::$table,
+                ':tab_type' => Category::$table,
+                ':tab_warehouse' => Warehouse::$table,
+                ':tab_admin_log' => AdminLog::$table,
+                ':tab_test_memeber' => TestMemeber::$table,
                 ':salt' => $salt,
                 ':password' => $password,
             );
@@ -136,7 +137,10 @@ class InitForm extends CFormModel {
             //#通讯录
             $sqls[] = " INSERT INTO :tab_AddressB  (`itemid`, `groups_id`, `fromid`, `name`, `email`, `phone`, `address`, `department`, `position`, `sex`, `longitude`, `latitude`, `location`, `display`, `add_time`, `add_us`, `add_ip`, `modified_time`, `modified_us`, `modified_ip`, `note`, `status`) VALUES (:itemid, :itemid, :fromid, '测试-张三', '', '', '', '', '业务经理', 1, '', '', '', 1, :time, :userid, 0, 0, 0, 0, '', 1);";
             //产品分类
-            $sqls[] = " INSERT INTO :tab_type (`typeid`, `fromid`, `typename`, `item`, `listorder`) VALUES (:time, :fromid, '默认分类', 'product', 0);";
+            $sqls[] = " INSERT INTO :tab_type (`catid`, `fromid`, `module`, `item`, `catename`, `level`, `parentid`, `arrparentid`, `child`, `arrchildid`, `listorder`) VALUES (:time, :fromid, 'product', '0', '默认分类', '0', '0', '0', '0', NULL, '0');";
+
+            // 仓库
+            $sqls[] ="INSERT INTO `:tab_warehouse` (`itemid`, `fromid`, `name`, `user_name`, `telephone`, `listorder`, `note`) VALUES (:time, :fromid, '默认仓库', '', '', '0', '');";
             
             $sqls[] = " INSERT INTO :tab_admin_log (`itemid`, `fromid`, `manageid`, `user_name`, `qstring`, `info`, `ip`, `add_time`) VALUES (:itemid, :fromid, :userid, ':uname', '', '激活初始化数据', :ip, :time);";
             //开始激活用户时间
@@ -147,6 +151,7 @@ class InitForm extends CFormModel {
                 // Tak::KD($sql);
                 $connection->createCommand($sql)->execute();
             }
+            // exit;
         }
         catch(Exception $e) // 如果有一条查询失败，则会抛出异常
         {

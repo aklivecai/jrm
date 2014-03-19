@@ -65,7 +65,7 @@ class Manage extends ModuleRecord
 			}
 		}
 
-		$sql = join(' AND ',$sql);
+		$sql = implode(' AND ',$sql);
 
 		 // Tak::KD(strtr($sql,$arr),1);
 		// if (Tak::getAdmin()) 	 Tak::KD(strtr($sql,$arr),1);
@@ -97,7 +97,7 @@ class Manage extends ModuleRecord
 					}		
 				}
 		    	}		
-			$arr['condition'] = join(" AND ",$condition);		
+			$arr['condition'] = implode(" AND ",$condition);		
 		    	return $arr;
     }
 

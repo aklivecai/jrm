@@ -8,6 +8,7 @@
 
 <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 <link rel="icon" type="image/ico" href="/favicon.ico"/>
+
 <!--[if lt IE 7]> 
         <meta http-equiv="refresh" content="0; url=<?php echo Yii::app()->createUrl('/site/ie6'); ?>" />
 <![endif]-->
@@ -40,7 +41,6 @@ $jss = array(
   // 向上滚动的图标
   'plugins/scrollup/jquery.scrollUp.min.js',
   'cookies.js',
-  'actions.js?2014-03-10',
   'plugins.js?2014-03-10',
   'settings.js',
   'k-load-select.js',
@@ -81,6 +81,12 @@ $jss = array(
 <script type="text/javascript">
   var CrmPath = '<?php echo Yii::app()->getBaseUrl();?>/';
 </script>
+
+
+<!--[if lt IE 9]> 
+<script type="text/javascript" src="<?php echo $this->getAssetsUrl();?>js/ie.js?>"></script>        
+<![endif]-->
+<script type="text/javascript" src="<?php echo $this->getAssetsUrl();?>js/actions.js?>"></script>        
 </head>
 
 <body id="ibody" class="<?php echo Yii::app()->user->getState('themeSettings_bg'); ?>" >   

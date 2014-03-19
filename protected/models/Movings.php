@@ -8,11 +8,10 @@ class Movings extends ModuleRecord {
     public $type = null;
     private $_typename = '';
     private $product_movings = null;
-    private $products = null;    
-    public $time = '';    
-    public static $table = '{{movings}}';    
+    private $products = null;
+    public $time = '';
+    public static $table = '{{movings}}';
     public $tableAlias = false;
-    public $warehouse_id = 0;
     public function init() {
         parent::init();
         $this->setSName();
@@ -52,7 +51,7 @@ class Movings extends ModuleRecord {
         // Tak::KD($this->product_movings,1);
         return $this->product_movings;
     }
-
+    
     public function rules() {
         return array(
             array(
@@ -110,7 +109,7 @@ class Movings extends ModuleRecord {
                 'TakType',
                 'typeid',
                 'select' => 'typename',
-                'condition' => join(" AND ", $condition)
+                'condition' => implode(" AND ", $condition)
             ) ,
         );
     }
@@ -157,28 +156,30 @@ class Movings extends ModuleRecord {
         $criteria->compare('itemid', $this->itemid);
         $criteria->compare('fromid', $this->fromid);
         $criteria->compare('type', $this->type);
-        if ($this->warehouse_id>0) {
-           $criteria->compare('warehouse_id', $this->warehouse_id);
-        }        
+        if ($this->warehouse_id > 0) {
+            $criteria->compare('warehouse_id', $this->warehouse_id);
+        }
         if ($this->typeid >= 0) {
             $criteria->compare('typeid', $this->typeid);
-        }        
-        $criteria->compare('numbers', $this->numbers);        
+        }
+        $criteria->compare('numbers', $this->numbers);
         $this->setCriteriaTime($criteria, array(
             'time',
             'add_time',
             'modified_time'
         ));
         
-        $criteria->compare('enterprise', $this->enterprise, true);        
+        $criteria->compare('enterprise', $this->enterprise, true);
         $criteria->compare('us_launch', $this->us_launch, true);
-        $criteria->compare('time_stocked', $this->time_stocked, true);        
-        $criteria->compare('add_us', $this->add_us, true);
-        $criteria->compare('add_ip', $this->add_ip, true);        
-        $criteria->compare('modified_us', $this->modified_us, true);
-        $criteria->compare('modified_ip', $this->modified_ip, true);
-        $criteria->compare('note', $this->note, true);
+        $criteria->compare('time_stocked', $this->time_stocked, true);
+        $criteria->compare('add_us', $this->add_us);
+        $criteria->compare('add_ip', $this->add_ip);
+        $criteria->compare('modified_us', $this->modified_us);
+        $criteria->compare('modified_ip', $this->modified_ip);
         $criteria->compare('status', $this->status);
+        
+        $criteria->compare('note', $this->note, true);
+        
         return $cActive;
     }
     
@@ -192,12 +193,11 @@ class Movings extends ModuleRecord {
             $arr['condition']
         );
         // $condition[] = 'display>0';
-        $sql = join(" AND ", $condition);
+        $sql = implode(" AND ", $condition);
         $t = explode("AND type = '1'", $sql);
-        if (count($t)>1&&strpos($t[1], 'type') !== false) {
-            $sql = join($t);
+        if (count($t) > 1 && strpos($t[1], 'type') !== false) {
+            $sql = implode($t);
         }
-        
         $sql = str_replace("type = '1' AND", "type", $sql);
         $arr['condition'] = $sql;
         
@@ -206,9 +206,8 @@ class Movings extends ModuleRecord {
     //保存数据前
     protected function beforeSave() {
         $result = parent::beforeSave();
-        
         if ($result && $this->status != TakType::STATUS_DELETED) {
-            $proucts = isset($_POST['Product']['number']) ? $_POST['Product']['number'] : false;
+            $proucts = isset($_POST['Product']) ? $_POST['Product'] : false;
             if (!$proucts || !is_array($proucts) || count($proucts) == 0) {
                 $result = false;
                 $this->addError('', "请填入入库产品明细");
@@ -216,12 +215,12 @@ class Movings extends ModuleRecord {
                 $iserr = false;
                 $mproducts = array();
                 foreach ($proucts as $key => $value) {
-                    if (!is_numeric($value) || !is_numeric($key) || $value <= 0 || $key <= 0) {
+                    if (!is_numeric($key) || $key <= 0) {
                         $iserr = true;
+                        Tak::KD(1);
                         break;
                     }
                 }
-                
                 $mproducts = Product::model()->findAllByPk(array_keys($proucts));
                 if (!$iserr && count($mproducts) != count($proucts)) {
                     $iserr = true;
@@ -231,18 +230,18 @@ class Movings extends ModuleRecord {
                     $result = false;
                     $this->addError('', "入库产品明细输入不正确");
                     $_arr = array();
-                    foreach ($mproducts as $key => $value) {
-                        $_arr[$value->itemid] = array(
-                            'name' => $value->name,
-                            'numbers' => $proucts[$value->itemid],
-                            'price' => $proucts['price'][$value->itemid],
-                            'note' => $proucts['note'][$value->itemid],
-                        );
-                    }
-                    $_POST['Product'] = $_arr;
                 } else {
                     $this->products = $_POST['Product'];
                 }
+                foreach ($mproducts as $key => $value) {
+                    $_arr[$value->itemid] = array(
+                        'name' => $value->name,
+                        'numbers' => $proucts[$value->itemid]['numbers'],
+                        'price' => $proucts[$value->itemid]['price'],
+                        'note' => $proucts[$value->itemid]['note'],
+                    );
+                }
+                $this->products = $_arr;
                 return $result;
             }
         }
@@ -252,30 +251,52 @@ class Movings extends ModuleRecord {
     protected function afterSave() {
         parent::afterSave();
         if ($this->products != null) {
+            // 删除所有产品出入库明细
             ProductMoving::model()->deleteAllByAttributes(array(
                 'type' => $this->type,
                 'movings_id' => $this->itemid
             ));
-            $tags = $this->products['number'];
+            $tags = $this->products;
             $m = new ProductMoving;
             $m->type = $this->type;
             $m->movings_id = $this->itemid;
+            $m->itemid = Tak::fastUuid();
             foreach ($tags as $key => $value) {
                 $m->setIsNewRecord(true);
-                $m->itemid = Tak::fastUuid();
+                $m->itemid+= 2;
                 $m->product_id = $key;
-                $m->numbers = $value;
-                $m->price = isset($this->products['price'][$key]) ? $this->products['price'][$key] : '0.00';
-                $m->note = isset($this->products['note'][$key]) ? $this->products['note'][$key] : '';
-                if (!$m->save()) {
-                    Tak::KD($m->getErrors());
+                $m->numbers = $value['numbers'];
+                $m->price = isset($value['price']) ? $value['price'] : '0.00';
+                $m->note = isset($value['note']) ? $value['note'] : '';
+                if ($m->save()) {
+                    $idata = array(
+                        'product_id' => $key,
+                        'warehouse_id' => $this->warehouse_id
+                    );
+                    $mstock = Stocks::model()->findByAttributes($idata);
+                    
+                    if ($mstock == null) {
+                        $mstock = new Stocks('create');
+                        $idata['stocks'] = 0;
+                        $mstock->attributes = $idata;
+                        if ($mstock->save()) {
+                            // Tak::KD($mstock->attributes);
+                            
+                        } else {
+                            // Tak::KD($mstock,getErrors(),1);
+                            
+                        }
+                    }
+                } else {
+                    // Tak::KD($m->getErrors(),1);
+                    
                 }
             }
         }
     }
     
     public function affirm() {
-        $connection = Yii::app()->db;
+        $connection = self::$db;
         $transaction = $connection->beginTransaction();
         try {
             $time = Tak::now();
@@ -283,18 +304,20 @@ class Movings extends ModuleRecord {
             $arr = array(
                 ':time' => $time,
                 ':itemid' => $itemid,
+                ':warehouse_id' => $this->warehouse_id,
                 ':operate' => $this->type == 1 ? '+' : '-',
-                ':movings' => '{{movings}}',
-                ':stocks' => '{{stocks}}',
-                ':product_moving' => '{{product_moving}}',
+                ':movings' => self::$table,
+                ':stocks' => Stocks::$table,
+                ':product_moving' => ProductMoving::$table,
             );
             $sql = "UPDATE :movings SET time_stocked=:time WHERE itemid=:itemid";
             $sql = strtr($sql, $arr);
             $connection->createCommand($sql)->execute();
             
-            $sql = "UPDATE :stocks AS s ,:product_moving AS pm SET s.stocks=stocks :operate pm.numbers , s.modified_time = :time WHERE s.product_id = pm.product_id AND  pm.movings_id=:itemid AND pm.time_stocked=0";
+            $sql = "UPDATE :stocks AS s ,:product_moving AS pm SET s.stocks=stocks :operate pm.numbers , s.modified_time = :time WHERE s.product_id = pm.product_id AND  pm.movings_id=:itemid  AND s.warehouse_id = :warehouse_id AND pm.time_stocked=0";
             $sql = strtr($sql, $arr);
             $connection->createCommand($sql)->execute();
+            // Tak::KD($sql,1);
             
             $sql = "UPDATE :product_moving SET time_stocked=:time WHERE movings_id=:itemid AND time_stocked=0 ";
             $sql = strtr($sql, $arr);
