@@ -2,6 +2,7 @@
   $this->pageTitle=Yii::app()->name; 
 ?>
 
+
 <div class="row-fluid">
   <div class="span4">
 <?php $this->widget('MyTopData'

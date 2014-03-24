@@ -41,7 +41,8 @@ if (isset($model->iManage)) {
     echo CHtml::link($model->iManage->company, Yii::app()->createUrl('/Site/PreviewTestMember', array(
         'id' => $model->manageid
     )) , array(
-        'class' => 'data-ajax'
+        'class' => 'data-ajax',
+	'title'=>$model->iManage->company
     ));
 } else {
     echo '未知';

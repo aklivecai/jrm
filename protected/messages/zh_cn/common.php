@@ -15,6 +15,7 @@
  */
 return array(
     ':name assigned.' => ':name 已指派',
+    'Database back' => '数据备份',
     'Error' => '错误',
     'Add' => '添加',
     'Create' => '新建',

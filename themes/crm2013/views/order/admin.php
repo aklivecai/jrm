@@ -28,6 +28,9 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 <?php 
   echo $form->dropDownList($model,'status',Order::getSearchStatus()); 
+
+  echo $form->dropDownList($model,'manageid',Order::getUsersSelect()); 
+
 ?>
 
 <?php 

@@ -113,8 +113,8 @@ class Ak {
     }
 
     //随机数
-   public static function createCode($codelen=4) {
-        $charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789'; //随机因子
+   public static function createCode($codelen=4,$charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789') {
+         //随机因子
         $_len = strlen($charset)-1;
         $code = '';
         for ($i=0;$i<$codelen;$i++) {
@@ -614,3 +614,20 @@ class Ak {
         return $result;
     }
 }   
+
+/*
+  $id = "922222222222222";
+//$id = '131970169159123104640404064868224';
+
+$ids = "131970169159123138416918185882704";
+$ids_s = base_convert($ids,10,36);
+echo $ids_s ;
+echo "\n";
+$ids_v = base_convert($ids_s,36,10);
+echo $ids_v;
+echo "\n";
+$str = Ak::setCryptNum($id);
+echo $str;
+echo "\n";
+echo Ak::getCryptNum($str);
+*/

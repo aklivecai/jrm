@@ -37,6 +37,7 @@ class TakCrypt {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
         $tex.="~#~" . sprintf('%010d', $expire ? $expire + time() : 0) . "~#~";
+        // echo "~#~" . sprintf('%010d', $expire ? $expire + time() : 0) . "~#~";
         $key_b = $chrArr[rand() % 62] . $chrArr[rand() % 62] . $chrArr[rand() % 62] . $chrArr[rand() % 62] . $chrArr[rand() % 62] . $chrArr[rand() % 62];
         $rand_key = $key_b . $key;
         $rand_key = md5($rand_key);
@@ -71,13 +72,16 @@ class TakCrypt {
         }
         $expiry_arr = array();
         preg_match('/^(.*)~#~(\d{10})~#~$/', $reslutstr, $expiry_arr);
+        // print_r($expiry_arr);
         if (count($expiry_arr) != 3) {
             //过期时间完整性验证失败
+            echo '过期时间完整性验证失败';
             return false;
         } else {
             $tex_time = $expiry_arr[2];
             if ($tex_time > 0 && $tex_time - time() <= 0) {
                 //验证码过期
+                echo '验证码过期';
                 return false;
             } else {
                 $reslutstr = $expiry_arr[1];
@@ -87,3 +91,14 @@ class TakCrypt {
     }
 
 }
+
+$key = new  TakCrypt('tak',999);
+$str = '1';
+$encode =  $key->encode($str);
+$decode = $key->decode($encode);
+echo "\n";
+echo $encode;
+echo "\n";
+echo $decode;
+echo "\n";
+echo $key->decode('e688ddabtxfIr4BQIFBQ1NEhtUBwsCAgoAC1EDSUVL');

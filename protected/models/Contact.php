@@ -7,7 +7,7 @@ class Contact extends ModuleRecord
 	public function rules()
 	{
 		return array(
-			array('contact_time,clienteleid, prsonid', 'required'),
+			array('contact_time,clienteleid, prsonid,type', 'required'),
 			array('stage, status', 'numerical', 'integerOnly'=>true),
 			array(' add_us, modified_us', 'length', 'max'=>25),
 			array('add_time, add_ip, modified_time, modified_ip', 'length', 'max'=>10),

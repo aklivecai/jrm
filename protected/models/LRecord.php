@@ -28,7 +28,7 @@ class LRecord extends CActiveRecord {
     public function rules() {
         return array(
             // array('itemid','autoID','on'=>'create'),
-            // array('itemid','required'),
+            // array('itemid','required'),          
             
         );
     }

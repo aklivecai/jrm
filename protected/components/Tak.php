@@ -367,7 +367,7 @@ class Tak extends Ak {
                             'Config'
                         ))) ,
                         'url' => array(
-                            '/Order/Config'
+                            '/OrderConfig/Config'
                         ) ,
                         'visible' => self::checkAccess('Order.config') ,
                     ) ,                    
@@ -755,15 +755,6 @@ class Tak extends Ak {
                         'label' => sprintf($strSpan, Tk::g('订单变更')) ,
                         'url' => array(
                             '/Site/Order'
-                        ) ,
-                        'visible' => YII_DEBUG
-                    ) ,
-                    
-                    array(
-                        'icon' => 'certificate',
-                        'label' => sprintf($strSpan, Tk::g('协议')) ,
-                        'url' => array(
-                            '/Order/Config'
                         ) ,
                         'visible' => YII_DEBUG
                     ) ,

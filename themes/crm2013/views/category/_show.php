@@ -4,7 +4,10 @@
 
 $data = Category::getCatsProduct();
 $tags = array();
+
+$temp  = array();
 foreach ($data as $key => $value) {
+	$temp[] = array('id'=>$key,'name'=>$value['catename']);
     $state = array();
         $state['opened'] = true;
     if ($key == $id) {
@@ -17,6 +20,7 @@ foreach ($data as $key => $value) {
                     "state"=>$state,
                 );
 }
+
 
 $js = '
 	var jstrss = $("#jstree_category").jstree({ "core" : {
@@ -38,4 +42,7 @@ if ($action=='select') {
 
 Tak::regScript('bodyend-',$js);
 ?>
+<!--
+<?php echo json_encode($temp);?>
+-->
  <div id="jstree_category"><div>

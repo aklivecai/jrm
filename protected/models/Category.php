@@ -373,8 +373,8 @@ class Category extends LRecord {
         // exit;
         return $count;
     }
-
-    public function counts() {        
+    
+    public function counts() {
         $sql = " SELECT count(catid) FROM :table 
                   WHERE fromid = :fromid AND module=':module'";
         $sql = strtr($sql, array(
@@ -384,16 +384,16 @@ class Category extends LRecord {
         ));
         $count = self::$db->createCommand($sql)->queryScalar();
         return $count;
-    }        
+    }
     
     public function del() {
         $result = false;
         $count = $this->isDel();
         if ($count > 0) {
             $result = '分类下已经有产品，不能进行删除';
-        } elseif($this->counts()==1){
+        } elseif ($this->counts() == 1) {
             $result = '最后一个分类不允许删除!';
-        }else {
+        } else {
             if ($this->child) {
                 $data = self::getCates($this->module);
                 $ids = self::get_arrchildid($this->catid, $data);

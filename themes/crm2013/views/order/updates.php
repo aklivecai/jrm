@@ -91,7 +91,7 @@ $this->breadcrumbs=array(
 	<?php echo $model->getAttributeLabel('manageid');?>：
 	<?php 
 	if (isset($model->iManage)) {
-		echo CHtml::link($model->iManage->company,Yii::app()->createUrl('/Site/PreviewTestMember',array('id'=>$model->manageid)),array('class'=>'data-preview'));
+		echo CHtml::link($model->iManage->company,Yii::app()->createUrl('/Site/PreviewTestMember',array('id'=>$model->manageid)),array('class'=>'data-ajax','title'=>$model->iManage->company));
 	}else{
 		echo '未知';
 	}

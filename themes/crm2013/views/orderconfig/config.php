@@ -6,27 +6,45 @@ $this->breadcrumbs=array(
 	Tk::g('Order')=>array('admin'),
 	Tk::g(array('Order','Config')),
 );
-?>
 
-<?php 
  foreach ($flowTypes as $key => $value) {
  	# code...
  }
 
 ?>
-<div class="well">
-<form class="form-inline" id="taktype-form" action="<?php echo $this->createUrl('flow',array('act'=>'create'))?>" method="post"> 
-<div class="input-prepend"><input class="input-medium" placeholder="流程名字" name="flow[typename]" id="TakType_name" type="text" maxlength="25" required="required"></div><button class="btn" type="submit">添加</button> 
+<div class="block-fluid">
+    <div class="row-fluid">
+<?php $this->widget('bootstrap.widgets.TbNavbar', array(
+    'brand'=>'',
+    'brandUrl'=>'#',
+    'fixed'=>'false',
+    'fixed'=>'true',
+    'collapse'=>true, // requires bootstrap-responsive.css
 
-<!-- li*3>i.icon-fullscreen[title=拖动排序]+input[type=hidden value=$]+input.ini[value=$$]+i.icon-remove[title=点击删除] -->
+    'items'=>array(
+        array(
+            'class'=>'bootstrap.widgets.TbMenu',
+            'items'=>array(
+                array('label'=>Tk::g(array('Add',$modelName)), 'url'=>$this->getLink('Create'), 'active'=>true,'linkOptions'=>array('class'=>"data-ajax",'id'=>'create-category','title'=>Tk::g(array('Add',$modelName)))),
+                array('label'=>Tk::g(array('Update',$modelName)), 'url'=>$this->getLink('Update'),'linkOptions'=>array('title'=>Tk::g(array('Update',$modelName)),'class'=>'data-ajax','id'=>"ajax-update")),
+
+                array('label'=>Tk::g(array('Delete',$modelName)), 'url'=>$this->getLink('Delete'),'linkOptions'=>array('id'=>"data-deletd")),
+            ),
+        ),
+    ),
+)); 
+?>
+<form class="form-inline" id="taktype-form" action="<?php echo $this->createUrl('flow',array('act'=>'create'))?>" method="post"> 
+<div class="input-prepend"><input class="input-medium" placeholder="流程名字" name="flow[typename]" id="TakType_name" type="text" maxlength="25" required="required"></div><button class="btn" type="submit">添加</button>
 <ul id="sortable-flow">
 	<?php $this->renderPartial('_config_flow', array('flowTypes'=>$flowTypes,));?>
  </ul>
-
  </form>
 <div class="dr"><span></span></div>
-<strong>提示</strong>：拖动左侧图标，即可排序
- </div>
+	<strong>提示</strong>：拖动左侧图标，即可排序
+</div>
+
+</div>
 	<script>
 	$(function() {
 		var addForm = $('#taktype-form')
@@ -101,8 +119,8 @@ $this->breadcrumbs=array(
 		sortable.disableSelection();
 	});
 	</script>
-	<style>
-	#sortable-flow { list-style-type: none; margin: 0;  padding: .2em;width:260px;}
-	#taktype-form .input-prepend{padding-left: 25px;}
-	#sortable-flow li { margin:5px 0 ; padding:3px 0;}
-	</style>
+<style>
+#sortable-flow { list-style-type: none; margin: 0;  padding: .2em;width:260px;}
+#taktype-form .input-prepend{padding-left: 25px;}
+#sortable-flow li { margin:5px 0 ; padding:3px 0;}
+</style>
