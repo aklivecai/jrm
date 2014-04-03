@@ -65,6 +65,7 @@ class Order extends MRecord {
                 // ,'on'=>'iClientele.itemid=clienteleid'
                 
             ) ,
+        'iOrderInfo'=>array(self::HAS_ONE, 'OrderInfo', 'itemid'),            
         );
     }
     /**

@@ -20,7 +20,7 @@ $log = array(
     //     'subject'=>'aklivecai@gmail.com',
     // ),
 );
-if( YII_DEBUG )
+if( YII_DEBUG ||true)
 {
     $log_debug = array(
         'class'=>'XWebDebugRouter',
@@ -30,7 +30,7 @@ if( YII_DEBUG )
         'categories'=>'cool.*,system.db.CDbCommand,php',
         'allowedIPs'=>array(
             // '127.0.0.1',
-            // '192.168.1.201X',
+            // '192.168.0.201',
         ),
     );
 

@@ -25,6 +25,7 @@ class TakType extends CActiveRecord {
     public function primaryKey() {
         // return 'typeid';
         
+        
     }
     
     public function init() {
@@ -78,8 +79,7 @@ class TakType extends CActiveRecord {
             '20' => 20,
             '50' => 50,
             '100' => 100
-        ) 
-        ,
+        ) ,
         'filetype' => array(
             '0' => 'default',
             '2' => 'rar',
@@ -297,6 +297,7 @@ class TakType extends CActiveRecord {
                 $this->fromid = Tak::getFormid();
             } else {
                 //修改数据时候
+                
                 
             }
         }

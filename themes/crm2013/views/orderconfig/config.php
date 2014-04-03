@@ -25,10 +25,7 @@ $this->breadcrumbs=array(
         array(
             'class'=>'bootstrap.widgets.TbMenu',
             'items'=>array(
-                array('label'=>Tk::g(array('Add',$modelName)), 'url'=>$this->getLink('Create'), 'active'=>true,'linkOptions'=>array('class'=>"data-ajax",'id'=>'create-category','title'=>Tk::g(array('Add',$modelName)))),
-                array('label'=>Tk::g(array('Update',$modelName)), 'url'=>$this->getLink('Update'),'linkOptions'=>array('title'=>Tk::g(array('Update',$modelName)),'class'=>'data-ajax','id'=>"ajax-update")),
-
-                array('label'=>Tk::g(array('Delete',$modelName)), 'url'=>$this->getLink('Delete'),'linkOptions'=>array('id'=>"data-deletd")),
+                array('label'=>Tk::g(array('Order','Config')), 'url'=>"#", 'active'=>true,'linkOptions'=>array('class'=>"",'id'=>'create-category')),
             ),
         ),
     ),

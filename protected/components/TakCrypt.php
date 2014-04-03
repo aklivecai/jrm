@@ -89,16 +89,4 @@ class TakCrypt {
         }
         return $reslutstr;
     }
-
 }
-
-$key = new  TakCrypt('tak',999);
-$str = '1';
-$encode =  $key->encode($str);
-$decode = $key->decode($encode);
-echo "\n";
-echo $encode;
-echo "\n";
-echo $decode;
-echo "\n";
-echo $key->decode('e688ddabtxfIr4BQIFBQ1NEhtUBwsCAgoAC1EDSUVL');

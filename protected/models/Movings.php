@@ -1,6 +1,5 @@
 <?php
 class Movings extends ModuleRecord {
-    
     public $linkName = array(
         'enterprise',
         'time'
@@ -282,13 +281,16 @@ class Movings extends ModuleRecord {
                         if ($mstock->save()) {
                             // Tak::KD($mstock->attributes);
                             
+                            
                         } else {
                             // Tak::KD($mstock,getErrors(),1);
+                            
                             
                         }
                     }
                 } else {
                     // Tak::KD($m->getErrors(),1);
+                    
                     
                 }
             }

@@ -5,7 +5,7 @@ class JImportForm extends CFormModel {
     public $model = null;
     public $headers = null;
     public $cols = null;
-
+    
     public $script = null;
     
     public $errors = array();
@@ -56,12 +56,10 @@ class JImportForm extends CFormModel {
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
             if (is_array($sheetData) && count($sheetData) > 0) {
                 $result = $sheetData;
-            }else{
-
+            } else {
             }
         }
         catch(Exception $e) {
-            
         }
         return $result;
     }
@@ -91,7 +89,7 @@ class JImportForm extends CFormModel {
         $errors = array();
         foreach ($data as $index => $value) {
             $row = array();
-            foreach ($this->headers as $key=>$col) {
+            foreach ($this->headers as $key => $col) {
                 $t = $this->checkS($key, $value[$key], $index);
                 if ($t) {
                     $errors[] = $this->getColName($key, $index);
@@ -126,7 +124,8 @@ class JImportForm extends CFormModel {
                 unlink($this->varfile);
                 return $result;
             } else {
-                // $head = array_keys($head);                
+                // $head = array_keys($head);
+                
             }
             // Tak::KD($data);
             $error = 0;
@@ -134,7 +133,7 @@ class JImportForm extends CFormModel {
                 $temp = array();
                 if (is_array($value)) {
                     $icol = trim(current($value));
-                    if (strpos($icol, '注意事项')!==false) {
+                    if (strpos($icol, '注意事项') !== false) {
                         break;
                     }
                     if ($icol == '') {

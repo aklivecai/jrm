@@ -1,24 +1,5 @@
 <?php
 class Tak extends Ak {
-    public static function getU($id) {
-        $result = sprintf("%s-%s", self::getManageid() , $id);
-        return $result;
-    }
-    public static function getUCache($id) {
-        $id = self::getU($id);
-        $result = Yii::app()->cache->get($id);
-        return $result;
-    }
-    public static function deleteUCache($id) {
-        $id = self::getU($id);
-        $result = Yii::app()->cache->delete($id);
-        return $result;
-    }
-    public static function setUCache($id, $value, $expire = 0, $dependency = null) {
-        $id = self::getU($id);
-        $result = Yii::app()->cache->set($id, $value, $expire, $dependency);
-        return $result;
-    }
     /*获取操作数*/
     public static function getOM() {
         $ip = Yii::app()->user->getState('ip') != '' ? Yii::app()->user->getState('ip') : false;
@@ -370,7 +351,7 @@ class Tak extends Ak {
                             '/OrderConfig/Config'
                         ) ,
                         'visible' => self::checkAccess('Order.config') ,
-                    ) ,                    
+                    ) ,
                     'product' => array(
                         'icon' => 'th',
                         'url' => array(
@@ -446,7 +427,7 @@ class Tak extends Ak {
                 'icon' => 'isw-users',
                 'label' => sprintf($strSpan, Tk::g(array(
                     'Manage',
-                    'Setting'
+                    'Admin'
                 ))) ,
                 'url' => array(
                     '/Manage/Admin'
@@ -1141,19 +1122,6 @@ class Tak extends Ak {
         );
         
         return $arr;
-    }
-    public static function getMovingsType($type) {
-        
-        $types = array(
-            1 => 'Purchase',
-            2 => 'Sell'
-        );
-        if (isset($types[$type])) {
-            $type = $types[$type];
-        } else {
-            $type = current($types);
-        }
-        return $type;
     }
     
     public static function msg($msg, $title = '', $type = 'palert') {

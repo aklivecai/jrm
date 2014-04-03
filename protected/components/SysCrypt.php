@@ -38,7 +38,7 @@ class SysCrypt{
         $this->crypt_key=NULL;
     }
 }
-    $m = new SysCrypt();
+    // $m = new SysCrypt();
     // $t = $m->encrypt('53788158634402140');
     // $t2 = $m->decrypt($t);
     

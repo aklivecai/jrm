@@ -35,15 +35,15 @@ foreach (array(
     $tags = ProductMoving::model()->getProductMovings($key, $product_id);
     
     $template = "<div class=\"list-view\">{pager}</div>\n<table class=\"items table table-striped table-bordered table-condensed\"> <thead> <tr> 
-				<th>{$m->getAttributeLabel('numbers') }</th>
-				<th>{$m->getAttributeLabel('enterprise') }</th>
-				<th>{$m->getAttributeLabel('typeid') }</th>
-				<th>数量</th>  
-				<th>{$m->getAttributeLabel('time') }</th>
-				<th>{$m->getAttributeLabel('us_launch') }</th>
-				<th>{$m->getAttributeLabel('time_stocked') }</th>
+                <th>{$m->getAttributeLabel('numbers') }</th>
+                <th>{$m->getAttributeLabel('enterprise') }</th>
+                <th>{$m->getAttributeLabel('typeid') }</th>
+                <th>数量</th>  
+                <th width='85'>{$m->getAttributeLabel('time') }</th>
+                <th>{$m->getAttributeLabel('us_launch') }</th>
+                <!--<th>{$m->getAttributeLabel('time_stocked') }</th>-->
                                         <th>{$m->getAttributeLabel('note') }</th>
-				</tr> </thead> <tbody>{items}</tbody> </table>\n<div class=\"list-view\">{pager}</div>";
+                </tr> </thead> <tbody>{items}</tbody> </table>\n<div class=\"list-view\">{pager}</div>";
     $content = $this->widget('bootstrap.widgets.TbListView', array(
         'dataProvider' => $tags,
         'itemView' => '//movings/_product_moving_list',

@@ -4,7 +4,6 @@ class MovesController extends Controller {
     public function init() {
         parent::init();
     }
-    
     public function actionClienteles() {
         $m = 'MovesForm';
         $model = new $m;

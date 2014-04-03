@@ -12,7 +12,7 @@
 <!--[if lt IE 7]> 
         <meta http-equiv="refresh" content="0; url=<?php echo Yii::app()->createUrl('/site/ie6'); ?>" />
 <![endif]-->
-<!--[if IE 8]>
+<!--[if IE 9]>
 <link href="<?php echo $this->getAssetsUrl();?>css/ie8.css" rel="stylesheet" type="text/css" />
 <![endif]-->
 <link rel='stylesheet' type='text/css' href='<?php echo $this->getAssetsUrl();?>css/fullcalendar.print.css' media='print' />

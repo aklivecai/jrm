@@ -33,7 +33,7 @@ foreach (array(1=>'purchase', 2=>'sell') as $key => $value) {
 				<th>数量</th>  
 				<th>{$m->getAttributeLabel('time')}</th>
 				<th>{$m->getAttributeLabel('us_launch')}</th>
-				<th>{$m->getAttributeLabel('time_stocked')}</th>
+				<!--<th>{$m->getAttributeLabel('time_stocked')}</th>-->
 				</tr> </thead> <tbody>{items}</tbody> </table>\n<div class=\"list-view\">{pager}</div>" ;
 	$content = $this->widget('bootstrap.widgets.TbListView', array(
 			'dataProvider' => $tags ,
