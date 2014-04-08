@@ -2,17 +2,21 @@
 /* @var $this ManageController */
 /* @var $model Manage */
 
-$this->breadcrumbs=array(
-	Tk::g('Manages') => array('admin')
-	,Tk::g('Admin')
+$this->breadcrumbs = array(
+    Tk::g('Manages') => array(
+        'admin'
+    ) ,
+    Tk::g('Admin')
 );
 
-$items = array(  
+$items = array(
     array(
-      'icon' =>'isw-plus',
-      'url' => array('create'),
-      'label'=>Tk::g('Create'),
-    )    
+        'icon' => 'isw-plus',
+        'url' => array(
+            'create'
+        ) ,
+        'label' => Tk::g('Create') ,
+    )
 );
 ?>
 
@@ -123,55 +127,63 @@ $items = array(
 	<div class="span12">
 	<div class="head clearfix">
         <div class="isw-grid"></div>
-        <h1><?php  echo Tk::g('Manages');?></h1>   
-<?php 
-$this->widget('application.components.MyMenu',array(
-      'htmlOptions'=>array('class'=>'buttons'),
-      'items'=> $items ,
+        <h1><?php echo Tk::g('Manages'); ?></h1>   
+<?php
+$this->widget('application.components.MyMenu', array(
+    'htmlOptions' => array(
+        'class' => 'buttons'
+    ) ,
+    'items' => $items,
 ));
 ?>                    
     </div>
 		<div class="block-fluid clearfix">
-<?php $this->renderPartial('_search',array('model'=>$model)); ?>
-<?php  
+<?php $this->renderPartial('_search', array(
+    'model' => $model
+)); ?>
+<?php
 
 $listOptions = Tak::gredViewOptions(false);
 $listOptions['dataProvider'] = $model->search();
 $listOptions['columns'] = array(
-		// array('class'=>'CCheckBoxColumn','name'=>'manageid','id'=>'select'), 	
-		Tak::getAdminPageCol(array(
-			  'template'=>' {view} {update}'
-			)
-			  ,'list-grid'
-		),	
-		array(
-			'name'=>'user_name',
-			'type'=>'raw',
-			'value'=>'CHtml::link($data->user_name,array("view","id"=>$data->manageid))',
-		),	
-		array(
-			'name'=>'user_nicename',
-			'type'=>'raw',
-		),		
-		array(
-			'name' => 'login_count',
-			'type'=>'raw',		
-			'headerHtmlOptions'=>array('style'=>'width: 85px'),
-		),
-		array(
-			'name'=>'last_login_time',
-			'type'=>'raw',
-			'value'=>'Tak::timetodate($data->last_login_time,4)',
-			'headerHtmlOptions'=>array('style'=>'width: 85px'),
-		),	
-		array(
-			'name' => 'user_status',
-			'headerHtmlOptions'=>array('style'=>'width: 55px'),
-			'value'=>'TakType::getStatus("status",$data->user_status)',
-			'type'=>'raw',
-		),
-	);
-	$widget = $this->widget('bootstrap.widgets.TbGridView', $listOptions);
+    // array('class'=>'CCheckBoxColumn','name'=>'manageid','id'=>'select'),
+    Tak::getAdminPageCol(array(
+        'template' => ' {view} {update}'
+    ) , 'list-grid') ,
+    array(
+        'name' => 'user_name',
+        'type' => 'raw',
+        'value' => 'CHtml::link($data->user_name,array("view","id"=>$data->manageid))',
+    ) ,
+    array(
+        'name' => 'user_nicename',
+        'type' => 'raw',
+    ) ,
+    array(
+        'name' => 'login_count',
+        'type' => 'raw',
+        'headerHtmlOptions' => array(
+            'style' => 'width: 85px'
+        ) ,
+    ) ,
+    array(
+        'name' => 'last_login_time',
+        'type' => 'raw',
+        'value' => 'Tak::timetodate($data->last_login_time,4)',
+        'headerHtmlOptions' => array(
+            'style' => 'width: 85px'
+        ) ,
+    ) ,
+    array(
+        'name' => 'user_status',
+        'headerHtmlOptions' => array(
+            'style' => 'width: 55px'
+        ) ,
+        'value' => 'TakType::getStatus("status",$data->user_status)',
+        'type' => 'raw',
+    ) ,
+);
+$widget = $this->widget('bootstrap.widgets.TbGridView', $listOptions);
 ?>
 		</div>
 	</div>

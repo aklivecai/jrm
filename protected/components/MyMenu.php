@@ -120,7 +120,7 @@ class MyMenu extends CMenu {
 			else
 				$item['linkOptions']['class'] = 'dropdown-toggle';
 
-			$item['linkOptions']['data-toggle'] = 'dropdown';
+			// $item['linkOptions']['data-toggle'] = 'dropdown';
 			$item['label'] .= '';
 		}
 
