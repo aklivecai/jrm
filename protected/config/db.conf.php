@@ -15,7 +15,7 @@ $db = array(
             'charset' => 'utf8',
             'tablePrefix'=>'tak_'
 );
-// $db['connectionString'] = 'mysql:host=127.0.0.1;dbname=test';
+// $db['connectionString'] = 'mysql:host=127.0.0.1;dbname=_b2b_ak';
 // $db['username'] = 'root';
 // $db['password'] = '';
 

@@ -82,15 +82,16 @@ class Subordinate extends CActiveRecord
 		);
 		$isbranch = $this->isbranch;
 		$contion = array(
-			' isbranch='.($isbranch?0:1),
-			"manageid<>:manageid",
+			"fromid=:fromid",
+			'isbranch='.($isbranch?0:1),
+			"manageid<>:manageid",			
 		);
 		if ($not) {
 			$contion[]=' branch <>:branch';
 		}else{
 			$contion[]=' branch =:branch';
 		}
-		$contion = sprintf(' (%s) ',implode(' AND  ',$contion));
+		$contion = sprintf(' (%s) ',implode(' AND ',$contion));
 		$sql = array($contion);
 
 		$sql[] = $this->getSqlSub($not);
@@ -103,6 +104,7 @@ class Subordinate extends CActiveRecord
 		// Tak::KD(self::initMos());
 		// Tak::KD($sql);
 		$sql = strtr($sql, $arr);
+		// Tak::KD($sql);
 		return $sql;
 	}	
 

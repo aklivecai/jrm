@@ -88,7 +88,6 @@ class Manage extends ModuleRecord {
      * 检验重复
      */
     public function checkRepetition($attribute, $params) {
-        
         $sql = array(
             "LOWER(:col)=:val"
         );
@@ -101,14 +100,12 @@ class Manage extends ModuleRecord {
             $arr[':itemid'] = $this->primaryKey;
             $sql[] = 'fromid=' . $this->fromid;
         } else {
-            if (Tak::getAdmin()) {
-                $sql[] = 'fromid=' . Tak::getFormid();
-            }
+            $sql[] = 'fromid=' . Tak::getFormid();
         }
         
         $sql = implode(' AND ', $sql);
         // Tak::KD(strtr($sql,$arr),1);
-        // if (Tak::getAdmin()) 	 Tak::KD(strtr($sql,$arr),1);
+        // if (Tak::getAdmin())      Tak::KD(strtr($sql,$arr),1);
         // 查找满足指定条件的结果中的第一行
         
         $sql = strtr($sql, $arr);
@@ -138,6 +135,7 @@ class Manage extends ModuleRecord {
                     $condition[] = 'fromid=' . Tak::getFormid();
                     // $condition[] = "user_name<>'admin'";
                     
+                    
                 }
             }
         }
@@ -158,6 +156,7 @@ class Manage extends ModuleRecord {
                 'select' => 'name,description',
                 'order' => ''
                 // ,'on'=>'name='.$this->branch
+                
                 
             ) ,
         );
@@ -294,6 +293,7 @@ class Manage extends ModuleRecord {
                 // $db->createCommand($sql)->execute();
                 // Tak::KD($sql,1);
                 
+                
             }
             // 判断是否已经存在 queryScalar
             $sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";
@@ -310,8 +310,10 @@ class Manage extends ModuleRecord {
                 $comm->setText($sql)->execute();
                 // Tak::KD($sql,1);
                 
+                
             }
             // exit;
+            
             
         }
     }
@@ -319,11 +321,11 @@ class Manage extends ModuleRecord {
     public function upActivkey() {
         $arr = Tak::getOM();
         $sql = " UPDATE :tableName SET
-		    active_time = :active_time
-		WHERE
-			 fromid = :fromid
-		     AND manageid = :manageid
-		";
+            active_time = :active_time
+        WHERE
+             fromid = :fromid
+             AND manageid = :manageid
+        ";
         $sql = strtr($sql, array(
             ':tableName' => $this->tableName() ,
             ':active_time' => $arr['time'],
@@ -339,13 +341,13 @@ class Manage extends ModuleRecord {
     public function upLogin() {
         $arr = Tak::getOM();
         $sql = " UPDATE :tableName SET
-		    last_login_ip = :last_login_ip
-		    ,login_count = login_count+1
-		    ,last_login_time = :last_login_time
-		WHERE
-			 fromid = :fromid
-		     AND manageid = :manageid
-		";
+            last_login_ip = :last_login_ip
+            ,login_count = login_count+1
+            ,last_login_time = :last_login_time
+        WHERE
+             fromid = :fromid
+             AND manageid = :manageid
+        ";
         $sql = strtr($sql, array(
             ':tableName' => $this->tableName() ,
             ':last_login_ip' => $arr['ip'],

@@ -27,7 +27,7 @@ if (Tak::getAdmin()) {
 }
 ?>
 <?php
-echo $form->dropDownList($model, 'user_status', TakType::sitems('status', '状态'));
+ $form->dropDownList($model, 'user_status', TakType::sitems('status', '状态'));
 ?>
 <?php
 echo $form->dropDownList($model, 'branch', $branchs);
