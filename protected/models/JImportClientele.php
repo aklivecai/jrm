@@ -5,7 +5,6 @@
  * @date    2014-03-15 08:20:35
  * @version $Id$
  */
-
 class JImportClientele extends JImportForm {
     public $model = 'clientele';
     public $headers = array(
@@ -44,7 +43,7 @@ class JImportClientele extends JImportForm {
         }
         return $result;
     }
-
+    
     public function import($manageid = false) {
         if (!$manageid) {
             $manageid = Tak::getPost('manageid', false);
@@ -59,7 +58,7 @@ class JImportClientele extends JImportForm {
         $arr = Tak::getOM();
         unset($arr['itemid']);
         $arr['note'] = '导入';
-        AdminLog::$isLog = false;        
+        AdminLog::$isLog = false;
         $model = new Clientele('create');
         $model->attributes = $arr;
         
@@ -67,31 +66,35 @@ class JImportClientele extends JImportForm {
         
         $newContact = 0;
         $newModels = 0;
+        $itemid = Tak::fastUuid();
         // Tak::KD($this->data);
         foreach ($this->data as $key => $value) {
+            $itemid = Tak::numAdd($itemid, $key + 2);
             $value['manageid'] = $manageid;
             $model->attributes = $value;
             // Tak::KD($model->attributes);
-            $model->industry = 0 ;
+            $model->industry = 0;
             if ($model->primaryKey > 0) {
-                $model->itemid+= $key * 2;
+                $model->itemid = $itemid;
                 $model->setIsNewRecord(true);
             }
-            if (!$model->checkRepetition('clientele_name',array())) {
-                $model->clientele_name .= Tak::timetodate($arr['time'],6);
+            if (!$model->checkRepetition('clientele_name', array())) {
+                $model->clientele_name.= Tak::timetodate($arr['time'], 6);
             }
             if ($model->save()) {
                 if ($value['nicename']) {
                     if ($contact->primaryKey > 0) {
-                        $contact->itemid+= $key * 2;
+                        $contact->itemid = $itemid;
                         $contact->setIsNewRecord(true);
                     }
                     $contact->attributes = $value;
                     $contact->clienteleid = $model->primaryKey;
                     if ($contact->save()) {
                         $newContact++;
-                    }else{
+                    } else {
                         // Tak::KD();
+                        
+                        
                     }
                 }
                 $newModels++;
@@ -111,7 +114,7 @@ class JImportClientele extends JImportForm {
         $strContact = '';
         if ($newContact > 0) {
             $strContact = sprintf('<li>导入%s：%s</li>', Tk::g('ContactpPrson') , $newContact);
-        }        
+        }
         $tarr = array(
             'add_time' => $arr['time'],
             'add_ip' => $arr['ip'],

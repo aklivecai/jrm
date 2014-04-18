@@ -98,7 +98,7 @@ array_splice($items, count($items) - 2, 0, $_itemis);
         array(
             'name' => 'accessory',
             'type' => 'raw',
-            'value' => CHtml::link($model->accessory, $model->accessory)
+            'value' => CHtml::link(basename($model->accessory),$model->accessory,array("target"=>"_blank")) ,
         ) ,
         array(
             'name' => 'add_time',

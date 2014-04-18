@@ -7,6 +7,8 @@ class Product extends ModuleRecord {
     public $price = '0.00';
     private $total = '0.00';
     private $stock = 0;
+    
+    public $warehouse_id = false;
     /**
      * @return array validation rules for model attributes.字段校验的结果
      */
@@ -121,7 +123,10 @@ class Product extends ModuleRecord {
         $criteria->compare('itemid', $this->itemid);
         $criteria->compare('fromid', $this->fromid);
         $criteria->compare('name', $this->name, true);
-        $criteria->compare('typeid', $this->typeid);
+        if ($this->typeid > 0) {
+            $criteria->compare('typeid', $this->typeid);
+        }
+        
         $criteria->compare('material', $this->material, true);
         $criteria->compare('spec', $this->spec, true);
         $criteria->compare('unit', $this->unit, true);
@@ -137,7 +142,7 @@ class Product extends ModuleRecord {
         
         $criteria->compare('status', $this->status);
         
-        $warehouse_id = Tak::getQuery('warehouse_id', false);
+        $warehouse_id = $this->warehouse_id > 0 ? $this->warehouse_id : Tak::getQuery('warehouse_id', false);
         
         if ($warehouse_id > 0) {
             $sql = sprintf("itemid in (SELECT product_id FROM %s WHERE fromid=%s AND warehouse_id='$warehouse_id'  GROUP BY itemid)", Stocks::$table, Tak::getFormid());
@@ -180,6 +185,8 @@ class Product extends ModuleRecord {
             $alias = $this->tableAlias;
         } else {
             // $alias = 't';
+            
+            
         }
         if ($alias) {
             $sql = $alias . '.' . $sql;
@@ -193,7 +200,9 @@ class Product extends ModuleRecord {
             //添加数据时候
             if ($this->isNewRecord) {
             } else {
-                //修改数据时候                
+                //修改数据时候
+                
+                
             }
         }
         return $result;
@@ -250,7 +259,7 @@ class Product extends ModuleRecord {
     }
     public function isDel() {
         $sql = " SELECT count(s.itemid) FROM :table  AS s
-    	 		  WHERE s.product_id = :itemid ";
+                  WHERE s.product_id = :itemid ";
         $sql = strtr($sql, array(
             ':table' => ProductMoving::$table,
             ':itemid' => $this->itemid,
@@ -295,10 +304,10 @@ class Product extends ModuleRecord {
         }
         $condition = implode(' AND ', $condition);
         $sql = ' SELECT  SUM(s.stotals) AS stotal,SUM(p.price*s.stotals) AS ptotal FROM :product p
-	       	,(SELECT SUM(stocks) AS stotals,product_id  FROM :stock WHERE product_id in ( 
-					SELECT itemid FROM :product WHERE :condition 
-	       		)  GROUP BY product_id) s
-	        WHERE p.itemid = s.product_id ';
+            ,(SELECT SUM(stocks) AS stotals,product_id  FROM :stock WHERE product_id in ( 
+                    SELECT itemid FROM :product WHERE :condition 
+                )  GROUP BY product_id) s
+            WHERE p.itemid = s.product_id ';
         
         $sql = strtr($sql, array(
             ':stock' => Stocks::$table,

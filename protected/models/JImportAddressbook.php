@@ -19,15 +19,15 @@ class JImportAddressbook extends JImportForm {
         'I' => '备注',
     );
     public $cols = array(
-         'A' => 'name',
-         'B' => 'catename',
-         'C' => 'position',
-         'D' => 'sex',
-         'E' => 'email',
-         'F' => 'telephone',
-         'G' => 'phone',
-         'H' => 'address',
-         'I' =>  'note',
+        'A' => 'name',
+        'B' => 'catename',
+        'C' => 'position',
+        'D' => 'sex',
+        'E' => 'email',
+        'F' => 'telephone',
+        'G' => 'phone',
+        'H' => 'address',
+        'I' => 'note',
     );
     public $model = 'addressBook';
     
@@ -56,6 +56,8 @@ class JImportAddressbook extends JImportForm {
         $newProducts = 0;
         // Tak::KD($this->data,1);
         foreach ($this->data as $key => $value) {
+            $itemid = Tak::numAdd($itemid, $key + 2);
+
             if (isset($cates[$value['catename']])) {
                 $groups_id = $cates[$value['catename']];
             } else {
@@ -79,7 +81,7 @@ class JImportAddressbook extends JImportForm {
             }
             
             if ($model->itemid > 0) {
-                $model->itemid+= $key * 2;
+                $model->itemid = $itemid;
                 $model->setIsNewRecord(true);
             }
             $model->groups_id = $groups_id;
@@ -87,17 +89,16 @@ class JImportAddressbook extends JImportForm {
                 $newProducts++;
             } else {
                 // Tak::KD($model->getErrors(),1);
-                
             }
         }
         AdminLog::$isLog = true;
         $str = '
-			<ul>
-				<li>
-					导入%s：%s个<a href="%s">点击浏览</a>
-				</li>%s
-			</ul>
-		';
+            <ul>
+                <li>
+                    导入%s：%s个<a href="%s">点击浏览</a>
+                </li>%s
+            </ul>
+        ';
         $strCate = '';
         if (count($newCates) > 0) {
             $_str = '';

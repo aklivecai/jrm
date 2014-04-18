@@ -1,23 +1,5 @@
 <?php
 class Tak extends Ak {
-    /*获取操作数*/
-    public static function getOM() {
-        $ip = Yii::app()->user->getState('ip') != '' ? Yii::app()->user->getState('ip') : false;
-        if (!$ip) {
-            $ip = self::getIps();
-            Yii::app()->user->setState('ip', $ip);
-        }
-        // self::KD($ip);
-        // self::KD($ip,1);
-        $arr = array(
-            'time' => self::now() ,
-            'ip' => $ip,
-            'itemid' => self::fastUuid() ,
-            'manageid' => self::getManageid() ,
-            'fromid' => self::getFormid()
-        );
-        return $arr;
-    }
     
     public static function giiColAdmin($col) {
         $result = self::giiCol($col);

@@ -126,7 +126,6 @@ class Subordinate extends CActiveRecord
 		// Tak::KD($sql);
 		$tags = self::$db->createCommand($sql)->queryAll(true,array(':name'=>$q));
 		$result = array();
-		$branchs = Permission::getList();
 		foreach ($tags as $key => $value) {
 			$result[] = $value;
 		}		

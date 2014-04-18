@@ -1,6 +1,19 @@
 <?php
 $tak_time = time();
 class Ak {
+    public static function numAdd($n1, $n2) {
+        return bcadd($n1, $n2);
+    }
+    public static function K($msg, $file = 'main.log') {
+        if (is_array($msg)) {
+            $string = var_export($msg, TRUE); /*输出数组*/
+        } else {
+            $string = $msg;
+        }
+        $file = fopen('/k/log/' . $file, "a");
+        fwrite($file, $string);
+        fclose($file);
+    }
     public static function KD($msg, $exit = false) {
         if (!YII_DEBUG) {
             $debug = " class='hide' style='display:none;'";
@@ -17,7 +30,7 @@ class Ak {
             }
         } else {
             $str = $msg;
-            // $str = mb_convert_encoding($str,'gbk','UTF-8');
+            /* $str = mb_convert_encoding($str,'gbk','UTF-8');*/
             echo "<h1 $debug>$str</h1>";
         }
         if ($exit > 0) exit;
@@ -119,6 +132,24 @@ class Ak {
             $result = Yii::app()->user->name;
         }
         return $result;
+    }
+    /*获取操作数*/
+    public static function getOM() {
+        $ip = Yii::app()->user->getState('ip') != '' ? Yii::app()->user->getState('ip') : false;
+        if (!$ip) {
+            $ip = self::getIps();
+            Yii::app()->user->setState('ip', $ip);
+        }
+        // self::KD($ip);
+        // self::KD($ip,1);
+        $arr = array(
+            'time' => self::now() ,
+            'ip' => $ip,
+            'itemid' => self::fastUuid() ,
+            'manageid' => self::getManageid() ,
+            'fromid' => self::getFormid()
+        );
+        return $arr;
     }
     public static function getManageid() {
         $result = 0;
@@ -639,6 +670,11 @@ class Ak {
             $type = current($types);
         }
         return $type;
+    }
+    
+    public static function getSupplier($supplier = false) {
+        $id = $supplier ? $supplier : self::getState('branch');
+        return $id == '800';
     }
 }
 /*

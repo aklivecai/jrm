@@ -571,7 +571,7 @@ if (btnAffirm.length>0) {
             if (data.val.val()>0) {
                 wurl+='&id='+data.val.val();
             };
-            window.open(wurl, "windowName" ,"width=800,height=650,resizable=0,scrollbars=1");
+        window.open(wurl, "windowName" ,"width=800,height=650,resizable=0,scrollbars=1");
         }else if(t.hasClass('clearReferenceSelection')){
             data.txt.val(data.txt.attr('placeholder'));
             data.val.val('');

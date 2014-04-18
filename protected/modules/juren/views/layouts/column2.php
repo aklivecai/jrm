@@ -10,12 +10,14 @@
 
 <div class="portlet" id="yw2">
 <div class="portlet-decoration">
-<div class="portlet-title"><?php echo Tk::g('Test Memebers')?></div>
+<div class="portlet-title"><?php echo Tk::g('Test Memebers') ?></div>
 </div>
 <div class="portlet-content">
 		<?php
-			$this->widget('zii.widgets.CMenu',array('items'=>$this->menu));
-		 ?>
+$this->widget('zii.widgets.CMenu', array(
+    'items' => $this->menu
+));
+?>
 </div>
 </div>
 

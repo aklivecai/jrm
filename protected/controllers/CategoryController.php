@@ -10,11 +10,33 @@ class CategoryController extends Controller {
         $this->cateUrl = $this->getLink();
         parent::init();
     }
-    public function loadModel($id,$isload=false) {
-        if ($isload||$this->_model === null) {
+
+    public function filters() {
+        // $arr = parent::filters();
+        $arr = array();
+        $arr[] = 'selectOwn + admin';
+        $arr[] = 'rights';
+        return $arr;
+    }    
+    public function filterselectOwn($filterChain) {
+        // $params=array('item'=>$model); // set params array for Rights' BizRule
+        $params = array(
+            'm' => Tak::getQuery('m'),
+            'action' => Tak::getQuery('action'),
+        );
+        if (Tak::checkAccess('ProductCateSelect', $params)){
+            $filterChain->removeAt(1);    
+        }        
+        $filterChain->run();
+    }
+    public function loadModel($id, $isload = false) {
+        if ($isload || $this->_model === null) {
             $m = $this->modelName;
             $m = $m::model();
-            $m = $m->findByAttributes(array('catid'=>$id,'module'=>$this->m));
+            $m = $m->findByAttributes(array(
+                'catid' => $id,
+                'module' => $this->m
+            ));
             if ($m === null) {
                 $this->error();
             }
@@ -23,21 +45,18 @@ class CategoryController extends Controller {
         return $this->_model;
     }
 
-    public function filters() {
-        return array(
-            'rights',
-        );
-    }    
-
     public function allowedActions() {
-        $result = array(parent::allowedActions(),'select');
-        return implode(',',$result);
-    }        
+        $result = array(
+            parent::allowedActions() ,
+            'select'
+        );
+        return implode(',', $result);
+    }
     protected function getLink($action = 'Admin') {
         return $this->createUrl($action, array(
             'm' => $this->m
         ));
-    }    
+    }
     protected function getType() {
         $m = Tak::getQuery('m', false);
         if (!$m || !Category::getModel($m)) {
@@ -46,7 +65,7 @@ class CategoryController extends Controller {
         return ucwords($m);
     }
     
-    public function actionAdmin($action=false,$id=false) {
+    public function actionAdmin($action = false, $id = false) {
         $m = $this->modelName;
         $model = new $m('search');
         $model->unsetAttributes();
@@ -54,39 +73,39 @@ class CategoryController extends Controller {
             $model->attributes = $_GET[$m];
         }
         $model->setModel($this->m);
-        if ($action=='select') {
+        if ($action == 'select') {
             $this->_setLayout('//layouts/columnWindows');
             $view = '_show';
-        }else{
+        } else {
             $view = $this->templates['admin'];
         }
-        $this->render($view,array(
+        $this->render($view, array(
             'model' => $model,
             'id' => $id,
             'action' => $action,
         ));
     }
-
+    
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
         $model->scenario = 'update';
         $m = $this->modelName;
         if (isset($_POST[$m])) {
-            if ($model->parentid!=$_POST[$m]['parentid']) {
+            if ($model->parentid != $_POST[$m]['parentid']) {
                 $model->setChangePid($model->parentid);
             }
             $model->attributes = $_POST[$m];
-             $model->setModel($this->m);
+            $model->setModel($this->m);
             if ($model->save()) {
-                   $this->redirect($this->getLink().'&id='.$model->getItemid());
+                $this->redirect($this->getLink() . '&id=' . $model->getItemid());
             }
         }
         $this->render($this->templates['update'], array(
             'model' => $model,
         ));
-    }    
+    }
     
-    public function actionCreate($action=false) {
+    public function actionCreate($action = false) {
         $m = $this->modelName;
         $model = new $m('create');
         if (isset($_POST[$m])) {
@@ -96,12 +115,12 @@ class CategoryController extends Controller {
             if ($model->save()) {
                 if ($this->returnUrl) {
                     $this->redirect($this->returnUrl);
-                }elseif($action=='select'){
-                        $this->_setLayout('//layouts/columnWindows');
-                        $this->render('create', array(
-                            'model' => $model,
-                        ));
-                        exit;
+                } elseif ($action == 'select') {
+                    $this->_setLayout('//layouts/columnWindows');
+                    $this->render('create', array(
+                        'model' => $model,
+                    ));
+                    exit;
                 } else {
                     if ($this->isAjax) {
                         if (isset($_POST['getItemid'])) {
@@ -109,7 +128,7 @@ class CategoryController extends Controller {
                             exit;
                         }
                     } else {
-                        $this->redirect($this->getLink().'&id='.$model->getItemid());
+                        $this->redirect($this->getLink() . '&id=' . $model->getItemid());
                     }
                 }
             }
@@ -128,20 +147,19 @@ class CategoryController extends Controller {
             // Tak::KD($model->getError('name'));
             echo $result;
         } else {
-
         }
         exit;
         if ($this->isAjax) {
             exit;
         }
-        $this->redirect(array("admin"));
-    }    
-
+        $this->redirect(array(
+            "admin"
+        ));
+    }
+    
     public function actionList($m, $id = false) {
         $this->render('list', array(
             'data' => $data,
         ));
     }
-
-
 }

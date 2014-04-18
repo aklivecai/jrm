@@ -5,7 +5,7 @@ class ManageController extends Controller {
         parent::init();
         $this->primaryName = 'manageid';
         $this->modelName = 'Manage';
-        $this->branchs = Permission::getList();
+        $this->branchs = Permission::getList(true);
         if (count($this->branchs) == 0) {
             $this->redirect(array(
                 '/permission/create'
@@ -161,7 +161,6 @@ class ManageController extends Controller {
             'dataJurisdiction' => $dataJurisdiction,
             'formModel' => $formModel,
             'assignSelectOptions' => $assignSelectOptions,
-
             'subusers' => $subusers,
         ));
     }

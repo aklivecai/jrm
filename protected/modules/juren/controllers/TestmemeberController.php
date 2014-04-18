@@ -3,8 +3,7 @@ class TestMemeberController extends JController {
     public $defaultAction = 'admin';
     public function init() {
         $this->modelName = 'Test9Memeber';
-        parent::init();
-        
+        parent::init();        
         $this->menu = array(
             'admin' => array(
                 'label' => Tk::g('Admin') ,

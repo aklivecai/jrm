@@ -45,6 +45,13 @@ class SiteController extends Controller {
         );
     }
     
+    public function actionSupplier($action=false) {
+        if ($action=='preview') {
+            $this->_setLayout('//layouts/column2');
+        }       
+        $this->render('supplier');
+    }
+    
     public function actionIndex() {
         if (Tak::isGuest()) {
             // Tak::KD($_GET);
@@ -66,8 +73,12 @@ class SiteController extends Controller {
             }
         }
         $this->_setLayout();
-        
-        $this->render('index');
+        if (Tak::getSupplier()) {
+            # code...
+            $this->render('supplier');
+        } else {
+            $this->render('index');
+        }
     }
     
     public function actionIe6() {
@@ -285,7 +296,6 @@ class SiteController extends Controller {
     
     public function actionProfile() {
         $this->_setLayout();
-        
         $m = 'Manage';
         $model = $m::model()->findByPk(Tak::getManageid());
         if (isset($_POST[$m])) {
@@ -314,18 +324,17 @@ class SiteController extends Controller {
         $this->render('appcache');
     }
     
-    public function actionDatabase() {        
+    public function actionDatabase() {
         $dtables = $tables = $C = array();
         $i = $j = $dtotalsize = $totalsize = 0;
         $DT_PRE = 'tak_';
-        $db_name = 'test';        
+        $db_name = 'test';
         // Tak::KD(Yii::app()->db->schema->getTableNames());
         foreach (Yii::app()->db->schema->getTables() as $name => $table) {
-
         }
-
+        
         $this->_setLayout();
-        $this->render('database');        
+        $this->render('database');
         exit;
         
         $sql = "SHOW TABLES FROM `$db_name`";
@@ -371,7 +380,6 @@ class SiteController extends Controller {
         }
         $dtotalsize = round($dtotalsize / 1024 / 1024, 2);
         $totalsize = round($totalsize / 1024 / 1024, 2);
-    
     }
     /**
      * 还原数据库

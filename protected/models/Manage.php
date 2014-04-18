@@ -155,15 +155,12 @@ class Manage extends ModuleRecord {
                 'condition' => '',
                 'select' => 'name,description',
                 'order' => ''
-                // ,'on'=>'name='.$this->branch
-                
-                
+                /*,'on'=>'name='.$this->branch*/
             ) ,
         );
     }
     public function search() {
-        $criteria = new CDbCriteria;
-        
+        $criteria = new CDbCriteria;        
         if (Tak::getAdmin()) {
             if ($this->fromid) {
                 $criteria->compare('fromid', $this->fromid);
@@ -249,8 +246,7 @@ class Manage extends ModuleRecord {
                 $this->add_time = $arr['time'];
                 $this->add_ip = $arr['ip'];
                 $this->fromid = $arr['fromid'];
-                $this->salt = $this->generateSalt();
-                
+                $this->salt = $this->generateSalt();                
                 if (!$this->user_status) {
                     $this->user_status = TakType::STATUS_DEFAULT;
                 }
@@ -279,29 +275,25 @@ class Manage extends ModuleRecord {
             ':fromid' => $this->fromid,
             ':userid' => $this->manageid,
             ':tabl' => '{{rbac_authassignment}}',
-        );
-        
+        );        
         if ($this->isNewRecord || $this->oldbranch >= 0) {
             $comm = Tak::getDb('db')->createCommand();
             // Tak::KD($this->oldbranch);
             // 删除就记录
             if ($this->oldbranch >= 0 && $this->oldbranch != '') {
                 $arr[':oldbranch'] = $this->oldbranch;
-                $sql = "DELETE FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':oldbranch'";
+                //$sql = "DELETE FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':oldbranch'";
+                $sql = "DELETE FROM :tabl WHERE fromid=:fromid AND  userid=:userid";
                 $sql = strtr($sql, $arr);
                 $comm->setText($sql)->execute();
                 // $db->createCommand($sql)->execute();
                 // Tak::KD($sql,1);
-                
-                
             }
             // 判断是否已经存在 queryScalar
-            $sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";
-            
+            $sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";            
             $sql = strtr($sql, $arr);
             $rows = $comm->setText($sql)->queryScalar();
-            // Tak::KD($rows);
-            
+            // Tak::KD($rows);            
             // Tak::KD($rows,1);
             if ($rows == 0) {
                 $sql = "INSERT INTO :tabl (itemname,fromid,userid,data) VALUES(:itemname,:fromid,:userid,'N;')";
@@ -309,12 +301,8 @@ class Manage extends ModuleRecord {
                 // $db->createCommand($sql)->execute();
                 $comm->setText($sql)->execute();
                 // Tak::KD($sql,1);
-                
-                
             }
             // exit;
-            
-            
         }
     }
     

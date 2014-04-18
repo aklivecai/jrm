@@ -23,10 +23,8 @@ $items = array(
 
 	<!--[if !IE]><!-->
 	<style>
-	@media 
-	only screen and (max-width: 500px),
-	(min-device-width: 568px) and (max-device-width: 1024px)  {
-	
+	@media  only screen and (max-width: 500px),
+	(min-device-width: 568px) and (max-device-width: 1024px)  {	
 	#list-grid a
 	#list-grid span,{
 		float: none;
@@ -73,7 +71,6 @@ $items = array(
 			background-color: none;
 			float: left;
 			width:48%;
-
 		}
 		#list-grid thead tr:first-child{
 		}
@@ -92,7 +89,7 @@ $items = array(
 			border: none;
 			border-bottom: 1px solid #EEE; 
 			position: relative;
-			padding-left: 50%; 
+			padding-left: 25%; 
 		}
 		
 		#list-grid  td:before { 
@@ -142,7 +139,6 @@ $this->widget('application.components.MyMenu', array(
     'model' => $model
 )); ?>
 <?php
-
 $listOptions = Tak::gredViewOptions(false);
 $listOptions['dataProvider'] = $model->search();
 $listOptions['columns'] = array(

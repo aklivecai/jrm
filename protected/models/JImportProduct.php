@@ -29,13 +29,17 @@ class JImportProduct extends JImportForm {
         'I' => 'stocks',
     );
     public $model = 'product';
-    
     public function checkS($col, $value, $index) {
         $result = false;
         if (($col == 'A' || $col == 'B') && $value == '') {
             $result = true;
         } elseif ($col == 'I' && $value != '') {
-            $result = !(Tak::isNumeric($value) && $value > 0);
+            if (Tak::isNumeric($value) || $value == 0) {
+                $v = (int)$value;
+                $result = !($v >= 0);
+            } else {
+                $result = true;
+            }
         } elseif ($col == 'H' && $value != '') {
             $result = !Tak::isPrice($value);
         }
@@ -50,6 +54,8 @@ class JImportProduct extends JImportForm {
         $arr['note'] = '导入';
         $cates = $this->getCates();
         $sqls = array();
+
+        // 不记录日志
         AdminLog::$isLog = false;
         
         $cate = new Category('create');
@@ -63,8 +69,10 @@ class JImportProduct extends JImportForm {
         $stock->attributes = $arr;
         $newCates = array();
         $newProducts = 0;
+        $itemid = Tak::fastUuid();
         // Tak::KD($this->data);
         foreach ($this->data as $key => $value) {
+            $itemid = Tak::numAdd($itemid, $key + 2);            
             if (isset($cates[$value['catename']])) {
                 $catid = $cates[$value['catename']];
             } else {
@@ -79,7 +87,7 @@ class JImportProduct extends JImportForm {
             }
             $product->attributes = $value;
             if ($product->itemid > 0) {
-                $product->itemid+= $key * 2;
+                $product->itemid = $itemid;
                 $product->setIsNewRecord(true);
             }
             if ($product->price == '') {
@@ -89,7 +97,7 @@ class JImportProduct extends JImportForm {
             if ($product->save()) {
                 if ($warehouse_id > 0 && $product->stocks > 0) {
                     if ($stock->itemid > 0) {
-                        $stock->itemid+= $key * 2;
+                        $stock->itemid = $itemid;
                         $stock->setIsNewRecord(true);
                     }
                     $stock->attributes = array(
@@ -99,20 +107,22 @@ class JImportProduct extends JImportForm {
                     );
                     $stock->warehouse_id = $warehouse_id;
                     if ($stock->save()) {
-                        // Tak::KD($warehouse_id);
-                        // Tak::KD($stock->warehouse_id);
-                        // return false;                        
+                        /*Tak::KD($warehouse_id);
+                        Tak::KD($stock->warehouse_id);
+                        return false;*/
                     } else {
-                        // Tak::KD($stock->getErrors());
-                        // return false;                        
+                        /*Tak::KD($stock->getErrors());
+                         return false;*/
                     }
                 }
                 $newProducts++;
             } else {
-                // Tak::KD($product->getErrors());
+                /* Tak::KD($product->getErrors());*/
             }
         }
+        // 记录日志
         AdminLog::$isLog = true;
+
         $str = '
             <ul>
                 <li>

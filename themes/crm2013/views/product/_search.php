@@ -21,8 +21,7 @@ $this->renderPartial('/category/select', array(
 }
   if (isset($warehouse)) {
     echo JHtml::dropDownList('warehouse_id',$_GET['warehouse_id'],Warehouse::toSelects(Tk::g('Warehouse')));
-  }
-  
+  }  
 
   echo $form->textFieldRow($model,'name',array('size'=>10,'maxlength'=>10)); 
 ?>

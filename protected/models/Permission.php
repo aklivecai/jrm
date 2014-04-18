@@ -95,7 +95,7 @@ class Permission extends CActiveRecord {
         }
         return $result;
     }
-    // 删除部门,清空部门下的所有权限
+    // 删除部门,清空部门下的所有权限,部门下的所有人的权限
     protected function afterDelete() {
         parent::afterDelete();
         $sql = "DELETE FROM {{rbac_authitemchild}} WHERE parent=:parent";
@@ -109,13 +109,16 @@ class Permission extends CActiveRecord {
         self::$db->createCommand($sql)->execute($arr);
     }
     
-    public static function getList() {
+    public static function getList($isload = false) {
         $model = new self('search');
         $tags = $model->search()->getData();
         $reulst = array();
         foreach ($tags as $key => $value) {
             $reulst[$value['name']] = $value['description'];
         }
+        if ($isload) {
+            $reulst['800'] = '供应商';
+        }        
         // $reulst['']
         return $reulst;
     }

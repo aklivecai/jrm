@@ -25,6 +25,7 @@ class JController extends CController {
             $this->layout = $this->module->layout;
             // Tak::KD($_GET);
             
+            
         }
         
         $this->returnUrl = Yii::app()->request->getParam('returnUrl', null);

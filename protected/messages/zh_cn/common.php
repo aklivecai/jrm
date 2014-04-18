@@ -14,6 +14,7 @@
  * @version $Id: $
  */
 return array(
+    'All' => '全部',
     ':name assigned.' => ':name 已指派',
     'Database back' => '数据备份',
     'Error' => '错误',

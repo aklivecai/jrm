@@ -7,8 +7,6 @@ $this->breadcrumbs=array(
 	Tk::g('Admin'),
 );
 ?>
-
-
 <?php echo CHtml::link(Tk::g('Search'),'#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
