@@ -1,5 +1,5 @@
 <?php
-class Category extends LRecord {    
+class Category extends LRecord {
     private $scondition = false; /*默认搜索条件*/
     public static $table = '{{category}}';
     public static $models = array(

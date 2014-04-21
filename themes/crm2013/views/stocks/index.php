@@ -10,15 +10,15 @@ $this->breadcrumbs = array(
 $items = Tak::getListMenu();
 ?>
 <div class="row-fluid">
-	<div class="span12">
-	<div class="head clearfix">
+    <div class="span12">
+    <div class="head clearfix">
         <div class="isw-grid"></div>
         <h1><?php echo Tk::g(array(
     $this->modelName
 )) ?></h1>
-	</div>	
+    </div>  
 
-	<div class="block-fluid clearfix">
+    <div class="block-fluid clearfix">
 
 <?php $this->renderPartial('/product/_search', array(
     'model' => $model,
@@ -26,7 +26,6 @@ $items = Tak::getListMenu();
 )); ?>
 
 <?php
-
 $options = Tak::gredViewOptions(false);
 $tags = $model->search();
 $str = '';
@@ -53,6 +52,10 @@ $columns = array(
         'name' => 'name',
         'type' => 'raw',
         'value' => 'CHtml::link($data->name,array("viewProduct","id"=>$data->primaryKey))',
+    ) ,
+    array(
+        'name' => 'typeid',
+        'value' => 'Category::getProductName($data->typeid)',
     ) ,
     array(
         'name' => 'material',
@@ -85,6 +88,6 @@ $options['columns'] = $columns;
 $options['dataProvider'] = $tags;
 $widget = $this->widget('bootstrap.widgets.TbGridView', $options);
 ?>
-		</div>
-	</div>
+        </div>
+    </div>
 </div>

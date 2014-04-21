@@ -108,11 +108,10 @@ $columns = array(
         // 'value' => 'CHtml::link($data->name,array("viewProduct","id"=>$data->primaryKey))',
         // 'value' => '$data->name,array("viewProduct","id"=>$data->primaryKey)',
         
-        
     ) ,
     array(
         'name' => 'typeid',
-        'value' => '$data->iType->typename',
+        'value' => 'Category::getProductName($data->typeid)',
     ) ,
     array(
         'name' => 'material',

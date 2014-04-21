@@ -65,16 +65,16 @@ class Product extends ModuleRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         $condition = array(
-            "item='product'"
+            "module='product'"
         );
-        $condition[] = 'fromid=' . Tak::getFormid();
+        // $condition[] = 'fromid=' . Tak::getFormid();
         $sqlStocks = $this->getConAlias('itemid=iStocks.product_id');
         return array(
             'iType' => array(
                 self::BELONGS_TO,
-                'TakType',
+                'Category',
                 'typeid',
-                'select' => 'typename',
+                'select' => 'catename',
                 'condition' => implode(" AND ", $condition)
             ) ,
             'iStocks' => array(
