@@ -31,7 +31,7 @@ foreach ($tags as $k1 => $v1) {
       }
       $_tags[] = array(
         'label'=>$label,
-        'url'=> $model->getLink($key,$view),
+        'url'=> $model->getLink(Tak::setSId($key),$view),
         'icon' =>'chevron-right',
       );
     }

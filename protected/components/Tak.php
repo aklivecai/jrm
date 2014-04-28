@@ -1,6 +1,5 @@
 <?php
 class Tak extends Ak {
-    
     public static function giiColAdmin($col) {
         $result = self::giiCol($col);
         if (!$result) {
@@ -107,7 +106,7 @@ class Tak extends Ak {
                 'icon' => 'edit',
                 'url' => array(
                     'update',
-                    'id' => $itemid
+                    'id' => self::setSId($itemid)
                 )
             ) ,
             '---',
@@ -116,7 +115,7 @@ class Tak extends Ak {
                 'icon' => 'trash',
                 'url' => array(
                     'delete',
-                    'id' => $itemid
+                    'id' => self::setSId($itemid)
                 ) ,
                 'linkOptions' => array(
                     'class' => 'delete'
@@ -150,7 +149,7 @@ class Tak extends Ak {
               'url' => '#',
               'label'=>Tk::g('Update'),
               'linkOptions'=>array('class'=>'edit'),
-            )    
+            )
             ,array(
               'icon' =>'isw-delete',
               'url' => '#',
@@ -267,7 +266,7 @@ class Tak extends Ak {
             'training' => ',training,',
             'clientele' => ',clientele,contactpPrson,contact,clienteles,',
             'Pss' => ',purchase,stocks,product,sell,',
-            'setting' => ',category,changepwd,profile,sell,'
+            'setting' => ',category,changepwd,profile,sell,orderconfig,'
         );
         $items = array(
             'index' => array(
@@ -324,7 +323,7 @@ class Tak extends Ak {
                         'visible' => self::checkAccess('Category.*') ,
                     ) ,
                     array(
-                        'icon' => 'certificate',
+                        'icon' => 'shopping-cart',
                         'label' => sprintf($strSpan, Tk::g(array(
                             'Order',
                             'Config'
@@ -335,7 +334,7 @@ class Tak extends Ak {
                         'visible' => self::checkAccess('Order.config') ,
                     ) ,
                     'product' => array(
-                        'icon' => 'th',
+                        'icon' => 'screenshot',
                         'url' => array(
                             '/Import/Product'
                         ) ,
@@ -346,7 +345,7 @@ class Tak extends Ak {
                         'visible' => self::checkAccess('Import.Product') ,
                     ) ,
                     'iClientele' => array(
-                        'icon' => 'th',
+                        'icon' => 'screenshot',
                         'url' => array(
                             '/Import/Clientele'
                         ) ,
@@ -357,7 +356,7 @@ class Tak extends Ak {
                         'visible' => self::checkAccess('Import.Clientele') ,
                     ) ,
                     'iaddressbook' => array(
-                        'icon' => 'th',
+                        'icon' => 'screenshot',
                         'url' => array(
                             '/Import/AddressBook'
                         ) ,
@@ -714,17 +713,9 @@ class Tak extends Ak {
                         )
                     ) ,
                     array(
-                        'icon' => 'th-large',
-                        'label' => sprintf($strSpan, Tk::g('订单变更')) ,
-                        'url' => array(
-                            '/Site/Order'
-                        ) ,
-                        'visible' => YII_DEBUG
-                    ) ,
-                    array(
                         'icon' => 'pencil',
                         'label' => sprintf($strSpan, Tk::g('自助下单')) ,
-                        'url' => 'http://u.9juren.com/order/cart/' . self::getFormid() ,
+                        'url' => sprintf("%s/order/cart/%s", Yii::app()->params['userUrl'], self::getFormid()) ,
                         'linkOptions' => array(
                             'target' => '_blank'
                         )
@@ -1186,7 +1177,7 @@ class Tak extends Ak {
                 'label' => Tk::g($key) ,
                 'url' => array(
                     $view,
-                    'id' => $value
+                    'id' => self::setSId($value) ,
                 ) ,
                 'icon' => 'chevron-right',
                 'linkOptions' => array(
@@ -1265,13 +1256,41 @@ class Tak extends Ak {
         }
         return self::getCryptNum($id, $str);
     }
-    
-    public static function encrypt($str) {
-        $m = new SysCrypt();
-        return $m->encrypt($str);
+    /*解密ID*/
+    public static function getSId($id) {
+        if (!is_numeric($id) && strlen($id) >= 35) {
+            $result = Tak::getCryptKey($id);
+        } else {
+            $result = $id;
+        }
+        return $result;
     }
-    public static function decrypt($str) {
-        $m = new SysCrypt();
-        return $m->decrypt($str);
+    /*加密要传输的ID*/
+    public static function setSId($id) {
+        if (!is_numeric($id) || strlen($id) >= 35) {
+            $result = $id;
+        } else {
+            $result = Tak::setCryptKey($id, 1800);
+        }
+        return $result;
+    }
+    
+    public static function reptHtml($data) {
+        $content = preg_replace("/<a[^>]*>/i", "", $content);
+        $content = preg_replace("/<\/a>/i", "", $content);
+        $content = preg_replace("/<div[^>]*>/i", "", $content);
+        $content = preg_replace("/<\/div>/i", "", $content);
+        $content = preg_replace("/<!--[^>]*-->/i", "", $content); //注释内容
+        $content = preg_replace("/style=.+?['|\"]/i", '', $content); //去除样式
+        $content = preg_replace("/class=.+?['|\"]/i", '', $content); //去除样式
+        $content = preg_replace("/id=.+?['|\"]/i", '', $content); //去除样式
+        $content = preg_replace("/lang=.+?['|\"]/i", '', $content); //去除样式
+        $content = preg_replace("/width=.+?['|\"]/i", '', $content); //去除样式
+        $content = preg_replace("/height=.+?['|\"]/i", '', $content); //去除样式
+        $content = preg_replace("/border=.+?['|\"]/i", '', $content); //去除样式
+        $content = preg_replace("/face=.+?['|\"]/i", '', $content); //去除样式
+        $content = preg_replace("/face=.+?['|\"]/", '', $content); //去除样式只允许
+        
+        
     }
 }

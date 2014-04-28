@@ -202,8 +202,3 @@ $this->widget('ext.AkCListView', array(
 </div>
 </div>
 <div class="dr"><span></span></div>
-<!--
-<?php
-echo Tak::fastUuid() + 1;
-?>
--->

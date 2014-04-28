@@ -1,46 +1,31 @@
 <?php
-/* @var $this OrderController */
-/* @var $model Order */
-
-$this->breadcrumbs=array(
-	Tk::g('Order')=>array('admin'),
-	Tk::g(array('Order','Config')),
+$this->breadcrumbs = array(
+    Tk::g('Order') => array(
+        'order/admin'
+    ) ,
+    Tk::g('Order Flow') ,
 );
-
- foreach ($flowTypes as $key => $value) {
- 	# code...
- }
-
 ?>
+<div class="page-header">
+    <h1><?php echo Tk::g('Order Flow') ?></h1>
+</div>
 <div class="block-fluid">
+<?php $this->tab(); ?>
     <div class="row-fluid">
-<?php $this->widget('bootstrap.widgets.TbNavbar', array(
-    'brand'=>'',
-    'brandUrl'=>'#',
-    'fixed'=>'false',
-    'fixed'=>'true',
-    'collapse'=>true, // requires bootstrap-responsive.css
 
-    'items'=>array(
-        array(
-            'class'=>'bootstrap.widgets.TbMenu',
-            'items'=>array(
-                array('label'=>Tk::g(array('Order','Config')), 'url'=>"#", 'active'=>true,'linkOptions'=>array('class'=>"",'id'=>'create-category')),
-            ),
-        ),
-    ),
-)); 
-?>
-<form class="form-inline" id="taktype-form" action="<?php echo $this->createUrl('flow',array('act'=>'create'))?>" method="post"> 
+<form class="form-inline" id="taktype-form" action="<?php echo $this->createUrl('flow', array(
+    'act' => 'create'
+)) ?>" method="post"> 
 <div class="input-prepend"><input class="input-medium" placeholder="流程名字" name="flow[typename]" id="TakType_name" type="text" maxlength="25" required="required"></div><button class="btn" type="submit">添加</button>
 <ul id="sortable-flow">
-	<?php $this->renderPartial('_config_flow', array('flowTypes'=>$flowTypes,));?>
+<?php $this->renderPartial('_config_flow', array(
+    'flowTypes' => $flowTypes,
+)); ?>
  </ul>
  </form>
 <div class="dr"><span></span></div>
 	<strong>提示</strong>：拖动左侧图标，即可排序
 </div>
-
 </div>
 	<script>
 	$(function() {
@@ -48,8 +33,12 @@ $this->breadcrumbs=array(
 		, sortable = addForm.find('#sortable-flow') 
 		, addName = addForm.find('#TakType_name')
 		, addUrl = addForm.attr('action')
-		, orderUrl = "<?php echo $this->createUrl('flow',array('act'=>'order')); ?>"
-		, upUrl = "<?php echo $this->createUrl('flow',array('act'=>'update')); ?>"
+		, orderUrl = "<?php echo $this->createUrl('flow', array(
+    'act' => 'order'
+)); ?>"
+		, upUrl = "<?php echo $this->createUrl('flow', array(
+    'act' => 'update'
+)); ?>"
 		, checkName = function(elem){
 			var result = elem.val()!='';
 			if (!result) {
@@ -110,14 +99,13 @@ $this->breadcrumbs=array(
 			if(confirm('你确定要删除信息吗?')){
 				updateTable($(this).attr('href'),'');
 			}
-			t.removeClass('bor-error');
-			
+			t.removeClass('bor-error');			
 		});
 		sortable.disableSelection();
 	});
 	</script>
 <style>
-#sortable-flow { list-style-type: none; margin: 0;  padding: .2em;width:260px;}
+#sortable-flow { list-style-type: none; margin: 0;  padding: .2em;width:260px;margin-left:1em;}
 #taktype-form .input-prepend{padding-left: 25px;}
 #sortable-flow li { margin:5px 0 ; padding:3px 0;}
 </style>

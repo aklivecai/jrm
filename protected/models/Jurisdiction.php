@@ -37,9 +37,8 @@ class Jurisdiction
 			';
 		$data =  Tak::getDb('db')->createCommand($sql)->queryAll(TRUE,array(':userid'=>$id));
 		$result = array();
-		$crypt = new SysCrypt();
 		foreach ($data as $key => $value) {
-			$id = $crypt->encrypt($value['name']);
+			$id = Tak::setCryptKey($value['name']);
 			$result[$value['name']] = array(
 					'id'=> $id,
 					'name'=> $value['name'],

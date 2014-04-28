@@ -69,7 +69,9 @@ $this->widget('bootstrap.widgets.TbMenu', array(
 </div>
 
 <?php if (Tak::getSupplier($model->branch)) {
-    $this->renderPartial('_supplier', array('model'=>$model));
+    $this->renderPartial('_supplier', array(
+        'model' => $model
+    ));
 } else {
     $this->renderPartial('_permission', array(
         'formModel' => $formModel,

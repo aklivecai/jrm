@@ -1,37 +1,25 @@
 <?php
-/**
- * 这个模块来自表 "{{order_flow}}".
- *
- * 数据表的字段 '{{order_flow}}':
- * @property string $itemid
- * @property string $order_id
- * @property string $status
- * @property string $action_user
- * @property string $add_time
- * @property string $add_us
- * @property string $add_ip
- * @property string $note
- */
 class OrderFlow extends MRecord {
     public $action_user = '系统';
-    
     public static $table = '{{order_flow}}';
-    
     public function init() {
         parent::init();
-        $itemid = Yii::app()->user->getState('order_flow_id');
+        $itemid = Tak::getState('order_flow_id');
         if (!$itemid) {
             $itemid = Tak::fastUuid();
-            Yii::app()->user->setState('order_flow_id', $itemid);
+            Tak::setState('order_flow_id', $itemid);
         }
         $this->itemid = $itemid;
     }
-    /**
-     * @return array validation rules for model attributes.字段校验的结果
-     */
+    
+    public function scopes() {
+        return array(
+            'sort_time' => array(
+                'order' => 'add_time DESC',
+            )
+        );
+    }
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array(
                 'order_id',
@@ -57,8 +45,6 @@ class OrderFlow extends MRecord {
                 'length',
                 'max' => 255
             ) ,
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array(
                 'itemid, order_id, status, action_user, add_time, add_us, add_ip, note',
                 'safe',
@@ -66,23 +52,17 @@ class OrderFlow extends MRecord {
             ) ,
         );
     }
-    /**
-     * @return array relational rules. 表的关系，外键信息
-     */
+    
     public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array();
     }
-    /**
-     * @return array customized attribute labels (name=>label) 字段显示的
-     */
+    
     public function attributeLabels() {
         return array(
             'itemid' => '编号',
             'order_id' => '订单编号',
             'name' => '流程名字',
-            'status' => '订单状态', /*(0:删除,1:    您提交了订单-请等待系统确认-客户,101等待付款-通过审核,201取消订单-无效订单,102等待发货-已经付款,103等待收货,.客户自己定义.,999完成订单,)*/
+            'status' => '订单状态', /*(0:删除,1:    您提交了订单-请等待系统确认-客户,101等待付款-通过审核,201取消订单-无效订单,102等待发货-已经付款,103等待收货,.客户自己定义.,999完成订单,10订单变更)*/
             'action_user' => '操作人',
             'add_time' => '添加时间',
             'add_us' => '添加人',
@@ -94,7 +74,6 @@ class OrderFlow extends MRecord {
     public function search() {
         $cActive = parent::search();
         $criteria = $cActive->criteria;
-        
         $criteria->compare('itemid', $this->itemid, true);
         $criteria->compare('order_id', $this->order_id, true);
         $criteria->compare('name', $this->name, true);
@@ -122,10 +101,22 @@ class OrderFlow extends MRecord {
         $arr['order'] = ' add_time ASC ';
         return $arr;
     }
+    protected function afterFind() {
+        parent::afterFind();
+        /*对应下单用户显示提示*/
+        if ($this->status == 1 && $this->add_us == Tak::getManageid()) {
+            $this->note = '您提交了订单-请等待系统确认';
+        }
+    }
+    /*订单变更*/
+    public function changeFlow() {
+        $this->status = 10;
+        $this->action_user = '客户';
+        return $this->save();
+    }
     //保存数据前
     protected function beforeSave() {
         $result = parent::beforeSave(true);
-        
         if ($result) {
             $arr = Tak::getOM();
             //添加数据时候
@@ -137,8 +128,6 @@ class OrderFlow extends MRecord {
                 $this->add_time = $arr['time'];
                 $this->add_ip = $arr['ip'];
             } else {
-                //修改数据时候
-                
             }
         }
         return $result;
@@ -146,7 +135,7 @@ class OrderFlow extends MRecord {
     //保存数据后
     protected function afterSave() {
         parent::afterSave();
-        Yii::app()->user->setState('order_flow_id', false);
+        Tak::setState('order_flow_id', false);
     }
     //删除信息后
     protected function afterDelete() {
@@ -181,7 +170,16 @@ class OrderFlow extends MRecord {
         }
         return $result;
     }
-    
+    /*查看订单最后流程*/
+    public static function getOneLast($id) {
+        $sql = sprintf('SELECT * FROM %s WHERE order_id = :order_id ORDER BY add_time DESC', self::$table);
+        $arr = array(
+            ':order_id' => $id
+        );
+        $command = Tak::getDb('db')->createCommand($sql);
+        $model = $command->queryRow(true, $arr);
+        return $model;
+    }
     public function getListByOrder($condition) {
         $arr = array();
         foreach ($condition as $key => $value) {

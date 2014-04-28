@@ -6,12 +6,8 @@ class OrderInfo extends MRecord {
     public $remaining_day = '';
     
     public static $table = '{{order_info}}';
-    /**
-     * @return array validation rules for model attributes.字段校验的结果
-     */
+    
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         
         return array(
             array(
@@ -164,19 +160,32 @@ class OrderInfo extends MRecord {
                 }
                 $this->add_ip = $arr['ip'];
             } else {
-                //修改数据时候
-                
             }
         }
         return $result;
     }
-    public function getPayInfo() {
-        $result = ' &nbsp;&nbsp; 定金 <strong class="price-strong">:earnest%</strong> 于订单确认后 <strong>:few_day</strong>天内支付， 交货前支付 <strong class="price-strong">:delivery_before%</strong>，余款 <strong>:remaining_day</strong>天内支付';
+    public function getPayInfo($total) {
+        $result = ' &nbsp;&nbsp; 定金 <strong class="price-strong">:earnest%(%earnest)</strong> 于订单确认后 <strong>:few_day</strong>天内支付， 交货前支付 <strong class="price-strong">:delivery_before%(%delivery_before)</strong>，余款(<span class="price-strong">%yk</span>) <strong>:remaining_day</strong>天内支付';
+        
+        $earnest = $total * $this->earnest / 100;
+        
+        $delivery_before = $total * $this->delivery_before / 100;
+        $yk = $total - $earnest - $delivery_before;
+        if ($yk <= 0) {
+            $yk = 0;
+        }
+        $earnest = Tak::format_price($earnest);
+        $delivery_before = Tak::format_price($delivery_before);
+        $yk = Tak::format_price($yk);
         $result = strtr($result, array(
             ':earnest' => $this->earnest,
             ':few_day' => $this->few_day,
             ':delivery_before' => $this->delivery_before,
             ':remaining_day' => $this->remaining_day,
+            
+            '%earnest' => $earnest,
+            '%delivery_before' => $delivery_before,
+            '%yk' => $yk,
         ));
         
         return $result;

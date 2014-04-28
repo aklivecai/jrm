@@ -3,22 +3,24 @@ class PermissionController extends Controller {
     protected $tabs = null;
     private $_authorizer = null;
     private $_mods = null;
-    
     public $defaultAction = 'admin';
-    
     public function init() {
         parent::init();
         $this->modelName = 'Permission';
         if (!$this->isAjax) {
-            $this->tabs = Permission::getList();
+            $tabs = Permission::getList();
+            foreach ($tabs as $key => $value) {
+                // $tabs[$this->setSId($key) ] = $value;
+                // unset($tabs[$key]);
+            }
+            $this->tabs = $tabs;
             if (isset($this->tabs['998'])) {
-                # code...
-                
             }
         }
     }
     public function loadModel($id) {
-        if ($this->_model === null) {
+        if ($this->_model === null) {            
+            $id = $this->getSId($id);            
             $m = $this->modelName;
             $m = $m::model();
             $this->_model = $m->findByPk($id);
@@ -32,18 +34,13 @@ class PermissionController extends Controller {
         }
         return $this->_authorizer;
     }
-    /**
-     * @return string the item name or null if not set.
-     */
     public function getItemName() {
         return isset($_GET['name']) === true ? urldecode($_GET['name']) : null;
     }
-    /**
-     * Returns the data model based on the primary key given in the GET variable.
-     * If the data model is not found, an HTTP exception will be raised.
-     */
+    
     public function loadModelI($name) {
         if ($this->_mods === null) {
+            $name = $this->getSId($name);
             $itemName = $name;
             if ($itemName !== null) {
                 $authorizer = $this->getAuthorizer();
@@ -52,7 +49,6 @@ class PermissionController extends Controller {
             }
             if ($this->_mods === null) $this->error();
         }
-        
         return $this->_mods;
     }
     public function actionDelete($id) {
@@ -64,7 +60,6 @@ class PermissionController extends Controller {
     
     public function actionAdmin() {
         $len = count($this->tabs);
-        
         if ($len == 0) {
             $this->redirect(array(
                 'create'
@@ -74,7 +69,7 @@ class PermissionController extends Controller {
             $id = $t[0];
             $this->redirect(array(
                 'view',
-                'id' => $id
+                'id' => $this->setSId($id) ,
             ));
         }
         $m = $this->modelName;
@@ -96,9 +91,7 @@ class PermissionController extends Controller {
     
     public function actionShow($child) {
         $child = urldecode($child);
-        $crypt = new SysCrypt();
-        $id = $crypt->decrypt($child);
-        
+        $id = Tak::decrypt($child);
         $itemName = $id;
         $_model = $this->loadModel($id);
         $model = $this->loadModelI($id);
@@ -112,14 +105,10 @@ class PermissionController extends Controller {
         $parentDataProvider = new RAuthItemParentDataProvider($model);
         $childDataProvider = new RAuthItemChildDataProvider($model);
         
-        $crypt = new SysCrypt();
-        
         $this->render('show', array(
             'model' => $_model,
             'models' => $model,
             'id' => $id,
-            
-            'crypt' => $crypt,
             'childSelectOptions' => $childSelectOptions,
             'parentDataProvider' => $parentDataProvider,
             'childDataProvider' => $childDataProvider,
@@ -129,9 +118,7 @@ class PermissionController extends Controller {
     public function actionView($id) {
         $_model = $this->loadModel($id);
         $model = $this->loadModelI($id);
-        $itemName = $id;
-        
-        $crypt = new SysCrypt();
+        $itemName = $this->getSId($id);
         
         $type = Rights::getValidChildTypes($model->type);
         $exclude = array(
@@ -147,7 +134,7 @@ class PermissionController extends Controller {
                 if ($childFormModel->validate() === true) {
                     $authorizer = $this->getAuthorizer();
                     
-                    $childFormModel->itemname = $crypt->decrypt($childFormModel->itemname);
+                    $childFormModel->itemname = Tak::decrypt($childFormModel->itemname);
                     $authorizer->authManager->addItemChild($itemName, $childFormModel->itemname);
                     $child = $authorizer->authManager->getAuthItem($childFormModel->itemname);
                     $child = $authorizer->attachAuthItemBehavior($child);
@@ -157,7 +144,7 @@ class PermissionController extends Controller {
                     )) , 'success');
                     $this->redirect(array(
                         'view',
-                        'id' => urlencode($itemName)
+                        'id' => $id,
                     ));
                 }
             } else {
@@ -187,7 +174,6 @@ class PermissionController extends Controller {
         );
         $notstr = '~' . implode('~', $_notArr) . '~';
         // Tak::KD($notstr,1);
-        
         foreach ($childSelectOptions as $key => $value) {
             if ($key == '部门') {
                 unset($childSelectOptions[$key]);
@@ -197,7 +183,7 @@ class PermissionController extends Controller {
                     if (strpos($notstr, '~' . $k1 . '~') !== false) {
                         unset($childSelectOptions[$key][$k1]);
                     } else {
-                        $t[$crypt->encrypt($k1) ] = $v1;
+                        $t[Tak::encrypt($k1) ] = $v1;
                     }
                 }
                 $childSelectOptions[$key] = $t;
@@ -212,23 +198,16 @@ class PermissionController extends Controller {
             'model' => $_model,
             'models' => $model,
             'id' => $id,
-            'crypt' => $crypt,
-            
             'childFormModel' => $childFormModel,
             'childSelectOptions' => $childSelectOptions,
-            
             'data' => $data,
         ));
     }
-    /**
-     * Removes a child from an authorization item.
-     */
+    
     public function actionRemoveChild($id, $child) {
         $_model = $this->loadModel($id);
-        $itemName = $id;
-        $child = urldecode($child);
-        $crypt = new SysCrypt();
-        $childName = $crypt->decrypt($child);
+        $itemName = $this->getSId($id);
+        $childName = Tak::decrypt($child);
         
         $authorizer = $this->getAuthorizer();
         // Remove the child and load it

@@ -10,7 +10,8 @@ class ItController extends RController {
         Tak::MkDirs($root . $folder);
         
         $image = CUploadedFile::getInstanceByName('file');
-        $name = $folder . date('Ymd-His.') . $image->getExtensionName();
+        $_md5 = md5(Tak::fastUuid(9));
+        $name =$folder . date('Ymd-His') . $_md5 .'.'. $image->getExtensionName();
         $name2 = $image->tempName;
         $oname = $image->name;
         $image->saveAs($root . $name);
@@ -27,13 +28,10 @@ class ItController extends RController {
             $file->attributes = $arr;
             if (!$file->save()) {
                 Tak::KD($file->getErrors, 1);
-                // throw new CHttpException(404,'所请求的页面不存在。');
-                
             }
             $id = $file->itemid;
         } else {
         }
-        
         die('{"jsonrpc" : "2.0", "result" : "' . $name . '", "id" : "' . $id . '"}');
     }
     

@@ -129,7 +129,7 @@ class MRecord extends CActiveRecord {
     /**
      * 检验重复
      */
-    public function checkRepetition($attribute, $params) {        
+    public function checkRepetition($attribute, $params) {
         $sql = array(
             "LOWER(:col)=:val"
         );
@@ -155,7 +155,7 @@ class MRecord extends CActiveRecord {
             ':val' => strtolower($this->$attribute)
         ));
         // Tak::KD($m,1);
-        $result = true;        
+        $result = true;
         if ($m != null) {
             $err = $this->getAttributeLabel($attribute) . ' 已经存在 :';
             $err.= $m->getHtmlLink();
@@ -183,10 +183,7 @@ class MRecord extends CActiveRecord {
                 } elseif ($this->primaryKey == 1) {
                     $this->setItemid(null);
                 }
-            } else {
-                //修改数据时候
-                
-                
+            } else {                
             }
         }
         return $result;
@@ -202,7 +199,7 @@ class MRecord extends CActiveRecord {
     
     protected function afterDelete() {
         $result = parent::afterDelete();
-        if ($result&&$this->isLog) {
+        if ($result && $this->isLog) {
             $this->logDel();
         }
         return $result;
@@ -433,8 +430,7 @@ class MRecord extends CActiveRecord {
                     ksort($temp);
                     $tags[$key] = $temp;
                 }
-                // Tak::KD($tags,1);
-                
+                // Tak::KD($tags,1);             
                 
             }
             $result = $tags;

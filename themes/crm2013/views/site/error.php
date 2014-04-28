@@ -4,6 +4,9 @@ if (isset($error) && isset($error['code'])) {
 }else{
     $this->pageTitle = ' - 错误';
 }
+if (strpos($message, 'DB connection')) {
+    $message = '系统维护，请稍等！！';
+}
 ?>
 <div class="errorPage">
   <p class="name">

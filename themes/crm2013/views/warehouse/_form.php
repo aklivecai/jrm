@@ -29,7 +29,12 @@ echo $form->errorSummary($model);
     'maxlength' => 50
 )); ?>
     </div>
-        <div class="">
+    <div class="row-form clearfix">
+    <?php echo $form->textFieldRow($model, 'note', array(
+    'size' => 50,
+    'maxlength' => 50
+)); ?>
+    </div>
     <div class="footer tar">
         <?php $this->widget('bootstrap.widgets.TbButton', array(
     'size' => 'large',
@@ -41,7 +46,6 @@ echo $form->errorSummary($model);
     'buttonType' => 'reset',
     'label' => Tk::g('Reset')
 )); ?>
-    </div>
     </div>
 </div>
 <?php $this->endWidget(); ?>

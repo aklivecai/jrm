@@ -2,14 +2,8 @@
 class Order extends MRecord {
     private $_orderinfo = null;
     public $status = 1; /*订单默认状态*/
-    
     public static $table = '{{order}}';
-    /**
-     * @return array validation rules for model attributes.字段校验的结果
-     */
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array(
                 'fromid',
@@ -62,10 +56,13 @@ class Order extends MRecord {
                 'manageid',
                 'condition' => '',
                 'order' => ''
-                // ,'on'=>'iClientele.itemid=clienteleid'
-                
+                /*,'on'=>'iClientele.itemid=clienteleid'*/
             ) ,
-        'iOrderInfo'=>array(self::HAS_ONE, 'OrderInfo', 'itemid'),            
+            'iOrderInfo' => array(
+                self::HAS_ONE,
+                'OrderInfo',
+                'itemid'
+            ) ,
         );
     }
     /**
@@ -102,8 +99,8 @@ class Order extends MRecord {
         }
         
         $criteria->compare('fromid', $this->fromid);
-        if ($this->manageid>0) {
-           $criteria->compare('manageid', $this->manageid);
+        if ($this->manageid > 0) {
+            $criteria->compare('manageid', $this->manageid);
         }
         
         $criteria->compare('add_time', $this->add_time);
@@ -155,8 +152,6 @@ class Order extends MRecord {
                 $this->add_ip = $arr['ip'];
                 $this->manageid = $arr['manageid'];
             } else {
-                //修改数据时候
-                
             }
         }
         return $result;
@@ -164,13 +159,12 @@ class Order extends MRecord {
     //保存数据后
     protected function afterSave() {
         parent::afterSave();
-        //
         if ($this->isNewRecord) {
             $msg = new OrderFlow;
             $msg->order_id = $this->itemid;
             $msg->name = '';
             $msg->action_user = '客户';
-            $msg->note = '您提交了订单-请等待系统确认';
+            $msg->note = '';
             $msg->save();
         }
     }
@@ -186,10 +180,21 @@ class Order extends MRecord {
         }
         return $this->_products;
     }
+    
+    public function wProductsTitle() {
+        $products = $this->getProducts();
+        $html = array();
+        foreach ($products as $key => $value) {
+            if ($value['name']) {
+                $html[] = $value['name'];
+            }
+        }
+        echo implode(' , ', $html);
+    }
     public function wProducts() {
-        
         $products = $this->getProducts();
         $html = '<ul class="wap-products li-product">';
+        
         foreach ($products as $key => $value) {
             $pname = $value->name;
             $html.= '<li>';
@@ -245,7 +250,7 @@ class Order extends MRecord {
     }
     
     public function upTotal() {
-        $connection = Yii::app()->db;
+        $connection = self::$db;
         $transaction = $connection->beginTransaction();
         try {
             $itemid = $this->itemid;
@@ -306,6 +311,7 @@ WHERE itemid = ':itemid'";
     }
     
     public function saveStatus($status, $note = '') {
+        $result = false;
         $this->status = $status;
         $time = Tak::now();
         if ($status == '102') {
@@ -314,7 +320,6 @@ WHERE itemid = ':itemid'";
         if ($status == '103') {
             $this->delivery_time = $time;
         }
-        
         if ($this->save()) {
             $msg = new OrderFlow;
             $msg->order_id = $this->itemid;
@@ -324,22 +329,24 @@ WHERE itemid = ':itemid'";
             if ($status == 200) {
                 $msg->action_user = '客户';
             }
-            $msg->save();
+            /*添加返回成功插入的,流程编号*/
+            $result = $msg->save() ? $msg->primaryKey : false;
         }
+        return $result;
     }
-
-    public static function getUsersSelect()
-    {
+    
+    public static function getUsersSelect() {
         $data = self::getOrderUsers();
-        $result = array('0'=>'下单用户');
+        $result = array(
+            '0' => '下单用户'
+        );
         foreach ($data as $key => $value) {
             $result[$value['itemid']] = $value['company'];
         }
         return $result;
     }
-
-    public static function getOrderUsers()
-    {
+    
+    public static function getOrderUsers() {
         $sql = "
         SELECT  m.* FROM  :users  AS m
             WHERE
@@ -364,6 +371,6 @@ WHERE itemid = ':itemid'";
             $tags[] = $row;
         }
         // Tak::KD($tags,1);
-        return $tags;        
+        return $tags;
     }
 }

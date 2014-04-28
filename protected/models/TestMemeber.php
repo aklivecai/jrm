@@ -164,7 +164,7 @@ class TestMemeber extends ModuleRecord {
     
     public function getMmeber($itemid) {
         $sql = "SELECT * FROM {$this->tableName() }
-			WHERE itemid = :itemid ";
+            WHERE itemid = :itemid ";
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':itemid', $itemid);
         $tags = $command->queryRow();
@@ -180,6 +180,7 @@ class TestMemeber extends ModuleRecord {
             $this->itemid = 1;
         } else {
             //修改数据时候
+            
             
         }
         

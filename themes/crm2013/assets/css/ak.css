@@ -15,6 +15,9 @@
     -webkit-user-select: none;
     cursor: wait;
 }
+.btn{
+    margin: 0 3px;
+}
 #ibody .red {
     color: #F00;
 }
@@ -603,4 +606,19 @@ form.active .wap-flow-content {
 #progress #btn-submit {
     margin-top: 8px;
     margin-bottom: 3px;
+}
+
+
+.list-tree li{
+    line-height: 25px;
+    border-bottom: 1px  dotted #DDD;
+    list-style-position:inside;
+    list-style-type:square;
+}
+
+.tip-msg{
+    margin:2px 8px;
+}
+.tip-title{
+
 }

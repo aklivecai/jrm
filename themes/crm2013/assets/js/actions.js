@@ -99,8 +99,13 @@ var createUrl = function(route)
 ;
 
 jQuery(function($){
-var wapConct = $('#content');
+    /*表格折叠,订单展示*/
+        $(document).on('click','table.action-fold caption',function(){
+            var t = $(this).parent();
+            t.toggleClass('active');
+        });
 
+var wapConct = $('#content');
 if ($('.more-list').length>0) {
     $(document).on('click','.more-list>a',function(){
         var t = $(this)

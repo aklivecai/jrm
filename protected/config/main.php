@@ -29,12 +29,9 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
-
 		// 调试的拓展
 		'application.extensions.debugtoolbar.*',
-
 		'application.extensions.jsonDataprovider.*',
-
 		/* for ext yii-rights */
  		'application.modules.rights.*',
     		'application.modules.rights.models.*',  

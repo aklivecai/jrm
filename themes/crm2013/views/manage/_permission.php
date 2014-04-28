@@ -52,7 +52,7 @@ endif; ?>
     if (!$value['active']) {
         echo JHtml::link('<i class="icon-remove"></i>' . Tk::g('Revoke') , array(
             'revoke',
-            'id' => $model->primaryKey,
+            'id' => $this->setSId($model->primaryKey) ,
             'name' => $value['id']
         ) , array(
             'class' => 'revoke-link'
@@ -63,7 +63,7 @@ endif; ?>
     if ($value['type'] == 2 && is_numeric($value['name'])) {
         echo JHtml::link('<i class="icon-eye-open"></i>' . Tk::g('View') , array(
             'permission/preview',
-            'id' => $value['name']
+            'id' => $this->setSId($value['name']) ,
         ) , array(
             'class' => 'data-ajax',
             'title' => Tk::g(array(
@@ -77,7 +77,8 @@ endif; ?>
                         </td>
                     </tr>
                     <?php
-endforeach ?>
+endforeach
+?>
                 </tbody>
             </table>
         </div>
@@ -136,7 +137,7 @@ $this->endWidget();
                             <?php
     echo JHtml::link('<i class="icon-eye-open"></i>' . Tk::g('View') , array(
         'preview',
-        'id' => $key
+        'id' => $this->setSId($key) ,
     ) , array(
         'class' => 'data-ajax',
         'title' => Tk::g(array(
@@ -148,8 +149,8 @@ $this->endWidget();
         echo '&nbsp;|&nbsp;';
         echo JHtml::link('<i class="icon-remove"></i>' . Tk::g('Revoke') , array(
             'RevokeSub',
-            'id' => $model->primaryKey,
-            'name' => $key
+            'id' => $this->setSId($model->primaryKey) ,
+            'name' => $this->setSId($key)
         ) , array(
             'class' => 'revoke-link'
         ));
@@ -158,7 +159,8 @@ $this->endWidget();
                         </td>
                     </tr>
                     <?php
-endforeach ?>
+endforeach
+?>
                 </tbody>
             </table>
         </div>

@@ -1,7 +1,4 @@
 <?php
-/* @var $this ManageController */
-/* @var $model Manage */
-
 $this->breadcrumbs = array(
     Tk::g('Manages') => array(
         'admin'
@@ -19,7 +16,6 @@ $items = array(
     )
 );
 ?>
-
 
 	<!--[if !IE]><!-->
 	<style>
@@ -149,7 +145,7 @@ $listOptions['columns'] = array(
     array(
         'name' => 'user_name',
         'type' => 'raw',
-        'value' => 'CHtml::link($data->user_name,array("view","id"=>$data->manageid))',
+        'value' => 'CHtml::link($data->user_name,array("view","id"=>Tak::setSId($data->manageid)))',
     ) ,
     array(
         'name' => 'user_nicename',

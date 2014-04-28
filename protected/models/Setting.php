@@ -31,7 +31,14 @@ class Setting extends CActiveRecord {
                 'safe',
                 'on' => 'search'
             ) ,
+            array(
+                'item_value',
+                'uhtml'
+            ) ,
         );
+    }
+    public function uhtml($attribute, $params) {
+        $this->item_value = Tak::uhtml($this->item_value);
     }
     public function attributeLabels() {
         return array(
@@ -65,10 +72,6 @@ class Setting extends CActiveRecord {
         return parent::model($className);
     }
     
-    public function getSetings($key) {
-        Yii::app()->user->getState('last_login_time', Tak::timetodate($user->last_login_time));
-    }
-    
     public function takSave() {
         $this->deleteAll(" manageid=:manageid AND item_key=:item_key", array(
             ':manageid' => $this->manageid,
@@ -82,16 +85,47 @@ class Setting extends CActiveRecord {
         return $list;
     }
     
-    public static function getListByName($key, $manageid = false) {
+    public function saveDefault($data) {
+        if ($this->manageid == 0) {
+            $this->manageid = Tak::getFormid();
+            $this->itemid = Tak::fastUuid();
+            $this->setIsNewRecord(true);
+        }
+        $this->item_value = $data['item_value'];
+        return $this->save();
+    }
+    
+    public static function getDefault($type, $mid = false) {
+        !$mid && $mid = Tak::getManageid();
+        //$sql = " SELECT * FROM :table WHERE  item_key=:key AND (manageid=:manageid OR manageid=1) ORDER BY manageid DESC";
+        //$sql = " SELECT * FROM :table WHERE  ORDER BY manageid DESC";
+        $criteria = new CDbCriteria;
+        $sql = strtr("item_key=':key' AND (manageid=:manageid OR manageid=0) ", array(
+            ':key' => $type,
+            ':manageid' => $mid,
+        ));
+        // Tak::KD($sql);
+        $criteria->addCondition($sql);
+        $criteria->order = 'manageid DESC'; //排序条件
+        $criteria->limit = 1; //取1条数据，如果小于0，则不作处理
+        /*
+        $data = array(
+            ':table' => self::$table,
+            ':key' => $type,
+            ':manageid' => $mid,
+        );        
+         $result = Tak::getDb('db')->createCommand($sql)->queryRow(true, $data);
+        */
+        $result = self::model()->find($criteria);
+        return $result;
+    }
+    
+    public static function getListByName($key, $uid = false) {
         $sql = "SELECT item_key,item_value FROM :tableName WHERE manageid=:manageid AND  item_key LIKE :name";
         $sql = strtr($sql, array(
             ':tableName' => self::$table,
         ));
-        if ($manageid > 0) {
-            $uid = $manageid;
-        } else {
-            $uid = Tak::getManageid();
-        }
+        !$uid && $uid = Tak::getManageid();
         $command = Tak::getDb('db')->createCommand($sql);
         $dataReader = $command->queryAll(true, array(
             ':name' => "$key%",

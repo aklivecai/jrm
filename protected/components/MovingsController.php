@@ -59,16 +59,18 @@ class MovingsController extends Controller {
             $script = false;
             if ($model->save()) {
                 $model->affirm();
-                $script = sprintf('parent.window.location.href="%s";',$this->createUrl('view',array('id'=>$model->primaryKey)));
+                $script = sprintf('parent.window.location.href="%s";', $this->createUrl('view', array(
+                    'id' => $model->primaryKey
+                )));
             } else {
                 Tak::KD($model->getErrors());
             }
-	        $this->_setLayout('//layouts/columnWindows');
-	        $this->render('/chip/iframe', array(
-	            'model' => $model,
-	            'script' => $script,
-	        ));
-	        exit;
+            $this->_setLayout('//layouts/columnWindows');
+            $this->render('/chip/iframe', array(
+                'model' => $model,
+                'script' => $script,
+            ));
+            exit;
         } elseif (isset($_GET[$m])) {
             $model->attributes = $_GET[$m];
         }

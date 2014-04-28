@@ -9,7 +9,6 @@ class SubordinateController extends Controller {
         $this->users = Subordinate::getUsers();
         // $this->users = Manage::model()->findAllByAttributes(array('branch' => Tak::getState('isbranch',-1)));
         // Tak::KD($this->users);
-        
     }
     
     public function actionIndex() {

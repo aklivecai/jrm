@@ -259,10 +259,11 @@ class Movings extends ModuleRecord {
             $m = new ProductMoving;
             $m->type = $this->type;
             $m->movings_id = $this->itemid;
-            $m->itemid = Tak::fastUuid();
+            $itemid = $m->itemid = Tak::fastUuid();
             foreach ($tags as $key => $value) {
                 $m->setIsNewRecord(true);
-                $m->itemid+= 2;
+                $itemid = Tak::numAdd($itemid, 2);
+                $m->itemid = $itemid;
                 $m->product_id = $key;
                 $m->numbers = $value['numbers'];
                 $m->price = isset($value['price']) ? $value['price'] : '0.00';
@@ -279,19 +280,13 @@ class Movings extends ModuleRecord {
                         $idata['stocks'] = 0;
                         $mstock->attributes = $idata;
                         if ($mstock->save()) {
-                            // Tak::KD($mstock->attributes);
-                            
-                            
+                            /*Tak::KD($mstock->attributes);*/
                         } else {
-                            // Tak::KD($mstock,getErrors(),1);
-                            
-                            
+                            /*Tak::KD($mstock,getErrors(),1);*/
                         }
                     }
                 } else {
-                    // Tak::KD($m->getErrors(),1);
-                    
-                    
+                    /*Tak::KD($m->getErrors(),1);*/
                 }
             }
         }
@@ -315,12 +310,10 @@ class Movings extends ModuleRecord {
             $sql = "UPDATE :movings SET time_stocked=:time WHERE itemid=:itemid";
             $sql = strtr($sql, $arr);
             $connection->createCommand($sql)->execute();
-            
             $sql = "UPDATE :stocks AS s ,:product_moving AS pm SET s.stocks=stocks :operate pm.numbers , s.modified_time = :time WHERE s.product_id = pm.product_id AND  pm.movings_id=:itemid  AND s.warehouse_id = :warehouse_id AND pm.time_stocked=0";
             $sql = strtr($sql, $arr);
             $connection->createCommand($sql)->execute();
-            // Tak::KD($sql,1);
-            
+            /*Tak::KD($sql,1);*/
             $sql = "UPDATE :product_moving SET time_stocked=:time WHERE movings_id=:itemid AND time_stocked=0 ";
             $sql = strtr($sql, $arr);
             $connection->createCommand($sql)->execute();

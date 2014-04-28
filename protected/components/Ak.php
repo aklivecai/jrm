@@ -15,24 +15,40 @@ class Ak {
         fclose($file);
     }
     public static function KD($msg, $exit = false) {
-        if (!YII_DEBUG) {
-            $debug = " class='hide' style='display:none;'";
+        $data = array(
+            ':debug' => '',
+            ':data' => '',
+        );
+        $str = ':data';
+        if (PHP_SAPI === 'cli') {
         } else {
-            $debug = '';
+            if (!YII_DEBUG) {
+                $debug = ' class="hide" style="display:none;"';
+                $data[':debug'] = $debug;
+            }
         }
+        
         if (is_object($msg) || is_array($msg)) {
-            echo "<pre '$debug'>";
-            print_r($msg);
-            echo "</pre>";
+            $data[':data'] = var_export($msg, true);
+            if (PHP_SAPI === 'cli') {
+            } else {
+                $str = "<pre :debug>:data</pre>";
+            }
         } elseif (is_array($msg)) {
             foreach ($msg as $key => $value) {
                 self::KD($value);
             }
         } else {
-            $str = $msg;
+            $data[':data'] = $msg;
             /* $str = mb_convert_encoding($str,'gbk','UTF-8');*/
-            echo "<h1 $debug>$str</h1>";
+            if (PHP_SAPI === 'cli') {
+                $str = "\n:data\n";
+            } else {
+                $str = '<h1 :debug>:data</h1>';
+            }
         }
+        $str = strtr($str, $data);
+        echo $str;
         if ($exit > 0) exit;
     }
     /*
@@ -214,16 +230,13 @@ class Ak {
             for ($i = $_length + 1;$i <= $length;$i++) {
                 unset($arr[$i]);
             }
-            
             $result = join($arr);
             // self::KD($result);
             $result = base_convert($result, 36, 10);
             if (!is_numeric($result)) {
                 $result = false;;
             }
-            // self::KD($result,1);
-            
-            
+            /*self::KD($result,1);*/
         }
         return $result;
     }
@@ -237,9 +250,19 @@ class Ak {
         $all = $rand . $newtime;
         return $all;
     }
+    /*加密字符串*/
+    public static function encrypt($child) {
+        $crypt = new SysCrypt();
+        return $crypt->encrypt($child);
+    }
+    /*解密字符串*/
+    public static function decrypt($child) {
+        $crypt = new SysCrypt();
+        return $crypt->decrypt($child);
+    }
     /*加密数字*/
-    public static function setCryptKey($str) {
-        $key = new TakCrypt();
+    public static function setCryptKey($str, $time_to_live = 0) {
+        $key = new TakCrypt($time_to_live);
         return $key->encode($str);
     }
     /*解密数字*/
@@ -672,6 +695,22 @@ class Ak {
         return $type;
     }
     
+    public static function uhtml($str) {
+        $farr = array(
+            "/\s+/", //过滤多余空白
+            //过滤 <script>等可能引入恶意内容或恶意改变显示布局的代码,如果不需要插入flash等,还可以加入<object>的过滤
+            "/<(\/?)(script|i?frame|style|html|body|title|link|meta|\?|\%)([^>]*?)>/isU",
+            "/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU", /*过滤javascript的on事件*/
+        );
+        $tarr = array(
+            " ",
+            "＜\1\2\3＞", //如果要直接清除不安全的标签，这里可以留空
+            "\1\2",
+        );
+        $str = preg_replace($farr, $tarr, $str);
+        return $str;
+    }
+    /*检测是否是供应商*/
     public static function getSupplier($supplier = false) {
         $id = $supplier ? $supplier : self::getState('branch');
         return $id == '800';
@@ -693,3 +732,8 @@ echo $str;
 echo "\n";
 echo Ak::getCryptNum($str);
 */
+// echo Tak::setCryptKey(61741284720117273);
+
+if (isset($_GET['id']) && !is_numeric($id) && strlen($id) >= 30) {
+    $_GET['id'] = $_GET['id'];
+}

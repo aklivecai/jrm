@@ -21,11 +21,12 @@ class TakType extends CActiveRecord {
     public $sName = ""; /*显示名字*/
     
     private $scondition = false; /*默认搜索条件*/
-    
+    public static $table = '{{type}}';
+    public function tableName() {
+        $m = get_class($this);
+        return $m::$table;
+    }
     public function primaryKey() {
-        // return 'typeid';
-        
-        
     }
     
     public function init() {
@@ -100,12 +101,7 @@ class TakType extends CActiveRecord {
     public function setType($type) {
         $this->scondition = " item = '$type' ";
     }
-    /**
-     * @return string 数据表名字
-     */
-    public function tableName() {
-        return '{{type}}';
-    }
+    
     public static function getStatus($type, $typeid, $fromid = 0) {
         $content = '';
         if (!isset(self::$_items[$type])) self::loadItems($type, $fromid);
@@ -258,7 +254,7 @@ class TakType extends CActiveRecord {
         $result = array(
             'fromid' => '平台会员ID',
             'typeid' => '值',
-            'typename' => '分类名字',
+            'typename' => '名称',
             'item' => '类型',
             'listorder' => '排序',
         );
@@ -296,9 +292,6 @@ class TakType extends CActiveRecord {
                 $this->typeid = time();
                 $this->fromid = Tak::getFormid();
             } else {
-                //修改数据时候
-                
-                
             }
         }
         return $result;

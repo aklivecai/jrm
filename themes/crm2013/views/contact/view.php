@@ -6,7 +6,6 @@ $this->breadcrumbs = array(
     Tk::g('Contacts') => array(
         'adminGroup'
     ) ,
-    $model->itemid,
 );
 $items = Tak::getViewMenu($model->itemid);
 
@@ -69,8 +68,8 @@ array_splice($items, count($items) - 2, 0, $_itemis);
 ?>
 
 <div class="block-fluid">
-	<div class="row-fluid">
-	    <div class="span10">
+    <div class="row-fluid">
+        <div class="span10">
 <?php $this->widget('bootstrap.widgets.TbDetailView', array(
     'data' => $model,
     'attributes' => array(
@@ -98,7 +97,9 @@ array_splice($items, count($items) - 2, 0, $_itemis);
         array(
             'name' => 'accessory',
             'type' => 'raw',
-            'value' => CHtml::link(basename($model->accessory),$model->accessory,array("target"=>"_blank")) ,
+            'value' => CHtml::link(basename($model->accessory) , $model->accessory, array(
+                "target" => "_blank"
+            )) ,
         ) ,
         array(
             'name' => 'add_time',

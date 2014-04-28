@@ -55,14 +55,15 @@ class JImportAddressbook extends JImportForm {
         $newCates = array();
         $newProducts = 0;
         // Tak::KD($this->data,1);
+        $itemid = Tak::fastUuid();
         foreach ($this->data as $key => $value) {
-            $itemid = Tak::numAdd($itemid, $key + 2);
+            $itemid = Tak::numAdd($itemid, 2);
 
             if (isset($cates[$value['catename']])) {
                 $groups_id = $cates[$value['catename']];
             } else {
                 if ($cate->address_groups_id > 0) {
-                    $cate->address_groups_id+= $key * 2;
+                    $cate->address_groups_id+= $key+ 2;
                 }
                 $cate->name = $value['catename'];
                 $cate->setIsNewRecord(true);

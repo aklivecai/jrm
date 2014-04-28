@@ -77,12 +77,21 @@
 			$this->endWidget();
 		?>
 		<div class="dr"><span></span></div>
+		<div class="tip-msg">
+			<strong class="tip-title">权限提示</strong>
+			<p>
+				<ol>
+					<li>选择仓库，该用户只能浏览对应的仓库的库存，不选则可以浏览所有仓库</li>
+					<li>输入产品型号，该用户只能浏览到对应产品的库存信息</li>
+					<li>选择货物分类，该用户只能浏览对应对应分类下的库存</li>
+				</ol>
+			</p>
+		</div>
 	</div>
 </div>
 <script>
 	$('#preview').on('click',function(){
 		wurl  = createUrl('Site/Supplier',['action=preview','Setting[stocks_typeid]='+$('#Setting_stocks_typeid').val(),'Setting[stocks_name]='+$('#setting_name').val(),'Setting[stocks_warehouse_id]='+$('#Setting_stocks_warehouse_id').val(),]);
 		window.open(wurl, "windowPreview" ,"width=800,height=650,resizable=0,scrollbars=1");
-	})
-	
+	})	
 </script>

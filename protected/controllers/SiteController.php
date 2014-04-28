@@ -45,10 +45,10 @@ class SiteController extends Controller {
         );
     }
     
-    public function actionSupplier($action=false) {
-        if ($action=='preview') {
+    public function actionSupplier($action = false) {
+        if ($action == 'preview') {
             $this->_setLayout('//layouts/column2');
-        }       
+        }
         $this->render('supplier');
     }
     
@@ -114,9 +114,19 @@ class SiteController extends Controller {
         if (!Tak::isGuest()) {
             $this->redirect(Yii::app()->user->returnUrl);
         }
-        if (!$k && isset(Yii::app()->request->cookies['fid']) && Yii::app()->request->cookies['fid']->value) {
-            $k = Yii::app()->request->cookies['fid']->value;
-            return $this->inits($k);
+        if (!$k) {
+            isset(Yii::app()->request->cookies['fid']) && $k = Yii::app()->request->cookies['fid']->value;
+            if (!$k && strpos(Yii::app()->user->returnUrl, 'fid')) {
+                $parts = parse_url(urldecode(Yii::app()->user->returnUrl));
+                parse_str($parts['query'], $query);
+                isset($query['fid']) && $k = $query['fid'];
+            }
+            if ($k) {
+                $this->redirect($this->createUrl('login', array(
+                    'k' => Tak::setCryptNum($k)
+                )));
+            }
+            // return $this->inits($k);
         } else {
         }
         $itemid = Tak::getCryptNum($k);
@@ -221,6 +231,7 @@ class SiteController extends Controller {
     }
     
     public function actionLogin($k = false) {
+        
         $itemid = $this->inits($k);
         $m = 'LoginForm';
         $this->model = $model = new $m();

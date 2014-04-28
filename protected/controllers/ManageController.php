@@ -19,7 +19,7 @@ class ManageController extends Controller {
     public function allowedActions() {
         return 'actionSelectById,actionSelect';
     }
-
+    
     private function getJurisdiction($id) {
         $result = Jurisdiction::getJurisdiction($id);
         $branch = $this->_model->branch;
@@ -31,53 +31,46 @@ class ManageController extends Controller {
         }
         return $result;
     }
-
+    
     public function getJUrl() {
         return $this->createUrl('view', array(
-            'id' => $this->_model->primaryKey
+            'id' => $this->setSId($this->_model->primaryKey) ,
         )) . '#userAssignments';
     }
-
+    
     public function getJSubUrl() {
         return $this->createUrl('view', array(
-            'id' => $this->_model->primaryKey
+            'id' => $this->setSId($this->_model->primaryKey) ,
         )) . '#userSubusers';
     }
-
+    
     private function loadJurisdiction($name) {
         $m = Jurisdiction::getObj($name);
         if ($m === null) $this->error();
         return $m;
     }
-
+    
     public function getItemName() {
         $name = isset($_GET['name']) === true ? trim($_GET['name']) : null;
         if ($name) {
-            $crypt = new SysCrypt();
-            $name = $crypt->decrypt($name);
+            $name = Tak::getCryptKey($name);
         }
         return $name;
     }
-
     public function actionRevoke($id) {
         $model = $this->loadModel($id);
         $name = $this->getItemName();
         $m = $this->loadJurisdiction($name);
-
         Jurisdiction::revoke($model->primaryKey, $model->fromid, $name);
         $msg = strtr('成功撤销  :name 「:title」', array(
             ':title' => $m['description'],
             'name:' => Jurisdiction::getTypeName($m['type'])
         ));
-        // Tak::setFlash(
-        //  Tk::g('成功撤销  :name 「:title」',array(':name'=>$m['description'])),
-        //  'success'
-        // );
-
         $this->redirect($this->getJUrl());
     }
-
+    
     public function actionRevokeSub($id, $name) {
+        $name = $this->getSId($name);
         $model = $this->loadModel($id);
         $subusers = new Subordinate;
         $subusers->initMos($model->attributes);
@@ -85,14 +78,12 @@ class ManageController extends Controller {
         }
         $this->redirect($this->getJSubUrl());
     }
-
+    
     public function actionView($id) {
         $model = $this->loadModel($id);
-
         $subusers = new Subordinate;
         // $subusers->unsetAttributes();
         $subusers->initMos($model->attributes);
-
         if (isset($_POST['Subordinate']['manageid'])) {
             $mid = $_POST['Subordinate']['manageid'];
             $m = null;
@@ -101,40 +92,33 @@ class ManageController extends Controller {
             }
             $subusers->saveto($mid, $m);
         }
-
-        $dataJurisdiction = $this->getJurisdiction($id);
+        $dataJurisdiction = $this->getJurisdiction($model->primaryKey);
         $assignSelectOptions = Jurisdiction::getSelectOptions($model);
-
+        
         if ($assignSelectOptions !== array()) {
-            $crypt = new SysCrypt();
             $formModel = new AssignmentForm();
-            // Form is submitted and data is valid, redirect the user
             if (isset($_POST['AssignmentForm']) === true) {
                 $formModel->attributes = $_POST['AssignmentForm'];
                 if ($formModel->validate() === true) {
                     $name = $formModel->itemname;
                     if (!is_numeric($name) && $name !== 'Admin') {
-                        $name = $crypt->decrypt($formModel->itemname);
+                        $name = Tak::getCryptKey($formModel->itemname);
                     }
                     $m = $this->loadJurisdiction($name);
                     Jurisdiction::create($model->primaryKey, $model->fromid, $name);
-                    // Tak::setFlash(
-                    //  Rights::t('core', 'Permission :name assigned.', array(':name'=>$m['description'])),
-                    //  'success'
-                    // );
                     $this->redirect($this->getJUrl());
                 }
             }
-
+            
             $childSelectOptions = array();
-
+            
             $ts = Permission::getList();
             $_arr = array();
             if ($assignSelectOptions['部门']['Admin']) {
                 $_arr['Admin'] = $assignSelectOptions['部门']['Admin'];
             }
             foreach ($ts as $key => $value) {
-                $_arr[$crypt->encrypt($key) ] = $value;
+                $_arr[Tak::setCryptKey($key) ] = $value;
             }
             // $childSelectOptions['部门'] = $_arr;
             unset($assignSelectOptions['部门']);
@@ -145,7 +129,7 @@ class ManageController extends Controller {
                     if ($k1 == 'Site.*' || $k1 == 'Setting.*' || $k1 == 'PostUpdateOwn' || $k1 == 'Site.Logout' || $k1 == 'AddressBook.View' || $k1 == 'Subordinate.*' || $k1 == 'ContactpPrson.*' || $k1 == 'Contact.*') {
                         unset($childSelectOptions[$key][$k1]);
                     } else {
-                        $t[$crypt->encrypt($k1) ] = $v1;
+                        $t[Tak::setCryptKey($k1) ] = $v1;
                     }
                 }
                 $childSelectOptions[$key] = $t;
@@ -164,7 +148,7 @@ class ManageController extends Controller {
             'subusers' => $subusers,
         ));
     }
-
+    
     public function actionIndex() {
         $criteria = array();
         if (!Tak::getAdmin()) {
@@ -180,7 +164,7 @@ class ManageController extends Controller {
             'dataProvider' => $dataProvider,
         ));
     }
-
+    
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
         $m = $this->modelName;
@@ -193,7 +177,7 @@ class ManageController extends Controller {
             if ($model->save()) {
                 $this->redirect($this->returnUrl ? $this->returnUrl : array(
                     'view',
-                    'id' => $model->primaryKey
+                    'id' => $this->setSId($model->primaryKey) ,
                 ));
             }
         }
@@ -201,9 +185,8 @@ class ManageController extends Controller {
             'model' => $model,
         ));
     }
-
+    
     protected function getSelectOption($q, $not = false) {
-
         if (!$not && isset($_GET['not'])) {
             $not = $_GET['not'];
         }

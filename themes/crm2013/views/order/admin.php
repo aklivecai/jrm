@@ -1,14 +1,10 @@
 <?php
-/* @var $this OrderController */
-/* @var $model Order */
-
 $this->breadcrumbs = array(
     Tk::g('Order') => array(
         'admin'
     ) ,
     Tk::g('Admin') ,
 );
-$items = Tak::getListMenu();
 ?>
 <div class="row-fluid">
     <div class="span12">
@@ -16,9 +12,8 @@ $items = Tak::getListMenu();
             <div class="isw-grid"></div>
             <h1><?php echo Tk::g('Order') ?></h1>
         </div>
-
 <div class="block-fluid clearfix">
-            <?php $this->renderPartial('_search', array(
+<?php $this->renderPartial('_search', array(
     'model' => $model
 ));
 
@@ -26,9 +21,10 @@ $listOptions = Tak::gredViewOptions(false);
 $listOptions['dataProvider'] = $model->search();
 $listOptions['columns'] = array(
     array(
-        'class' => 'bootstrap.widgets.TbButtonColumn',
-        'template' => ' <div style="font-weight: bold;text-align: center;line-height:55px;">{updates}</div> '
-        /*<br />{addproduct} <br />{addorderinfo} <br />{addorderflow}*/
+        'type' => 'raw',
+        'value' => 'Yii::app()->getController()->getLink($data->primaryKey,$data->status)',
+        /*'template' => ' <div style="font-weight: bold;text-align: center;line-height:55px;">{updates}</div> '
+        <br />{addproduct} <br />{addorderinfo} <br />{addorderflow}
         ,
         'buttons' => array(
             'updates' => array(
@@ -38,36 +34,34 @@ $listOptions['columns'] = array(
                     'style' => 'color: red;'
                 )
             ) ,
-            'addproduct' => array(
-                'label' => '添加商品',
-                'url' => 'Yii::app()->createUrl("OrderProduct/create", array("OrderProduct[order_id]"=>$data->primaryKey,"OrderProduct[fromid]"=>$data->fromid))',
-            ) ,
-            'addorderinfo' => array(
-                'label' => '添加订单详情',
-                'url' => 'Yii::app()->createUrl("OrderInfo/create", array("OrderInfo[itemid]"=>$data->primaryKey))',
-            ) ,
-            'addorderflow' => array(
-                'label' => '添加流程',
-                'url' => 'Yii::app()->createUrl("OrderFlow/create", array("OrderFlow[order_id]"=>$data->primaryKey))',
-            ) ,
         ) ,
+        */
         'header' => CHtml::dropDownList('pageSize', Yii::app()->user->getState('pageSize') , TakType::items('pageSize') , array(
+            'style' => 'width: 85px',
             'onchange' => "$.fn.yiiGridView.update('list-grid',{data:{setPageSize: $(this).val()}})",
         )) ,
         'htmlOptions' => array(
             'style' => 'width: 85px'
-        )
+        ) ,
+        'headerHtmlOptions' => array(
+            'style' => 'width: 85px'
+        ) ,
     ) ,
     array(
         'name' => 'itemid',
         'headerHtmlOptions' => array(
             'style' => 'width: 120px'
-        )
+        ) ,
+
+    ) ,
+    array(
+        'name' => 'manageid',
+        'value' => '$data->iManage->company'
     ) ,
     array(
         'name' => '订单产品',
         'type' => 'raw',
-        'value' => '$data->wProducts()'
+        'value' => '$data->wProductsTitle()'
     ) ,
     array(
         'name' => '预期交货日期',

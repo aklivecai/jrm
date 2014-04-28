@@ -13,7 +13,7 @@
 class TakCrypt {
     private $expire = 0, $key = 'Tak';
 
-    public function __construct($key_str = null, $time_to_live = null) {
+    public function __construct($time_to_live = null,$key_str = null) {
         if ($key_str) {
             self::setKey($key_str);
         }
@@ -75,14 +75,13 @@ class TakCrypt {
         // print_r($expiry_arr);
         if (count($expiry_arr) != 3) {
             //过期时间完整性验证失败
-            echo '过期时间完整性验证失败';
-            return false;
+            // echo '过期时间完整性验证失败';
+            return -1;
         } else {
             $tex_time = $expiry_arr[2];
             if ($tex_time > 0 && $tex_time - time() <= 0) {
                 //验证码过期
-                echo '验证码过期';
-                return false;
+                return -2;
             } else {
                 $reslutstr = $expiry_arr[1];
             }

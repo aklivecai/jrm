@@ -48,6 +48,7 @@ $jss = array(
     'plugins/stepywizard/jquery.stepy.js',
     // 'plugins/validate/jquery.validate.min.js',
     
+    
 );
 
 $this->regCssFile(array(
@@ -85,8 +86,6 @@ Tak::regCssFile($cssS, 'static');
 <script type="text/javascript">
   var CrmPath = '<?php echo Yii::app()->getBaseUrl(); ?>/';
 </script>
-
-
 <!--[if lt IE 9]> 
 <script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/ie.js?>"></script>        
 <![endif]-->
@@ -133,7 +132,7 @@ echo CHtml::tag('a', array(
             <div class="row-fluid">
               <div class="span3"><strong>固定布局:</strong></div>
               <div class="span9">
-                <input type="checkbox" name="settings_fixed" value="1"/>
+                <input type="checkbox" name="settings_fixed" value="1" checked="checked" />
               </div>
             </div>
             <div class="row-fluid">
@@ -157,6 +156,7 @@ echo CHtml::tag('a', array(
         <?php
 echo Tak::getManame();
 // echo Tak::getManageid();
+
 
 ?> 
 
@@ -241,5 +241,28 @@ CHtml::tag('iframe', array(
 Tak::showMsg();
 ?>
 <?php Tak::copyright() ?>
+<!--
+<?php
+if (YII_DEBUG) {
+    $str = Tak::fastUuid() . '122223333333333333333333333333.x%|898sxs;.$ContactpPrson.*http://hao123.com';
+    $str = 'Clienteles.**http://hao123.com||http%3A%2F%2Fhao123.com';
+    $str = "abcdefghijklmnopqrstuvwz=.";
+    $str = "http://192.168.0.201/GitHub/CRM/manage/RevokeSub/d0bfbcf5lkXO8tBldSAltbUAYOVFtRUFQGAApKQkxSUQoBB1NQVgBVHRNO?name=8a0b3b76RMK645V1JYDgNWVwMCVFAFVwBVVVIdGx1QAloNA1NQAFBVTRoc";
+    // $str = "1";
+    $s1 = Tak::setCryptKey($str);
+    $s2 = Tak::getCryptKey($s1);
+    echo strlen($s1);
+    echo sprintf("\n\n %s\n\n %s\n\n %s\n\n", $str, $s1, $s2);
+    
+    $crypt = new SysCrypt();
+    $s1 = $crypt->encrypt($str);
+    
+    $s2 = $crypt->decrypt($s1);
+    echo sprintf("%s\n %s\n", $s1, $s2);
+    // urldecode
+    
+}
+?>
+-->
 </body>
 </html>

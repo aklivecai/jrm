@@ -124,6 +124,10 @@ return array(
     'Order' => '订单',
     'Orders' => '订单',
     
+    'Order Flow' => '订单流程',
+    'Order Note' => '下单说明',
+    'Alipay' => '支付方式',
+    
     'Select' => '选择 ',
     'contact-type' => '联系方式',
     'contact-stage' => '销售阶段',
@@ -144,9 +148,8 @@ return array(
     'Changepwd' => '修改密码',
     'Profile' => '个人资料',
     'Warehouse' => '仓库',
-
-  ':name move dw' => ' :name 下移',    
-  ':name move up' => ':name 上移',    
+    
+    ':name move dw' => ' :name 下移',
+    ':name move up' => ':name 上移',
 );
-
 

@@ -129,6 +129,7 @@ class OrderFiles extends MRecord {
             } else {
                 //修改数据时候
                 
+                
             }
         }
         return $result;
@@ -156,7 +157,8 @@ class OrderFiles extends MRecord {
         if ($this->file_path != '') {
             $img = $this->file_type == 1 ? $this->file_path : Tak::getFileIco($this->file_type);
             if (!strpos($img, 'ttp://')) {
-                $img = 'http://' . $img;
+                // $img = 'http://' . $img;
+                // $img = '/' . $img;
             }
             $result = "<img src='$img' width='45' height='45' alt='$filename'/>";
             if ($istitle) {
