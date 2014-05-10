@@ -39,11 +39,11 @@ $listMenu = array(
 );
 ?>
 <div class="row-fluid">
-	<div class="span12">
-	<div class="head clearfix">
+    <div class="span12">
+    <div class="head clearfix">
         <div class="isw-grid"></div>
         <h1><?php echo Tk::g($model->sName) ?></h1>   
-		<?php
+        <?php
 $this->widget('application.components.MyMenu', array(
     'htmlOptions' => array(
         'class' => 'buttons'
@@ -51,10 +51,9 @@ $this->widget('application.components.MyMenu', array(
     'items' => $listMenu,
 ));
 ?>    
-	</div>	
-	<div class="block-fluid clearfix">
+    </div>  
+    <div class="block-fluid clearfix">
 <?php
-
 $this->renderPartial('//_search', array(
     'model' => $model
 ));
@@ -82,12 +81,21 @@ $columns = array(
         'sortable' => false,
         'header' => $model->getAttributeLabel("enterprise") ,
     ) ,
-    'numbers'
-    ,
+    'numbers',
     array(
         'name' => 'us_launch',
         'type' => 'raw',
         'sortable' => false,
+        'headerHtmlOptions' => array(
+            'class' => 'stor-date',
+            'style'=>"width:65px;"
+        )
+    ) ,
+    'note',
+    array(
+        'name' => '金额',
+        'type' => 'raw',
+        'value'=>'Tak::format_price($data->getTotal())',
     ) ,
     array(
         'name' => 'time',
@@ -95,7 +103,8 @@ $columns = array(
         'value' => 'Tak::timetodate($data->time)',
         'sortable' => false,
         'headerHtmlOptions' => array(
-            'class' => 'stor-date'
+            'class' => 'stor-date',
+            'style'=>"width:65px;"
         ) ,
         'header' => $model->getAttributeLabel("time") ,
     ) ,
@@ -105,7 +114,8 @@ $columns = array(
         'value' => 'TakType::getStatus("isok",$data->time_stocked>0?1:0)',
         'sortable' => true,
         'headerHtmlOptions' => array(
-            'class' => 'stor-date'
+            'class' => 'stor-date',
+            'style'=>"width:25px;"
         ) ,
         'header' => Tk::g($model->sName) ,
     )
@@ -113,6 +123,6 @@ $columns = array(
 $options['columns'] = $columns;
 $widget = $this->widget('bootstrap.widgets.TbGridView', $options);
 ?>
-		</div>
-	</div>
+        </div>
+    </div>
 </div>

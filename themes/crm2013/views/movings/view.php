@@ -5,7 +5,6 @@ $this->breadcrumbs = array(
     Tk::g($model->sName) => array(
         'admin'
     ) ,
-    $model->itemid,
 );
 $items = Tak::getViewMenu($model->itemid);
 $items['Create']['label'] = Tk::g('Entering');
@@ -136,7 +135,7 @@ echo $str;
  <?php $this->widget('bootstrap.widgets.TbListView', array(
     'dataProvider' => $model->getProductMovings() ,    
     'itemView' => '//movings/_product_view',
-    'template' => '<table class="table"> <thead> <tr> <th>物料名字</th> <th>产品规格</th> <th>材料</th> <th>单位</th>  <th>颜色</th><th>价格</th><th>数量</th> </tr> </thead> <tbody>{items}</tbody> </table>',
+    'template' => '<table class="table"> <thead> <tr> <th>物料名字</th> <th>产品规格</th> <th>材料</th>  <th>颜色</th><th>价格</th><th>数量</th> <th>单位</th> </tr> </thead> <tbody>{items}</tbody> </table>',
     'htmlOptions' => array(
         'class' => ''
     ) ,

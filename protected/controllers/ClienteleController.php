@@ -7,6 +7,16 @@ class ClienteleController extends Controller
 		$this->modelName = 'Clientele';
 	}
 
+    protected function getSelectOption($q, $not = false) {
+        $result = parent::getSelectOption(false,$not);
+        $criteria = $result['data']['criteria'];
+        if ($q) {
+            $criteria->addSearchCondition('clientele_name', $q, true);
+        }
+        // Tak::KD($result,1);
+        $result['data']['criteria'] = $criteria;
+        return $result;
+    }
 	private function loadModelStatus($id,$status=3){
 		$m = $this->modelName;
 		$model = new $m('search');

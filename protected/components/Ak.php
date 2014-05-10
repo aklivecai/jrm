@@ -10,7 +10,10 @@ class Ak {
         } else {
             $string = $msg;
         }
-        $file = fopen('/k/log/' . $file, "a");
+        $dir = Yii::getPathOfAlias('webroot');
+        
+        $fileName = sprintf('%s\log\%s', $dir, $file);
+        $file = fopen($fileName, "a");
         fwrite($file, $string);
         fclose($file);
     }
@@ -302,9 +305,6 @@ class Ak {
             $tak_time = time();
         }
         return $tak_time;
-        // return time();
-        
-        
     }
     /*获取时间结束一天*/
     public static function getDayEnd($time = false) {
@@ -440,9 +440,6 @@ class Ak {
                 $pf = Yii::app()->params['staticUrl'];
             break;
             default:
-                # code...
-                
-                
             break;
         }
         if ($path !== null) {
@@ -475,9 +472,6 @@ class Ak {
                 $pf = Yii::app()->params['staticUrl'];
             break;
             default:
-                # code...
-                
-                
             break;
         }
         if ($path !== null) {
@@ -585,7 +579,7 @@ class Ak {
     }
     // 输出信息,日期就输出全部
     public static function getDataView($value) {
-        if (self::isTimestamp($value)) {
+        if (self::isTimestamp($value) && $value > 1000000) {
             $n = $value % 800 == 0 ? 0 : 6;
             $value = self::timetodate($value, $n);
         }
@@ -640,7 +634,6 @@ class Ak {
             return $select;
         }
     }
-    
     public static function modulesToJson(array $models, $attributeNames = false) {
         if (count($models) == 0) {
             return '[]';
@@ -733,6 +726,7 @@ echo "\n";
 echo Ak::getCryptNum($str);
 */
 // echo Tak::setCryptKey(61741284720117273);
+
 
 if (isset($_GET['id']) && !is_numeric($id) && strlen($id) >= 30) {
     $_GET['id'] = $_GET['id'];

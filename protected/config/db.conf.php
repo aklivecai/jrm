@@ -9,6 +9,7 @@ $db = array(
         // uncomment the following to use a MySQL database
 $db = array(
             'connectionString' => 'mysql:host=192.168.0.222;dbname=_b2b_ak',
+            // 'connectionString' => 'mysql:host=112.124.63.178;dbname=_b2b_ak',
             'emulatePrepare' => true,
             'username' => 'ak',
             'password' => 'aklivecai',

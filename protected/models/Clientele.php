@@ -1,9 +1,7 @@
 <?php
-class Clientele extends ModuleRecord {
-    
+class Clientele extends ModuleRecord {    
     public $linkName = 'clientele_name'; /*连接的显示的字段名字*/
-    public $profession = 4;
-    
+    public $profession = 4;    
     public static $table = '{{clientele}}';
     /**
      * @return array validation rules for model attributes.字段校验的结果
@@ -82,7 +80,7 @@ class Clientele extends ModuleRecord {
         return array(
             'itemid' => '编号',
             'fromid' => '平台会员ID',
-            'manageid' => '录入者',
+            'manageid' => '所有者',
             'clientele_name' => '客户名称',
             'rating' => '客户等级',
             'annual_revenue' => '年营业额',
@@ -99,7 +97,7 @@ class Clientele extends ModuleRecord {
             'status' => '状态', /*(0:回收站,1:正常)*/
             'last_time' => '最后联系时间', /*(客户联系记录中修改)*/
             'add_time' => '添加时间',
-            'add_us' => '添加人',
+            'add_us' => '录入者',
             'add_ip' => '添加IP',
             'modified_time' => '修改时间',
             'modified_us' => '修改人',
@@ -179,7 +177,7 @@ class Clientele extends ModuleRecord {
     }
     
     protected function _del() {
-    	AdminLog::$isLog = false;
+        AdminLog::$isLog = false;
         $tags = $this->getProsons();
         foreach ($tags as $key => $value) {
             $value->del();

@@ -161,13 +161,13 @@ class Movings extends ModuleRecord {
         if ($this->typeid >= 0) {
             $criteria->compare('typeid', $this->typeid);
         }
-        $criteria->compare('numbers', $this->numbers);
         $this->setCriteriaTime($criteria, array(
             'time',
             'add_time',
             'modified_time'
         ));
         
+        $criteria->compare('numbers', $this->numbers, true);
         $criteria->compare('enterprise', $this->enterprise, true);
         $criteria->compare('us_launch', $this->us_launch, true);
         $criteria->compare('time_stocked', $this->time_stocked, true);
@@ -259,6 +259,7 @@ class Movings extends ModuleRecord {
             $m = new ProductMoving;
             $m->type = $this->type;
             $m->movings_id = $this->itemid;
+            $m->warehouse_id = $this->warehouse_id;
             $itemid = $m->itemid = Tak::fastUuid();
             foreach ($tags as $key => $value) {
                 $m->setIsNewRecord(true);
@@ -269,6 +270,7 @@ class Movings extends ModuleRecord {
                 $m->price = isset($value['price']) ? $value['price'] : '0.00';
                 $m->note = isset($value['note']) ? $value['note'] : '';
                 if ($m->save()) {
+                    /*保存成功,查找是否存在库存中,没有就插入新的,主要区别为,判断仓库*/
                     $idata = array(
                         'product_id' => $key,
                         'warehouse_id' => $this->warehouse_id
@@ -320,7 +322,6 @@ class Movings extends ModuleRecord {
             
             $sql = strtr($sql, $arr);
             $connection->createCommand($sql)->execute();
-            
             $transaction->commit();
         }
         catch(Exception $e) // 如果有一条查询失败，则会抛出异常
@@ -338,8 +339,16 @@ class Movings extends ModuleRecord {
         ));
         return $link;
     }
-    //删除信息后
-    protected function afterDelete() {
-        parent::afterDelete();
+    
+    public function getTotal() {
+        $data = array(
+            ':movings_id' => $this->itemid,
+            ':tabl' => ProductMoving::$table,
+        );
+        $sql = 'SELECT SUM(numbers*price) FROM :tabl WHERE movings_id=:movings_id';
+        $sql = strtr($sql, $data);
+        $total = self::$db->createCommand($sql)->queryScalar();
+        $total = sprintf("%01.2f", $total);
+        return $total;
     }
 }

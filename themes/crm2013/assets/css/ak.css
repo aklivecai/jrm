@@ -87,7 +87,7 @@ ul.yiiPager .first, ul.yiiPager .last {
 .grid-view {
     margin: 12px;
 }
-.grid-view .pagination .disabled > span, .grid-view .pagination .disabled > a, .grid-view .pagination .disabled > a: hover, .grid-view .pagination .disabled > a: focus {
+.grid-view .pagination .disabled > span, .grid-view .pagination .disabled > a, .grid-view .pagination .disabled > a:hover, .grid-view .pagination .disabled > a: focus {
     color: #999999;
     cursor: not-allowed;
     border-color: #dddddd;
@@ -312,16 +312,16 @@ input[type=date] {
     border: 1px solid #FFF;
     border-width: 1px 2px 2px 1px;
 }
-.li-product li: hover {
+.li-product li:hover {
     z-index: 9;
 }
-.li-product li: hover .wap-pic {
+.li-product li:hover .wap-pic {
     width: 295px;
     height: auto;
     overflow: inherit;
     border-color: #DDD;
 }
-.li-product li: hover .wap-pic dl {
+.li-product li:hover .wap-pic dl {
     visibility: visible;
 }
 .wap-products img {
@@ -426,7 +426,7 @@ input[type=date] {
 .tak-table tbody td a {
     color: #317EE7;
 }
-.tak-table tbody tr: hover {
+.tak-table tbody tr:hover {
     background: #fbf8e9;
     -o-transition: all 0.1s ease-in-out;
     -webkit-transition: all 0.1s ease-in-out;
@@ -496,10 +496,10 @@ form.active .wap-flow-content {
 #list-views tbody tr {
     cursor: pointer;
 }
-#list-views tr.active td, #list-views tbody tr: hover td {
+#list-views tr.active td, #list-views tbody tr:hover td {
     background-color: #FCFCFC;
 }
-#list-views tr.active .more-info, #list-views tbody tr: hover .more-info {
+#list-views tr.active .more-info, #list-views tbody tr:hover .more-info {
     height: auto;
     overflow: visible;
     border-color: red;
@@ -621,4 +621,28 @@ form.active .wap-flow-content {
 }
 .tip-title{
 
+}
+
+#list-more-search{
+    padding-top: 12px;
+    display:'';
+}
+#list-more-search li{
+    margin-top: 3px;
+    margin-bottom: 2px;
+    list-style-type: none;
+    clear: both;
+}
+#list-more-search label{
+    float: left;
+    width:85px;
+    padding-right: 3px;
+    line-height: 25px;
+    text-align: right;
+}
+#list-more-search input{
+    height: 18px;
+}
+#list-more-search .more-search-dlist{
+    padding-left: 95px;
 }

@@ -69,11 +69,13 @@ $columns = array(
         'name' => 'color',
         'value' => '$data->color',
     ) ,
+    'note',
     array(
         'name' => '数量',
         'type' => 'raw',
         'value' => 'Tak::tagNum($data->stock)',
     ) ,
+    'unit',
     array(
         'name' => 'price',
         'value' => 'Tak::format_price($data->price)',
@@ -81,6 +83,11 @@ $columns = array(
     array(
         'name' => '小计',
         'value' => 'Tak::format_price($data->total)',
+    ),
+    array(
+        'name'=>'历史',
+        'type' => 'raw',
+        'value' => 'Stocks::getHistory($data->primaryKey,$_GET["warehouse_id"])',
     )
 );
 

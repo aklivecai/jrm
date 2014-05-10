@@ -266,6 +266,7 @@ class Tak extends Ak {
             'training' => ',training,',
             'clientele' => ',clientele,contactpPrson,contact,clienteles,',
             'Pss' => ',purchase,stocks,product,sell,',
+            'subordinate' => ',subordinate,',
             'setting' => ',category,changepwd,profile,sell,orderconfig,'
         );
         $items = array(
@@ -331,7 +332,7 @@ class Tak extends Ak {
                         'url' => array(
                             '/OrderConfig/Config'
                         ) ,
-                        'visible' => self::checkAccess('Order.config') ,
+                        'visible' => self::checkAccess('Orderconfig.*') ,
                     ) ,
                     'product' => array(
                         'icon' => 'screenshot',
@@ -385,7 +386,6 @@ class Tak extends Ak {
                         'url' => array(
                             '/Subordinate/'
                         ) ,
-                        'visible' => self::getAdmin() ,
                     ) ,
                     array(
                         'icon' => 'retweet',
@@ -395,12 +395,18 @@ class Tak extends Ak {
                         ) ,
                     ) ,
                     array(
-                        'icon' => 'user',
+                        'icon' => 'retweet',
+                        'label' => sprintf($strSpan, Tk::g('订单客户分配')) ,
+                        'url' => array(
+                            '/Subordinate/OrderClientele'
+                        ) ,
+                    ) ,
+                    array(
+                        'icon' => 'list-alt',
                         'label' => sprintf($strSpan, Tk::g('Log')) ,
                         'url' => array(
                             '/Subordinate/Log'
                         ) ,
-                        'visible' => self::checkSuperuser() && YII_DEBUG,
                     ) ,
                 )
             ) ,
@@ -1270,7 +1276,7 @@ class Tak extends Ak {
         if (!is_numeric($id) || strlen($id) >= 35) {
             $result = $id;
         } else {
-            $result = Tak::setCryptKey($id, 1800);
+            $result = Tak::setCryptKey($id, 180000);
         }
         return $result;
     }
@@ -1290,7 +1296,21 @@ class Tak extends Ak {
         $content = preg_replace("/border=.+?['|\"]/i", '', $content); //去除样式
         $content = preg_replace("/face=.+?['|\"]/i", '', $content); //去除样式
         $content = preg_replace("/face=.+?['|\"]/", '', $content); //去除样式只允许
-        
-        
+        /**/
     }
 }
+
+
+/*
+$id = '44773236400282037';
+$id16 = dechex($id);
+$idstr = Tak::setCryptKey($id16);
+$idstr116 = Tak::setCryptKey($id16);
+
+echo sprintf("%s\t%s\n",strlen($id),$id);
+echo sprintf("%s\t%s\n",strlen($id16),$id16);
+echo sprintf("%s\t%s\n",strlen($idstr1),$idstr1);
+echo sprintf("%s\t%s\n",strlen($idstr116),$idstr116);
+
+echo sprintf("%s\n 16 to 10 \n ",hexdec('536aed2fb09bc90c1d8b456a'));
+*/

@@ -1,7 +1,7 @@
 <?php
 class SubordinateController extends Controller {
     public $defaultAction = 'index';
-    protected $users = array();
+    public $users = array();
     
     public function init() {
         parent::init();
@@ -9,10 +9,83 @@ class SubordinateController extends Controller {
         $this->users = Subordinate::getUsers();
         // $this->users = Manage::model()->findAllByAttributes(array('branch' => Tak::getState('isbranch',-1)));
         // Tak::KD($this->users);
+        /**/
     }
     
     public function actionIndex() {
-        $tags = null;
+        $this->render('index', array(
+            'model' => null,
+        ));
+    }
+    
+    public function getLinkOrderUser($itemid) {
+        $btns = array();
+        $btns[] = JHtml::link(Tk::g('Order') , array(
+            '/Order',
+            'SubClientele[manageid]' => $itemid,
+        ) , array(
+            'class' => 'btn btn-small'
+        ));
+        $strBtns = implode('  ', $btns);
+        return $strBtns;
+    }
+    private function getOrderUser($key = false, $mid = false) {
+        $sql = "SELECT  m.* FROM  :users  AS m
+        #otherTable
+         AND m.itemid IN(SELECT o.manageid FROM :order AS o WHERE o.fromid=:fromid GROUP BY o.manageid) ";
+        if ($mid > 0) {
+            $sql = strtr($sql, array(
+                'm.*' => ' m.*,sub.mid '
+            ));
+            $otherTable = ',' . Merchandiser::$table . " AS sub WHERE sub.mid = $mid AND sub . manageid = m . itemid AND item = 'OrderClientele'";
+            $sql.= ' AND sub.fromid =:fromid ';
+        } else {
+            $otherTable = ' WHERE 1=1 ';
+        }
+        if ($key) {
+            $sql.= " AND m . companyLIKE'%$key%'";
+        }
+        $sql.= ' ORDER BY m.company ASC';
+        $sql = strtr($sql, array(
+            ':order' => Order::$table,
+            ':users' => Profile::$table,
+            ':fromid' => Tak::getFormid() ,
+            '#otherTable' => $otherTable,
+        ));
+        $rawData = Tak::getDb('db')->createCommand($sql)->queryAll();
+        $dataProvider = new CArrayDataProvider($rawData, array(
+            'id' => 'profile',
+            'pagination' => array(
+                'pageSize' => 10,
+            ) ,
+        ));
+        return $dataProvider;
+    }
+    public function actionOrderClientele() {
+        /*orderclientele*/
+        $m = 'Profile';
+        $model = new $m();
+        $model->unsetAttributes();
+        if (isset($_GET[$m])) {
+            $model->attributes = $_GET[$m];
+        }
+        $dataProvider = $this->getOrderUser($model->company, $model->itemid);
+        $this->render('orderclientele', array(
+            'model' => $model,
+            'tags' => $dataProvider,
+        ));
+    }
+    public function actionLog() {
+        $m = 'SubAdminLog';
+        $model = new $m('search');
+        $model->unsetAttributes();
+        if (isset($_GET[$m])) {
+            $model->attributes = $_GET[$m];
+        }
+        $model->setGetCU()->setUsers($this->users);
+        $this->render('log', array(
+            'model' => $model,
+        ));
     }
     
     public function actionClienteles() {
@@ -23,7 +96,6 @@ class SubordinateController extends Controller {
         if (isset($_GET[$m])) {
             $model->attributes = $_GET[$m];
         }
-        
         $this->render('clienteles', array(
             'model' => $model,
         ));

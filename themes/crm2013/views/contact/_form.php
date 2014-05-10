@@ -96,9 +96,9 @@ container:'container' ,
 filters : {
     max_file_size : '10mb',
     mime_types: [
-    {'title' : 'Image files', 'extensions' : 'jpg,gif,png,jpeg'},
-    {'title' : 'Zip files', 'extensions' : 'zip,rar'},
-    {'title' : 'Doc files', 'extensions' : 'doc,docx,xls,xlsx,rtf,txt'}
+    {'title' : '图片|Image files', 'extensions' : 'jpg,gif,png,jpeg'},
+    {'title' : '压缩包|Zip files', 'extensions' : 'zip,rar'},
+    {'title' : '文档文件|Doc files', 'extensions' : 'doc,docx,xls,xlsx,rtf,txt,wps'}
     ]
 }}
 , uploader = new plupload.Uploader(objUpload)

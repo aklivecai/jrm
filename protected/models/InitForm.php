@@ -126,7 +126,6 @@ class InitForm extends CFormModel {
                 //插入权限
                 $sqls[] = "INSERT INTO :tab_rabc (`itemname`,`fromid`,`userid`,`bizrule`,`data`) VALUES ('Admin',:fromid, :userid$key, '', 'N;');";
                 // Tak::KD($sqls);
-                
             }
             $arr[':userid'] = $this->fromid;
             // Tak::KD($admin);
@@ -144,7 +143,9 @@ class InitForm extends CFormModel {
             
             $sqls[] = " INSERT INTO :tab_admin_log (`itemid`, `fromid`, `manageid`, `user_name`, `qstring`, `info`, `ip`, `add_time`) VALUES (:itemid, :fromid, :userid, ':uname', '', '激活初始化数据', :ip, :time);";
             //开始激活用户时间
-            $sqls[] = " UPDATE :tab_test_memeber SET   `start_time`=':time' , `active_time` =  ':time' WHERE `itemid` = :fromid;";
+            $sqls[] = " UPDATE :tab_test_memeber SET   `start_time`=':time' WHERE `itemid` = :fromid;";
+            // 如果客户没有设置过期时间即为当前时间
+            $sqls[] = " UPDATE :tab_test_memeber SET  `active_time` =  ':time' WHERE `itemid` = :fromid AND  `active_time`=0;";
             
             foreach ($sqls as $value) {
                 $sql = strtr($value, $arr);

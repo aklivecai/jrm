@@ -65,6 +65,19 @@ if (count($nps) > 0) {
     array_splice($_itemis, count($_itemis) , 0, Tak::getNP($nps));
 }
 array_splice($items, count($items) - 2, 0, $_itemis);
+
+if ($model->accessory) {
+    if (strpos($model->accessory, 'png')) {
+        $accessory = CHtml::image($model->accessory,'',array('style'=>'max-height:85px;max-width:200px;'));
+    }else{
+        $accessory = basename($model->accessory);
+    }
+$accessory = CHtml::link($accessory , $model->accessory, array(
+                "target" => "_blank"
+            )) ;
+}else{
+    $accessory = '';
+}
 ?>
 
 <div class="block-fluid">
@@ -97,9 +110,7 @@ array_splice($items, count($items) - 2, 0, $_itemis);
         array(
             'name' => 'accessory',
             'type' => 'raw',
-            'value' => CHtml::link(basename($model->accessory) , $model->accessory, array(
-                "target" => "_blank"
-            )) ,
+            'value' => $accessory,
         ) ,
         array(
             'name' => 'add_time',

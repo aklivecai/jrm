@@ -254,6 +254,7 @@ class Manage extends ModuleRecord {
             } else {
                 //修改数据时候
                 if (!Tak::isValidMd5($this->user_pass)) {
+                    $this->salt = $this->generateSalt();
                     $this->user_pass = $this->hashPassword($this->user_pass, $this->salt);
                 }
                 if (!isset($this->user_status)) {
@@ -277,7 +278,7 @@ class Manage extends ModuleRecord {
             ':tabl' => '{{rbac_authassignment}}',
         );
         if ($this->isNewRecord || $this->oldbranch >= 0) {
-            $comm = Tak::getDb('db')->createCommand();
+            $comm = self::$db->createCommand();
             // Tak::KD($this->oldbranch);
             // 删除就记录
             if ($this->oldbranch >= 0 && $this->oldbranch != '') {
@@ -288,8 +289,7 @@ class Manage extends ModuleRecord {
                 $comm->setText($sql)->execute();
                 // $db->createCommand($sql)->execute();
                 // Tak::KD($sql,1);
-                
-                
+                /**/
             }
             // 判断是否已经存在 queryScalar
             $sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";
@@ -303,12 +303,8 @@ class Manage extends ModuleRecord {
                 // $db->createCommand($sql)->execute();
                 $comm->setText($sql)->execute();
                 // Tak::KD($sql,1);
-                
-                
+                /**/
             }
-            // exit;
-            
-            
         }
     }
     
@@ -321,7 +317,7 @@ class Manage extends ModuleRecord {
              AND manageid = :manageid
         ";
         $sql = strtr($sql, array(
-            ':tableName' => $this->tableName() ,
+            ':tableName' => self::$table,
             ':active_time' => $arr['time'],
             ':fromid' => $arr['fromid'],
             ':manageid' => $arr['manageid']
@@ -343,13 +339,13 @@ class Manage extends ModuleRecord {
              AND manageid = :manageid
         ";
         $sql = strtr($sql, array(
-            ':tableName' => $this->tableName() ,
+            ':tableName' => self::$table,
             ':last_login_ip' => $arr['ip'],
             ':last_login_time' => $arr['time'],
             ':fromid' => $arr['fromid'],
             ':manageid' => $arr['manageid']
         ));
-        $query = Yii::app()->db->createCommand($sql);
+        $query = self::$db->createCommand($sql);
         $query->execute();
         AdminLog::log('登录操作');
         return true;

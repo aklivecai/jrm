@@ -19,6 +19,16 @@ $this->menu = array_merge_recursive($this->menu, array(
     ) ,
     array(
         'label' => Tk::g(array(
+            'Manage',
+        )) ,
+        'url' => array(
+            'memeber/index',
+            'Manage[fromid]' => $model->primaryKey,
+            'visible' => Tak::getAdmin() ,
+        )
+    ) ,
+    array(
+        'label' => Tk::g(array(
             'View',
             'Log'
         )) ,
@@ -27,6 +37,7 @@ $this->menu = array_merge_recursive($this->menu, array(
             'TestLog[fromid]' => $model->primaryKey
         )
     ) ,
+    
     array(
         'label' => Tk::g('Delete') ,
         'url' => '#',

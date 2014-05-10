@@ -13,7 +13,7 @@ class ProductMoving extends CActiveRecord {
                 'required'
             ) ,
             array(
-                'itemid, movings_id, product_id',
+                'itemid, movings_id, product_id,warehouse_id',
                 'length',
                 'max' => 25
             ) ,
@@ -142,12 +142,8 @@ class ProductMoving extends CActiveRecord {
     protected function beforeSave() {
         $result = parent::beforeSave();
         if ($result) {
-            //添加数据时候
             if ($this->isNewRecord) {
             } else {
-                //修改数据时候
-                
-                
             }
         }
         return $result;

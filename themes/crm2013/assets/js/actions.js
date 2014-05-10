@@ -141,6 +141,9 @@ $('.more-search').on('click',function(){
     searchForm.find('.more-search-info').toggleClass('hide');
 });
 
+searchForm.find('.btn-more-serch').on('click',function(){
+    searchForm.find('#list-more-search').toggleClass('hide');
+});
 searchForm.find('.btn-reset').on('click',function(){
     // $('#'+searchForm.attr('to-view')+' > div.keys').attr('title');
     searchForm.find('input[type=reset]').trigger('click');

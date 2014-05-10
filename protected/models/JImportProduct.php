@@ -34,8 +34,8 @@ class JImportProduct extends JImportForm {
         if (($col == 'A' || $col == 'B') && $value == '') {
             $result = true;
         } elseif ($col == 'I' && $value != '') {
-            if (Tak::isNumeric($value) || $value == 0) {
-                $v = (int)$value;
+            if (is_numeric($value) || $value == 0) {
+                $v = $value;
                 $result = !($v >= 0);
             } else {
                 $result = true;
@@ -45,19 +45,26 @@ class JImportProduct extends JImportForm {
         }
         return $result;
     }
+    
+    private $newProducts = 0;
+    private $arr = null;
+    public function init() {
+        parent::init();
+        $this->arr = Tak::getOM();
+    }
     public function import($warehouse_id = false) {
         if (!$warehouse_id) {
             $warehouse_id = Tak::getPost('warehouse_id', false);
         }
-        $arr = Tak::getOM();
+        $arr = $this->arr;
         unset($arr['itemid']);
         $arr['note'] = '导入';
         $cates = $this->getCates();
         $sqls = array();
-
+        $logfile = sprintf('%s-test.log', Tak::getFormid());
+        $strMsg = '';
         // 不记录日志
         AdminLog::$isLog = false;
-        
         $cate = new Category('create');
         $cate->attributes = $arr;
         $cate->setModel($this->model);
@@ -68,61 +75,77 @@ class JImportProduct extends JImportForm {
         $stock = new Stocks('create');
         $stock->attributes = $arr;
         $newCates = array();
-        $newProducts = 0;
+        
         $itemid = Tak::fastUuid();
+        $data = $this->data;
         // Tak::KD($this->data);
-        foreach ($this->data as $key => $value) {
-            $itemid = Tak::numAdd($itemid, $key + 2);            
-            if (isset($cates[$value['catename']])) {
-                $catid = $cates[$value['catename']];
-            } else {
-                if ($cate->catid > 0) {
-                    $cate->catid+= $key * 2;
-                }
-                $cate->catename = $value['catename'];
-                $cate->setIsNewRecord(true);
-                $cate->save();
-                $newCates[] = $cate->catename;
-                $catid = $cates[$value['catename']] = $cate->catid;
-            }
-            $product->attributes = $value;
-            if ($product->itemid > 0) {
-                $product->itemid = $itemid;
-                $product->setIsNewRecord(true);
-            }
-            if ($product->price == '') {
-                $product->price = 0;
-            }
-            $product->typeid = $catid;
-            if ($product->save()) {
-                if ($warehouse_id > 0 && $product->stocks > 0) {
-                    if ($stock->itemid > 0) {
-                        $stock->itemid = $itemid;
-                        $stock->setIsNewRecord(true);
+        $transaction = Tak::getDb('db')->beginTransaction();
+        try {
+            foreach ($data as $key => $value) {
+                $itemid = Tak::numAdd(Tak::fastUuid() , $key + 2);
+                if (isset($cates[$value['catename']])) {
+                    $catid = $cates[$value['catename']];
+                } else {
+                    if ($cate->catid > 0) {
+                        $cate->catid+= $key * 2;
                     }
-                    $stock->attributes = array(
-                        'product_id' => $product->itemid,
-                        'warehouse_id' => $warehouse_id,
-                        'stocks' => $product->stocks,
-                    );
-                    $stock->warehouse_id = $warehouse_id;
-                    if ($stock->save()) {
-                        /*Tak::KD($warehouse_id);
-                        Tak::KD($stock->warehouse_id);
-                        return false;*/
-                    } else {
-                        /*Tak::KD($stock->getErrors());
-                         return false;*/
-                    }
+                    $cate->catename = $value['catename'];
+                    $cate->setIsNewRecord(true);
+                    $cate->save();
+                    $newCates[] = $cate->catename;
+                    $catid = $cates[$value['catename']] = $cate->catid;
                 }
-                $newProducts++;
-            } else {
-                /* Tak::KD($product->getErrors());*/
+                
+                $product->attributes = $value;
+                if ($product->itemid > 0) {
+                    $product->itemid = $itemid;
+                    $product->setIsNewRecord(true);
+                }
+                if ($product->price == '') {
+                    $product->price = 0;
+                }
+                $product->typeid = $catid;
+                if ($product->save()) {
+                    // print_r($product->attributes);
+                    if ($warehouse_id > 0 && $product->stocks > 0) {
+                        if ($stock->itemid > 0) {
+                            $stock->itemid = $itemid;
+                            $stock->setIsNewRecord(true);
+                        }
+                        $stock->attributes = array(
+                            'product_id' => $product->itemid,
+                            'warehouse_id' => $warehouse_id,
+                            'stocks' => $product->stocks,
+                        );
+                        $stock->warehouse_id = $warehouse_id;
+                        // print_r($stock->attributes);
+                        if ($stock->save()) {
+                            // print_r($stock->attributes);
+                        } else {
+                            $strMsg.= "\n" . var_export($stock->getErrors() , TRUE);
+                        }
+                        // print_r($strMsg);
+                    }
+                    unset($data[$key]);
+                    $this->newProducts++;
+                } else {
+                    $strMsg.= "\n" . var_export($product->getErrors() , TRUE);
+                }
             }
         }
+        catch(Exception $e) {
+            $transaction->rollback();
+            $error = $e->getMessage();
+            Tak::K($error, $logfile);
+            if (strpos($error, 'Duplicate')) {
+                $this->data = $data;
+                $this->import($warehouse_id);
+            }
+            return false;
+        }
+        // exit;
         // 记录日志
         AdminLog::$isLog = true;
-
         $str = '
             <ul>
                 <li>
@@ -144,12 +167,14 @@ class JImportProduct extends JImportForm {
             'add_ip' => $arr['ip'],
         );
         $url = Yii::app()->createUrl('Product/Admin?');
-        
         $url.= Tak::createMUrl($tarr, $this->getModel());
-        $str = sprintf($str, $newProducts, $url, $strCate);
+        $str = sprintf($str, $this->newProducts, $url, $strCate);
         Tak::deleteUCache($this->model);
         AdminLog::log($str, $arr);
         Tak::setFlash($str);
+        
+        Tak::K(count($this->data) , $logfile);
+        Tak::K($strMsg, $logfile);
     }
     
     public function getCates() {

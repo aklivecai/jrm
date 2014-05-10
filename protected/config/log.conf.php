@@ -19,7 +19,7 @@ $log = array(
     //     'sentFrom'=>'aklivecai@gmail.com',
     //     'subject'=>'aklivecai@gmail.com',
     // ),
-    
+
 );
 if (YII_DEBUG || true) {
     $log_debug = array(
@@ -30,7 +30,7 @@ if (YII_DEBUG || true) {
         'categories' => 'cool.*,system.db.CDbCommand,php',
         'allowedIPs' => array(
             '127.0.0.1',
-            // '192.168.0.201',   
+             '192.168.0.201',
         ) ,
     );
     $log[] = $log_debug;

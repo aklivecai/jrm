@@ -9,19 +9,14 @@ class Product extends ModuleRecord {
     private $stock = 0;
     
     public $warehouse_id = false;
-    /**
-     * @return array validation rules for model attributes.字段校验的结果
-     */
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array(
                 ' name, typeid',
                 'required'
             ) ,
             array(
-                'stocks, status',
+                'status',
                 'numerical',
                 'integerOnly' => true
             ) ,
@@ -30,7 +25,7 @@ class Product extends ModuleRecord {
                 'numerical',
             ) ,
             array(
-                'itemid, add_us, modified_us',
+                'stocks,itemid, add_us, modified_us',
                 'length',
                 'max' => 25
             ) ,
@@ -49,8 +44,6 @@ class Product extends ModuleRecord {
                 'length',
                 'max' => 255
             ) ,
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array(
                 'itemid, fromid, name, typeid, material, spec, unit, stocks, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status',
                 'safe',
@@ -58,12 +51,7 @@ class Product extends ModuleRecord {
             ) ,
         );
     }
-    /**
-     * @return array relational rules. 表的关系，外键信息
-     */
     public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         $condition = array(
             "module='product'"
         );
@@ -91,9 +79,6 @@ class Product extends ModuleRecord {
             ) ,
         );
     }
-    /**
-     * @return array customized attribute labels (name=>label) 字段显示的
-     */
     public function attributeLabels() {
         return array(
             'itemid' => '物料编号',
@@ -131,6 +116,7 @@ class Product extends ModuleRecord {
         $criteria->compare('spec', $this->spec, true);
         $criteria->compare('unit', $this->unit, true);
         $criteria->compare('color', $this->color, true);
+        $criteria->compare('price', $this->price, true);
         $criteria->compare('stocks', $this->stocks);
         $criteria->compare('add_time', $this->add_time);
         $criteria->compare('add_us', $this->add_us);
@@ -184,9 +170,7 @@ class Product extends ModuleRecord {
         if (property_exists($this, 'tableAlias') && $this->tableAlias) {
             $alias = $this->tableAlias;
         } else {
-            // $alias = 't';
-            
-            
+            /*$alias = 't';*/
         }
         if ($alias) {
             $sql = $alias . '.' . $sql;
@@ -200,9 +184,6 @@ class Product extends ModuleRecord {
             //添加数据时候
             if ($this->isNewRecord) {
             } else {
-                //修改数据时候
-                
-                
             }
         }
         return $result;

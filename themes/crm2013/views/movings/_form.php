@@ -169,14 +169,14 @@ $form = $this->beginWidget('CActiveForm', array(
 <td class="info">{{=v.color}}</td>
 <td><input type="number" class="stor-txt" name="Product[{{=v.itemid}}][price]" min="0.1" value="{{=v.price}}"/></td>
 <td class="info">
-  <input type="number" class="stor-txt" name="Product[{{=v.itemid}}][numbers]" required="required" value="{{#def.number || ''}}" min="1"/></td>
+  <input type="text" class="stor-txt" name="Product[{{=v.itemid}}][numbers]" required="required" value="{{#def.number || ''}}"/></td>
   <td><input name="Product[{{=v.itemid}}][note]" type="text" class="stor-txt" value="{{=v.note}}"/></td>  
   </tr>
   {{~}}
   </script>      
 <?php
 $this->endWidget();
-$this->regScriptFile('k-load-movings.js?t=1', CClientScript::POS_END);
+$this->regScriptFile('k-load-movings.js?t=200', CClientScript::POS_END);
 Tak::regScript('end', '
 ');
 ?>

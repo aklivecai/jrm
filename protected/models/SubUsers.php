@@ -4,7 +4,6 @@ class SubUsers extends CActiveRecord {
     public $branch = 0;
     public $manageid = 0;
     public $fromid = 0;
-    
     public function primaryKey() {
         return 'manageid';
     }

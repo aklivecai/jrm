@@ -430,8 +430,7 @@ class MRecord extends CActiveRecord {
                     ksort($temp);
                     $tags[$key] = $temp;
                 }
-                // Tak::KD($tags,1);             
-                
+                // Tak::KD($tags,1);
             }
             $result = $tags;
         }

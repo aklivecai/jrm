@@ -92,6 +92,54 @@ class SiteController extends Controller {
     
     public function actionHelp() {
         $this->_setLayout();
+        $m = 'post';
+        // Tak::KD($_POST[$m],1);
+        if (isset($_POST[$m]) && $_POST[$m]['name'] && $_POST[$m]['note']) {
+            $arr = $_POST[$m];
+            $str = <<<END
+            <ul>
+                <li>平台会员：fromid</li>
+                <li>会员ID：manageid(:umane)</li>
+                <li>姓名：name</li>
+                <li>Email：email</li>
+                <li>内容：note</li>
+            </ul>
+END;
+            $str = strtr($str, $arr);
+            $arr = Tak::getOM();
+            $arr[':umane'] = Tak::getManame();
+            $str = strtr($str, $arr);
+            $data = array(
+                'subject' => '问题反馈',
+                'body' => $str,
+                'from' => '419524837@qq.com',
+                'to' => '419524837@qq.com',
+            );
+            // Tak::KD($data,1);
+            $model = new MailForm();
+            $model->attributes = $data;
+            if ($model->validate()) {
+                $mailer = Yii::app()->mailer;
+                $mailer->CharSet = "UTF-8";
+                $mailer->IsHTML(true);
+                $mailer->IsSMTP();
+                $mailer->SMTPAuth = true;
+                $mailer->Port = '25';
+                $mailer->Host = 'smtp.vip.163.com';
+                $mailer->Username = '9juren001';
+                $mailer->Password = 'juren001';
+                $mailer->From = '9juren001@vip.163.com';
+                $mailer->FromName = $model->from;
+                $mailer->AddReplyTo($model->from);
+                $mailer->AddAddress($model->to);
+                $mailer->Subject = ($model->subject);
+                $mailer->Body = ($model->body);
+                $sendmail = $mailer->Send();
+                if ($sendmail) {
+                    Tak::setFlash('问题已经反馈到后台，请耐心等待我们的处理!', 'success');
+                }
+            }
+        }
         $this->render('help');
     }
     public function actionWizard() {
@@ -126,7 +174,7 @@ class SiteController extends Controller {
                     'k' => Tak::setCryptNum($k)
                 )));
             }
-            // return $this->inits($k);
+            // return $this->inits($k);            
         } else {
         }
         $itemid = Tak::getCryptNum($k);
@@ -140,8 +188,9 @@ class SiteController extends Controller {
                     $itemid = false;
                     $errorInfo = '帐号以禁止登录! 请联系客服 400 0168 488';
                 } else {
+                    $start_time = $msg['start_time'];
                     $active_time = $msg['active_time'];
-                    if ($active_time > 0) {
+                    if ($start_time > 0) {
                         if (Tak::isDayOver($active_time, 15)) {
                             $itemid = false;
                             $errorInfo = '帐号已过期! 请联系客服 400 0168 488';

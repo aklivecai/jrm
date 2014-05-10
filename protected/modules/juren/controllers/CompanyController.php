@@ -30,7 +30,11 @@ class CompanyController extends JController
 	public function actionImport($id)
 	{
 		$mcompany = $this->loadModel($id);
+		 $m = Manage::model()->findByPk($id);
 		$m = 'Test9Memeber';
+		if ($m!==null) {
+			$this->redirect(array('testMemeber/View','id'=>$id));			
+		}
 		$model = new $m;
 		if(isset($_POST[$m])){
 			$model->attributes = $_POST[$m];

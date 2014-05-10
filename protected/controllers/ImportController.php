@@ -66,6 +66,7 @@ class ImportController extends Controller {
     public function actionImport($action) {
         $model = $this->loadModel($action);
         if (isset($_POST[$model->model])) {
+            // Tak::KD(count($_POST[$model->model]),1);
             $result = $model->load($_POST[$model->model]);
             if ($result) {
                 $model->import();

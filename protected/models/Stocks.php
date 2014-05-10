@@ -1,52 +1,26 @@
 <?php
-/**
- * 这个模块来自表 "{{stocks}}".
- *
- * 数据表的字段 '{{stocks}}':
- * @property string $itemid
- * @property string $fromid
- * @property string $product_id
- * @property integer $stocks
- * @property string $add_time
- * @property string $add_us
- * @property string $add_ip
- * @property string $modified_time
- * @property string $modified_us
- * @property string $modified_ip
- * @property string $note
- */
 class Stocks extends ModuleRecord {
-    
     public static $table = '{{stocks}}';
-    /**
-     * @return string 数据表名字
-     */
     public function tableName() {
         return self::$table;
     }
-    
     public function init() {
         parent::init();
         $this->isLog = false;
     }
-    /**
-     * @return array validation rules for model attributes.字段校验的结果
-     */
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array(
                 'product_id',
                 'required'
             ) ,
             array(
-                'stocks,warehouse_id',
+                'warehouse_id',
                 'numerical',
                 'integerOnly' => true
             ) ,
             array(
-                'itemid, product_id, add_us, modified_us',
+                'stocks,itemid, product_id, add_us, modified_us',
                 'length',
                 'max' => 25
             ) ,
@@ -60,8 +34,6 @@ class Stocks extends ModuleRecord {
                 'length',
                 'max' => 255
             ) ,
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array(
                 'itemid, fromid, product_id, stocks, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note',
                 'safe',
@@ -69,12 +41,7 @@ class Stocks extends ModuleRecord {
             ) ,
         );
     }
-    /**
-     * @return array relational rules. 表的关系，外键信息
-     */
     public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array(
             'iProduct' => array(
                 self::BELONGS_TO,
@@ -85,9 +52,6 @@ class Stocks extends ModuleRecord {
             ) ,
         );
     }
-    /**
-     * @return array customized attribute labels (name=>label) 字段显示的
-     */
     public function attributeLabels() {
         return array(
             'itemid' => '编号',
@@ -112,9 +76,9 @@ class Stocks extends ModuleRecord {
         $criteria = $cActive->criteria;
         $criteria->compare('itemid', $this->itemid);
         $criteria->compare('fromid', $this->fromid);
-
+        
         $criteria->compare('warehouse_id', $this->warehouse_id);
-
+        
         $criteria->compare('product_id', $this->product_id, true);
         $criteria->compare('stocks', $this->stocks);
         $criteria->compare('add_time', $this->add_time);
@@ -160,5 +124,93 @@ class Stocks extends ModuleRecord {
     //删除信息后
     protected function afterDelete() {
         parent::afterDelete();
+    }
+    /**
+     * 获取产品历史出入库数量
+     * @param  int $product_id    产品编号
+     * @param  int $warehouse_id 仓库编号
+     * @return  string               上个月结存，本月出入库数量，本月结存
+     */
+    public static function getHistory($product_id, $warehouse_id = fale) {
+        $data = array(
+            ':product_id' => $product_id,
+            ':tabl' => ProductMoving::$table,
+        );
+        $condition = array(
+            ' WHERE 1=1',
+            sprintf('product_id=%s', $product_id)
+        );
+        /* 查询仓库*/
+        if ($warehouse_id > 0) {
+            $data[':warehouse_id'] = $warehouse_id;
+            $condition[] = sprintf('warehouse_id=%s', $warehouse_id);
+        }
+        
+        $data[':where'] = implode(' AND ', $condition);
+        $t = time();
+        //
+        $data[':本月开始时间'] = $t2 = mktime(0, 0, 0, date("m", $t) , 1, date("Y", $t));
+        //
+        $data[':本月结束时间'] = $e2 = mktime(23, 59, 59, date("m", $t) , date("t") , date("Y", $t));
+        // 上个月开始时间
+        $t3 = mktime(0, 0, 0, date("m", $t) - 1, 1, date("Y", $t));
+        // 上个月结束时间
+        $e3 = mktime(23, 59, 59, date("m", $t) - 1, date("t", $t3) , date("Y", $t));
+        
+        $sqls = array(
+            '上个月进' => 'SELECT SUM(numbers) AS total,21 AS itype FROM :tabl  :where AND type=1 AND  time_stocked<:本月开始时间 GROUP BY product_id',
+            '上个月出' => 'SELECT SUM(numbers) AS total,22 AS itype FROM :tabl  :where AND type=2   AND  time_stocked<:本月开始时间 GROUP BY product_id',
+            
+            '本月进货' => 'SELECT SUM(numbers) AS total,2 AS itype FROM :tabl  :where AND type=1 AND time_stocked>=:本月开始时间 GROUP BY product_id',
+            '本月出货' => 'SELECT SUM(numbers) AS total,3 AS itype  FROM :tabl  :where AND type=2 AND time_stocked>=:本月开始时间  GROUP BY product_id',
+            '结存进' => 'SELECT SUM(numbers) AS total,11 AS itype  FROM :tabl  :where AND type=1 AND time_stocked<=:本月结束时间 GROUP BY product_id',
+            '结存出' => 'SELECT SUM(numbers) AS total,12 AS itype  FROM :tabl  :where AND type=2 AND time_stocked<=:本月结束时间 GROUP BY product_id',
+        );
+        $sql = implode(' UNION ALL ', $sqls);
+        $sql = strtr($sql, $data);
+        $arr = array(
+            '1' => 0,
+            '2' => 0,
+            '3' => 0,
+            '4' => 0,
+            
+            '11' => 0,
+            '12' => 0,
+            '21' => 0,
+            '22' => 0,
+        );
+        $query = self::$db->createCommand($sql)->queryAll();
+        foreach ($query as $key => $value) {
+            $arr[$value['itype']] = $value['total'];
+        }
+        $arr['1'] = $arr['21'] - $arr['22'];
+        $arr['4'] = $arr['11'] - $arr['12'];
+        $htmls = array(
+            '<ul>'
+        );
+        $htmls[] = sprintf('<li>上个月结存：%01.4f</li>', $arr['1']);
+        $htmls[] = sprintf('<li>本月进货：%01.4f</li>', $arr['2']);
+        $htmls[] = sprintf('<li>本月出货：%01.4f</li>', $arr['3']);
+        $htmls[] = sprintf('<li>本月结存：%01.4f</li>', $arr['4']);
+        $htmls[] = '</ul>';
+        return implode("\n", $htmls);
+    }
+    
+    public static function getTypeStocks($productid) {
+        $sql = ' SELECT SUM(numbers) AS total,type FROM :tabl  WHERE product_id=:productid GROUP BY type';
+        $sql = strtr($sql, array(
+            ':tabl' => ProductMoving::$table,
+            ':productid' => $productid,
+        ));
+        $arr = array(
+            '0' => self::getStocks($productid) ,
+            '1' => 0,
+            '2' => 0
+        );
+        $query = self::$db->createCommand($sql)->queryAll();
+        foreach ($query as $key => $value) {
+            $arr[$value['type']] = $value['total'];
+        }
+        return $arr;
     }
 }

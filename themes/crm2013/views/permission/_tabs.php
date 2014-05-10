@@ -50,7 +50,7 @@ if ($this->tabs) {
             'label' => '修改',
             'url' => array(
                 'permission/update',
-                'id' => $id
+                'id' => $itemid
             ) ,
             'linkOptions' => array(
                 'class' => 'data-ajax',
@@ -68,7 +68,7 @@ if ($this->tabs) {
             ) ,
             'url' => array(
                 'permission/delete',
-                'id' => $id
+                'id' => $itemid
             )
         );
     } else {

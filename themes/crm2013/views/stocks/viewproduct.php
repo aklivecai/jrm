@@ -10,9 +10,16 @@ $this->breadcrumbs = array(
 ?>
 <div class="">
 <?php
-$msgProduct = $this->renderPartial('//product/_view', array(
+$msgProduct = '<div class="span5">';
+$msgProduct.= $this->renderPartial('//product/_view', array(
     'model' => $model
 ) , true);
+$msgProduct.= '</div><div class="span5">';
+
+$msgProduct.= $this->renderPartial('_stock', array(
+    'model' => $model
+) , true);
+$msgProduct.= '</div>';
 $items = array(
     'product' => array(
         'label' => Tk::g(array(

@@ -15,6 +15,7 @@ class MovingsController extends Controller {
         $this->cates = TakType::items($_type);
     }
     public function loadModel($id = false, $recycle = false) {
+        $id = $this->getSId($id);
         if ($this->_model === null) {
             if ($id) {
                 $m = $this->modelName;

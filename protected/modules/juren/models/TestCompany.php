@@ -5,7 +5,7 @@ class TestCompany extends Jb2bCompany {
         '1' => '全部',
         '11' => '未激活',
         '2' => '已过期',
-        '3' => '未过期'
+        '3' => '未过期',
     );
     
     public function search() {
@@ -18,6 +18,9 @@ class TestCompany extends Jb2bCompany {
         } else {
             $data = self::getMs();
             if ($get == 0) {
+                $condition = array(
+                    'start_time>0'
+                );
                 $criteria->addInCondition('userid', array_keys($data));
             } elseif ($get == 11) {
                 $criteria->addNotInCondition('userid', array_keys($data));

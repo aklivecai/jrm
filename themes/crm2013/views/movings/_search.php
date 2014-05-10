@@ -19,7 +19,29 @@ foreach ($cates as $key => $value) {
 
 <?php 
   $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Tk::g('Search'))); 
-  $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'button', 'label'=>Tk::g('Reset'),'htmlOptions'=>array('class'=>'btn-reset'))); 
-  echo CHtml::button(Tk::g('Reset'),array('type'=>'reset','class'=>'hide'));
+
+$this->widget('bootstrap.widgets.TbButton', array(
+    'buttonType' => 'button',
+    'label' => Tk::g('More') ,
+    'htmlOptions' => array(
+        'class' => 'btn-more-serch'
+    )
+));
 ?>
+<div id="list-more-search" class="hide">
+<ul>
+  <li>
+    <?php echo CHtml::activeLabelEx($model,'numbers')?>:
+    <?php echo CHtml::activeTextField($model,'numbers');?>
+  </li>
+  <li>
+    <?php echo CHtml::activeLabelEx($model,'us_launch')?>:
+    <?php echo CHtml::activeTextField($model,'us_launch');?>
+  </li>
+  <li>
+    <?php echo CHtml::activeLabelEx($model,'note')?>:
+    <?php echo CHtml::activeTextField($model,'note');?>
+  </li>
+</ul>
+</div>
 <?php $this->endWidget(); ?>   

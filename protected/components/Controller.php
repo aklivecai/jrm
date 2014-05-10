@@ -376,8 +376,7 @@ class Controller extends RController {
     
     protected function getSelectOption($q, $not = false) {
         $m = $this->modelName;
-        $model = new $m;
-        
+        $model = new $m;        
         $key = $model->primaryKey();
         $linkName = $model->linkName;
         

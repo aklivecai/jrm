@@ -14,18 +14,14 @@
 class AdminLog extends CActiveRecord {
     
     public static $isLog = true;
-    
+    protected $_bycu = true; //搜索自己
     public static $table = '{{admin_log}}';
+    
     public function tableName() {
         $m = get_class($this);
         return $m::$table;
-    }    
-    /**
-     * @return array validation rules for model attributes.
-     */
+    }
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array(
                 'itemid, manageid,fromid, user_name',
@@ -42,16 +38,9 @@ class AdminLog extends CActiveRecord {
                 'max' => 255
             ) ,
             array(
-                'add_time',
-                'length',
-                'max' => 10
-            ) ,
-            array(
                 'ip',
                 'safe'
             ) ,
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array(
                 'itemid, fromid, user_name, qstring, info, ip, add_time',
                 'safe',
@@ -59,17 +48,22 @@ class AdminLog extends CActiveRecord {
             ) ,
         );
     }
-    /**
-     * @return array relational rules.
-     */
+    
     public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array();
     }
-    /**
-     * @return array customized attribute labels (name=>label)
-     */
+    
+    public function setGetCU($isTure = false) {
+        $this->_bycu = $isTure;
+        return $this;
+    }
+    protected function getCu() {
+        $result = false;
+        if ($this->hasAttribute('manageid') && $this->_bycu && !Tak::checkSuperuser()) {
+            $result = true;
+        }
+        return $result;
+    }
     public function attributeLabels() {
         return array(
             'itemid' => '编号',
@@ -82,42 +76,39 @@ class AdminLog extends CActiveRecord {
             'add_time' => '时间',
         );
     }
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
-     */
+    
     public function search() {
         // @todo Please modify the following code to remove attributes that should not be searched.
         
         $criteria = new CDbCriteria;
-        
         $criteria->compare('itemid', $this->itemid);
         $criteria->compare('fromid', $this->fromid);
-        $criteria->compare('manageid', $this->fromid);
+        if ($this->manageid > 0) {
+            $criteria->compare('manageid', $this->manageid);
+        }
+        
         $criteria->compare('user_name', $this->user_name, true);
         $criteria->compare('qstring', $this->qstring, true);
         $criteria->compare('info', $this->info, true);
         $criteria->compare('ip', $this->ip, true);
-        $criteria->compare('add_time', $this->add_time, true);
+        
+        $add_time = $this->add_time;
+        if ($add_time) {
+            if ($add_time > 0 && Tak::isTimestamp($add_time)) {
+                $criteria->compare('add_time', $add_time);
+            } elseif ($add_time == 0) {
+            } else {
+                $start = strtotime($add_time);
+                $end = TaK::getDayEnd($start);
+                $criteria->addBetweenCondition('add_time', $start, $end);
+            }
+        }
         
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
         ));
     }
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return AdminLog the static model class
-     */
+    
     public static function model($className = __CLASS__) {
         return parent::model($className);
     }
@@ -148,11 +139,10 @@ class AdminLog extends CActiveRecord {
             $arr['order'] = 'add_time DESC';
         }
         $condition = array();
-        
         if ($this->hasAttribute('fromid')) {
             $condition[] = 'fromid=' . Tak::getFormid();
         }
-        if (!Tak::checkSuperuser()) {
+        if ($this->getCu() && Tak::getManageid()) {
             $condition[] = 'manageid=' . Tak::getManageid();
         }
         

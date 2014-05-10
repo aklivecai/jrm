@@ -346,7 +346,7 @@ WHERE itemid = ':itemid'";
         return $result;
     }
     
-    public static function getOrderUsers() {
+    public static function getOrderUsers($key = false) {
         $sql = "
         SELECT  m.* FROM  :users  AS m
             WHERE
@@ -354,23 +354,24 @@ WHERE itemid = ':itemid'";
                 SELECT  o.manageid
                 FROM :order o  WHERE :condition
                 GROUP BY  o.manageid
-            )           
-            
-            ORDER BY m.company DESC
+            )
+            #condition 
+            ORDER BY m.company ASC
         ";
+        if ($key) {
+            $condition = "  company LIKE  '%$key%'";
+        } else {
+            $condition = '';
+        }
         $sql = strtr($sql, array(
             ':order' => self::$table,
             ':users' => Profile::$table,
-            ':condition' => 'o.fromid=' . Tak::getFormid()
+            ':condition' => 'o.fromid=' . Tak::getFormid() ,
+            '#condition' => $condition,
         ));
         // Tak::KD($sql);
-        $command = Tak::getDb('db')->createCommand($sql);
-        $dataReader = $command->query();
-        $tags = array();
-        foreach ($dataReader as $row) {
-            $tags[] = $row;
-        }
-        // Tak::KD($tags,1);
+        $command = self::$db->createCommand($sql);
+        $tags = $command->queryAll(true);
         return $tags;
     }
 }
