@@ -47,16 +47,16 @@ $listOptions['columns'] = array(
             'style' => 'width: 85px'
         ) ,
     ) ,
+/*
     array(
         'name' => 'itemid',
         'headerHtmlOptions' => array(
             'style' => 'width: 120px'
         ) ,
-
     ) ,
+*/
     array(
-        'name' => 'manageid',
-        'value' => '$data->iManage->company'
+        'name' => 'company',
     ) ,
     array(
         'name' => '订单产品',

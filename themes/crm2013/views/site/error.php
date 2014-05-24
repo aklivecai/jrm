@@ -1,11 +1,13 @@
 <?php
 if (isset($error) && isset($error['code'])) {
     $this->pageTitle = ' - ' . $error['code'];
-}else{
+} else {
     $this->pageTitle = ' - 错误';
 }
 if (strpos($message, 'DB connection')) {
     $message = '系统维护，请稍等！！';
+} elseif (strpos($message, '无法找到 active record')) {
+    $message = '您的数据库服务IP无法连接,联系我们处理!';
 }
 ?>
 <div class="errorPage">

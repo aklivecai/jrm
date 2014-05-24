@@ -106,7 +106,6 @@ class JImportProduct extends JImportForm {
                 }
                 $product->typeid = $catid;
                 if ($product->save()) {
-                    // print_r($product->attributes);
                     if ($warehouse_id > 0 && $product->stocks > 0) {
                         if ($stock->itemid > 0) {
                             $stock->itemid = $itemid;
@@ -118,13 +117,10 @@ class JImportProduct extends JImportForm {
                             'stocks' => $product->stocks,
                         );
                         $stock->warehouse_id = $warehouse_id;
-                        // print_r($stock->attributes);
                         if ($stock->save()) {
-                            // print_r($stock->attributes);
                         } else {
                             $strMsg.= "\n" . var_export($stock->getErrors() , TRUE);
                         }
-                        // print_r($strMsg);
                     }
                     unset($data[$key]);
                     $this->newProducts++;
@@ -143,7 +139,6 @@ class JImportProduct extends JImportForm {
             }
             return false;
         }
-        // exit;
         // 记录日志
         AdminLog::$isLog = true;
         $str = '

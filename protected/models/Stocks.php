@@ -1,5 +1,5 @@
 <?php
-class Stocks extends ModuleRecord {
+class Stocks extends DbRecod {
     public static $table = '{{stocks}}';
     public function tableName() {
         return self::$table;
@@ -125,6 +125,7 @@ class Stocks extends ModuleRecord {
     protected function afterDelete() {
         parent::afterDelete();
     }
+
     /**
      * 获取产品历史出入库数量
      * @param  int $product_id    产品编号
@@ -172,7 +173,6 @@ class Stocks extends ModuleRecord {
             '1' => 0,
             '2' => 0,
             '3' => 0,
-            '4' => 0,
             
             '11' => 0,
             '12' => 0,
@@ -185,6 +185,7 @@ class Stocks extends ModuleRecord {
         }
         $arr['1'] = $arr['21'] - $arr['22'];
         $arr['4'] = $arr['11'] - $arr['12'];
+        
         $htmls = array(
             '<ul>'
         );

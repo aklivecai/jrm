@@ -37,12 +37,10 @@ echo $form->errorSummary($model);
     </div>
     <div class="footer tar">
         <?php $this->widget('bootstrap.widgets.TbButton', array(
-    'size' => 'large',
     'buttonType' => 'submit',
     'label' => $model->isNewRecord ? Tk::g('Add') : Tk::g('Save')
 )); ?>
         <?php $this->widget('bootstrap.widgets.TbButton', array(
-    'size' => 'large',
     'buttonType' => 'reset',
     'label' => Tk::g('Reset')
 )); ?>

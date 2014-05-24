@@ -71,16 +71,4 @@ class ProductController extends Controller {
             'model' => $model,
         ));
     }
-    
-    public function actionUAdmin() {
-        $m = $this->modelName;
-        $model = new $m('search');
-        $model->unsetAttributes(); // clear any default values
-        if (isset($_GET[$m])) {
-            $model->attributes = $_GET[$m];
-        }
-        $this->render($this->templates['admin'], array(
-            'model' => $model,
-        ));
-    }
 }

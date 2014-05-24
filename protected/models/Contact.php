@@ -1,5 +1,5 @@
 <?php
-class Contact extends ModuleRecord {
+class Contact extends DbRecod {
     public $linkName = 'contact_time';
     public static $table = '{{contact}}';
     
@@ -47,9 +47,7 @@ class Contact extends ModuleRecord {
             ) ,
         );
     }
-    /**
-     * @return array relational rules. 表的关系，外键信息
-     */
+    
     public function relations() {
         
         return array(
@@ -59,8 +57,7 @@ class Contact extends ModuleRecord {
                 'clienteleid',
                 'condition' => '',
                 'order' => ''
-                // ,'on'=>'iClientele.itemid=clienteleid'
-                
+                /*,'on'=>'iClientele.itemid=clienteleid'*/
             ) ,
             'iContactpPrson' => array(
                 self::BELONGS_TO,
@@ -68,14 +65,11 @@ class Contact extends ModuleRecord {
                 'prsonid',
                 'condition' => '',
                 'order' => ''
-                // ,'on'=>'prsonid=iContactpPrson.itemid'
-                
+                /* ,'on'=>'prsonid=iContactpPrson.itemid'*/
             ) ,
         );
     }
-    /**
-     * @return array customized attribute labels (name=>label) 字段显示的
-     */
+    
     public function attributeLabels() {
         $arr = array(
             'itemid' => '编号',
@@ -96,7 +90,6 @@ class Contact extends ModuleRecord {
             'modified_us' => '修改人',
             'modified_ip' => '修改IP',
             'note' => '备注',
-            
             'status' => '状态', /*(0:回收站,1:正常)*/
             'iContactpPrson.nicename' => '联系人',
             'iClientele.clientele_name' => '客户',
@@ -172,19 +165,6 @@ class Contact extends ModuleRecord {
     protected function beforeValidate() {
         return parent::beforeValidate();
     }
-    //保存数据前
-    protected function beforeSave() {
-        $result = parent::beforeSave();
-        if ($result) {
-            //添加数据时候
-            if ($this->isNewRecord) {
-            } else {
-                //修改数据时候
-                
-            }
-        }
-        return $result;
-    }
     
     public function getHtmlLink($name = false, $itemid = false, array $htmlOptions = array() , $action = 'view') {
         if (!$name) {
@@ -222,15 +202,12 @@ class Contact extends ModuleRecord {
         ) , $c);
         // contact_time
         
+        
     }
     
     public function del() {
         parent::del();
         Events::model()->deleteByPk($this->itemid);
-    }
-    //删除信息后
-    protected function afterDelete() {
-        parent::afterDelete();
     }
     
     protected function _getnp($isid = true, $top = 1) {

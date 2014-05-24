@@ -65,6 +65,14 @@ endif ?>
 		<?php echo $form->error($model, 'email'); ?>
 	</div>
 	<div class="row">
+		<?php echo $form->labelEx($model, 'logo'); ?>
+		<?php echo $form->textField($model, 'logo', array(
+    'size' => 60,
+    'maxlength' => 255
+)); ?>
+		<?php echo $form->error($model, 'email'); ?>
+	</div>
+	<div class="row">
 		<?php echo $form->labelEx($model, 'note'); ?>
 		<?php echo $form->textArea($model, 'note', array(
     'cols' => 25,

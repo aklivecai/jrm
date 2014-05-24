@@ -38,6 +38,11 @@ class TestMemeber extends ModuleRecord {
                 'max' => 100
             ) ,
             array(
+                'logo',
+                'length',
+                'max' => 255
+            ) ,
+            array(
                 'add_us, modified_us',
                 'length',
                 'max' => 25
@@ -50,7 +55,7 @@ class TestMemeber extends ModuleRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array(
-                'itemid, manageid, company, email, active_time, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note',
+                'itemid, manageid, company, email,logo, active_time, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note',
                 'safe',
                 'on' => 'search'
             ) ,
@@ -79,6 +84,7 @@ class TestMemeber extends ModuleRecord {
             'user_name' => '默认登陆帐号',
             'company' => '公司名字',
             'email' => '邮箱',
+            'logo' => '企业Logo',
             'active_time' => '开始计算日期',
             'start_time' => '激活时间',
             'add_time' => '添加时间',

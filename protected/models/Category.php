@@ -1,5 +1,5 @@
 <?php
-class Category extends LRecord {
+class Category extends LRecord {    
     private $scondition = false; /*默认搜索条件*/
     public static $table = '{{category}}';
     public static $models = array(
@@ -19,7 +19,7 @@ class Category extends LRecord {
                 ':fromid' => Tak::getFormid() ,
             ));
             // Tak::KD($sql);
-            $tags = Tak::getDb('db')->createCommand($sql)->queryAll();
+            $tags = self::$db->createCommand($sql)->queryAll();
             $result = array();
             foreach ($tags as $key => $value) {
                 $result[$value['catid']] = $value;
@@ -451,8 +451,6 @@ class Category extends LRecord {
         $tree->JTree($categorys);
         $content = $tree->get_tree(0, "<option value=\\\"\$id\\\">\$spacer\$name</option>") . '</select>';
         Tak::KD($content);
-        // cache_write('catetree-'.$moduleid.'.php', $content);
-        
-        
+        /*cache_write('catetree-'.$moduleid.'.php', $content);*/
     }
 }

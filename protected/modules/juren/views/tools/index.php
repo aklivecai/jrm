@@ -9,7 +9,7 @@ $form = $this->beginWidget('CActiveForm', array(
     ) ,
 ));
 
-echo CHtml::dropDownList('action', $action, $this->actions);
+echo CHtml::dropDownList('action', Ak::getQuery('action',''), $this->actions);
 
 echo CHtml::textField('fid', $fid);
 ?>

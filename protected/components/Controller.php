@@ -189,7 +189,7 @@ class Controller extends RController {
             'model' => $this->loadModel($id) ,
         ));
     }
-    public function actionPreview($id, $uuid = false, $status = false, $not = false) {
+    public function actionPreview($id, $uuid = false, $status = false, $not = true) {
         if (!$this->isAjax) {
             $this->_setLayout('//layouts/columnPreview');
         }
@@ -376,7 +376,8 @@ class Controller extends RController {
     
     protected function getSelectOption($q, $not = false) {
         $m = $this->modelName;
-        $model = new $m;        
+        $model = new $m;
+        
         $key = $model->primaryKey();
         $linkName = $model->linkName;
         

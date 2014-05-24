@@ -1,5 +1,5 @@
 <?php
-class Clientele extends ModuleRecord {    
+class Clientele extends DbRecod {    
     public $linkName = 'clientele_name'; /*连接的显示的字段名字*/
     public $profession = 4;    
     public static $table = '{{clientele}}';

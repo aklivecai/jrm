@@ -5,6 +5,7 @@
  * @date    2014-03-15 08:20:35
  * @version $Id$
  */
+
 class JImportClientele extends JImportForm {
     public $model = 'clientele';
     public $headers = array(
@@ -69,7 +70,8 @@ class JImportClientele extends JImportForm {
         $itemid = Tak::fastUuid();
         // Tak::KD($this->data);
         foreach ($this->data as $key => $value) {
-            $itemid = Tak::numAdd($itemid, $key + 2);
+            $itemid = Tak::numAdd($itemid,$key+2);
+            
             $value['manageid'] = $manageid;
             $model->attributes = $value;
             // Tak::KD($model->attributes);
@@ -92,9 +94,7 @@ class JImportClientele extends JImportForm {
                     if ($contact->save()) {
                         $newContact++;
                     } else {
-                        // Tak::KD();
-                        
-                        
+                        // Tak::KD();                        
                     }
                 }
                 $newModels++;

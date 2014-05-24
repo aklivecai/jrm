@@ -47,6 +47,7 @@ class GoogleQRCode extends CWidget {
         
         $src = sprintf("http://qr.liantu.com/api.php?%s", http_build_query($data));
         
+        $k = '';
         if (!Tak::isGuest()) {
             $k = Tak::getFormid();
         } else {
@@ -58,6 +59,7 @@ class GoogleQRCode extends CWidget {
             }
         }
         $src = sprintf("http://i.9juren.com/_ak/code.php?fid=%s&%s", $k, md5($_content));
+        $src = 'http://127.0.0.1/';
         
         $_htmlOptions = array(
             'src' => $src,

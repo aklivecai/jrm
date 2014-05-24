@@ -19,20 +19,24 @@ class OrderConfig {
     public static function getListAlipay($fid = false) {
         !is_numeric($fid) && $fid = Tak::getFormid();
         $tags = array();
-        $sql = "SELECT  title,itemid FROM :tabl WHERE fromid=:fromid AND type=':item' ORDER BY listorder DESC ";
+        $sql = "SELECT  title FROM :tabl WHERE fromid=:fromid AND type=':item'";
         $sql = strtr($sql, array(
             ':tabl' => Info::$table,
             ':fromid' => $fid,
             ':item' => 'order-alipay',
         ));
         // Tak::KD($sql);
-        $data = Tak::getDb('db')->createCommand($sql)->queryAll(TRUE);
-        return $data;
+        $data = Tak::getDb('db')->createCommand($sql)->queryScalar();
+        $result = array();
+        if ($data != '') {
+            $result = explode(',', $data);
+        }
+        return $result;
     }
     public static function getAlipay($id, $fid = false) {
         $tags = array();
-        $id < 100 && $fid = 0;
-        $sql = "SELECT  i.title,c.content FROM :info i LEFT JOIN :data c  ON(i.itemid=c.itemid)   WHERE i.itemid = :itemid AND i.fromid=:fromid AND i.type=:item";
+        $id < 1 && $fid = 0;
+        $sql = "SELECT  i.title,c.content FROM :info i LEFT JOIN :data c  ON(i.itemid=c.itemid)   WHERE i.fromid=:fromid AND i.type=:item";
         $sql = strtr($sql, array(
             ':info' => Info::$table,
             ':data' => ContentData::$table,
@@ -42,8 +46,11 @@ class OrderConfig {
             ':fromid' => $fid,
             ':item' => 'order-alipay',
         );
-        // Tak::KD($sql);
+        
         $data = Tak::getDb('db')->createCommand($sql)->queryRow(true, $arr);
+        if ($data) {
+            $data['title'] = OrderType::item('pay_type', $id);
+        }
         return $data;
     }
     
@@ -54,8 +61,9 @@ class OrderConfig {
             $tags = self::getListAlipay(0);
         }
         $data = array();
+        $types = OrderType::items('pay_type');
         foreach ($tags as $key => $value) {
-            $data[$value['itemid']] = $value['title'];
+            $data[$value] = $types[$value];
         }
         return $data;
     }

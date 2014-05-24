@@ -1,7 +1,7 @@
 <?php
 /* @var $this ClienteleController */
 /* @var $model Clientele */
-$sname = Tk::g(array('Move','Clientele'));
+
 $this->breadcrumbs=array(
 	Tk::g('Clienteles') => array('index'),
 	Tk::g('Move'),
@@ -11,13 +11,16 @@ $this->breadcrumbs=array(
     'id'=>'verticalForm',
     'htmlOptions'=>array('class'=>'well'),
 ));
+
+  echo $form->errorSummary($model); 
+
  ?>
  <div class="form">
  <div class="block-fluid ucard">
             <div class="info">
                 <ul class="rows">
                 <?php 
-				echo '<li class="heading">'.(!$this->isAjax?$sname:'').'</li>';
+				echo '<li class="heading">'.(!$this->isAjax?Tk::g(array('Move','Clientele')):'').'</li>';
                 ?>
 			<li >
 				<div class="title"><?php echo $model->getAttributeLabel('clientele_name')?>:</div> 
@@ -31,9 +34,9 @@ $this->breadcrumbs=array(
 				<div class="title"><?php echo Tk::g('Move')?>:</div> 
 				<div class="text">&nbsp;
 				<?php 
-				  echo $form->textField($modelF,'tMid',array('class'=>'select-manageid','data-select'=>'Manage','data-not'=>$uid,'size'=>10,'style'=>'width:150px')); 
+				  echo $form->textField($model,'manageid',array('class'=>'select-manageid','data-select'=>'Manage','data-not'=>$uid,'size'=>10,'style'=>'width:150px','value'=>'')); 
 				?>
-				<?php echo $form->error($modelF,'manageid'); ?>
+				<?php echo $form->error($model,'manageid'); ?>
 				</div>
 			</li>       
                 </ul>

@@ -91,19 +91,95 @@ class Ak {
         Yii::app()->end($status, $exit);
     }
     
-    public static function getF($id) {
-        $result = sprintf("%s-%s", self::getFormid() , $id);
+    public static function getF($id, $fid = 0) {
+        $fid <= 0 && $fid = self::getFormid();
+        $result = sprintf("%s-%s", $fid, $id);
         return $result;
     }
-    public static function getFCache($id) {
-        $id = self::getF($id);
+    public static function getFCache($id, $fid = 0) {
+        $id = self::getF($id, $fid);
         $result = Yii::app()->cache->get($id);
         return $result;
     }
-    public static function setFCache($id, $value, $expire = 0, $dependency = null) {
-        $id = self::getF($id);
+    /**
+     * 获取企业缓存
+     * @param string  $id         缓存名字
+     * @param string  $value      缓存内容
+     * @param int $fid        缓存的的企业
+     * @param integer $expire     有效时间
+     * @param [type]  $dependency 缓存依赖
+     */
+    public static function setFCache($id, $value, $fid = 0, $expire = 0, $dependency = null) {
+        $id = self::getF($id, $fid);
         $result = Yii::app()->cache->set($id, $value, $expire, $dependency);
         return $result;
+    }
+    public static function deleteFCache($id, $fid = 0) {
+        $id = self::getF($id, $fid);
+        $result = Yii::app()->cache->delete($id);
+        return $result;
+    }
+    
+    public static $_db = null;
+    /**
+     * 获取企业数据库连接
+     * @param  boolean $iseover 是否一定要
+     * @return [type]           [description]
+     */
+    public static function db($iseover = false) {
+        if (self::$_db !== null) return self::$_db;
+        $result = false;
+        $temp = self::getDb('db');
+        if ($connection = self::getWdb()) {
+            // self::KD($connection,1);
+            $db = new CDbConnection($connection['dns'], $connection['username'], $connection['password']);
+            $db->tablePrefix = $temp->tablePrefix;
+            $db->charset = $temp->charset;
+            $db->emulatePrepare = $temp->emulatePrepare;
+            self::$_db = $db;
+            $result = $db;
+        } elseif ($iseover) {
+            $result = $temp;
+        }
+        return $result;
+    }
+    /**
+     * 获取企业数据库配置信息
+     * @param  boolean $id  企业编号
+     * @return [type]       [description]
+     */
+    public static function getWdb($fid = false) {
+        $result = null;
+        $result = self::getFCache('dbconfig', $fid);
+        $fid <= 0 && $fid = self::getFormid();
+        if (!$result) {
+            $info = Info::model()->findByAttributes(array(
+                'fromid' => $fid,
+                'type' => 'dbconfig'
+            ));
+            if ($info) {
+                $tmp = unserialize($info->title);
+            }
+            self::setWdb($result);
+        }
+        return $result;
+    }
+    /**
+     * 设置企业数据库配置信息
+     * @param array  $data 数据库配置数组
+     * @param integer $fid 企业编号
+     */
+    public static function setWdb($data, $fid = 0) {
+        $db = self::setFCache('dbconfig', $data, $fid);
+        return $db;
+    }
+    /**
+     * 删除企业的数据库配置缓存
+     * @param  int $id 企业编号
+     * @return bool     是否删除成功
+     */
+    public static function deleteWdb($id) {
+        return self::deleteFCache('dbconfig', $id);
     }
     public static function getU($id) {
         $result = sprintf("%s-%s", self::getManageid() , $id);
@@ -154,7 +230,7 @@ class Ak {
     }
     /*获取操作数*/
     public static function getOM() {
-        $ip = Yii::app()->user->getState('ip') != '' ? Yii::app()->user->getState('ip') : false;
+        $ip = self::getState('ip') != '' ? self::getState('ip') : false;
         if (!$ip) {
             $ip = self::getIps();
             Yii::app()->user->setState('ip', $ip);
@@ -306,10 +382,22 @@ class Ak {
         }
         return $tak_time;
     }
+    /*获取时间开始的一天*/
+    public static function getDayStart($time = false) {
+        if (!$time) {
+            $time = static ::now();
+        }
+        $startDate = false;
+        if (is_numeric($time)) {
+            $date = date("Y-m-d", $time);
+            $startDate = strtotime($date);
+        }
+        return $startDate;
+    }
     /*获取时间结束一天*/
     public static function getDayEnd($time = false) {
         if (!$time) {
-            $time = time();
+            $time = static ::now();
         }
         $dayEnd = false;
         if (is_numeric($time)) {
@@ -358,8 +446,7 @@ class Ak {
             return $datas;
         }
     }
-    /*唯一数字*/
-    public static function fastUuid($suffix_len = 3) {
+    private static function _fastUid($suffix_len = 3) {
         //! 计算种子数的开始时间
         static $being_timestamp = 1336681180; // 2012-5-10
         $time = explode(' ', microtime());
@@ -367,6 +454,14 @@ class Ak {
         if ($suffix_len > 0) {
             $id.= substr(sprintf('%010u', mt_rand()) , 0, $suffix_len);
         }
+        return $id;
+    }
+    /*唯一数字*/
+    public static function fastUuid($suffix_len = 3) {
+        $id = static ::numAdd(static ::_fastUid() , static ::_fastUid(0));
+        // x64 添加后会重复
+        // x86　添加才能不重复
+        // $id =  static::numAdd($id,mt_rand());
         return $id;
     }
     /*判断字符串是不是MD5加密的*/
@@ -726,8 +821,3 @@ echo "\n";
 echo Ak::getCryptNum($str);
 */
 // echo Tak::setCryptKey(61741284720117273);
-
-
-if (isset($_GET['id']) && !is_numeric($id) && strlen($id) >= 30) {
-    $_GET['id'] = $_GET['id'];
-}

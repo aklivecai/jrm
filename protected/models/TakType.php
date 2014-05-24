@@ -95,6 +95,12 @@ class TakType extends CActiveRecord {
             '3' => 'label-important',
             '4' => 'label-info',
             '5' => 'label-inverse'
+        ),
+        'comparison'=>array(
+            'then'=>'大概',
+            'equals'=>'等于',
+            'greater'=>'大于',
+            'less'=>'小于',
         )
     );
     

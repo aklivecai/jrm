@@ -65,7 +65,7 @@ class TestMemeberController extends JController {
             'manages' => $manages,
         ));
     }
-
+    
     public function actionVolume() {
         $model = new VolumeForm();
         if (isset($_POST['VolumeForm'])) {
@@ -99,6 +99,63 @@ class TestMemeberController extends JController {
         $this->redirect(array(
             'admin',
             'TestMemeber[add_time]' => $time
+        ));
+    }
+    public function actionDeleteDb($id) {
+        $model = $this->loadModel($id);
+        Info::model()->deleteAllByAttributes(array(
+            'fromid' => $model->primaryKey,
+            'type' => 'dbconfig'
+        ));
+        TAk::deleteWdb($model->primaryKey);
+        $this->redirect(array(
+            'view',
+            'id' => $model->primaryKey
+        ));
+    }
+    public function actionDb($id) {
+        $user = $this->loadModel($id);       
+        // Tak::KD(Tak::getWdb($user->primaryKey));
+        $m = 'DbConfig';
+        $dbconfig = Info::model()->findByAttributes(array(
+            'fromid' => $user->primaryKey,
+            'type' => 'dbconfig'
+        ));
+        if ($dbconfig) {
+            $model = new $m('update');
+            $model->attributes = unserialize($dbconfig['title']);
+            // echo $dbconfig['title'];
+            // print_r(unserialize($dbconfig['title']));
+            // print_r($model->attributes);
+            /**/
+        } else {
+            $dbconfig = new Info();
+            $model = new $m('create');
+        }
+        if (isset($_POST[$m])) {
+            $model->attributes = $_POST[$m];
+            if ($model->validate()) {
+                $dbconfig->attributes = array(
+                    'fromid' => $user->primaryKey,
+                    'type' => 'dbconfig',
+                    'title' => serialize($model->attributes) ,
+                );
+                // Tak::KD($model->attributes);
+                // Tak::KD($dbconfig->attributes,1);
+                if ($dbconfig->save()) {
+                    // echo $user->primaryKey;
+                    // 更新数据库缓存
+                    TAk::setWdb($model->toString(), $user->primaryKey);
+                    $this->redirect(array(
+                        'db',
+                        'id' => $user->primaryKey
+                    ));
+                }
+            }
+        }
+        $this->render('db', array(
+            'model' => $model,
+            'user' => $user,
         ));
     }
 }

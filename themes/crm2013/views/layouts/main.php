@@ -155,7 +155,10 @@ echo CHtml::tag('a', array(
       <div class="adminControl active"> 欢迎，
         <?php
 echo Tak::getManame();
-// echo Tak::getManageid();?> 
+// echo Tak::getManageid();
+
+
+?> 
 
       </div>
     </div>
@@ -251,9 +254,6 @@ if (YII_DEBUG) {
     echo strlen($s1);
     echo sprintf("\n\n %s\n\n %s\n\n %s\n\n", $str, $s1, $s2);
     
-
-
-
     $crypt = new SysCrypt();
     $s1 = $crypt->encrypt($str);
     

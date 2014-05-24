@@ -108,5 +108,36 @@ class MovingsController extends Controller {
             'id' => $id
         ));
     }
+    
+    public function writeProduct($data) {
+        $htmls = array('<ol>');
+        foreach ($data as $key => $value) {
+            $numbers = $value['numbers'];
+            if ($value['unit']) {
+                $numbers.= sprintf('%s', $value['unit']);
+            }
+            // $numbers =Tak::tagNum($numbers,'label-info');
+            $htmls[] = sprintf("<li>%s - %s</li>", $value['name'], $numbers);
+        }
+        $htmls[] = '</ol>';
+        $html = implode("", $htmls);
+        if (count($data) >3) {
+            $html = sprintf('<div class="mov-product">%s<a class="not-printf more-product">&gt;&gt;更多</a><a class="not-printf more-product-hide">&gt;&gt;收起</a></div>', $html);
+        }
+        return $html;
+    }
+    public function actionPrint($id) {
+        $this->layout = '//layouts/colummPrint';
+        $str = $this->templates['print'];
+        $fid = Tak::getFormid();
+        if ($fid == 5139) {
+            $dir = $fid;
+            $str = sprintf("/print/%s/movings/print", $dir);
+        }
+        $this->render($str, array(
+            'fid'=>$fid,
+            'model' => $this->loadModel($id) ,
+        ));
+    }    
 }
 

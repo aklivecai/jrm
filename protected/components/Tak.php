@@ -265,7 +265,7 @@ class Tak extends Ak {
             'order' => ',order,',
             'training' => ',training,',
             'clientele' => ',clientele,contactpPrson,contact,clienteles,',
-            'Pss' => ',purchase,stocks,product,sell,',
+            'pss' => ',purchase,stocks,product,sell,',
             'subordinate' => ',subordinate,',
             'setting' => ',category,changepwd,profile,sell,orderconfig,'
         );
@@ -279,11 +279,9 @@ class Tak extends Ak {
             ) ,
             'test' => array(
                 'icon' => 'isw-grid',
-                'url' => array(
-                    '/Site/Wizard'
-                ) ,
-                'label' => sprintf($strSpan, Tk::g('测试')) ,
-                'visible' => self::getAdmin() ,
+                'url' => "javascript:window.open('/costaccounting/mvc.html?', 'newwindow', 'height=600, width=1050');",
+                'label' => sprintf($strSpan, Tk::g('成本核算')) ,
+                'visible' => self::getFormid() == 1,
             ) ,
             'setting' => array(
                 'icon' => 'isw-sync',
@@ -386,6 +384,7 @@ class Tak extends Ak {
                         'url' => array(
                             '/Subordinate/'
                         ) ,
+                        'visible' => self::getAdmin() ,
                     ) ,
                     array(
                         'icon' => 'retweet',
@@ -400,6 +399,7 @@ class Tak extends Ak {
                         'url' => array(
                             '/Subordinate/OrderClientele'
                         ) ,
+                        'visible' => self::getAdmin() ,
                     ) ,
                     array(
                         'icon' => 'list-alt',
@@ -407,6 +407,7 @@ class Tak extends Ak {
                         'url' => array(
                             '/Subordinate/Log'
                         ) ,
+                        'visible' => self::getAdmin() ,
                     ) ,
                 )
             ) ,
@@ -654,7 +655,7 @@ class Tak extends Ak {
                 ) ,
             ) ,
             'pss' => array(
-                'visible' => (self::checkAccess('Pss.*') || self::checkAccess('Product.*') || self::checkAccess('Purchase.*') || self::checkAccess('Product.*') || self::checkAccess('Sell.*') || self::checkAccess('Stocks.*')) ,
+                'visible' => (self::checkAccess('Stocks.Index') || self::checkAccess('Pss.*') || self::checkAccess('Product.*') || self::checkAccess('Purchase.*') || self::checkAccess('Product.*') || self::checkAccess('Sell.*') || self::checkAccess('Stocks.*')) ,
                 'icon' => 'isw-list',
                 'label' => sprintf($strSpan, Tk::g(array(
                     'Admin',
@@ -695,7 +696,16 @@ class Tak extends Ak {
                         'url' => array(
                             '/Stocks'
                         ) ,
-                        'visible' => self::checkAccess('Stocks.*') ,
+                        'visible' => self::checkAccess('Stocks.Index')||self::checkAccess('Stocks.*') ,
+                    ) ,
+                    'costaccounting' => array(
+                        'icon' => 'th',
+                        'url' => "javascript:;",
+                        'label' => sprintf($strSpan, Tk::g('成本核算')) ,
+                        'linkOptions' => array(
+                            'id' => 'costaccounting',
+                            'onclick'=>"window.open('/costaccounting/mvc.html?', '', 'height=600, width=1100,top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=no,location=n o, status=no');"
+                        )
                     ) ,
                 ) ,
             ) ,
@@ -1299,8 +1309,6 @@ class Tak extends Ak {
         /**/
     }
 }
-
-
 /*
 $id = '44773236400282037';
 $id16 = dechex($id);

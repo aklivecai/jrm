@@ -63,9 +63,12 @@ class Info extends CActiveRecord {
         if ($result) {
             if ($this->isNewRecord && $this->itemid <= 0) {
                 $this->itemid = Tak::fastUuid();
+            }
+            if ($this->fromid <= 0) {
                 $this->fromid = Tak::getFormid();
             }
         }
+        
         return $result;
     }
     
@@ -75,11 +78,10 @@ class Info extends CActiveRecord {
     
     public static function getOne($id, $setIsContent = false) {
         $model = self::model()->findByPk($id);
-        if ($model->fromid != Tak::getFormid()) {
-            $model = null;
-        }
         if ($model != null && $setIsContent) {
             $model->content = ContentData::getOne($model->itemid);
+        } else {
+            // $model = null;
         }
         return $model;
     }

@@ -11,7 +11,7 @@ class OrderInfo extends MRecord {
         
         return array(
             array(
-                'detype, pay_type,earnest,few_day,delivery_before,remaining_day,packing,taxes,convey',
+                'company,detype, pay_type,earnest,few_day,delivery_before,remaining_day,packing,taxes,convey',
                 'required'
             ) ,
             array(
@@ -45,7 +45,11 @@ class OrderInfo extends MRecord {
                 'length',
                 'max' => 255
             ) ,
-            
+            array(
+                'company',
+                'length',
+                'max' => 100
+            ) ,            
             array(
                 'earnest, few_day, delivery_before, remaining_day',
                 'length',
@@ -54,7 +58,7 @@ class OrderInfo extends MRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array(
-                'itemid, date_time, detype, pay_type, earnest, few_day, delivery_before, remaining_day, packing, taxes, convey, area, address, people, tel, phone, purchasconsign, contactphone, note, add_ip',
+                'company,itemid, date_time, detype, pay_type, earnest, few_day, delivery_before, remaining_day, packing, taxes, convey, area, address, people, tel, phone, purchasconsign, contactphone, note, add_ip',
                 'safe',
                 'on' => 'search'
             ) ,
@@ -85,6 +89,7 @@ class OrderInfo extends MRecord {
     public function attributeLabels() {
         return array(
             'itemid' => '编号',
+            'company' => '公司',
             'date_time' => '期望交货日期',
             'detype' => '交货方式',
             'pay_type' => '支付方式',

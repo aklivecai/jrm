@@ -1,14 +1,8 @@
 <?php
-class ContactpPrson extends ModuleRecord {
-    
+class ContactpPrson extends DbRecod {
     public $linkName = 'nicename';
     public static $table = '{{contactp_prson}}';
-    /**
-     * @return array validation rules for model attributes.字段校验的结果
-     */
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array(
                 'nicename, clienteleid',
@@ -49,8 +43,6 @@ class ContactpPrson extends ModuleRecord {
                 'length',
                 'max' => 20
             ) ,
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array(
                 'itemid, fromid, manageid, clienteleid, nicename, sex, department, position, email, phone, mobile, fax, qq, address, last_time, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status',
                 'safe',
@@ -146,26 +138,7 @@ class ContactpPrson extends ModuleRecord {
         // $condition[] = 'display>0';
         $arr['condition'] = implode(" AND ", $condition);
         return $arr;
-    }
-    //保存数据前
-    protected function beforeSave() {
-        $result = parent::beforeSave();
-        if ($result) {
-            //添加数据时候
-            if ($this->isNewRecord) {
-            } else {
-                //修改数据时候
-                
-                
-            }
-        }
-        return $result;
-    }
-    //保存数据后
-    protected function afterSave() {
-        parent::afterSave();
-    }
-    
+    }    
     public function getUrl() {
         return Yii::app()->createUrl('contactpPrson/view', array(
             'itemid' => $this->itemid,
@@ -179,11 +152,7 @@ class ContactpPrson extends ModuleRecord {
         $items = CHtml::listData($m, 'itemid', 'nicename');
         return $items;
     }
-    //删除信息后
-    protected function afterDelete() {
-        parent::afterDelete();
-    }
-    
+        
     private $_contact = null;
     protected function getContact() {
         if ($this->_contact === null) {

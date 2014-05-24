@@ -9,7 +9,7 @@ class SiteController extends Controller {
         );
     }
     public function allowedActions() {
-        return 'init,index,login,error,ie6,tak';
+        return 'init,index,login,error,ie6,tak,';
     }
     
     protected function beforeRender($view) {
@@ -174,7 +174,7 @@ END;
                     'k' => Tak::setCryptNum($k)
                 )));
             }
-            // return $this->inits($k);            
+            /*return $this->inits($k);*/
         } else {
         }
         $itemid = Tak::getCryptNum($k);
@@ -186,7 +186,7 @@ END;
             } else {
                 if ($msg['status'] == 0) {
                     $itemid = false;
-                    $errorInfo = '帐号以禁止登录! 请联系客服 400 0168 488';
+                    $errorInfo = '帐号已禁止登录! 请联系客服 400 0168 488';
                 } else {
                     $start_time = $msg['start_time'];
                     $active_time = $msg['active_time'];

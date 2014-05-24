@@ -14,31 +14,54 @@ $items = array(
 <div class="block-fluid">
     <div class="row-fluid">
 <?php $this->widget('bootstrap.widgets.TbNavbar', array(
-    'brand'=>'',
-    'brandUrl'=>'#',
-    'fixed'=>'false',
-    'fixed'=>'true',
-    'collapse'=>true, // requires bootstrap-responsive.css
-
-    'items'=>array(
+    'brand' => '',
+    'brandUrl' => '#',
+    'fixed' => 'false',
+    'fixed' => 'true',
+    'collapse' => true, // requires bootstrap-responsive.css
+    
+    'items' => array(
         array(
-            'class'=>'bootstrap.widgets.TbMenu',
-            'items'=>array(
-                array('label'=>Tk::g(array('Add',$modelName)), 'url'=>$this->getLink('Create'), 'active'=>true,'linkOptions'=>array('class'=>"data-ajax",'id'=>'create-category','title'=>Tk::g(array('Add',$modelName)))),
-                array('label'=>Tk::g(array('Update',$modelName)), 'url'=>$this->getLink('Update'),'linkOptions'=>array('title'=>Tk::g(array('Update',$modelName)),'class'=>'data-ajax','id'=>"ajax-update")),
-
-                array('label'=>Tk::g(array('Delete',$modelName)), 'url'=>$this->getLink('Delete'),'linkOptions'=>array('id'=>"data-deletd")),
-            ),
-        ),
-    ),
-)); 
+            'class' => 'bootstrap.widgets.TbMenu',
+            'items' => array(
+                array(
+                    'label' => Tk::g('Add') ,
+                    'url' => $this->getLink('Create') ,
+                    'active' => true,
+                    'linkOptions' => array(
+                        'class' => "data-ajax",
+                        'id' => 'create-category',
+                        'title' => Tk::g('Add')
+                    )
+                ) ,
+                array(
+                    'label' => Tk::g('Update') ,
+                    'url' => $this->getLink('Update') ,
+                    'linkOptions' => array(
+                        'title' => Tk::g('Update') ,
+                        'class' => 'data-ajax',
+                        'id' => "ajax-update"
+                    )
+                ) ,
+                
+                array(
+                    'label' => Tk::g('Delete') ,
+                    'url' => $this->getLink('Delete') ,
+                    'linkOptions' => array(
+                        'id' => "data-deletd"
+                    )
+                ) ,
+            ) ,
+        ) ,
+    ) ,
+));
 $this->renderPartial('_show', array(
-        'model' => $model,
-        'id' => $id,
-        'action' => $action,
-)); 
-Tak::regScript('','
-    var CURL = "'.$this->getLink('Admin').'";
+    'model' => $model,
+    'id' => $id,
+    'action' => $action,
+));
+Tak::regScript('', '
+    var CURL = "' . $this->getLink('Admin') . '";
     var caction = function(){
         var data = jstrss.jstree("get_selected");
         if ( data.length == 0) {

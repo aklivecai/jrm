@@ -119,6 +119,7 @@ return array(
     'Permissions' => '部门',
     'Permission' => '部门',
 
+
     'View Roles' => '部门权限介绍',
 
     'Order' => '订单',
@@ -151,5 +152,7 @@ return array(
 
     ':name move dw' => ' :name 下移',
     ':name move up' => ':name 上移',
+    
+    'Dbconfig'=>'数据库配置',
 );
 

@@ -9,6 +9,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'action' => Yii::app()->createUrl($this->route) ,
     'method' => 'get',
 ));
+
+!isset($_GET['warehouse_id']) && $_GET['warehouse_id'] = '';
 if (!isset($notcate)) {
 ?>
 <span class="span2">
@@ -46,24 +48,24 @@ $this->widget('bootstrap.widgets.TbButton', array(
 <div id="list-more-search" class="hide">
 <ul>
   <li>
-    <?php echo CHtml::activeLabelEx($model,'material')?>:
-    <?php echo CHtml::activeTextField($model,'material');?>
+    <?php echo CHtml::activeLabelEx($model, 'material') ?>:
+    <?php echo CHtml::activeTextField($model, 'material'); ?>
   </li>
   <li>
-    <?php echo CHtml::activeLabelEx($model,'spec')?>:
-    <?php echo CHtml::activeTextField($model,'spec');?>
+    <?php echo CHtml::activeLabelEx($model, 'spec') ?>:
+    <?php echo CHtml::activeTextField($model, 'spec'); ?>
   </li>
   <li>
-    <?php echo CHtml::activeLabelEx($model,'price')?>:
-    <?php echo CHtml::activeTextField($model,'price');?>
+    <?php echo CHtml::activeLabelEx($model, 'price') ?>:
+    <?php echo CHtml::activeTextField($model, 'price'); ?>
   </li>
   <li>
-    <?php echo CHtml::activeLabelEx($model,'color')?>:
-    <?php echo CHtml::activeTextField($model,'color');?>
+    <?php echo CHtml::activeLabelEx($model, 'color') ?>:
+    <?php echo CHtml::activeTextField($model, 'color'); ?>
   </li>
   <li>
-    <?php echo CHtml::activeLabelEx($model,'note')?>:
-    <?php echo CHtml::activeTextField($model,'note');?>
+    <?php echo CHtml::activeLabelEx($model, 'note') ?>:
+    <?php echo CHtml::activeTextField($model, 'note'); ?>
   </li>
 </ul>
 </div>

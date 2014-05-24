@@ -154,11 +154,11 @@ class Warehouse extends LRecord {
     
     public function isDel() {
         $sql = " SELECT pt.itemid FROM :tabl-pm AS pt  LEFT JOIN :tabl-m AS m 
-                    ON(pt.movings_id=m.itemid)
-                  WHERE m.fromid = :fromid AND pt.warehouse_id = :itemid";
+    	 			ON(pt.movings_id=m.itemid)
+    	 		  WHERE m.fromid = :fromid AND pt.warehouse_id = :itemid";
         
         $sql = " SELECT count(s.itemid) FROM :table  AS s
-                  WHERE s.fromid = :fromid AND s.warehouse_id = :itemid ";
+    	 		  WHERE s.fromid = :fromid AND s.warehouse_id = :itemid ";
         $sql = strtr($sql, array(
             ':table' => Stocks::$table,
             ':fromid' => Tak::getFormid() ,
@@ -167,8 +167,8 @@ class Warehouse extends LRecord {
         $count = self::$db->createCommand($sql)->queryScalar();
         return $count;
     }
-    
-    public function counts() {
+
+    public function counts() {        
         $sql = " SELECT count(itemid) FROM :table 
                   WHERE fromid = :fromid ";
         $sql = strtr($sql, array(
@@ -177,16 +177,16 @@ class Warehouse extends LRecord {
         ));
         $count = self::$db->createCommand($sql)->queryScalar();
         return $count;
-    }
-    
+    }    
+
     public function del() {
         $result = false;
         $count = $this->isDel();
         if ($count > 0) {
             $result = '该仓库已经有出入库记录，不能进行删除!';
-        } elseif ($this->counts() == 1) {
+        } elseif($this->counts()==1) {
             $result = '最后一个仓库不允许删除!';
-        } else {
+        }else{
             $this->delete();
         }
         return $result;

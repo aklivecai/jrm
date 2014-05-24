@@ -1,13 +1,10 @@
 <?php
-$this->pageTitle = Yii::app()->name . ' - 帮助中心';
-$this->breadcrumbs = array(
-    '帮助中心 ',
+$this->pageTitle=Yii::app()->name . ' - 帮助中心';
+$this->breadcrumbs=array(
+  '帮助中心 ',
 );
 
-$jss = array(
-    'plugins/highlight/jquery.highlight-4.js',
-    'faq.js'
-);
+$jss = array('plugins/highlight/jquery.highlight-4.js','faq.js');
 $this->regScriptFile($jss);
 ?>
                 <div class="page-header">
@@ -100,37 +97,33 @@ $this->regScriptFile($jss);
                             </ul>
                             
                         </div>
-
-
-     <?php echo JHtml::beginForm('', $method = 'post', array(
-    "id" => "signupForm"
-)); ?>                        
+                        
                         <div class="block-fluid nm without-head">
                             <div class="toolbar nopadding-toolbar clear clearfix">
                                 <h4>问题反馈</h4>
-                            </div>
-
+                            </div>                            
+                            
                                 <div class="row-form clearfix">
                                     <div class="span3">名字</div>
                                     <div class="span9">                                      
-                                        <input type="text" placeholder="名字" required="required" name="post[name]">
+                                        <input type="text" placeholder="名字">
                                     </div>
                                 </div>
                                 <div class="row-form clearfix">
                                     <div class="span3">Email</div>
                                     <div class="span9">                                    
-                                        <input type="email" placeholder="Email" required='required' name="post[email]">
+                                        <input type="text" placeholder="Email">
                                     </div>
                                 </div>                                
                                 <div class="row-form clearfix">
                                     <div class="span12">
-                                        <textarea required="required" name="post[note]"></textarea> 
+                                        <textarea name="text"></textarea> 
                                    </div>
-                                </div>
+                                </div>                                                                          
+                            
                             <div class="footer tar">
                                 <button class="btn">提交</button>
                             </div>                            
                         </div>
                     </div>                    
                 </div>     
-            <?php echo JHtml::endForm(); ?>

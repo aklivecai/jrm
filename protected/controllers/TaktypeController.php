@@ -1,12 +1,12 @@
 <?php
+
 class TakTypeController extends Controller
 {
 	public $type = false;
 	public $_model;
 	public $typeUrl = false;
-	
 	public function init()  
-	{
+	{     
 		parent::init();
 	    	$this->modelName = 'TakType';
 	    	$this->primaryName = 'typeid';
@@ -23,7 +23,7 @@ class TakTypeController extends Controller
 	}
 	public function loadModel($id=false,$not=false)
 	{
-		if($this->_model === null)
+		if($this->_model===null)
 		{
 			if ($id) {
 				$m = $this->modelName;
@@ -45,6 +45,7 @@ class TakTypeController extends Controller
 
 	public function actionDelete($id)
 	{
+
 		$this->loadModel($id)->delete();
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : $this->typeUrl);
@@ -65,17 +66,13 @@ class TakTypeController extends Controller
 		if (Yii::app()->request->getParam('returnUrl',false)) {
 			$this->typeUrl = $returnUrl = Yii::app()->request->getParam('returnUrl');
 		}
-		if(isset($_POST[$m])===true){
+		if(isset($_POST[$m]))
+		{
+
 			$model->attributes = $_POST[$m];
 			$model->initak($this->type);
 			if($model->save()){
 				$returnUrl = $_POST['returnUrl'];
-					$str = Tk::g(array('Success',$id?'Edit':'Create'),$model->item);
-					Tak::setFlash(
-						$str,
-						'success'
-					);			
-
 				if (!$returnUrl) {
 					if ($this->isAjax) {
 						if ($_POST['getItemid']) {

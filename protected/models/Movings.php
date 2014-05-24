@@ -1,5 +1,5 @@
 <?php
-class Movings extends ModuleRecord {
+class Movings extends DbRecod {
     public $linkName = array(
         'enterprise',
         'time'
@@ -179,6 +179,38 @@ class Movings extends ModuleRecord {
         
         $criteria->compare('note', $this->note, true);
         
+        $times = array();
+        foreach ($_GET['time'] as $key => $value) {
+            $times[$key] = $value;
+        }
+        if (isset($times['time']) && count($times['time']) >= 1) {
+            $times = $times['time'];
+            $t0 = isset($times[0]) ? $times[0] : false;
+            $t1 = isset($times[1]) ? $times[1] : false;
+            $start = $t0 ? Tak::getDayStart(strtotime($t0)) : 0;
+            $end = $t1 ? Tak::getDayEnd(strtotime($t1)) : 0;
+            if ($start < 0 || $start > $end) {
+                $start = $start > 0 ? $start : $end;
+                if ($start > 0) {
+                    $end = TaK::getDayEnd($start);
+                }
+            }
+            if ($start > 0 && $end > $start) {
+                $criteria->addBetweenCondition('time', $start, $end);
+            }
+        }
+        $info_product = Tak::getParam('info-product', false);
+        if ($info_product) {
+            $sql = "itemid IN (SELECT mp.movings_id FROM :table_mp AS mp LEFT JOIN :table_p AS p ON p.itemid=mp.product_id WHERE p.fromid=:fromid AND p.name LIKE '%:info_product%' GROUP BY mp.movings_id )";
+            $sql = strtr($sql, array(
+                ':table_p' => Product::$table,
+                ':table_mp' => ProductMoving::$table,
+                ':fromid' => Tak::getFormid() ,
+                ':info_product' => $info_product,
+            ));
+            $criteria->addCondition($sql);
+        }
+        
         return $cActive;
     }
     
@@ -329,7 +361,6 @@ class Movings extends ModuleRecord {
             $transaction->rollBack();
         }
     }
-    
     public function getLink($itemid = false, $action = 'view') {
         if (!$itemid) {
             $itemid = $this->primaryKey;
@@ -339,7 +370,6 @@ class Movings extends ModuleRecord {
         ));
         return $link;
     }
-    
     public function getTotal() {
         $data = array(
             ':movings_id' => $this->itemid,
@@ -351,4 +381,22 @@ class Movings extends ModuleRecord {
         $total = sprintf("%01.2f", $total);
         return $total;
     }
+    
+    private $_products = null;
+    public function getProducts() {
+        if ($this->_products === null) {
+            $sql = "SELECT p.itemid,p.name,p.unit,mp.price,mp.numbers FROM :table_mp AS mp LEFT JOIN :table_p AS p ON p.itemid=mp.product_id  WHERE p.fromid=:fromid AND mp.movings_id=:movings_id";
+            $sql = strtr($sql, array(
+                ':table_p' => Product::$table,
+                ':table_mp' => ProductMoving::$table,
+                ':fromid' => Tak::getFormid() ,
+                ':movings_id' => $this->itemid,
+            ));
+            $this->_products = self::$db->createCommand($sql)->queryAll();
+        }
+        return $this->_products;
+    }
 }
+/*
+SELECT mp.movings_id FROM :table_mp AS mp LEFT JOIN :table_p AS p ON p.itemid=mp.product_id WHERE p.fromid=:fromid AND p.name LIKE '%:info_product%' GROUP BY mp.movings_id
+*/

@@ -7,7 +7,8 @@ $time = Tak::fastUuid();
  ?>
  <a href="list?m=<?php echo $time?>" class="data-ajax" title="<?php echo $time?>">更多</a>
 
-<div id="using_json_2" class="demo">	
+<div id="using_json_2" class="demo">
+	
 -------------------------
 </div>
 <script type="text/javascript">

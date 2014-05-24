@@ -40,28 +40,22 @@ class ClientelesController extends Controller
 		$uname = $model->iManage->user_nicename;
 		$uid = $model->manageid;
 		$m = $this->modelName;
-
-		$mF = 'MovesForm';
-		$modelF = new $mF;
-
-		if(isset($_POST[$mF])){
-			$modelF->attributes = $_POST[$mF];
-			if($modelF->validate()){
-				$model->manageid = $modelF->tMid;
-				if($model->save()&&$model->move()){
-					if ($this->isAjax) {
-						exit;
-					}else{
-						$this->redirect(array('move','id'=>$model->primaryKey));
-					}							
-				}
+		if(isset($_POST[$m])){
+			$model->attributes = $_POST[$m];
+			if ($model->manageid==''||$model->manageid==$uid) {
+				$model->addError('manageid','请选择转移的到的用户');	
+			}elseif($model->save()&&$model->move()){
+				if ($this->isAjax) {
+					exit;
+				}else{
+					$this->redirect(array('move','id'=>$model->primaryKey));
+				}				
 			}
 		}
 		$this->render('move',array(
 			'model' => $model,
 			'uname' => $uname,
-			'uid' => $uid,
-			'modelF' => $modelF,
+			'uid' => $uid
 		));		
 	}
 	public function actionView($id)

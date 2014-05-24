@@ -1,12 +1,10 @@
 <?php
-class AddressGroups extends ModuleRecord {
+class AddressGroups extends DbRecod {
     public static $table = '{{address_groups}}';
     public static $datas = null;
-    
     public function primaryKey() {
         return 'address_groups_id';
     }
-    
     public function rules() {
         return array(
             array(
@@ -108,11 +106,10 @@ class AddressGroups extends ModuleRecord {
         // $markup .= $this->sortableId();
         return $markup;
     }
-
+    
     public static function model($className = __CLASS__) {
         return parent::model($className);
     }
-   
     //默认继承的搜索条件
     public function defaultScope() {
         $arr = parent::defaultScope();
@@ -135,22 +132,21 @@ class AddressGroups extends ModuleRecord {
     }
     
     public static function getDatas($iskey = true) {
-        if (self::$datas == null||!$iskey) {
+        if (self::$datas == null || !$iskey) {
             $sql = "SELECT * FROM :table WHERE  fromid=:fromid ORDER BY listorder DESC, address_groups_id ASC";
             $sql = strtr($sql, array(
                 ':table' => self::$table,
                 ':fromid' => Tak::getFormid() ,
             ));
-
+            
             $tags = Tak::getDb('db')->createCommand($sql)->queryAll(true);
             $result = array();
             foreach ($tags as $key => $value) {
                 if ($iskey) {
                     $result[$value['address_groups_id']] = $value;
-                }else{
+                } else {
                     $result[] = $value;
                 }
-                
             }
             self::$datas = $result;
         }
@@ -174,7 +170,7 @@ class AddressGroups extends ModuleRecord {
     }
     public function isDel() {
         $sql = " SELECT count(s.itemid) FROM :table  AS s
-    	 		  WHERE s.fromid = :fromid AND s.groups_id = :itemid ";
+                  WHERE s.fromid = :fromid AND s.groups_id = :itemid ";
         $sql = strtr($sql, array(
             ':table' => AddressBook::$table,
             ':fromid' => Tak::getFormid() ,

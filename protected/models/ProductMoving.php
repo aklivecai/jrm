@@ -1,6 +1,7 @@
 <?php
 class ProductMoving extends CActiveRecord {
     private $products = null;
+    private $total = '0.00';
     public static $table = '{{product_moving}}';
     public function tableName() {
         $m = get_class($this);
@@ -53,6 +54,15 @@ class ProductMoving extends CActiveRecord {
             ) ,
         );
     }
+    
+    public function getTotal() {
+        $result = 0;
+        if ($this->price > 0 && $this->numbers != 0) {
+            $result = $this->price * $this->numbers;
+        }        
+        return sprintf('%01.2f', $result);
+    }
+    
     public function getProductMovings($typeid, $product_id = false) {
         $condition = array(
             ' time_stocked > 0 '

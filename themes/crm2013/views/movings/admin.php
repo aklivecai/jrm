@@ -54,9 +54,6 @@ $this->widget('application.components.MyMenu', array(
     </div>  
     <div class="block-fluid clearfix">
 <?php
-$this->renderPartial('//_search', array(
-    'model' => $model
-));
 $this->renderPartial("/movings/_search", array(
     'model' => $model,
     'cates' => $this->cates
@@ -65,15 +62,18 @@ $this->renderPartial("/movings/_search", array(
 $options = Tak::gredViewOptions(false);
 $options['dataProvider'] = $model->search();
 $columns = array(
-    Tak::getAdminPageCol() ,
+    Tak::getAdminPageCol(array(
+        'template' => '{view}{update}',
+    )) ,
     array(
-        'name' => 'typeid',
+        'name' => '产品',
         'type' => 'raw',
-        'value' => 'TakType::getStatus("' . $this->typename . '-type",$data->typeid)',
-        'headerHtmlOptions' => array(
-            'style' => 'width:100px;'
-        ) ,
-        'header' => $model->getAttributeLabel("typeid") ,
+        'value' => 'Yii::app()->controller->writeProduct($data->getProducts())',
+    ) ,
+    array(
+        'name' => '金额',
+        'type' => 'raw',
+        'value' => 'Tak::tagNum(Tak::format_price($data->getTotal()),"label-success")',
     ) ,
     array(
         'name' => 'enterprise',
@@ -88,15 +88,10 @@ $columns = array(
         'sortable' => false,
         'headerHtmlOptions' => array(
             'class' => 'stor-date',
-            'style'=>"width:65px;"
+            'style' => "width:65px;"
         )
     ) ,
     'note',
-    array(
-        'name' => '金额',
-        'type' => 'raw',
-        'value'=>'Tak::format_price($data->getTotal())',
-    ) ,
     array(
         'name' => 'time',
         'type' => 'raw',
@@ -104,20 +99,9 @@ $columns = array(
         'sortable' => false,
         'headerHtmlOptions' => array(
             'class' => 'stor-date',
-            'style'=>"width:65px;"
+            'style' => "width:65px;"
         ) ,
         'header' => $model->getAttributeLabel("time") ,
-    ) ,
-    array(
-        'name' => 'time_stocked',
-        'type' => 'raw',
-        'value' => 'TakType::getStatus("isok",$data->time_stocked>0?1:0)',
-        'sortable' => true,
-        'headerHtmlOptions' => array(
-            'class' => 'stor-date',
-            'style'=>"width:25px;"
-        ) ,
-        'header' => Tk::g($model->sName) ,
     )
 );
 $options['columns'] = $columns;
@@ -126,3 +110,14 @@ $widget = $this->widget('bootstrap.widgets.TbGridView', $options);
         </div>
     </div>
 </div>
+<script>
+    isprintf = true;
+</script>
+<?php
+Tak::regScript('movings-product','
+    $(document).on("click",".more-product,.more-product-hide",function(event){
+        event.preventDefault();
+        $(this).parent().toggleClass("move-clear-product");
+    })
+');
+?>

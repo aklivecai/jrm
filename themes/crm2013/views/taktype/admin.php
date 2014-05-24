@@ -7,11 +7,11 @@
 	);
 	$action = $model->isNewRecord?'Create':'Update';
 ?>
-<?php 
-	if ($this->type&&$this->type['file']) {
-		$this->renderPartial("//{$this->type['file']}/type",array('model'=>$model,)); 
-	}
-?>
+		<?php 
+			if ($this->type&&$this->type['file']) {
+				$this->renderPartial("//{$this->type['file']}/type",array('model'=>$model,)); 
+			}
+		?>
 <div class="tab-content">
    <div class="row-fluid">
                     <div class="span6">
@@ -27,7 +27,7 @@
 							    'type'=>'striped bordered condensed',
 							    'id' => 'list-grid',
 								'dataProvider'=>$listM->search(),
-								'template' => '{pager}{summary}<div class="dr"><span></span></div>{items}',
+								'template' => '{pager}{summary}<div class="dr"><span></span></div>{items}{pager}',
 								'enableHistory'=>true,
 							    	'loadingCssClass' => 'grid-view-loading',
 							    	'summaryCssClass' => 'dataTables_info',
@@ -89,7 +89,7 @@
 <?php
 if ($tags->getTotalItemCount()==0) {
     $_tname = $model->getAttribute('typename');
-    
+    echo $_tname;
     Tak::regScript('bodyend-',
     "   intro =new  introJs();
            intro.setOptions({
@@ -97,22 +97,6 @@ if ($tags->getTotalItemCount()==0) {
                       {
                         element: document.querySelector('input[name*=typename]'),
                         intro: '$_tname.',
-                        position: 'button'
-                      }
-                    ]
-              });
-            intro.start();          
-    "
-    );	
-}else{
-
-    Tak::regScript('bodyend-',
-    "   intro =new  introJs();
-           intro.setOptions({
-                    steps: [
-                      {
-                        element: document.querySelector('#yw0'),
-                        intro: '必须先得设置仓库才能操作!',
                         position: 'button'
                       }
                     ]

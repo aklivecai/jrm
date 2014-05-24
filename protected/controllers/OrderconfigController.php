@@ -113,23 +113,44 @@ class OrderConfigController extends Controller {
         ));
     }
     public function actionAlipay() {
-        $tags = OrderConfig::getListAlipay();
+        $itemid = Tak::getFormid();
+        $dalipays = OrderConfig::getSelectAlipay(0);
+        $alipays = array();
+        $m = 'Info';
+        $model = $m::getOne($itemid, true);
+        
+        if ($model == null) {
+            $model = new $m;
+            $alipays = $dalipays;
+        } else {
+            $alipays = array_flip(explode(',', $model->title));
+        }
+        // Tak::KD($alipays);
+        if (isset($_POST['values']) && is_array($_POST['values'])) {
+            $list = $_POST['values'];
+            foreach ($list as $key => $value) {
+                if (!isset($dalipays[$value])) {
+                    unset($list[$key]);
+                }
+            }
+            $model->title = implode(',', $list);
+
+            $model->itemid = $itemid;
+            
+            $content = isset($_POST['tak_content']) ? Tak::uhtml($_POST['tak_content']) : '';
+            $model->content = $content;
+            $model->setIsContent(true);
+            $model->type = 'order-alipay';
+            $model->save();
+            $this->redirect($this->createUrl('alipay'));
+        }
         $this->render('alipay', array(
-            'tags' => $tags
+            'model' => $model,
+            'alipays' => $alipays,
+            'dalipays' => $dalipays,
         ));
     }
-    private function getAlipay($id) {
-        $m = 'Info';
-        $model = $m::getOne($id, true);
-        if ($model == null) {
-            $this->error();
-        }
-        return $model;
-    }
-    public function actionDeletedAlipay($id) {
-        $model = $this->getAlipay($id)->delete();
-        $this->redirect($this->createUrl('alipay'));
-    }
+    
     public function actionCreateAlipay($id = false) {
         $m = 'Info';
         if ($id) {

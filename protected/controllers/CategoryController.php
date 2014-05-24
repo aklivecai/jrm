@@ -10,41 +10,42 @@ class CategoryController extends Controller {
         $this->cateUrl = $this->getLink();
         parent::init();
     }
-
+    
     public function filters() {
         // $arr = parent::filters();
         $arr = array();
         $arr[] = 'selectOwn + admin';
         $arr[] = 'rights';
         return $arr;
-    }    
+    }
     public function filterselectOwn($filterChain) {
         // $params=array('item'=>$model); // set params array for Rights' BizRule
         $params = array(
-            'm' => Tak::getQuery('m'),
-            'action' => Tak::getQuery('action'),
+            'm' => Tak::getQuery('m') ,
+            'action' => Tak::getQuery('action') ,
         );
-        if (Tak::checkAccess('ProductCateSelect', $params)){
-            $filterChain->removeAt(1);    
-        }        
+        if (Tak::checkAccess('ProductCateSelect', $params)) {
+            $filterChain->removeAt(1);
+        }
         $filterChain->run();
     }
     public function loadModel($id, $isload = false) {
         if ($isload || $this->_model === null) {
             $m = $this->modelName;
+
             $m = $m::model();
             $m = $m->findByAttributes(array(
                 'catid' => $id,
-                'module' => $this->m
+                'module' => strtolower($this->m)
             ));
-            if ($m === null) {
+            if ($m == null) {
                 $this->error();
             }
             $this->_model = $m;
         }
         return $this->_model;
     }
-
+    
     public function allowedActions() {
         $result = array(
             parent::allowedActions() ,

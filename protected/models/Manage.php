@@ -160,7 +160,7 @@ class Manage extends ModuleRecord {
         );
     }
     public function search() {
-        $criteria = new CDbCriteria;
+        $criteria = new CDbCriteria;        
         if (Tak::getAdmin()) {
             if ($this->fromid) {
                 $criteria->compare('fromid', $this->fromid);
@@ -246,7 +246,7 @@ class Manage extends ModuleRecord {
                 $this->add_time = $arr['time'];
                 $this->add_ip = $arr['ip'];
                 $this->fromid = $arr['fromid'];
-                $this->salt = $this->generateSalt();
+                $this->salt = $this->generateSalt();                
                 if (!$this->user_status) {
                     $this->user_status = TakType::STATUS_DEFAULT;
                 }
@@ -254,7 +254,6 @@ class Manage extends ModuleRecord {
             } else {
                 //修改数据时候
                 if (!Tak::isValidMd5($this->user_pass)) {
-                    $this->salt = $this->generateSalt();
                     $this->user_pass = $this->hashPassword($this->user_pass, $this->salt);
                 }
                 if (!isset($this->user_status)) {
@@ -276,9 +275,9 @@ class Manage extends ModuleRecord {
             ':fromid' => $this->fromid,
             ':userid' => $this->manageid,
             ':tabl' => '{{rbac_authassignment}}',
-        );
+        );        
         if ($this->isNewRecord || $this->oldbranch >= 0) {
-            $comm = self::$db->createCommand();
+            $comm = Tak::getDb('db')->createCommand();
             // Tak::KD($this->oldbranch);
             // 删除就记录
             if ($this->oldbranch >= 0 && $this->oldbranch != '') {
@@ -289,13 +288,12 @@ class Manage extends ModuleRecord {
                 $comm->setText($sql)->execute();
                 // $db->createCommand($sql)->execute();
                 // Tak::KD($sql,1);
-                /**/
             }
             // 判断是否已经存在 queryScalar
-            $sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";
+            $sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";            
             $sql = strtr($sql, $arr);
             $rows = $comm->setText($sql)->queryScalar();
-            // Tak::KD($rows);
+            // Tak::KD($rows);            
             // Tak::KD($rows,1);
             if ($rows == 0) {
                 $sql = "INSERT INTO :tabl (itemname,fromid,userid,data) VALUES(:itemname,:fromid,:userid,'N;')";
@@ -303,8 +301,8 @@ class Manage extends ModuleRecord {
                 // $db->createCommand($sql)->execute();
                 $comm->setText($sql)->execute();
                 // Tak::KD($sql,1);
-                /**/
             }
+            // exit;
         }
     }
     
@@ -317,7 +315,7 @@ class Manage extends ModuleRecord {
              AND manageid = :manageid
         ";
         $sql = strtr($sql, array(
-            ':tableName' => self::$table,
+            ':tableName' => $this->tableName() ,
             ':active_time' => $arr['time'],
             ':fromid' => $arr['fromid'],
             ':manageid' => $arr['manageid']
@@ -339,13 +337,13 @@ class Manage extends ModuleRecord {
              AND manageid = :manageid
         ";
         $sql = strtr($sql, array(
-            ':tableName' => self::$table,
+            ':tableName' => $this->tableName() ,
             ':last_login_ip' => $arr['ip'],
             ':last_login_time' => $arr['time'],
             ':fromid' => $arr['fromid'],
             ':manageid' => $arr['manageid']
         ));
-        $query = self::$db->createCommand($sql);
+        $query = Yii::app()->db->createCommand($sql);
         $query->execute();
         AdminLog::log('登录操作');
         return true;

@@ -11,16 +11,9 @@ $this->breadcrumbs=array(
 <?php 
 $_stocks = $model->getAttributeLabel('stocks');
 $msgProduct = "<h3> ".$_stocks."：{$model->stocks}</h3>";
-?>
-<div class="span6">
-<?php
+
 $msgProduct .= $this->renderPartial('//product/_view',array('model'=>$product),true); 
-?>
-</div>
-<div class="span3">
-xas
-</div>
-<?php
+
 $items = array(
         'product' => array('label'=>Tk::g(array('Product','Detail')), 'content'=>$msgProduct),
         );

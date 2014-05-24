@@ -8,6 +8,15 @@ $this->breadcrumbs = array(
     ) ,
     $model->primaryKey,
 );
+if (Tak::getAdmin()) {
+    $this->menu['db'] = array(
+        'label' => Tk::g('Dbconfig') ,
+        'url' => array(
+            'db',
+            'id' => $model->primaryKey
+        )
+    );
+}
 
 $this->menu = array_merge_recursive($this->menu, array(
     array(
@@ -15,16 +24,6 @@ $this->menu = array_merge_recursive($this->menu, array(
         'url' => array(
             'update',
             'id' => $model->primaryKey
-        )
-    ) ,
-    array(
-        'label' => Tk::g(array(
-            'Manage',
-        )) ,
-        'url' => array(
-            'memeber/index',
-            'Manage[fromid]' => $model->primaryKey,
-            'visible' => Tak::getAdmin() ,
         )
     ) ,
     array(
@@ -49,10 +48,16 @@ $this->menu = array_merge_recursive($this->menu, array(
         ) ,
     )
 ));
-?>
 
-
-<?php $this->widget('zii.widgets.CDetailView', array(
+$img = $model->logo;
+if ($img) {
+    $img = CHtml::image($img, 'Logo', array(
+        'style' => "max-width:200px"
+    ));
+} else {
+    $img = '';
+}
+$this->widget('zii.widgets.CDetailView', array(
     'data' => $model,
     'attributes' => array(
         'itemid',
@@ -87,5 +92,10 @@ $this->menu = array_merge_recursive($this->menu, array(
             'value' => Tak::timetodate($model->modified_time, 6) ,
         ) ,
         'note',
+        array(
+            'name' => 'logo',
+            'type' => 'raw',
+            'value' => $img,
+        ) ,
     ) ,
 )); ?>

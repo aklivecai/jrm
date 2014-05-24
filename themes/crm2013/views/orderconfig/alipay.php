@@ -7,36 +7,68 @@ Tk::g('Alipay') ,
 );
 ?>
 <div class="page-header">
-    <h1><?php echo Tk::g('Alipay') ?> <small><?php echo Tk::g($action) ?></small></h1>
+    <h1><?php echo Tk::g('Alipay') ?></h1>
 </div>
 <div class="block-fluid">
-	<div class="row-fluid">
-		<?php $this->tab(); ?>
-		<div class="">
-			&nbsp;
-			<?php
-				echo  JHtml::link(Tk::g('Create'),array('CreateAlipay'),array('class'=>'btn btn-success','id'=>'create'));
-			?>
-		</div>
-		<div class="dr"><span></span></div>
-		<?php $form = $this->beginWidget('CActiveForm', array(
-		'id' => 'manage-form',
-		'enableAjaxValidation' => false,
-		)); ?>
-		<div  class="list-tree">
-			<ul>
-				<?php
-				$html='';
-				$str = '<li><a  title="更新" href="%s">%s <i class="icon-pencil"></i></a>|<a class="delete" title="删除" href="%s"><i class="icon-trash"></i></a></li>';
-				foreach ($tags as $key => $value){
-					$html.=sprintf($str,$this->createUrl('CreateAlipay',array('id'=>$value['itemid'])),$value['title'],$this->createUrl('DeletedAlipay',array('id'=>$value['itemid'])));
-				}
-				echo $html;
-				?>
-			</ul>
-		</div>
 
-	</form>
+    <div class="row-fluid">
+        <?php $this->tab(); ?>
+        <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+        'id' => 'mod-form',
+        'type' => 'horizontal',
+        ));
+        echo $form->errorSummary($model);
+        ?>
+        <table class="table table-search">
+            <colgroup align="center">
+            <col width="10%"/>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>
+                        <?php echo Tk::g('Alipay'); ?>
+                    </th>
+                    <td>
+                    <?php 
+                    $htmls = array();
+                    foreach ($dalipays as $key => $value) {
+                        $htmls[] = sprintf('<label class="checkbox inline"><input type="checkbox" name="values[]" value="%s" %s/>%s</label>'
+                            ,$key
+                            ,isset($alipays[$key])?' checked ':''
+                            ,$value
+                        );
+                    }
+                    echo implode("\n",$htmls);
+                    ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th>账号信息:</th>
+                    <td>
+                        <?php $this->widget('application.extensions.HtmlEdit', array(
+                        'name' => 'tak_content',
+                        'value' => $model->content,
+                        'options' => array(
+                        'toolbar' => 'Edit',
+                        'height' => 200,
+                        'allowedContent' => false,
+                        'startupOutlineBlocks' => false,
+                        )
+                        )); ?>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+            <th></th>
+            <td>
+                <?php echo JHtml::htmlButton(Tk::g('Save') , array(
+                'class' => "btn",
+                'type' => "submit"
+            )) ?></td>
+            </tfoot>
+        </table>
+        <?php $this->endWidget(); ?>
+    </div>
+
 </div>
 </div>
-<?php $this->endWidget(); ?>

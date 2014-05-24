@@ -48,11 +48,20 @@ if ($tags->itemCount > 0) {
     $options['template'] = $options['template'] . $str;
 }
 $columns = array(
-    array(
-        'name' => 'name',
-        'type' => 'raw',
-        'value' => 'CHtml::link($data->name,array("viewProduct","id"=>$data->primaryKey))',
-    ) ,
+    Tak::getAdminPageCol(array(
+        'template' => '{preview}',
+        'buttons' => array(
+            'preview' => array(
+                'label' => '',
+                'url' => 'Yii::app()->controller->createUrl("viewProduct", array("id"=>$data->primaryKey))',
+                'options' => array(
+                    'title' => '浏览',
+                    'class' => 'icon-eye-open'
+                ) ,
+            )
+        )
+    )) ,
+    'name' => 'name',
     array(
         'name' => 'typeid',
         'value' => 'Category::getProductName($data->typeid)',
@@ -83,12 +92,23 @@ $columns = array(
     array(
         'name' => '小计',
         'value' => 'Tak::format_price($data->total)',
-    ),
+    ) ,
     array(
-        'name'=>'历史',
-        'type' => 'raw',
-        'value' => 'Stocks::getHistory($data->primaryKey,$_GET["warehouse_id"])',
-    )
+        'name' => '上个月结存',
+        'value' => '$data->writeHistory(1,$_GET["warehouse_id"])',
+    ) ,
+    array(
+        'name' => '本月进货',
+        'value' => '$data->writeHistory(2,$_GET["warehouse_id"])',
+    ) ,
+    array(
+        'name' => '本月出货',
+        'value' => '$data->writeHistory(3,$_GET["warehouse_id"])',
+    ) ,
+    array(
+        'name' => '本月结存',
+        'value' => '$data->writeHistory(4,$_GET["warehouse_id"])',
+    ) ,
 );
 
 $options['columns'] = $columns;
@@ -98,3 +118,7 @@ $widget = $this->widget('bootstrap.widgets.TbGridView', $options);
         </div>
     </div>
 </div>
+
+<script>
+    isprintf = true;
+</script>

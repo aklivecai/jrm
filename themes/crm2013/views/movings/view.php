@@ -9,8 +9,18 @@ $this->breadcrumbs = array(
 $items = Tak::getViewMenu($model->itemid);
 $items['Create']['label'] = Tk::g('Entering');
 
+$warehouse = Warehouse::model()->findByAttributes(
+    array(
+    'fromid'=>$model->fromid,
+    'itemid'=>$model->warehouse_id,
+    )
+);
 $tags = array(
     'numbers',
+    'warehouse_id' => array(
+        'name' => 'warehouse_id',
+        'value' => $warehouse->name
+    ) ,
     'time' => array(
         'name' => 'time',
         'value' => Tak::timetodate($model->time)

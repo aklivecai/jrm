@@ -7,6 +7,9 @@
   clear: both;
   visibility: hidden;
 }
+input{
+	border: 0 !important;
+}
 .hide, .noprint, #nav {
   display: none !important;
 }

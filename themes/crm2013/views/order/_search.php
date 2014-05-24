@@ -1,44 +1,87 @@
 <?php
 /** @var BootActiveForm $form */
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+$form = $this->beginWidget('CActiveForm', array(
     'id' => 'search-form',
-    'type' => 'search',
-    'htmlOptions' => array(
-        'class' => 'well'
-    ) ,
+    'htmlOptions' => array('class'=>'form-search') ,
     'action' => Yii::app()->createUrl($this->route) ,
     'method' => 'get',
 ));
-echo $form->dropDownList($model, 'status', Order::getSearchStatus());
-echo $form->dropDownList($model, 'manageid', Order::getUsersSelect());
 
-echo $form->textFieldRow($model, 'add_time', array(
-    'size' => 10,
-    'maxlength' => 10,
-    'class' => 'type-date'
-));
-echo $form->textFieldRow($model, 'itemid', array(
-    'class' => 'input-medium',
-    'prepend' => '<i class="icon-search"></i>'
-));
-echo " ";
-$this->widget('bootstrap.widgets.TbButton', array(
-    'buttonType' => 'submit',
-    'label' => Tk::g('Search') ,
-)); ?>
-
-            <hr />
-
-<?php
-if (YII_DEBUG) {
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType' => 'link',
-        'label' => '生成测试订单',
-        'url' => array(
-            'TestOrder'
-        ) ,
-        'size' => 'large'
-    ));
+$info = new OrderInfo();
+if (!isset($_GET['time'])) {
+    $_GET['time'] = array();
 }
+?>
+<table class="table table-search">
+    <colgroup align="center">
+    <col width="90px"/>
+    <col width="125px"/>
+    <col width="90px"/>
+    <col width="125px"/>
+    </colgroup>
+    <tbody>
+        <tr>
+        <th></th>
+            <td colspan="4">
+<?php
+echo $form->dropDownList($model, 'status', Order::getSearchStatus());
+echo ' ';
+echo $form->dropDownList($model, 'manageid', Order::getUsersSelect());
+?>
+            </td>
+        </tr>
+        <tr>
+            <th><?php echo $form->label($model, 'company') ?></th>
+            <td> <?php echo $form->textField($model, 'company'); ?></td>
+            <th>
+                <?php echo CHtml::activeLabelEx($model, 'itemid') ?></th>
+            <td><?php echo CHtml::activeTextField($model, 'itemid'); ?></td>
+        
+            <td></td>
+        </tr>
+    </tbody>
+    <tbody  class="more-content hide">
+        <tr>
+            <th><?php echo $form->label($model, 'total') ?></th>
+            <td colspan="4">
+                <?=CHtml::dropDownList('comparison',Tak::getQuery('comparison'),TakType::items('comparison'))?>
+                <?php echo $form->textField($model, 'total'); ?>
+            </td>
+        </tr>
+        <tr>
+            <th><?php echo $form::label($model, 'add_time') ?></th>
+            <td>
+                <?php echo CHtml::textField('time[add_time][]', $_GET['time']['add_time']['0'],array('class'=>'type-date','id'=>'time-start')); ?>
+                至
+                <?php echo CHtml::textField('time[add_time][]', $_GET['time']['add_time']['1'],array('class'=>'type-date','id'=>'time-end')); ?>
+            </td>
+            <th><?php echo CHtml::label($info->getAttributeLabel('date_time'), 'date_time') ?></th>
+            <td>
+                <?php echo CHtml::textField('time[date_time][]', $_GET['time']['date_time'][0],array('class'=>'type-date','id'=>'date_start')); ?>
+                至
+                <?php echo CHtml::textField('time[date_time][]', $_GET['time']['date_time'][1],array('class'=>'type-date','id'=>'date_end')); ?>
+            </td>
+        </tr>
+        <tr>
+            <th><?php echo CHtml::label('产品', 'info-product') ?></th>
+            <td colspan="4">
+            <?=CHtml::textField('info-product',$_GET['info-product'])?>
+            </td></tr> 
+        <tr>
+            <th><?php echo $form->label($model, 'note') ?></th>
+            <td colspan="4"> <?php echo $form->textArea($model, 'note',array()); ?></td>
+        </tr> 
+    </tbody>
+    <tfoot>
+        <tr>
+        <th></th>
+            <td colspan="4">
+                <?php echo JHtml::htmlButton(Tk::g('Search'),array('class'=>'btn','type'=>'submit'))?>
+                <?php echo JHtml::htmlButton(Tk::g('More'),array('class'=>'btn btn-more'))?>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<?php
 $this->endWidget();
 ?>

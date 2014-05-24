@@ -625,11 +625,12 @@ form.active .wap-flow-content {
 
 #list-more-search{
     padding-top: 12px;
-    display:'';
+    clear: both;
+    margin: 0;
 }
+#list-more-search ul{margin:0;padding:0;}
 #list-more-search li{
-    margin-top: 3px;
-    margin-bottom: 2px;
+    margin: 3px  0 2px 0 ;
     list-style-type: none;
     clear: both;
 }
@@ -645,4 +646,58 @@ form.active .wap-flow-content {
 }
 #list-more-search .more-search-dlist{
     padding-left: 95px;
+}
+
+
+label, input, button, select, textarea{
+    font-size: 12px;
+}
+.table-search tbody th{
+    text-align: right;
+}
+.table-search tfoot td,
+.table-search tfoot th{
+    border-bottom: 1px solid #DDD;
+}
+.table-search th,
+.table-search td{
+    padding:5px;
+}
+.table-search select{
+    width: 120px;
+    margin-bottom: 0;
+}
+.table-search input{
+    margin:0;
+    padding:2px;
+    height: 20px;
+}
+.table-search span.required {
+    display: none;
+}
+
+/*movings*/
+.mov-product ol{
+    margin-bottom:0;
+    padding:0;
+    height: 60px;
+    overflow: hidden;
+    list-style-type: none;
+}
+.move-clear-product ol{
+    height: auto;
+    overflow: visible;
+}
+.mov-product a{
+    float: right;
+    cursor: pointer;
+}
+.move-clear-product .more-product{
+    display: none;
+}
+.more-product-hide{
+    display: none;
+}
+.move-clear-product .more-product-hide{
+    display: block;
 }

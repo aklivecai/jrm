@@ -5,7 +5,7 @@ class AppcacheController extends CController
 	public function init() {     
 		parent::init();   
 		header('Content-Type: text/cache-manifest');
-		header('Cache-Control: no-cache');	
+		header('Cache-Control: no-cache');		
 		$this->url = Yii::app()->homeUrl;
 	}
 	private $url = null;
@@ -37,18 +37,18 @@ class AppcacheController extends CController
 		foreach ($NETWORK as $key => $value) {
 			$NETWORK[$key] = Yii::app()->createUrl($value);
 		}
-
+		
 		// $img = array();
 echo "CACHE MANIFEST
 # 2014-01-15:v3.4
 CACHE:\n".
-	implode("\n",$files)
+	join("\n",$files)
 ."\n\nNETWORK:\n".
-	implode("\n",$NETWORK)
+	join("\n",$NETWORK)
 ."\n\nFALLBACK:\n".
-	implode("\n",$notArr)
+	join("\n",$notArr)
 ;
-		// flush();
+		flush();
 		exit;
 	}
 	public function list_files( $folder = '', $levels = 100 ) {

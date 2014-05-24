@@ -21,7 +21,6 @@ var data = []
   if (getObj(id)) {
     delete dataObject["x"+id];
   }
-  delete dataObject["x"+id];
 }
 , countObj = function(){
   return dataObject.length;
@@ -50,13 +49,11 @@ for (i=100; i <102 ; i++) {
     var tdata = []
     , len = odata.length
     ;
-    console.log(odata);
     for (i=0; i < len; i++) { 
       if (setObj(odata[i]["itemid"])) {
         tdata.push(odata[i]);
       }
     }
-    console.log(tdata);
     if (tdata.length>0) {
       loadData(tdata);
     }

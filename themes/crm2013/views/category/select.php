@@ -13,7 +13,7 @@
     <span class="add-on relatedPopup cursorPointer">
     <i class="icon-search " title="Select" ></i>
     </span>
-    <span class="add-on createPopup cursorPointer <?php if(!$add){echo'hide';}?>"  title="添加分类">
+    <span class="add-on createPopup cursorPointer <?php if(!isset($add)){echo'hide';}?>"  title="添加分类">
         <i class='icon-plus'></i>
     </span>
     <span class="help-inline error" id="Category_parentid_em_" style="display: none"></span>

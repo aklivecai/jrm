@@ -1,8 +1,7 @@
 <?php
-class AddressBook extends ModuleRecord {
+class AddressBook extends DbRecod {
     public $linkName = 'name';
     public static $table = '{{address_book}}';
-    
     public function rules() {
         return array(
             array(
@@ -136,25 +135,5 @@ class AddressBook extends ModuleRecord {
         $arr['condition'] = join(" AND ", $condition);
         // echo 1;
         return $arr;
-    }
-    //保存数据前
-    protected function beforeSave() {
-        $result = parent::beforeSave();
-        if ($result) {
-            //添加数据时候
-            
-            if ($this->isNewRecord) {
-            } else {
-            }
-        }
-        return $result;
-    }
-    //保存数据后
-    protected function afterSave() {
-        parent::afterSave();
-    }
-    //删除信息后
-    protected function afterDelete() {
-        parent::afterDelete();
     }
 }

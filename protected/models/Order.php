@@ -6,7 +6,7 @@ class Order extends MRecord {
     public function rules() {
         return array(
             array(
-                'fromid',
+                'fromid,company',
                 'required'
             ) ,
             array(
@@ -33,6 +33,11 @@ class Order extends MRecord {
                 'note',
                 'length',
                 'max' => 255
+            ) ,
+            array(
+                'company',
+                'length',
+                'max' => 100
             ) ,
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
@@ -73,6 +78,7 @@ class Order extends MRecord {
             'itemid' => '订单编号',
             'fromid' => '商铺',
             'manageid' => '下单用户',
+            'company' => '公司',
             'add_time' => '下单时间',
             'total' => '总金额',
             'status' => '订单状态', /*(-1:删除,1待审核,2已取消,3通过审核,4已完成)*/
@@ -95,21 +101,93 @@ class Order extends MRecord {
             if (is_numeric($this->itemid)) {
                 $criteria->compare('itemid', $this->itemid, true);
             }
-            $criteria->addCondition("itemid IN (SELECT order_id FROM {{order_product}} WHERE name LIKE '%{$this->itemid}%'  GROUP BY order_id )", 'OR');
         }
         
         $criteria->compare('fromid', $this->fromid);
         if ($this->manageid > 0) {
             $criteria->compare('manageid', $this->manageid);
         }
+        $times = array();
         
-        $criteria->compare('add_time', $this->add_time);
-        $criteria->compare('total', $this->total);
+        $_time = isset($_GET['time']) ? $_GET['time'] : array();
+        foreach ($_time as $key => $value) {
+            $times[$key] = $value;
+        }
+        if (isset($times['add_time']) && count($times['add_time']) >= 1) {
+            $add_times = $times['add_time'];
+            $start = $add_times[0] ? Tak::getDayStart(strtotime($add_times[0])) : 0;
+            $end = $add_times[1] > 0 ? Tak::getDayEnd(strtotime($add_times[1])) : 0;
+            if ($start < 0 || $start > $end) {
+                $start = $start > 0 ? $start : $end;
+                if ($start > 0) {
+                    $end = TaK::getDayEnd($start);
+                }
+            }
+            if ($start > 0 && $end > $start) {
+                $criteria->addBetweenCondition('add_time', $start, $end);
+            }
+        }
         
+        if ($this->total > 0) {
+            $total = floatval($this->total);
+            $v = $_GET['comparison'] ? $_GET['comparison'] : false;
+            $comparison = TakType::items('comparison');
+            if (!isset($comparison[$v])) {
+                $v = '';
+            }
+            switch ($v) {
+                case 'then':
+                    $criteria->compare('total', $this->total, true);
+                break;
+                case 'greater':
+                    $criteria->addCondition("total>$total");
+                break;
+                case 'less':
+                    $criteria->addCondition("total<$total");
+                break;
+                default:
+                    $criteria->compare('total', $total);
+                break;
+            }
+        }
+        
+        $orderInfoSql = array();
+        if (isset($times['date_time']) && count($times['date_time']) >= 1) {
+            $add_times = $times['date_time'];
+            $start = $add_times[0] ? Tak::getDayStart(strtotime($add_times[0])) : 0;
+            $end = $add_times[1] > 0 ? Tak::getDayEnd(strtotime($add_times[1])) : 0;
+            if ($start < 0 || $end < $start) {
+                $start = $start > 0 ? $start : $end;
+                if ($start > 0) {
+                    $end = TaK::getDayEnd($start);
+                }
+            }
+            if ($start > 0 && $end > $start) {
+                $orderInfoSql[] = sprintf('date_time BETWEEN %s AND %s', $start, $end);
+            }
+        }
+        if (count($orderInfoSql) > 0) {
+            $sql = strtr('itemid IN (SELECT itemid FROM :table WHERE :where )', array(
+                ':table' => OrderInfo::$table,
+                ':where' => implode(' AND ', $orderInfoSql) ,
+            ));
+            $criteria->addCondition($sql);
+        }
+        $info_product = Tak::getParam('info-product', false);
+        if ($info_product) {
+            
+            $sql = "itemid IN (SELECT order_id FROM :table WHERE fromid=:fromid AND name LIKE '%$info_product%' GROUP BY order_id )";
+            $sql = strtr($sql, array(
+                ':table' => OrderProduct::$table,
+                ':fromid' => Tak::getFormid() ,
+            ));
+            $criteria->addCondition($sql);
+        }
         $criteria->compare('pay_time', $this->pay_time);
         $criteria->compare('delivery_time', $this->delivery_time);
         $criteria->compare('u_time', $this->u_time);
         $criteria->compare('invoice_number', $this->invoice_number);
+        $criteria->compare('company', $this->company, true);
         $criteria->compare('note', $this->note, true);
         
         if ($this->status && $this->getState($this->status)) {

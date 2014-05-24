@@ -1,47 +1,104 @@
-<?php /** @var BootActiveForm $form */
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-    'id'=>'search-form',
-    'type'=>'search',
-    'htmlOptions'=>array('class'=>'well'),
-    'action' => Yii::app()->createUrl($this->route),
-    'method'=>'get',
-)); 
-
-$types = array('-1'=>$model->getAttributeLabel('typeid'));
-foreach ($cates as $key => $value) {
-	$types[$key] =  $value;
-}
-  echo $form->dropDownList($model,'typeid',$types);
-  echo $form->dropDownList($model,'warehouse_id',Warehouse::toSelects($model->getAttributeLabel('warehouse_id')));
-  echo $form->textFieldRow($model,'enterprise',array('size'=>10,'maxlength'=>10));   
- echo $form->textFieldRow($model,'time_stocked',array('size'=>10,'maxlength'=>10,'class'=>'type-date')); 
-?>
-
-<?php 
-  $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Tk::g('Search'))); 
-
-$this->widget('bootstrap.widgets.TbButton', array(
-    'buttonType' => 'button',
-    'label' => Tk::g('More') ,
+<?php
+/** @var BootActiveForm $form */
+$form = $this->beginWidget('CActiveForm', array(
+    'id' => 'search-form',
     'htmlOptions' => array(
-        'class' => 'btn-more-serch'
-    )
+        'class' => 'form-search'
+    ) ,
+    'action' => Yii::app()->createUrl($this->route) ,
+    'method' => 'get',
 ));
+
+$types = array(
+    '-1' => $model->getAttributeLabel('typeid')
+);
+foreach ($cates as $key => $value) {
+    $types[$key] = $value;
+}
+
+if (!isset($_GET['time'])) {
+    $_GET['time'] = array(
+        'time' => array(
+            '',
+            ''
+        )
+    );
+}
+!isset($_GET['info-product']) && $_GET['info-product'] = '';
 ?>
-<div id="list-more-search" class="hide">
-<ul>
-  <li>
-    <?php echo CHtml::activeLabelEx($model,'numbers')?>:
-    <?php echo CHtml::activeTextField($model,'numbers');?>
-  </li>
-  <li>
-    <?php echo CHtml::activeLabelEx($model,'us_launch')?>:
-    <?php echo CHtml::activeTextField($model,'us_launch');?>
-  </li>
-  <li>
-    <?php echo CHtml::activeLabelEx($model,'note')?>:
-    <?php echo CHtml::activeTextField($model,'note');?>
-  </li>
-</ul>
-</div>
-<?php $this->endWidget(); ?>   
+
+<table class="table table-search">
+  <colgroup align="center">
+  <col width="90px"/>
+  <col width="125px"/>
+  <col width="90px"/>
+  <col width="125px"/>
+  </colgroup>
+  <tbody>
+    <tr>
+      <th></th>
+      <td colspan="4">
+        <?php
+echo $form->dropDownList($model, 'typeid', $types);
+echo $form->dropDownList($model, 'warehouse_id', Warehouse::toSelects($model->getAttributeLabel('warehouse_id')));
+?>
+      </td>
+    </tr>
+    <tr>
+      <th><?php echo $form::label($model, 'time') ?></th>
+      <td colspan="3">
+        <?php echo CHtml::textField('time[time][]', $_GET['time']['time']['0'], array(
+    'class' => 'type-date',
+    'id' => 'time-start'
+)); ?>
+        至
+        <?php echo CHtml::textField('time[time][]', $_GET['time']['time']['1'], array(
+    'class' => 'type-date',
+    'id' => 'time-end'
+)); ?>
+      </td>
+      <td></td>
+
+    </tr>
+  </tbody>
+  <tbody  class="more-content hide">
+    <tr>
+    <th><?php echo CHtml::label('产品', 'info-product') ?></th>
+    <td><?php echo CHtml::textField('info-product', $_GET['info-product']); ?></td>
+          <th>
+        <?php echo CHtml::activeLabelEx($model, 'numbers') ?>
+      </th>
+      <td>
+        <?php echo CHtml::activeTextField($model, 'numbers'); ?>
+      </td>
+  <td></td>
+    </tr>
+    <tr>
+      <th><?php echo CHtml::activeLabelEx($model, 'enterprise') ?></th>
+      <td><?php echo CHtml::activeTextField($model, 'enterprise'); ?></td>
+      <th><?php echo CHtml::activeLabelEx($model, 'us_launch') ?></th>
+      <td colspan="2"><?php echo CHtml::activeTextField($model, 'us_launch'); ?></td>
+    </tr>
+    <tr>
+      <th><?php echo CHtml::activeLabelEx($model, 'note') ?>:</th>
+      <td colspan="4"><?php echo CHtml::activeTextField($model, 'note'); ?></td>
+    </tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <th></th>
+    <td colspan="4">
+      <?php echo JHtml::htmlButton(Tk::g('Search') , array(
+    'class' => 'btn',
+    'type' => 'submit'
+)) ?>
+      <?php echo JHtml::htmlButton(Tk::g('More') , array(
+    'class' => 'btn btn-more'
+)) ?>
+    </td>
+  </tr>
+  </tfoot>
+</table>
+<?php
+$this->endWidget();
+?>

@@ -5,7 +5,7 @@ class ContactpPrsonController extends Controller {
         $this->modelName = 'ContactpPrson';
     }
     protected function getSelectOption($q, $not = false) {
-        $result = parent::getSelectOption(false,$not);
+        $result = parent::getSelectOption(false);
         $criteria = $result['data']['criteria'];
         $clienteleid = Tak::getQuery('clienteleid', false);
         if ($q) {

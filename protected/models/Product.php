@@ -1,5 +1,5 @@
 <?php
-class Product extends ModuleRecord {
+class Product extends DbRecod {
     public static $table = '{{product}}';
     public $linkName = 'name'; /*连接的显示的字段名字*/
     protected $_stocks = null;
@@ -177,17 +177,6 @@ class Product extends ModuleRecord {
         }
         return $sql;
     }
-    //保存数据前
-    protected function beforeSave() {
-        $result = parent::beforeSave();
-        if ($result) {
-            //添加数据时候
-            if ($this->isNewRecord) {
-            } else {
-            }
-        }
-        return $result;
-    }
     //保存数据后
     protected function afterSave() {
         parent::afterSave();
@@ -300,5 +289,83 @@ class Product extends ModuleRecord {
         $query = self::$db->createCommand($sql);
         $result = $query->queryRow();
         return $result;
+    }
+    
+    public $history = null;
+    public function writeHistory($type = 1, $warehouse_id = false) {
+        $result = $this->getHistory($warehouse_id);
+        // Ak::KD($result, 1);
+        $html = isset($result[$type]) ? $result[$type] : 0;
+        return sprintf('%01.4f', $html);
+        return $html;
+    }
+    
+    public function getHistory($warehouse_id = fale) {
+        if ($this->history != null) {
+            return $this->history;
+        }
+        $data = array(
+            ':product_id' => $this->itemid,
+            ':tabl' => ProductMoving::$table,
+        );
+        $condition = array(
+            ' WHERE 1=1',
+            sprintf('product_id=%s', $this->itemid)
+        );
+        /* 查询仓库*/
+        if ($warehouse_id > 0) {
+            $data[':warehouse_id'] = $warehouse_id;
+            $condition[] = sprintf('warehouse_id=%s', $warehouse_id);
+        }
+        
+        $data[':where'] = implode(' AND ', $condition);
+        $t = time();
+        //
+        $data[':本月开始时间'] = $t2 = mktime(0, 0, 0, date("m", $t) , 1, date("Y", $t));
+        //
+        $data[':本月结束时间'] = $e2 = mktime(23, 59, 59, date("m", $t) , date("t") , date("Y", $t));
+        // 上个月开始时间
+        $t3 = mktime(0, 0, 0, date("m", $t) - 1, 1, date("Y", $t));
+        // 上个月结束时间
+        $e3 = mktime(23, 59, 59, date("m", $t) - 1, date("t", $t3) , date("Y", $t));
+        
+        $sqls = array(
+            '上个月进' => 'SELECT SUM(numbers) AS total,21 AS itype FROM :tabl  :where AND type=1 AND  time_stocked<:本月开始时间 GROUP BY product_id',
+            '上个月出' => 'SELECT SUM(numbers) AS total,22 AS itype FROM :tabl  :where AND type=2   AND  time_stocked<:本月开始时间 GROUP BY product_id',
+            
+            '本月进货' => 'SELECT SUM(numbers) AS total,2 AS itype FROM :tabl  :where AND type=1 AND time_stocked>=:本月开始时间 GROUP BY product_id',
+            '本月出货' => 'SELECT SUM(numbers) AS total,3 AS itype  FROM :tabl  :where AND type=2 AND time_stocked>=:本月开始时间  GROUP BY product_id',
+            '结存进' => 'SELECT SUM(numbers) AS total,11 AS itype  FROM :tabl  :where AND type=1 AND time_stocked<=:本月结束时间 GROUP BY product_id',
+            '结存出' => 'SELECT SUM(numbers) AS total,12 AS itype  FROM :tabl  :where AND type=2 AND time_stocked<=:本月结束时间 GROUP BY product_id',
+        );
+        $sql = implode(' UNION ALL ', $sqls);
+        $sql = strtr($sql, $data);
+        $arr = array(
+            '1' => 0,
+            '2' => 0,
+            '3' => 0,
+            
+            '11' => 0,
+            '12' => 0,
+            '21' => 0,
+            '22' => 0,
+        );
+        $query = self::$db->createCommand($sql)->queryAll();
+        foreach ($query as $key => $value) {
+            $arr[$value['itype']] = $value['total'];
+        }
+        $arr['1'] = $arr['21'] - $arr['22'];
+        $arr['4'] = $arr['11'] - $arr['12'];
+        $this->history = $arr;
+        return $this->history;
+        $htmls = array(
+            '<ul>'
+        );
+        $htmls[] = sprintf('<li>上个月结存：%01.4f</li>', $arr['1']);
+        $htmls[] = sprintf('<li>本月进货：%01.4f</li>', $arr['2']);
+        $htmls[] = sprintf('<li>本月出货：%01.4f</li>', $arr['3']);
+        $htmls[] = sprintf('<li>本月结存：%01.4f</li>', $arr['4']);
+        $htmls[] = '</ul>';
+        return implode("\n", $htmls);
     }
 }
