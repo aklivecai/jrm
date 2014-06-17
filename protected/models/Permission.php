@@ -103,8 +103,8 @@ class Permission extends CActiveRecord {
             ':parent' => $this->name,
         );
         $sql = "DELETE FROM {{rbac_authitemchild}} WHERE parent=:parent";
-        self::$db->createCommand($sql)->execute($arr);        
-        $arr[':fromid'] = $this->getFid();        
+        self::$db->createCommand($sql)->execute($arr);
+        $arr[':fromid'] = $this->getFid();
         $sql = "DELETE FROM {{rbac_authassignment}} WHERE itemname=:parent  AND  fromid=:fromid";
         self::$db->createCommand($sql)->execute($arr);
     }
@@ -118,7 +118,7 @@ class Permission extends CActiveRecord {
         }
         if ($isload) {
             $reulst['800'] = '供应商';
-        }        
+        }
         // $reulst['']
         return $reulst;
     }
@@ -128,9 +128,9 @@ class Permission extends CActiveRecord {
             ':parent' => $this->name,
             ':fromid' => $this->fromid,
         );
-        $sql = "SELECT count(`parent`) FROM {{rbac_authitemchild}} WHERE `parent`=:parent";
+        $sql = "SELECT count(parent) FROM {{rbac_authitemchild}} WHERE parent=:parent";
         $count = self::$db->createCommand(strtr($sql, $arr))->queryScalar();
-        $sql = 'SELECT C.*,P.* FROM {{rbac_authitemchild}} C,{{rbac_authitem}} P WHERE  C.child = P.name AND C.`parent`=:parent ORDER BY P.type DESC,P.description ASC';
+        $sql = 'SELECT C.*,P.* FROM {{rbac_authitemchild}} C,{{rbac_authitem}} P WHERE  C.child = P.name AND C.parent=:parent ORDER BY P.type DESC,P.description ASC';
         $dataProvider = new CSqlDataProvider(strtr($sql, $arr) , array(
             'keyField' => 'child',
             'totalItemCount' => $count,
@@ -144,7 +144,29 @@ class Permission extends CActiveRecord {
                 'pageSize' => 100,
             ) ,
         ));
-        
         return $dataProvider;
+    }
+    /**
+     *获取所有的仓库管理员
+     */
+    public static function getUWarehouses() {
+        $sql = sprintf("SELECT r.userid,m.user_nicename,m.user_name FROM {{rbac_authassignment}} AS r LEFT JOIN {{manage}} AS m ON(r.userid=m.manageid)  WHERE r.fromid=%s AND r.itemname='Warehouse'", Ak::getFormid());
+        $_result = Ak::getDb('db')->createCommand($sql)->queryAll();
+        $result = array();
+        foreach ($_result as $key => $value) {
+            $result[$value['userid']] = $value['user_nicename'] != '' ? $value['user_nicename'] : $value['user_name'];
+        }
+        return $result;
+    }
+    /**
+     * 查看用户是否是仓库管理员
+     * @param  int $uid 管理员编号
+     * @return int       返回用户编号
+     */
+    public static function iSWarehouses($uid = 0) {
+        !($uid > 0) && $uid = Ak::getManageid();
+        $sql = sprintf("SELECT r.userid FROM {{rbac_authassignment}} AS r WHERE r.fromid=%s AND r.userid=%s AND  r.itemname='Warehouse'", Ak::getFormid() , $uid);
+        $_result = Ak::getDb('db')->createCommand($sql)->queryScalar();
+        return $_result > 0 ? $uid : 0;
     }
 }

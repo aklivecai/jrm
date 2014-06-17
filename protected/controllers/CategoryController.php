@@ -32,7 +32,7 @@ class CategoryController extends Controller {
     public function loadModel($id, $isload = false) {
         if ($isload || $this->_model === null) {
             $m = $this->modelName;
-
+            
             $m = $m::model();
             $m = $m->findByAttributes(array(
                 'catid' => $id,
@@ -117,6 +117,12 @@ class CategoryController extends Controller {
                 if ($this->returnUrl) {
                     $this->redirect($this->returnUrl);
                 } elseif ($action == 'select') {
+                    $turl = $_SERVER['HTTP_REFERER'];
+                    if (strpos($turl, 'product')) {
+                        $turl.=sprintf("?Product[typeid]=%s",$model->catid);
+                        $this->redirect($turl);
+                    }                    
+                    exit;
                     $this->_setLayout('//layouts/columnWindows');
                     $this->render('create', array(
                         'model' => $model,

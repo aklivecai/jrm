@@ -15,7 +15,7 @@
     -webkit-user-select: none;
     cursor: wait;
 }
-.btn{
+.btn {
     margin: 0 3px;
 }
 #ibody .red {
@@ -87,7 +87,7 @@ ul.yiiPager .first, ul.yiiPager .last {
 .grid-view {
     margin: 12px;
 }
-.grid-view .pagination .disabled > span, .grid-view .pagination .disabled > a, .grid-view .pagination .disabled > a:hover, .grid-view .pagination .disabled > a: focus {
+.grid-view .pagination .disabled > span, .grid-view .pagination .disabled > a, .grid-view .pagination .disabled > a:hover, .grid-view .pagination .disabled > a:focus {
     color: #999999;
     cursor: not-allowed;
     border-color: #dddddd;
@@ -173,12 +173,12 @@ ul.yiiPager .first, ul.yiiPager .last {
         margin-left: -30px;
         *zoom: 1;
    }
-   .row: before, .row: after {
+   .row:before, .row:after {
        display: table;
        line-height: 0;
        content: "";
   }
-  .row: after {
+  .row:after {
       clear: both;
  }
  [class*="span"] {
@@ -249,8 +249,31 @@ input[type=date] {
     min-height: 250px;
     padding: 8px;
 }
+/* 出入库 */
+
 .not-mpr input {
     margin: 0;
+    padding: 0;
+    text-indent: .5em;
+}
+.min-table th, .min-table td {
+    padding: 2px;
+}
+.min-table td input {
+    width: 85%;
+    padding: 2px;
+    height: 18px;
+    margin: 0;
+}
+.min-table tfoot .pagination {
+    margin: 0;
+}
+.text-show {
+    display: inline-block;
+    margin: 0 3px;
+    border: 0;
+    border-bottom: 1px solid #000;
+    background: none;
 }
 .content .workplace .head>.buttons>li {
     padding-right: 8px;
@@ -607,97 +630,115 @@ form.active .wap-flow-content {
     margin-top: 8px;
     margin-bottom: 3px;
 }
-
-
-.list-tree li{
+.list-tree li {
     line-height: 25px;
-    border-bottom: 1px  dotted #DDD;
-    list-style-position:inside;
-    list-style-type:square;
+    border-bottom: 1px dotted #DDD;
+    list-style-position: inside;
+    list-style-type: square;
 }
-
-.tip-msg{
-    margin:2px 8px;
+.tip-msg {
+    margin: 2px 8px;
 }
-.tip-title{
-
-}
-
-#list-more-search{
+.tip-title {} #list-more-search {
     padding-top: 12px;
     clear: both;
     margin: 0;
 }
-#list-more-search ul{margin:0;padding:0;}
-#list-more-search li{
-    margin: 3px  0 2px 0 ;
+#list-more-search ul {
+    margin: 0;
+    padding: 0;
+}
+#list-more-search li {
+    margin: 3px 0 2px 0;
     list-style-type: none;
     clear: both;
 }
-#list-more-search label{
+#list-more-search label {
     float: left;
-    width:85px;
+    width: 85px;
     padding-right: 3px;
     line-height: 25px;
     text-align: right;
 }
-#list-more-search input{
+#list-more-search input {
     height: 18px;
 }
-#list-more-search .more-search-dlist{
+#list-more-search .more-search-dlist {
     padding-left: 95px;
 }
-
-
-label, input, button, select, textarea{
+label, input, button, select, textarea {
     font-size: 12px;
 }
-.table-search tbody th{
+.table-search tbody th {
     text-align: right;
 }
-.table-search tfoot td,
-.table-search tfoot th{
+.table-search tfoot td, .table-search tfoot th {
     border-bottom: 1px solid #DDD;
 }
-.table-search th,
-.table-search td{
-    padding:5px;
+.table-search th, .table-search td {
+    padding: 5px;
 }
-.table-search select{
+.table-search select {
     width: 120px;
     margin-bottom: 0;
 }
-.table-search input{
-    margin:0;
-    padding:2px;
+.table-search input {
+    margin: 0;
+    padding: 2px;
     height: 20px;
 }
 .table-search span.required {
     display: none;
 }
-
 /*movings*/
-.mov-product ol{
-    margin-bottom:0;
-    padding:0;
+
+.mov-product ol {
+    margin-bottom: 0;
+    padding: 0;
     height: 60px;
     overflow: hidden;
-    list-style-type: none;
+    margin-left: 2px;
+    list-style-type: none;
+    transition: all 0.3s;
 }
-.move-clear-product ol{
+.move-clear-product ol {
+
+    padding-left: 15px;
     height: auto;
     overflow: visible;
+    list-style-type: decimal;
 }
-.mov-product a{
+/**/
+
+.mov-products {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.mov-product a {
     float: right;
     cursor: pointer;
 }
-.move-clear-product .more-product{
+.move-clear-product .more-product {
     display: none;
 }
-.more-product-hide{
+.more-product-hide {
     display: none;
 }
-.move-clear-product .more-product-hide{
+.move-clear-product .more-product-hide {
     display: block;
+}
+/* ajax-modal */
+
+#ajax-modal .well {
+    min-height: 0;
+    padding: 0;
+}
+#ajax-modal .block, #ajax-modal .block-fluid {
+    margin-bottom: 0;
+}
+/** 产品出入库 **/
+
+#table-product input {
+    margin: 0;
 }

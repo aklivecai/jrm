@@ -69,6 +69,7 @@ class ImportController extends Controller {
             // Tak::KD(count($_POST[$model->model]),1);
             $result = $model->load($_POST[$model->model]);
             if ($result) {
+                // Tak::KD($model,1);
                 $model->import();
             }
             $this->_setLayout('//layouts/columnWindows');

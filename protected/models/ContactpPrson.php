@@ -66,6 +66,7 @@ class ContactpPrson extends DbRecod {
             ) ,
         );
     }
+    
     /**
      * @return array customized attribute labels (name=>label) 字段显示的
      */

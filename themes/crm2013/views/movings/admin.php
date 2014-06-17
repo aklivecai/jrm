@@ -63,7 +63,7 @@ $options = Tak::gredViewOptions(false);
 $options['dataProvider'] = $model->search();
 $columns = array(
     Tak::getAdminPageCol(array(
-        'template' => '{view}{update}',
+        'template' => '{view}',
     )) ,
     array(
         'name' => '产品',
@@ -74,6 +74,10 @@ $columns = array(
         'name' => '金额',
         'type' => 'raw',
         'value' => 'Tak::tagNum(Tak::format_price($data->getTotal()),"label-success")',
+    ) ,
+    array(
+        'name' => 'warehouse_id',
+        'value' => 'Warehouse::deisplayName($data->warehouse_id)'
     ) ,
     array(
         'name' => 'enterprise',
@@ -96,12 +100,21 @@ $columns = array(
         'name' => 'time',
         'type' => 'raw',
         'value' => 'Tak::timetodate($data->time)',
-        'sortable' => false,
         'headerHtmlOptions' => array(
             'class' => 'stor-date',
             'style' => "width:65px;"
         ) ,
         'header' => $model->getAttributeLabel("time") ,
+    ) ,
+    array(
+        'name' => 'time_stocked',
+        'type' => 'raw',
+        'value' => 'TakType::getStatus("isok",$data->isAffirm()?1:0)',
+        'headerHtmlOptions' => array(
+            'class' => 'stor-date',
+            'style' => "width:25px;"
+        ) ,
+        'header' => Tk::g($model->sName) ,
     )
 );
 $options['columns'] = $columns;
@@ -110,14 +123,6 @@ $widget = $this->widget('bootstrap.widgets.TbGridView', $options);
         </div>
     </div>
 </div>
-<script>
-    isprintf = true;
-</script>
 <?php
-Tak::regScript('movings-product','
-    $(document).on("click",".more-product,.more-product-hide",function(event){
-        event.preventDefault();
-        $(this).parent().toggleClass("move-clear-product");
-    })
-');
+Tak::regScript('tak', 'isprintf = true;istoxls = true;', CClientScript::POS_END);
 ?>

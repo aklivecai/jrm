@@ -45,7 +45,7 @@ class Product extends DbRecod {
                 'max' => 255
             ) ,
             array(
-                'itemid, fromid, name, typeid, material, spec, unit, stocks, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status',
+                'itemid, fromid, name, typeid, material, spec, unit, stocks, add_time, add_us, add_ip, modified_time, modified_us, modified_ip, note, status,warehouse_id',
                 'safe',
                 'on' => 'search'
             ) ,
@@ -98,7 +98,10 @@ class Product extends DbRecod {
             'modified_us' => '修改人',
             'modified_ip' => '修改IP',
             'note' => '介绍',
+            
             'status' => '状态', /*(0:回收站,1:正常)*/
+            
+            'warehouse_id' => ' 仓库',
         );
     }
     
@@ -109,7 +112,14 @@ class Product extends DbRecod {
         $criteria->compare('fromid', $this->fromid);
         $criteria->compare('name', $this->name, true);
         if ($this->typeid > 0) {
-            $criteria->compare('typeid', $this->typeid);
+            $cates = Category::getCatsProduct();
+            if (isset($cates[$this->typeid])) {
+                if ($cates[$this->typeid]['arrchildid'] > 0) {
+                    $criteria->addInCondition('typeid', explode(',', $cates[$this->typeid]['arrchildid']));
+                } else {
+                    $criteria->compare('typeid', $this->typeid);
+                }
+            }
         }
         
         $criteria->compare('material', $this->material, true);
@@ -127,11 +137,21 @@ class Product extends DbRecod {
         $criteria->compare('note', $this->note, true);
         
         $criteria->compare('status', $this->status);
+        /*仓库管理员，只查询自己在信息*/
+        // !$this->warehouse_id && !is_array($this->warehouse_id) && $this->warehouse_id = $_GET['warehouse_id'];
         
-        $warehouse_id = $this->warehouse_id > 0 ? $this->warehouse_id : Tak::getQuery('warehouse_id', false);
+        $warehouse_id = $this->warehouse_id;
+        if (is_array($warehouse_id)) {
+            count($warehouse_id) == 0 && $warehouse_id = array(-1
+            );
+            $warehouse = sprintf("warehouse_id IN(%s)", implode(',', $warehouse_id));
+            $this->warehouse_id = - 1;
+        } elseif ($warehouse_id > 0) {
+            $warehouse = sprintf("warehouse_id =%s", $warehouse_id);
+        }
         
-        if ($warehouse_id > 0) {
-            $sql = sprintf("itemid in (SELECT product_id FROM %s WHERE fromid=%s AND warehouse_id='$warehouse_id'  GROUP BY itemid)", Stocks::$table, Tak::getFormid());
+        if ($warehouse) {
+            $sql = sprintf("itemid in (SELECT product_id FROM %s WHERE fromid=%s AND $warehouse  GROUP BY itemid)", Stocks::$table, Tak::getFormid());
             $criteria->addCondition($sql);
         }
         
@@ -253,10 +273,17 @@ class Product extends DbRecod {
         }
         return $result;
     }
+    private $_stock = null;
     public function getStock() {
-        $warehouse_id = Tak::getQuery('warehouse_id', false);
-        $result = Stocks::getStocks($this->itemid, $warehouse_id);
-        return $result;
+        if ($this->_stock == null) {
+            $warehouse_id = $_GET['Product[warehouse_id]'];
+            if (!$warehouse_id && Permission::iSWarehouses()) {
+                $warehouse_id = Warehouse::getUserWare();
+            }
+            $this->_stock = Stocks::getStocks($this->itemid, $warehouse_id);
+        } else {
+        }
+        return $this->_stock;
     }
     
     public static function getTotals($sql = false) {
@@ -313,9 +340,17 @@ class Product extends DbRecod {
             sprintf('product_id=%s', $this->itemid)
         );
         /* 查询仓库*/
-        if ($warehouse_id > 0) {
-            $data[':warehouse_id'] = $warehouse_id;
-            $condition[] = sprintf('warehouse_id=%s', $warehouse_id);
+        !$warehouse_id && $warehouse_id = $_GET['Product[warehouse_id]'];
+        if ($warehouse_id) {
+            if (is_array($warehouse_id)) {
+                $warehouse = sprintf("warehouse_id IN(%s)", implode(',', $warehouse_id));
+            } elseif ($warehouse_id > 0) {
+                $warehouse = sprintf("warehouse_id =%s", $warehouse_id);
+            }
+        } else {
+        }
+        if ($warehouse) {
+            $condition[] = $warehouse;
         }
         
         $data[':where'] = implode(' AND ', $condition);

@@ -8,6 +8,7 @@ $this->breadcrumbs = array(
     ) ,
 );
 $items = Tak::getListMenu();
+Tak::regScript('tak', 'isprintf = true;istoxls = true;', CClientScript::POS_END);
 ?>
 <div class="row-fluid">
     <div class="span12">
@@ -18,8 +19,7 @@ $items = Tak::getListMenu();
 )) ?></h1>
     </div>  
 
-    <div class="block-fluid clearfix">
-
+<div class="block-fluid clearfix">
 <?php $this->renderPartial('/product/_search', array(
     'model' => $model,
     'warehouse' => true
@@ -64,7 +64,7 @@ $columns = array(
     'name' => 'name',
     array(
         'name' => 'typeid',
-        'value' => 'Category::getProductName($data->typeid)',
+        'value' => 'Category::getProductName($data->typeid," / ")',
     ) ,
     array(
         'name' => 'material',
@@ -79,6 +79,11 @@ $columns = array(
         'value' => '$data->color',
     ) ,
     'note',
+    
+    'warehouse' => array(
+        'name' => 'warehouse_id',
+        'value' => 'Warehouse::deisplayName($_GET[Product][warehouse_id])'
+    ) ,
     array(
         'name' => '数量',
         'type' => 'raw',
@@ -95,21 +100,24 @@ $columns = array(
     ) ,
     array(
         'name' => '上个月结存',
-        'value' => '$data->writeHistory(1,$_GET["warehouse_id"])',
+        'value' => '$data->writeHistory(1,Yii::app()->getController()->warehouse_id)',
     ) ,
     array(
         'name' => '本月进货',
-        'value' => '$data->writeHistory(2,$_GET["warehouse_id"])',
+        'value' => '$data->writeHistory(2,Yii::app()->getController()->warehouse_id)',
     ) ,
     array(
         'name' => '本月出货',
-        'value' => '$data->writeHistory(3,$_GET["warehouse_id"])',
+        'value' => '$data->writeHistory(3,Yii::app()->getController()->warehouse_id)',
     ) ,
     array(
         'name' => '本月结存',
         'value' => '$data->writeHistory(4,$_GET["warehouse_id"])',
     ) ,
 );
+if (!isset($_GET['Product']['warehouse_id'])||$_GET['Product']['warehouse_id']<0) {
+    unset($columns['warehouse']);
+}
 
 $options['columns'] = $columns;
 $options['dataProvider'] = $tags;
@@ -118,7 +126,3 @@ $widget = $this->widget('bootstrap.widgets.TbGridView', $options);
         </div>
     </div>
 </div>
-
-<script>
-    isprintf = true;
-</script>

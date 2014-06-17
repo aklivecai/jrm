@@ -184,9 +184,6 @@ class MRecord extends CActiveRecord {
                     $this->setItemid(null);
                 }
             } else {
-                //修改数据时候
-                
-                
             }
         }
         return $result;

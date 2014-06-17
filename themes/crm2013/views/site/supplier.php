@@ -21,7 +21,10 @@ $typeid > 0 && $model->typeid = $typeid;
 $warehouse_id > 0 && $model->warehouse_id = $warehouse_id;
 $stocks_name != '' && $model->name = $stocks_name;
 
-$warehouses = Warehouse::toSelects(Tk::g('Warehouse'));
+$warehouses = Warehouse::toSelects(Tk::g(array(
+    'All',
+    'Warehouse'
+)));
 
 $ihtmls = array();
 ?>
@@ -63,7 +66,7 @@ if ($typeid <= 0) {
 }
 echo ' ';
 if ($warehouse_id <= 0) {
-    echo JHtml::dropDownList('warehouse_id', $_GET['warehouse_id'], $warehouses);
+    echo $form->dropDownList($model, 'warehouse_id', $warehouses);
 } else {
     $html = sprintf("%s : %s", Tk::g('Warehouse') , $warehouses[$warehouse_id]);
     $ihtmls[] = JHtml::tag('span', $html, array(
@@ -107,6 +110,7 @@ $columns = array(
         'type' => 'raw',
         // 'value' => 'CHtml::link($data->name,array("viewProduct","id"=>$data->primaryKey))',
         // 'value' => '$data->name,array("viewProduct","id"=>$data->primaryKey)',
+        
         
     ) ,
     array(

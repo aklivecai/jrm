@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script type="text/javascript"></script>
 <?php
 $str = "";
 if (count($model->errors)>0) {
@@ -11,4 +11,3 @@ if (count($model->errors)>0) {
 }
 echo $str;
 ?>
-</script>

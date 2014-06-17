@@ -17,10 +17,13 @@ echo $form->errorSummary($model);
     'maxlength' => 50
 )); ?>
     </div>
-    <div class="row-form clearfix">
-        <?php echo $form->textFieldRow($model, 'user_name', array(
-    'size' => 50,
-    'maxlength' => 50
+    <div class="row-form clearfix"> 
+        <?php
+echo $form->dropDownListRow($model, 'user_name', $this->warehouseus, array(
+    'multiple' => 'multiple',
+    'class'=>'iselect',
+    'style'=>'width:95%',
+    'placeholder'=>'选择负责人',
 )); ?>
     </div>
     <div class="row-form clearfix">

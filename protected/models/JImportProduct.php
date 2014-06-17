@@ -51,51 +51,39 @@ class JImportProduct extends JImportForm {
     public function init() {
         parent::init();
         $this->arr = Tak::getOM();
+        $this->arr['note'] = '导入';
     }
+    
     public function import($warehouse_id = false) {
         if (!$warehouse_id) {
             $warehouse_id = Tak::getPost('warehouse_id', false);
         }
         $arr = $this->arr;
         unset($arr['itemid']);
-        $arr['note'] = '导入';
-        $cates = $this->getCates();
-        $sqls = array();
+        
         $logfile = sprintf('%s-test.log', Tak::getFormid());
         $strMsg = '';
         // 不记录日志
         AdminLog::$isLog = false;
-        $cate = new Category('create');
-        $cate->attributes = $arr;
-        $cate->setModel($this->model);
         
         $product = new Product('create');
         $product->attributes = $arr;
         
         $stock = new Stocks('create');
         $stock->attributes = $arr;
-        $newCates = array();
-        
+        $this->newCates = array();
         $itemid = Tak::fastUuid();
         $data = $this->data;
-        // Tak::KD($this->data);
         $transaction = Tak::getDb('db')->beginTransaction();
         try {
+            
             foreach ($data as $key => $value) {
-                $itemid = Tak::numAdd(Tak::fastUuid() , $key + 2);
-                if (isset($cates[$value['catename']])) {
-                    $catid = $cates[$value['catename']];
-                } else {
-                    if ($cate->catid > 0) {
-                        $cate->catid+= $key * 2;
-                    }
-                    $cate->catename = $value['catename'];
-                    $cate->setIsNewRecord(true);
-                    $cate->save();
-                    $newCates[] = $cate->catename;
-                    $catid = $cates[$value['catename']] = $cate->catid;
-                }
+                $itemid = Tak::numAdd($itemid, $key + 2);                
                 
+                $catid = $this->getCateId($value['catename'], $key * 2);
+                
+                Tak::KD($value['catename']);
+
                 $product->attributes = $value;
                 if ($product->itemid > 0) {
                     $product->itemid = $itemid;
@@ -105,6 +93,7 @@ class JImportProduct extends JImportForm {
                     $product->price = 0;
                 }
                 $product->typeid = $catid;
+                
                 if ($product->save()) {
                     if ($warehouse_id > 0 && $product->stocks > 0) {
                         if ($stock->itemid > 0) {
@@ -149,9 +138,9 @@ class JImportProduct extends JImportForm {
             </ul>
         ';
         $strCate = '';
-        if (count($newCates) > 0) {
+        if (count($this->newCates) > 0) {
             $_str = '';
-            foreach ($newCates as $value) {
+            foreach ($this->newCates as $value) {
                 $_str.= sprintf("<span class='label label-success'>%s</span> ", $value);
             }
             $strCate = sprintf('<li>导入货物分类：%s</li>', $_str);
@@ -167,23 +156,142 @@ class JImportProduct extends JImportForm {
         Tak::deleteUCache($this->model);
         AdminLog::log($str, $arr);
         Tak::setFlash($str);
-        
-        Tak::K(count($this->data) , $logfile);
-        Tak::K($strMsg, $logfile);
+        // Tak::K(count($this->data) , $logfile);
+        // Tak::K($strMsg, $logfile);
+        /**/
+    }
+    private $cates = null;
+    private $cateids = null;
+    private $cate = null;
+    private $newCates = array();
+    const PRE_STR = '`';
+    /*$str =  "分类/分类1/分类2/分类3"*/
+    public function getCateId($name, $ikeys = 0) {
+        $cates = $this->getCates();
+        $strPRE = self::PRE_STR;
+        #替换空格
+        $name = str_replace(' ', '', $name);
+        #替换多个重复的
+        $name = preg_replace('/[\/\\\\]{1,}/', '/', $name);
+        $names = str_replace('/', $strPRE, $name);
+        #查找字符串的首次出现
+        if (stripos($names, $strPRE) !== false && stripos($names, $strPRE) == 0) {
+            $names = substr($names, 1);
+        }
+        #查找字符串的最后出现
+        if (strpos($names, $strPRE) == strlen($names)) {
+            $names = substr($names, 0, strlen($names) - 1);
+        }
+        $pid = 0;
+        $cid = 0;
+        $data = array(
+            $names
+        );        
+        if (isset($cates[$names])) {
+            //分类已经存在
+            $cid = $cates[$names];
+        } elseif (strpos($names, $strPRE) !== false) {
+            //有多级分类
+            $str = $names;
+            $isok = true;
+            while ($isok) {
+                $int = strrpos($str, $strPRE);
+                if ($int !== false) {
+                    $str = substr($str, 0, $int);
+                    if (isset($cates[$str])) {
+                        $pid = $cates[$str];
+                        $isok = false;
+                        break;
+                    } else {
+                        array_unshift($data, $str);
+                    }
+                } else {
+                    $isok = false;
+                    break;
+                }
+            }
+        } else {
+            //一级分类，没有子类
+            ;
+        }
+        if ($cid == 0) {
+            foreach ($data as $key => $value) {
+                $int = strrpos($value, $strPRE);
+                if ($int === false) {
+                    $catename = $value;
+                } else {
+                    $ilen = strlen($str);
+                    $catename = substr($value, $int + 1);
+                }
+                $ikeys+= 2;
+                if ($this->cate === null) {
+                    $cate = new Category('create');
+                    $arr = $this->arr;
+                    unset($arr['itemid']);
+                    $cate->attributes = $arr;
+                    $cate->setModel($this->model);
+                }
+                $cate->parentid = $pid;
+                if ($cate->catid > 0) {
+                    
+                    $cate->catid+= $ikeys;
+                }
+                $cate->catename = $catename;
+                $cate->setIsNewRecord(true);
+                $cate->save();
+                $this->newCates[] = $cate->catename;
+                $pid = $cates[$value] = $cate->catid;
+                
+                $this->cate = $cate;
+            }
+            $cid = $pid;
+        }
+        // Tak::KD($cid);
+        return $cid;
+    }
+    public function getCates() {
+        if ($this->cateids == null) {
+            $sql = "SELECT catid,catename,parentid,child FROM :table WHERE  fromid=:fromid AND module=':module' ORDER BY listorder DESC,catid ASC";
+            $sql = strtr($sql, array(
+                ':table' => Category::$table,
+                ':module' => 'product',
+                ':fromid' => Tak::getFormid() ,
+            ));
+            $tags = Tak::getDb('db')->createCommand($sql)->queryAll();
+            $result = array();
+            $farr = array();
+            $cateids = array();
+            foreach ($tags as $key => $value) {
+                $cateids[$value['catename']] = $value['catid'];
+                $result[$value['catid']] = $value;
+                /**
+                 * 有子类的一级分类
+                 */
+                if ($value['child'] > 0 && $value['parentid'] == 0) {
+                    $farr[$value['catid']] = $value;
+                }
+            }
+            $tmep = $this->cates = $result;
+            $this->cateids = $cateids;
+            foreach ($farr as $key => $value) {
+                $this->getSetSubCate($value['catename'], $key, $tmep);
+                unset($tmep[$key]);
+            }
+        }
+        return $this->cateids;
     }
     
-    public function getCates() {
-        $sql = "SELECT catid,catename FROM :table WHERE  fromid=:fromid AND module=':module' ORDER BY listorder DESC,catid ASC";
-        $sql = strtr($sql, array(
-            ':table' => Category::$table,
-            ':module' => 'product',
-            ':fromid' => Tak::getFormid() ,
-        ));
-        $tags = Tak::getDb('db')->createCommand($sql)->queryAll();
-        $result = array();
-        foreach ($tags as $key => $value) {
-            $result[$value['catename']] = $value['catid'];
+    private function getSetSubCate($str, $id, &$data) {
+        if (!isset($this->cates[$id]) || $this->cates[$id]['child'] == 0) {
+            return false;
         }
-        return $result;
+        foreach ($data as $key => $value) {
+            if ($id == $value['parentid']) {
+                $catename = $str . self::PRE_STR . $value['catename'];
+                $this->cateids[$catename] = $key;
+                unset($data[$kye]);
+                $this->getSetSubCate($catename, $key, $data);
+            }
+        }
     }
 }

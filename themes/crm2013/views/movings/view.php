@@ -6,15 +6,17 @@ $this->breadcrumbs = array(
         'admin'
     ) ,
 );
+
 $items = Tak::getViewMenu($model->itemid);
 $items['Create']['label'] = Tk::g('Entering');
 
-$warehouse = Warehouse::model()->findByAttributes(
-    array(
-    'fromid'=>$model->fromid,
-    'itemid'=>$model->warehouse_id,
-    )
-);
+$subitems = array();
+
+$warehouse = Warehouse::model()->findByAttributes(array(
+    'fromid' => $model->fromid,
+    'itemid' => $model->warehouse_id,
+));
+
 $tags = array(
     'numbers',
     'warehouse_id' => array(
@@ -42,39 +44,11 @@ $tags = array(
     ) ,
 );
 
-$nps = $model->getNP(true);
-if (count($nps) > 0) {
-    $_itemis[] = array(
-        'label' => Tk::g(array(
-            'More',
-            $model->sName
-        )) ,
-        'url' => '#',
-        'icon' => 'list',
-        'itemOptions' => array(
-            'data-geturl' => $this->createUrl('gettop', array(
-                'id' => $model->primaryKey
-            )) ,
-            'class' => 'more-list'
-        ) ,
-        'submenuOptions' => array(
-            'class' => 'more-load-info'
-        ) ,
-        'items' => array(
-            array(
-                'label' => '...',
-                'url' => '#'
-            ) ,
-        )
-    );
-    $_itemis = Tak::getNP($nps);
-    // array_splice($_itemis, count($_itemis) , 0, Tak::getNP($nps));
-}
-array_splice($items, count($items) - 2, 0, $_itemis);
-
-if ($model->time_stocked > 0) {
-    unset($items['Update']);
-    unset($items['Delete']);    
+$items['Update']['label'] = '修改单据信息';
+$items['Update']['linkOptions'] = array(
+    'title' => $items['Update']['label'],
+    'class' => "data-ajax"
+);
     $items[] = array(
         'label' => Tk::g('Print') ,
         'icon' => 'print',
@@ -86,6 +60,23 @@ if ($model->time_stocked > 0) {
             'target' => '_blank'
         )
     );
+
+    $subitems['upproduct'] = array(
+        'label' => '修改产品明细',
+        'icon' => 'edit',
+        'url' => array(
+            'upproduct',
+            'id' => $id
+        )
+    );
+
+/*是否已经确认操作*/
+if ($model->isAffirm()) {
+    // unset($items['Update']);
+    unset($items['Delete']);
+    if (!$this->checkAccess()) {
+        unset($subitems['upproduct'] );
+    }
 } else {
     unset($tags['time_stocked']);
     if (ProductMoving::model()->recentlyByMovingid($model->itemid)->count() > 0) {
@@ -107,7 +98,10 @@ if ($model->time_stocked > 0) {
     }
 }
 
-unset($tags['time_stocked']);
+array_splice($items, count($items) - 2, 0, $subitems);
+// array_splice($items, count($items) - 2, 0, $_itemis);
+//unset($tags['time_stocked']);
+
 ?>
 <div class="block-fluid without-head">
     <div class="row-fluid ">
@@ -130,7 +124,7 @@ foreach ($tags as $key => $value) {
         $value = $value['value'];
     }
     // Tak::KD($tags,1);
-    $str.= sprintf('<li><div class="title">%s:</div><div class="text">&nbsp;%s </div></li>',CHtml::encode($model->getAttributeLabel($key)),$value);
+    $str.= sprintf('<li><div class="title">%s:</div><div class="text">&nbsp;%s </div></li>', CHtml::encode($model->getAttributeLabel($key)) , $value);
 }
 $str.= '</ul>';
 echo $str;
@@ -143,7 +137,7 @@ echo $str;
           <h4>产品明细</h4>
         </div>
  <?php $this->widget('bootstrap.widgets.TbListView', array(
-    'dataProvider' => $model->getProductMovings() ,    
+    'dataProvider' => $model->getProductMovings() ,
     'itemView' => '//movings/_product_view',
     'template' => '<table class="table"> <thead> <tr> <th>物料名字</th> <th>产品规格</th> <th>材料</th>  <th>颜色</th><th>价格</th><th>数量</th> <th>单位</th> </tr> </thead> <tbody>{items}</tbody> </table>',
     'htmlOptions' => array(
@@ -161,5 +155,10 @@ echo $str;
 ?>
 </div>
 <div class="dr"><span></span></div>
+<div class="tip-msg">
+            <strong class="tip-title">提示</strong><ol>
+                    <li>确认操作后产品明细不可以再修改，得通知管理员进行修改</li>
+                </ol>            
+        </div>
 </div>
 </div>

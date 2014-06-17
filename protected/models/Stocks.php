@@ -93,8 +93,17 @@ class Stocks extends DbRecod {
     
     public static function getStocks($productid, $warehouse_id = false) {
         $sql = 'SELECT SUM(stocks) FROM :tabl WHERE product_id=:productid';
-        if ($warehouse_id > 0) {
-            $sql.= " AND  warehouse_id ='$warehouse_id' ";
+        /* 查询仓库*/
+        if ($warehouse_id) {
+            if (is_array($warehouse_id)) {
+                $warehouse = sprintf("warehouse_id IN(%s)", implode(',', $warehouse_id));
+            } elseif ($warehouse_id > 0) {
+                $warehouse = sprintf("warehouse_id =%s", $warehouse_id);
+            }
+        } else {
+        }
+        if ($warehouse) {
+            $sql.= " AND  $warehouse ";
         }
         $sql = strtr($sql, array(
             ':tabl' => self::$table,
@@ -102,6 +111,7 @@ class Stocks extends DbRecod {
         ));
         $query = self::$db->createCommand($sql);
         // $query->bindParam(":productid",$productid);
+        // Tak::KD($sql);
         $count = $query->queryScalar();
         return $count;
     }
@@ -125,7 +135,6 @@ class Stocks extends DbRecod {
     protected function afterDelete() {
         parent::afterDelete();
     }
-
     /**
      * 获取产品历史出入库数量
      * @param  int $product_id    产品编号
@@ -196,13 +205,29 @@ class Stocks extends DbRecod {
         $htmls[] = '</ul>';
         return implode("\n", $htmls);
     }
-    
+    /**
+     * 查询产品出入库数量
+     * @param  int $productid [产品编号]
+     * @return [type]            [description]
+     */
     public static function getTypeStocks($productid) {
-        $sql = ' SELECT SUM(numbers) AS total,type FROM :tabl  WHERE product_id=:productid GROUP BY type';
+        $sql = ' SELECT SUM(numbers) AS total,type FROM :tabl  WHERE product_id=:productid :warehouse GROUP BY type';
+        $warehouse = '';
+        /*是不是仓库管理员*/
+        if (Permission::iSWarehouses()) {
+            $warehouse_id = Warehouse::getUserWare();
+            if (is_array($warehouse_id)) {
+                $warehouse = sprintf("AND warehouse_id IN(%s)", implode(',', $warehouse_id));
+            } elseif ($warehouse_id > 0) {
+                $warehouse = sprintf("AND warehouse_id =%s", $warehouse_id);
+            }
+        }
         $sql = strtr($sql, array(
             ':tabl' => ProductMoving::$table,
             ':productid' => $productid,
+            ':warehouse' => $warehouse,
         ));
+        
         $arr = array(
             '0' => self::getStocks($productid) ,
             '1' => 0,

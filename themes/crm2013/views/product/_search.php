@@ -10,7 +10,6 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'method' => 'get',
 ));
 
-!isset($_GET['warehouse_id']) && $_GET['warehouse_id'] = '';
 if (!isset($notcate)) {
 ?>
 <span class="span2">
@@ -24,7 +23,24 @@ if (!isset($notcate)) {
 <?php
 }
 if (isset($warehouse)) {
-    echo JHtml::dropDownList('warehouse_id', $_GET['warehouse_id'], Warehouse::toSelects(Tk::g('Warehouse')));
+    /*
+    echo JHtml::dropDownList('warehouse_id', $_GET['warehouse_id'], Warehouse::toSelects(Tk::g(array('All','Warehouse')),Permission::iSWarehouses()));
+    */
+    $warehouse_id = $model->warehouse_id;
+    if (is_array($warehouse_id)) {
+        $model->warehouse_id = - 1;
+    }
+    if ($typeid == 2) {
+        $warehouse_label = 0;
+        echo JHtml::hiddenField('type',Tak::setCryptKey($typeid));
+    } else {
+        $warehouse_label = Tk::g(array(
+            'All',
+            'Warehouse'
+        ));
+    }
+    echo $form->dropDownList($model, 'warehouse_id', Warehouse::toSelects($warehouse_label, Permission::iSWarehouses()));
+    $model->warehouse_id = $warehouse_id;
 }
 echo $form->textFieldRow($model, 'name', array(
     'size' => 10,

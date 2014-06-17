@@ -44,7 +44,7 @@ $listOptions['columns'] = array(
             'style' => 'width: 85px'
         ) ,
         'headerHtmlOptions' => array(
-            'style' => 'width: 85px'
+            'style' => 'width: 100px'
         ) ,
     ) ,
 /*
@@ -90,7 +90,7 @@ $listOptions['columns'] = array(
         'htmlOptions' => array(
             'style' => 'width: 100px'
         ) ,
-        'value' => 'Tak::timetodate($data->add_time,6)'
+        'value' => 'Tak::timetodate($data->add_time,5)'
     ) ,
     array(
         'name' => 'status',

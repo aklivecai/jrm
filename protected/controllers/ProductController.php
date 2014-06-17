@@ -56,11 +56,19 @@ class ProductController extends Controller {
         $rs = $dataProvider->getArrayCountData();
         $this->writeData($dataProvider->getJsonData());
     }
-    
-    public function actionWindow() {
+    /**
+     * 选择产品,
+     * @param  int $type 类型，1.入库，２.出库
+     * @return [type]       [description]
+     */
+    public function actionWindow($type = false) {
         $m = $this->modelName;
         $model = new $m('search');
         $model->unsetAttributes();
+        if ($type) {
+            $type = $this->getSId($type);
+            $type != 1 && $type = 2;
+        }
         if (isset($_GET[$m])) {
             $model->attributes = $_GET[$m];
         }
@@ -69,6 +77,7 @@ class ProductController extends Controller {
         }
         $this->render('window', array(
             'model' => $model,
+            'typeid' => $type,
         ));
     }
 }

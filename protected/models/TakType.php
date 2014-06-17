@@ -79,7 +79,8 @@ class TakType extends CActiveRecord {
             '10' => 10,
             '20' => 20,
             '50' => 50,
-            '100' => 100
+            '100' => 100,
+            '500' => 500,
         ) ,
         'filetype' => array(
             '0' => 'default',

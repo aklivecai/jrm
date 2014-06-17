@@ -95,7 +95,8 @@ class RController extends CController
 		{
 			$assetsPath = YiiBase::getPathOfAlias('webroot').'/themes/crm2013/assets/';
 			if(YII_DEBUG){
-				$this->_assetsUrl = Yii::app()->getAssetManager()->publish($assetsPath, false, -1, true);
+				$this->_assetsUrl = sprintf("%s/themes/crm2013/assets/",Yii::app()->getBaseUrl());
+				// $this->_assetsUrl = Yii::app()->getAssetManager()->publish($assetsPath, false, -1, true);
 			}
 			else{
 				$this->_assetsUrl = Yii::app()->getAssetManager()->publish($assetsPath);

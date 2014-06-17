@@ -38,9 +38,18 @@ if (!isset($_GET['time'])) {
     <tr>
       <th></th>
       <td colspan="4">
-        <?php
+<?php
 echo $form->dropDownList($model, 'typeid', $types);
-echo $form->dropDownList($model, 'warehouse_id', Warehouse::toSelects($model->getAttributeLabel('warehouse_id')));
+
+$warehouse_id = $model->warehouse_id;
+if (is_array($warehouse_id)) {
+    $model->warehouse_id = - 1;
+}
+echo $form->dropDownList($model, 'warehouse_id', Warehouse::toSelects(Tk::g(array(
+    'All',
+    'Warehouse'
+)) , Permission::iSWarehouses()));
+$model->warehouse_id = $warehouse_id;
 ?>
       </td>
     </tr>
@@ -58,7 +67,6 @@ echo $form->dropDownList($model, 'warehouse_id', Warehouse::toSelects($model->ge
 )); ?>
       </td>
       <td></td>
-
     </tr>
   </tbody>
   <tbody  class="more-content hide">
@@ -68,10 +76,9 @@ echo $form->dropDownList($model, 'warehouse_id', Warehouse::toSelects($model->ge
           <th>
         <?php echo CHtml::activeLabelEx($model, 'numbers') ?>
       </th>
-      <td>
+      <td colspan="2">
         <?php echo CHtml::activeTextField($model, 'numbers'); ?>
       </td>
-  <td></td>
     </tr>
     <tr>
       <th><?php echo CHtml::activeLabelEx($model, 'enterprise') ?></th>

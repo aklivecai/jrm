@@ -29,6 +29,16 @@
     background: #913F7F url("../img/styles/purple/backgrounds/box-head.jpg");
 }
 
-.input-prepend input[class*=span] {
-    min-height: 20px;
+/*ie8-ie9*/
+.input-prepend input[class*=span] {   
+    min-height: 20px;  
+}
+@media screen and (min-width:0\0) { 
+    .input-prepend input[class*=span] {            
+            min-height: 30px;
+    }/* IE9 , IE10 ,IE11 rule sets go here */
+}
+.control-group .input-prepend input[readonly=readonly]{
+    min-height: 28px; 
+    margin-top:-2px;
 }

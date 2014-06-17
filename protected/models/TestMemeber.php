@@ -185,8 +185,7 @@ class TestMemeber extends ModuleRecord {
         if ($this->isNewRecord) {
             $this->itemid = 1;
         } else {
-            //修改数据时候
-            
+            //修改数据时候           
             
         }
         

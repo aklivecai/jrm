@@ -23,7 +23,7 @@ class Manage extends ModuleRecord {
         // will receive user inputs.
         return array(
             array(
-                'user_name, user_pass,branch',
+                'user_name, user_pass,branch,user_nicename',
                 'required'
             ) ,
             array(

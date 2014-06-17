@@ -10,7 +10,7 @@ $data = Category::getCatsProduct();
 $tags = array();
 $temp = array();
 if (isset($data[$id])) {
-    $arrparentid = sprintf('$,%s,',$data[$id]['arrparentid']);
+    $arrparentid = sprintf('$,%s,', $data[$id]['arrparentid']);
 } else {
     $arrparentid = false;
 }
@@ -24,11 +24,13 @@ foreach ($data as $key => $value) {
     // 不存在ＩＤ时候默认展开一级分类
     if (!$id) {
         // if ($value['child'] == 0) {
-            // $state['opened'] = true;
+        // $state['opened'] = true;
         // }
+        
+        
     } else {
-        if (strpos($arrparentid, sprintf(',%s,',$key))>0) {
-            $state['opened'] = true;   
+        if (strpos($arrparentid, sprintf(',%s,', $key)) > 0) {
+            $state['opened'] = true;
         }
         if ($key == $id) {
             $state['selected'] = true;
@@ -52,8 +54,11 @@ $js = '
 ';
 if ($action == 'select') {
     $js.= '
-        jstrss.on("changed.jstree", function (e, data) {
-            window.opener.popupCate(data.node);
+        jstrss.on("changed.jstree", function (e, data) {            
+        if(window.opener == undefined) {
+            window.opener = window.dialogArguments;
+        }   
+        window.opener.popupCate(data.node);
             window.close();
         })
     ';

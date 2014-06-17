@@ -126,6 +126,7 @@ class JImportForm extends CFormModel {
             } else {
                 // $head = array_keys($head);
                 
+                
             }
             // Tak::KD($data);
             $error = 0;
@@ -169,5 +170,9 @@ class JImportForm extends CFormModel {
             }
         }
         return $result;
+    }
+    
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
     }
 }

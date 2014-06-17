@@ -24,6 +24,8 @@ if ($model->type == 1) {
     $enterprise = '领料部门';
     $numbers = '出库单号';
 }
+
+$totals = 0;
 ?>
 <style type="text/css">
 	.title span {
@@ -32,12 +34,13 @@ if ($model->type == 1) {
 	}
 	.logo{
 		position: relative;
+		margin-bottom: 28px;
 	}
 	.logo img{
 		width: 100px;
 		position: absolute;
-			top: 0;			
-			left: 14em;
+		top: 0;			
+		left: 14em;
 	}
 </style>
 <div class="content">
@@ -55,7 +58,7 @@ if ($model->type == 1) {
 <div>
 	<div class="col3">
 		<?php echo CHtml::encode($enterprise); ?>:
-		<?php echo CHtml::encode($model->enterprise); ?>
+		<input type="text" value="<?php echo $model->enterprise ?>" >
 	</div>
 	<div class="col3 txt-center">		
 		<?php echo date("Y 年 m 月 d 日", $model->time_stocked); ?>
@@ -69,9 +72,8 @@ if ($model->type == 1) {
 			<colgroup align="center">
 			<col width="80px"/>
 			<col width="auto"/>
-			<col width="80px"/>
-			<col width="auto"/>
-			<col width="120px"/>
+			<col width="90px"/>
+			<col span="3" width="110">
 			<col width="120px"/>
 			</colgroup>	
 		<thead>
@@ -97,9 +99,17 @@ if ($model->type == 1) {
 				<td class="txt-bold"><?php echo $value->total ?></td>
 			</tr>
 		<?php
+    $totals+= $value->total;
 endforeach
 ?>
 		</tbody>
+					<tfoot>
+			<tr>
+				<td colspan="5"></td>
+				<td class="txt-right">合计:</td>
+				<td><strong><?php echo sprintf('%.2f', $totals) ?></strong></td>
+			</tr>
+		</tfoot>		
 	</table>
 	<i class="clearfix"></i>
 	<div class="col4">
@@ -112,7 +122,7 @@ endforeach
 	</div>
 	<div class="col4 txt-center">		
 		制票:
-		<input type="text" >		
+		<input type="text" >
 	</div>
 	<div class="col4 txt-right">
 		领料人:

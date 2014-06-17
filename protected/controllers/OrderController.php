@@ -5,24 +5,40 @@ class OrderController extends Controller {
         $this->modelName = 'Order';
     }
     public function getLink($id, $status) {
-        $text = '马上处理';
+        $text = '处理订单';
         $arr = array(
             'id' => $id
         );
         $style = array();
         if ($status == 999 || $status == 200) {
-            $text = '浏览';
+            $text = '浏览订单';
             $url = $this->createUrl('view', $arr);
-            $style['class'] = 'btn-success';
+            $style['class'] = 'ibtn-success';
         } else {
+            if ($status == 1) {
+                $text = '审核订单';
+            }
             $url = $this->createUrl('updates', $arr);
-            $style['class'] = 'btn-info';
+            $style['class'] = 'ibtn-info';
         }
         if ($status == 10) {
             $url.= '#changeOrder';
         }
-        $style['class'] = $style['class'] . ' btn xbtn-mini';
-        return JHtml::link($text, $url, $style);
+        $style['class'] = $style['class'] . 'ibtn ixbtn-mini';
+        $result = array(
+            JHtml::link($text, $url, $style)
+        );
+        //存在生产模块
+        if (Tak::isCost()) {
+            $result[] = JHtml::link('成本核算', array(
+                '/Cost/Create',
+                'id' => $id
+            ) , array(
+                'class' => 'target-win ibtn ixbtn-mini',
+                'target' => '_blank',
+            ));
+        }
+        return implode(' | ', $result);
     }
     public function actionView($id) {
         $model = $this->loadModel($id);

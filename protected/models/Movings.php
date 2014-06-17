@@ -38,11 +38,14 @@ class Movings extends DbRecod {
         return $this->_typename;
     }
     
-    public function getProductMovings() {
+    public function getProductMovings($pageSize = 1000) {
         if ($this->product_movings === null) {
             $dataProvider = new CActiveDataProvider('ProductMoving', array(
                 'criteria' => array(
                     'condition' => '  movings_id=' . $this->itemid,
+                ) ,
+                'pagination' => array(
+                    'pageSize' => $pageSize,
                 ) ,
             ));
             $this->product_movings = $dataProvider;
@@ -87,7 +90,6 @@ class Movings extends DbRecod {
                 'safe',
                 'on' => 'search'
             ) ,
-            
             array(
                 'time',
                 'checkTime'
@@ -135,7 +137,7 @@ class Movings extends DbRecod {
             'numbers' => $numbers,
             'time' => $time,
             'typeid' => $typeid,
-            'enterprise' => '来源对象', /*$enterprise单位名称'*/
+            'enterprise' => $enterprise, /*$enterprise单位名称'*/
             'us_launch' => '经手人',
             'time_stocked' => '确认操作日期',
             'add_time' => '添加时间',
@@ -155,7 +157,10 @@ class Movings extends DbRecod {
         $criteria->compare('itemid', $this->itemid);
         $criteria->compare('fromid', $this->fromid);
         $criteria->compare('type', $this->type);
-        if ($this->warehouse_id > 0) {
+        /*仓库范围查询*/
+        if (is_array($this->warehouse_id)) {
+            $criteria->addInCondition('warehouse_id', $this->warehouse_id);
+        } elseif ($this->warehouse_id > 0) {
             $criteria->compare('warehouse_id', $this->warehouse_id);
         }
         if ($this->typeid >= 0) {
@@ -230,51 +235,213 @@ class Movings extends DbRecod {
             $sql = implode($t);
         }
         $sql = str_replace("type = '1' AND", "type", $sql);
+        $arr['order'] = 'add_time DESC';
         $arr['condition'] = $sql;
-        
         return $arr;
+    }
+    public function isAffirm() {
+        return $this->time_stocked > 0;
+    }
+    /**
+     * 倒置类型，方便删除产品后，调整库存信息
+     */
+    private function ReverseTeyp() {
+        $this->type = $this->type == 1 ? 2 : 1;
+    }
+    /**
+     * 更新出入库产品的真实库存,如果没有确认则不操作
+     * @param  array $data 传入的产品数量,产品编号
+     * @return [type]       [description]
+     */
+    private function updateStockProduct($data) {
+        if ($this->isAffirm()) {
+            $arr = array(
+                ':time' => Tak::now() ,
+                ':itemid' => $data['itemid'],
+                ':numbers' => $data['numbers'],
+                ':warehouse_id' => $this->warehouse_id,
+                ':operate' => $this->type == 1 ? '+' : '-',
+                ':stocks' => Stocks::$table,
+            );
+            $sql = "UPDATE :stocks AS s SET s.stocks=s.stocks:operate:numbers , s.modified_time = :time WHERE s.product_id = :itemid AND s.warehouse_id = :warehouse_id ";
+            $sql = strtr($sql, $arr);
+            // Tak::KD($sql);
+            self::$db->createCommand($sql)->execute();
+            // Tak::KD($sql,1);
+            
+            
+        }
+    }
+    /**
+     * 删除出入库中的产品
+     * @param  int $itemid 产品出入库的编号
+     * @return [type]         [description]
+     */
+    public function delProduct($itemid) {
+        $model = ProductMoving::model()->findByAttributes(array(
+            'itemid' => $itemid,
+            'movings_id' => $this->itemid,
+        ));
+        /*
+        Tak::KD($model->attributes);
+        Tak::KD($itemid, 1);
+        */
+        if ($model != null) {
+            /*记录要删除的数据,数量,产品编号,后续增减*/
+            $data = array(
+                'itemid' => $model->product_id,
+                'numbers' => $model->numbers,
+            );
+            /*判断是否删除成功*/
+            if ($model->delete()) {
+                /*
+                 更新产品库存信息
+                  之前是出库，就得增加，入库，则减少
+                */
+                $this->ReverseTeyp();
+                $this->updateStockProduct($data);
+                $this->ReverseTeyp();
+            }
+        }
+        return true;
+    }
+    /**
+     * 保存出入库产品，有就修改，没有就新增
+     * @param  [type] $product [description]
+     * @return [type]          [description]
+     */
+    public function saveProduct($product) {
+        $model = null;
+        $result = false;
+        $old_numbers = false;
+        $model = ProductMoving::model()->findByAttributes(array(
+            'itemid' => $product['itemid'],
+            'type' => $this->type,
+            'movings_id' => $this->itemid
+        ));
+        // Tak::KD($model->attributes, 1);
+        if ($model == null) {
+            $model = new ProductMoving();
+            $model->attributes = $product;
+            $model->itemid = Tak::fastUuid();
+            $model->fromid = $this->fromid;
+            $model->movings_id = $this->itemid;
+            $model->time_stocked = $this->time_stocked;
+            $model->type = $this->type;
+            $model->warehouse_id = $this->warehouse_id;
+            /*Tak::KD($model->attributes);*/
+            if (Product::model()->findByPk($product['product_id']) == null) {
+                $result = '请选择产品!';
+            } elseif ($model->save()) {
+                $this->_saveProductStock($model->itemid);
+                $result = $model->itemid;
+            } else {
+                $result = $model->getErrors();
+            }
+        } else {
+            //记录之前久的产品数量
+            $old_numbers = $model->numbers;
+            $model->fromid = $this->fromid;
+            $model->movings_id = $this->itemid;
+            $model->type = $this->type;
+            $model->warehouse_id = $this->warehouse_id;
+            
+            $model->time_stocked = $this->time_stocked;
+            
+            $model->numbers = $product['numbers'];
+            $model->note = $product['note'];
+            $model->price = $product['price'];
+            /*            Tak::KD($product);
+             Tak::KD($model->attributes);*/
+            if ($model->save()) {
+                /*Tak::KD($model->attributes);*/
+                $result = '';
+            } else {
+                $result = $model->getErrors();
+            }
+        }
+        //操作成功，更新库存信息
+        if ($result == '' || is_numeric($result)) {
+            $data = array(
+                'itemid' => $model->product_id,
+                'numbers' => $model->numbers,
+            );
+            $this->updateStockProduct($data);
+            if ($old_numbers) {
+                //清空以前留下来的数量
+                $this->ReverseTeyp();
+                $data['numbers'] = $old_numbers;
+                $this->updateStockProduct($data);
+                $this->ReverseTeyp();
+            }
+        }
+        return $result;
+    }
+    /**
+     * 保存产品仓库信息，没有则新增一个该仓库下的产品
+     * @param  [type] $product_id [description]
+     * @return [type]             [description]
+     */
+    private function _saveProductStock($product_id) {
+        $idata = array(
+            'product_id' => $product_id,
+            'warehouse_id' => $this->warehouse_id
+        );
+        $mstock = Stocks::model()->findByAttributes($idata);
+        if ($mstock == null) {
+            $mstock = new Stocks('create');
+            $idata['stocks'] = 0;
+            $mstock->attributes = $idata;
+            if ($mstock->save()) {
+                /*Tak::KD($mstock->attributes);*/
+            } else {
+                /*Tak::KD($mstock,getErrors(),1);*/
+            }
+        }
+    }
+    
+    public function checkProducts($proucts) {
+        $result = true;
+        if (!$proucts || !is_array($proucts) || count($proucts) == 0) {
+            $result = false;
+            $this->addError('', "请填入入库产品明细");
+        } else {
+            $iserr = false;
+            $mproducts = array();
+            foreach ($proucts as $key => $value) {
+                if (!is_numeric($key) || $key <= 0) {
+                    $iserr = true;
+                    break;
+                }
+            }
+            $mproducts = Product::model()->findAllByPk(array_keys($proucts));
+            if (!$iserr && count($mproducts) != count($proucts)) {
+                $iserr = true;
+            }
+            
+            if ($iserr) {
+                $result = false;
+                $this->addError('', "入库产品明细输入不正确");
+                $_arr = array();
+            } else {
+                $this->products = $_POST['Product'];
+            }
+            foreach ($mproducts as $key => $value) {
+                $_arr[$value->itemid] = array(
+                    'name' => $value->name,
+                    'numbers' => $proucts[$value->itemid]['numbers'],
+                    'price' => $proucts[$value->itemid]['price'],
+                    'note' => $proucts[$value->itemid]['note'],
+                );
+            }
+            $this->products = $_arr;
+            return $result;
+        }
     }
     //保存数据前
     protected function beforeSave() {
         $result = parent::beforeSave();
-        if ($result && $this->status != TakType::STATUS_DELETED) {
-            $proucts = isset($_POST['Product']) ? $_POST['Product'] : false;
-            if (!$proucts || !is_array($proucts) || count($proucts) == 0) {
-                $result = false;
-                $this->addError('', "请填入入库产品明细");
-            } else {
-                $iserr = false;
-                $mproducts = array();
-                foreach ($proucts as $key => $value) {
-                    if (!is_numeric($key) || $key <= 0) {
-                        $iserr = true;
-                        Tak::KD(1);
-                        break;
-                    }
-                }
-                $mproducts = Product::model()->findAllByPk(array_keys($proucts));
-                if (!$iserr && count($mproducts) != count($proucts)) {
-                    $iserr = true;
-                }
-                
-                if ($iserr) {
-                    $result = false;
-                    $this->addError('', "入库产品明细输入不正确");
-                    $_arr = array();
-                } else {
-                    $this->products = $_POST['Product'];
-                }
-                foreach ($mproducts as $key => $value) {
-                    $_arr[$value->itemid] = array(
-                        'name' => $value->name,
-                        'numbers' => $proucts[$value->itemid]['numbers'],
-                        'price' => $proucts[$value->itemid]['price'],
-                        'note' => $proucts[$value->itemid]['note'],
-                    );
-                }
-                $this->products = $_arr;
-                return $result;
-            }
+        if ($result) {
         }
         return $result;
     }
@@ -282,15 +449,17 @@ class Movings extends DbRecod {
     protected function afterSave() {
         parent::afterSave();
         if ($this->products != null) {
-            // 删除所有产品出入库明细
+            // 删除所有产品出库入明细
             ProductMoving::model()->deleteAllByAttributes(array(
                 'type' => $this->type,
                 'movings_id' => $this->itemid
             ));
+            
             $tags = $this->products;
             $m = new ProductMoving;
             $m->type = $this->type;
             $m->movings_id = $this->itemid;
+            $m->fromid = $this->fromid;
             $m->warehouse_id = $this->warehouse_id;
             $itemid = $m->itemid = Tak::fastUuid();
             foreach ($tags as $key => $value) {
@@ -303,22 +472,7 @@ class Movings extends DbRecod {
                 $m->note = isset($value['note']) ? $value['note'] : '';
                 if ($m->save()) {
                     /*保存成功,查找是否存在库存中,没有就插入新的,主要区别为,判断仓库*/
-                    $idata = array(
-                        'product_id' => $key,
-                        'warehouse_id' => $this->warehouse_id
-                    );
-                    $mstock = Stocks::model()->findByAttributes($idata);
-                    
-                    if ($mstock == null) {
-                        $mstock = new Stocks('create');
-                        $idata['stocks'] = 0;
-                        $mstock->attributes = $idata;
-                        if ($mstock->save()) {
-                            /*Tak::KD($mstock->attributes);*/
-                        } else {
-                            /*Tak::KD($mstock,getErrors(),1);*/
-                        }
-                    }
+                    $this->_saveProductStock($key);
                 } else {
                     /*Tak::KD($m->getErrors(),1);*/
                 }
@@ -385,7 +539,7 @@ class Movings extends DbRecod {
     private $_products = null;
     public function getProducts() {
         if ($this->_products === null) {
-            $sql = "SELECT p.itemid,p.name,p.unit,mp.price,mp.numbers FROM :table_mp AS mp LEFT JOIN :table_p AS p ON p.itemid=mp.product_id  WHERE p.fromid=:fromid AND mp.movings_id=:movings_id";
+            $sql = "SELECT mp.itemid,p.itemid as product_id,p.name,p.unit,p.material,p.color,p.spec,mp.price,mp.numbers,mp.note FROM :table_mp AS mp LEFT JOIN :table_p AS p ON p.itemid=mp.product_id  WHERE p.fromid=:fromid AND mp.movings_id=:movings_id";
             $sql = strtr($sql, array(
                 ':table_p' => Product::$table,
                 ':table_mp' => ProductMoving::$table,

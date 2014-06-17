@@ -2,6 +2,8 @@
 class WarehouseController extends Controller {
     public $defaultAction = 'admin';
     public $modelName = 'Warehouse';
+    public $warehouseus = null;
+    
     public $returnUrl = array(
         "admin"
     );
@@ -22,6 +24,29 @@ class WarehouseController extends Controller {
         }
         return $this->_model;
     }
+    
+    private function getUs() {
+        if ($this->warehouseus == null) {
+            $this->warehouseus = Permission::getUWarehouses();
+        }
+        return $this->warehouseus;
+    }
+    private function getUser($arr) {
+        !is_array($arr) && $arr = array_filter(explode(',', $arr));
+        $data = array();
+        $warehouseus = $this->getUs();
+        $result = '';
+        foreach ($arr as $value) {
+            if (isset($warehouseus[$value])) {
+                $data[] = $value;
+            }
+        }
+        $name = implode(',', $data);
+        if ($name) {
+            $result = sprintf('%s,', $name);
+        }
+        return $result;
+    }
     public function actionAdmin($id = false) {
         $m = $this->modelName;
         $model = new $m;
@@ -30,6 +55,43 @@ class WarehouseController extends Controller {
             'data' => $data,
             'id' => $id,
             'model' => $model,
+        ));
+    }
+    
+    public function actionCreate() {
+        $m = $this->modelName;
+        $warehouseus = $this->getUs();
+        if (isset($_POST[$m]) && is_array($_POST[$m]['user_name'])) {
+            $names = $this->getUser($_POST[$m]['user_name']);
+            if ($names != '') {
+                $_POST[$m]['user_name'] = $names;
+            }
+        }
+        parent::actionCreate();
+    }
+    
+    public function actionUpdate($id) {
+        $model = $this->loadModel($id);
+        $model->scenario = 'update';
+        $m = $this->modelName;
+        $warehouseus = $this->getUs();
+        if (isset($_POST[$m])) {
+            $names = $this->getUser($_POST[$m]['user_name']);
+            $_POST[$m]['user_name'] = $names;
+            $model->attributes = $_POST[$m];
+            if ($model->save()) {
+                $this->redirect($this->returnUrl ? $this->returnUrl : array(
+                    'view',
+                    'id' => $this->setSId($model->primaryKey) ,
+                ));
+            }
+        }
+        if ($model->user_name != '') {
+            $model->user_name = explode(',', $model->user_name);
+        }
+        $this->render($this->templates['update'], array(
+            'model' => $model,
+            'id' => $id,
         ));
     }
     

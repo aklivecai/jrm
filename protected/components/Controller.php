@@ -38,6 +38,7 @@ class Controller extends RController {
         } else {
             // Yii::app()->bootstrap->register();
             
+            
         }
         if ($this->dir) {
             $templates = $this->templates;
@@ -150,8 +151,7 @@ class Controller extends RController {
             }
             if ($notcu) {
                 $m->setGetCU();
-            }
-            
+            }            
             $m = $m->findByPk($id);
             if ($m === null) {
                 $this->error();
@@ -181,12 +181,14 @@ class Controller extends RController {
     public function actionView($id) {
         $this->render($this->templates['view'], array(
             'model' => $this->loadModel($id) ,
+            'id' => $id,
         ));
     }
     
     public function actionViews($id) {
         $this->render('views', array(
             'model' => $this->loadModel($id) ,
+            'id' => $id,
         ));
     }
     public function actionPreview($id, $uuid = false, $status = false, $not = true) {
@@ -196,6 +198,7 @@ class Controller extends RController {
         if ($uuid && Tak::getEid($uuid) != $id) {
             // $not = false;
             // $status = false;
+            
             
         }
         $this->render($this->templates['preview'], array(
@@ -241,7 +244,7 @@ class Controller extends RController {
                     } else {
                         $this->redirect(array(
                             'view',
-                            'id' => $this->setSId($model->primaryKey),
+                            'id' => $this->setSId($model->primaryKey) ,
                         ));
                     }
                 }
@@ -263,12 +266,13 @@ class Controller extends RController {
             if ($model->save()) {
                 $this->redirect($this->returnUrl ? $this->returnUrl : array(
                     'view',
-                    'id' => $this->setSId($model->primaryKey),
+                    'id' => $this->setSId($model->primaryKey) ,
                 ));
             }
         }
         $this->render($this->templates['update'], array(
             'model' => $model,
+            'id' => $id,
         ));
     }
     // 回收站
@@ -426,5 +430,6 @@ class Controller extends RController {
         echo ($str);
         exit;
     }
+    
 }
 

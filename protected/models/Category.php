@@ -1,5 +1,5 @@
 <?php
-class Category extends LRecord {    
+class Category extends LRecord {
     private $scondition = false; /*默认搜索条件*/
     public static $table = '{{category}}';
     public static $models = array(
@@ -41,7 +41,8 @@ class Category extends LRecord {
                         $arr[] = $data[$value]['catename'];
                     }
                 }
-                $result = implode("  - ", $arr);
+                $arr[] = $data[$catid]['catename'];
+                $result = implode($isall, $arr);
             } else {
                 $result = $data[$catid]['catename'];
             }
@@ -199,9 +200,6 @@ class Category extends LRecord {
         $result = parent::beforeSave();
         if ($result) {
             if ($this->isNewRecord) {
-                // Tak::KD($this->attributes,1);
-                
-                
             }
         }
         return $result;
@@ -228,9 +226,7 @@ class Category extends LRecord {
                 //update cure
                 $CATEGORY[$catid] = $this->attributes;
                 $arrparentid = self::get_arrparentid($catid, $CATEGORY);
-                // Tak::KD($arrparentid,1);
-                
-                
+                /*Tak::KD($arrparentid,1);*/
             } else {
                 $arrparentid = 0;
             }

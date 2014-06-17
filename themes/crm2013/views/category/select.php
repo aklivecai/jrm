@@ -9,7 +9,7 @@
     <span class="add-on clearReferenceSelection cursorPointer">
     <i class='icon-remove-sign' title="清除"></i>
     </span>
-    <input  name="vendor_id_display" type="text" class="span7" value="<?php echo $parentname ?>" placeholder="请选择分类" readonly="readonly" />
+    <input  name="vendor_id_display" type="text" class="span7" value="<?php echo $parentname ?>" placeholder="请选择分类" readonly="readonly" disabled="disabled"/>
     <span class="add-on relatedPopup cursorPointer">
     <i class="icon-search " title="Select" ></i>
     </span>

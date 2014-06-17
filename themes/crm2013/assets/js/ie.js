@@ -6,7 +6,9 @@ jQuery(function($) {
 		    }).blur(function() {
 		        if (elem.val() == "") elem.val(elem.attr("placeholder"));
 		    });
-		    elem.val(elem.attr("placeholder"));
+		    if (elem.val()=='') {
+		    	elem.val(elem.attr("placeholder"));	
+		    };		    
 		    elem.attr('placeholder-over',true);
 		var pform = elem.parents('form');
 		if (!pform.attr('placeholder-over')) {
@@ -29,7 +31,7 @@ jQuery(function($) {
 			initPlaceholder($(this));
 		});
 		elem.find('[placeholder]').blur();		
-	}	
+	}
 	init($(document));
 	$(document.body).on('ajax-load',function(){
 		init($(this));

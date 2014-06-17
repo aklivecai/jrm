@@ -1,13 +1,22 @@
 <?php
-$this->regCssFile('smart-wizard/styles/smart_wizard.css')->regScriptFile('plugins/smart-wizard/jquery.smartWizard2.js')->regScriptFile('doT.js');
+$this->regCssFile('smart-wizard/styles/smart_wizard.css')->regScriptFile('plugins/smart-wizard/jquery.smartWizard2.js');
+
+Tak::regScriptFile(array(
+    'knockout.js',
+    'knockout.tak.js',
+) , 'static', '_ak/js/advanced');
+
+$this->regScriptFile('k-load-movings.js?t=2014-06', CClientScript::POS_END);
 
 $action = $model->isNewRecord ? 'Entering' : 'Update';
-$warehouses = Warehouse::getSelect();
+$warehouses = Warehouse::toSelects(false, Permission::iSWarehouses());
+
 $form = $this->beginWidget('CActiveForm', array(
     'id' => 'takllist',
     'enableAjaxValidation' => false,
     'enableClientValidation' => false,
 ));
+echo JHtml::hiddenField('type', Tak::setCryptKey($this->type));
 ?>
         <!-- Smart Wizard -->
         <div id="wizard" class="swMain">
@@ -82,7 +91,10 @@ $form = $this->beginWidget('CActiveForm', array(
                             </div>
                             <div class="row-form clearfix">
                                 <div class="span2">
-                                  <?php echo $form->labelEx($model, 'enterprise'); ?>
+                                  
+                                <label for="Movings_enterprise" class="required">
+                                  <?php echo $model->getAttributeLabel('enterprise');?>
+                                 <span class="required">*</span></label>
                                 </div>
                                 <div class="span5">
 <?php echo $form->textField($model, 'enterprise', array(
@@ -119,27 +131,52 @@ $form = $this->beginWidget('CActiveForm', array(
           <div class="toolbar nopadding-toolbar clearfix">
               <h4>产品明细</h4>
           </div>               
-      <table cellpadding="0" cellspacing="0" width="100%" class="table" >
+      <table cellpadding="0" cellspacing="0" width="100%" class="table" id="table-product">
+      <colgroup align="center">      
+      <col width="25px" align="center" />
+      <col width="auto" span="5"/>
+      <col span="2" width="100px"/>
+      <col width="120px" />      
+      <col width="65"/>
+      </colgroup>      
+      <caption>
+      </caption>      
           <thead>
             <tr>
-            <th width="45">移除</th>
+              <th>ID</th>
               <th>产品</th>
-              <th width="80">规格</th>
-              <th width="80">材料</th>
-              <th width="80">颜色</th>
-              <th width="80">单价</th>
-              <th width="80">数量</th>
+              <th>规格</th>
+              <th>材料</th>
+              <th>颜色</th>
               <th>备注</th>
+              <th>单价</th>
+              <th>数量</th> 
+              <th>合计</th>
+              <th>操作</th>
             </tr>
           </thead>
-          <tbody class="not-mpr" id="product-movings">
-            <tr id="data-loading">
-              <td colspan="8" class="grid-view-loading">请选择产品型号</td>
-            </tr>
+<tbody data-bind="foreach: list " id="product-movings">
+ <tr data-bind="attr:{id:eid}">
+      <td data-bind="text: $index()+1"></td>
+      <td data-bind="text: obj.name"></td>
+      <td data-bind="text: obj.spec"></td>
+      <td data-bind="text: obj.material"></td>
+      <td data-bind="text: obj.color"></td>
+      <td><input  data-bind='value: note,attr:{name:getName("note")}' class="stor-txt" type="text"/></td>
+       <td>
+        <input data-bind='value: price,attr:{name:getName("price")}' required  step="1" type="number" min="0" class="stor-txt"/>
+       </td>
+       <td><input data-bind="value: number ,attr:{name:getName('numbers')}"  required step="1" type="number" min="0" class="stor-txt"/></td>
+       <td>￥<strong data-bind="text: totals" class="text-show"></strong></td>
+        <td class="buttons">
+            <a class="btn btn-mini" data-bind="click: $root.remove" href="#" title="取消"><i class="icon-trash"></i></a>
+        </td>
+   </tr>             
+
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3">
+              <td colspan="8">
             <span class="">
 <?php $this->widget('bootstrap.widgets.TbButton', array(
     'buttonType' => 'link',
@@ -153,30 +190,19 @@ $form = $this->beginWidget('CActiveForm', array(
 )); ?>
       </span>              
               </td>
-              <td colspan="5"></td>
+                  <td colspan="2">￥<strong data-bind="text: totals" class="text-show"></strong></td>
             </tr>
           </tfoot>
         </table>
           </div>
       </div>
-<script id="data-row" type="text/x-dot-template">
-  {{~it.tags :v:index}}
-<tr id="{{=v.itemid}}">
-<td><a href="#" class="data-remove"><span class="icon-remove"></span></a></td>
-<td class="info">{{=v.name}}</td>
-<td class="info">{{=v.spec}}</td>
-<td class="info">{{=v.material}}</td>
-<td class="info">{{=v.color}}</td>
-<td><input type="number" class="stor-txt" name="Product[{{=v.itemid}}][price]" min="0.1" value="{{=v.price}}"/></td>
-<td class="info">
-  <input type="text" class="stor-txt" name="Product[{{=v.itemid}}][numbers]" required="required" value="{{#def.number || ''}}"/></td>
-  <td><input name="Product[{{=v.itemid}}][note]" type="text" class="stor-txt" value="{{=v.note}}"/></td>  
-  </tr>
-  {{~}}
-  </script>      
+
 <?php
 $this->endWidget();
-$this->regScriptFile('k-load-movings.js?t=200', CClientScript::POS_END);
 Tak::regScript('end', '
+
 ');
 ?>
+
+<script id="itemsTmpl" type="text/html"> 
+   </script>      

@@ -30,9 +30,14 @@ class Warehouse extends LRecord {
                 'max' => 25
             ) ,
             array(
-                'name,user_name',
+                'name',
                 'length',
                 'max' => 64
+            ) ,
+            array(
+                'user_name',
+                'length',
+                'max' => 255
             ) ,
             array(
                 'telephone',
@@ -75,16 +80,48 @@ class Warehouse extends LRecord {
         );
     }
     
-    public static function getDatas() {
+    public static function deisplayName($id) {
+        $datas = self::getDatas(false);
+        // Tak::KD()
+        // Tak::KD($datas,1);
+        $result = isset($datas[$id]) ? $datas[$id]['name'] : '';
+        return $result;
+    }
+    /**
+     * 查询搜索仓库
+     * @param  boolean $isuse 是否读取用户数据
+     * @return [type]         [description]
+     */
+    public static function getDatas($isuse = true) {
         if (self::$datas === null) {
             $sql = 'SELECT * FROM :tabl WHERE :where ORDER BY listorder DESC,itemid DESC';
-            $where = 'fromid=' . Tak::getFormid();
+            $where = 'fromid=' . Ak::getFormid();
             $sql = strtr($sql, array(
                 ':tabl' => self::$table,
                 ':where' => $where,
             ));
-            $tags = Tak::getDb('db')->createCommand($sql)->queryAll(true);
-            self::$datas = $tags;
+            $tags = Ak::getDb('db')->createCommand($sql)->queryAll(true);
+            if ($isuse) {
+                $sql = sprintf('SELECT user_nicename,user_name FROM %s WHERE %s AND manageid IN(:ids)', Manage::$table, $where);
+            }
+            $result = array();
+            foreach ($tags as $key => $value) {
+                if ($isuse) {
+                    $uname = $value['user_name'];
+                    if ($uname != '') {
+                        if (strpos($uname, ',')) {
+                            $uname.= '0';
+                        }
+                        $_sql = strtr($sql, array(
+                            ':ids' => $uname,
+                        ));
+                        $names = Ak::getDb('db')->createCommand($_sql)->queryColumn();
+                        $value['user_name'] = implode(' , ', $names);
+                    }
+                }
+                $result[$value['itemid']] = $value;
+            }
+            self::$datas = $result;
         }
         return self::$datas;
     }
@@ -97,14 +134,22 @@ class Warehouse extends LRecord {
         }
         return $result;
     }
-    
-    public static function toSelects($label = false) {
-        $data = self::getDatas();
+    /**
+     * 下拉数据
+     * @param  boolean $label [description]
+     * @param  integer $uid   [description]
+     * @return [type]         [description]
+     */
+    public static function toSelects($label = false, $uid = 0) {
+        $data = self::getDatas(false);
         $result = array();
         if ($label) {
             $result['-1'] = $label;
         }
         foreach ($data as $key => $value) {
+            if ($uid > 0 && strpos($value['user_name'], $uid . ',') === false) {
+                continue;
+            }
             $result[$value['itemid']] = $value['name'];
         }
         return $result;
@@ -127,12 +172,12 @@ class Warehouse extends LRecord {
     
     protected function getLast() {
         $sql = 'SELECT * FROM :tabl WHERE :where ORDER BY listorder DESC,itemid DESC';
-        $where = 'fromid=' . Tak::getFormid();
+        $where = 'fromid=' . Ak::getFormid();
         $sql = strtr($sql, array(
             ':tabl' => self::$table,
             ':where' => $where,
         ));
-        $tags = Tak::getDb('db')->createCommand($sql)->queryRow();
+        $tags = self::$db->createCommand($sql)->queryRow();
         return $tags;
     }
     
@@ -154,39 +199,39 @@ class Warehouse extends LRecord {
     
     public function isDel() {
         $sql = " SELECT pt.itemid FROM :tabl-pm AS pt  LEFT JOIN :tabl-m AS m 
-    	 			ON(pt.movings_id=m.itemid)
-    	 		  WHERE m.fromid = :fromid AND pt.warehouse_id = :itemid";
+                    ON(pt.movings_id=m.itemid)
+                  WHERE m.fromid = :fromid AND pt.warehouse_id = :itemid";
         
         $sql = " SELECT count(s.itemid) FROM :table  AS s
-    	 		  WHERE s.fromid = :fromid AND s.warehouse_id = :itemid ";
+                  WHERE s.fromid = :fromid AND s.warehouse_id = :itemid ";
         $sql = strtr($sql, array(
             ':table' => Stocks::$table,
-            ':fromid' => Tak::getFormid() ,
+            ':fromid' => Ak::getFormid() ,
             ':itemid' => $this->itemid,
         ));
         $count = self::$db->createCommand($sql)->queryScalar();
         return $count;
     }
-
-    public function counts() {        
+    
+    public function counts() {
         $sql = " SELECT count(itemid) FROM :table 
                   WHERE fromid = :fromid ";
         $sql = strtr($sql, array(
             ':table' => self::$table,
-            ':fromid' => Tak::getFormid() ,
+            ':fromid' => Ak::getFormid() ,
         ));
         $count = self::$db->createCommand($sql)->queryScalar();
         return $count;
-    }    
-
+    }
+    
     public function del() {
         $result = false;
         $count = $this->isDel();
         if ($count > 0) {
             $result = '该仓库已经有出入库记录，不能进行删除!';
-        } elseif($this->counts()==1) {
+        } elseif ($this->counts() == 1) {
             $result = '最后一个仓库不允许删除!';
-        }else{
+        } else {
             $this->delete();
         }
         return $result;
@@ -225,7 +270,7 @@ class Warehouse extends LRecord {
         $col = $isid ? ':itemid' : '*';
         
         $sql = "SELECT $col FROM :tableName WHERE $sqlWhere ORDER BY $orderCol ";
-        // Tak::KD($this->listorder);
+        // Ak::KD($this->listorder);
         
         // LIMIT 1
         $sql = strtr($sql, array(
@@ -255,6 +300,27 @@ class Warehouse extends LRecord {
         $result = $this->getOjb('pre', $isid);
         if ($result && $isid) {
             $result = current($result);
+        }
+        return $result;
+    }
+    /**
+     * 根据用户编号查询用户管理的仓库
+     * @param  integer $uid 用户编号
+     * @return array       仓库id数组
+     */
+    public static function getUserWare($uid = 0) {
+        !($uid > 0) && $uid = Ak::getManageid();
+        $sql = " SELECT itemid FROM :table 
+                  WHERE fromid = :fromid AND user_name LIKE '%:uid%'";
+        $sql = strtr($sql, array(
+            ':table' => self::$table,
+            ':fromid' => Ak::getFormid() ,
+            ':uid' => $uid,
+        ));
+        $_result = self::$db->createCommand($sql)->queryColumn();
+        $result = array();
+        foreach ($_result as $key => $value) {
+            $result[$value] = $value;
         }
         return $result;
     }

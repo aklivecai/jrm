@@ -7,6 +7,7 @@ $this->breadcrumbs=array(
 	Tk::g('Admin'),
 );
 $items = Tak::getListMenu();
+Tak::regScript('tak', 'isprintf = true;', CClientScript::POS_END);
 ?>
 <div class="row-fluid">
 	<div class="span12">
@@ -35,7 +36,7 @@ $columns = array(
 		,array(
 			'name'=>'typeid',
 			'type'=>'raw',
-			'value'=>'Category::getProductName($data->typeid)',
+			'value'=>'Category::getProductName($data->typeid," / ")',
 		)
 		,array(
 			'name'=>'material',

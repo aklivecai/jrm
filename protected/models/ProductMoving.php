@@ -14,7 +14,7 @@ class ProductMoving extends CActiveRecord {
                 'required'
             ) ,
             array(
-                'itemid, movings_id, product_id,warehouse_id',
+                'itemid, movings_id, product_id,warehouse_id,price,numbers',
                 'length',
                 'max' => 25
             ) ,
@@ -59,29 +59,45 @@ class ProductMoving extends CActiveRecord {
         $result = 0;
         if ($this->price > 0 && $this->numbers != 0) {
             $result = $this->price * $this->numbers;
-        }        
+        }
         return sprintf('%01.2f', $result);
     }
-    
-    public function getProductMovings($typeid, $product_id = false) {
+    /**
+     * 查询出入库的产品记录
+     * @param  int  $typeid     类型
+     * @param  int $product_id 产品编号
+     * @return [type]              [description]
+     */
+    public function getProductMovings($typeid, $product_id = 0, $warehouse_id = 0) {
         $condition = array(
             ' time_stocked > 0 '
         );
         if ($typeid > 0) {
             $condition[] = " type = $typeid ";
         }
-        if ($product_id) {
+        if ($product_id > 0) {
             $condition[] = " product_id = '$product_id' ";
         }
+        if ($warehouse_id) {
+            if (is_array($warehouse_id)) {
+                $warehouse = sprintf("warehouse_id IN(%s)", implode(',', $warehouse_id));
+                $this->warehouse_id = - 1;
+            } elseif ($warehouse_id > 0) {
+                $warehouse = sprintf("warehouse_id =%s", $warehouse_id);
+            }
+        }
+        if ($warehouse) {
+            $condition[] = $warehouse;
+        }
+        
         $dataProvider = new CActiveDataProvider('ProductMoving', array(
             'criteria' => array(
                 'condition' => implode(" AND ", $condition) ,
             ) ,
         ));
-        
-        $this->products = $dataProvider;
+        // $this->products = $dataProvider;
         // Tak::KD($this->product_movings,1);
-        return $this->products;
+        return $dataProvider;
     }
     
     public function attributeLabels() {

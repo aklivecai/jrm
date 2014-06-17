@@ -2,7 +2,12 @@
 $tak_time = time();
 class Ak {
     public static function numAdd($n1, $n2) {
-        return bcadd($n1, $n2);
+        $result = bcadd($n1, $n2);
+        if (strpos($result, '.')) {
+            $result = explode('.', $result);
+            $result = $result[0];
+        }
+        return $result;
     }
     public static function K($msg, $file = 'main.log') {
         if (is_array($msg)) {
@@ -446,6 +451,9 @@ class Ak {
             return $datas;
         }
     }
+    public static function getTimeId() {
+        return time() + mt_rand(10, 50) + mt_rand(1, 50);
+    }
     private static function _fastUid($suffix_len = 3) {
         //! 计算种子数的开始时间
         static $being_timestamp = 1336681180; // 2012-5-10
@@ -549,6 +557,9 @@ class Ak {
         }
     }
     public static function regScript($id, $script, $position = null, array $htmlOptions = array()) {
+        if ($id == 'tak') {
+            $id = self::fastUuid();
+        }
         Yii::app()->clientScript->registerScript($id, $script, $position, $htmlOptions);
         return __CLASS__;
     }
@@ -693,21 +704,22 @@ class Ak {
     /*
     生成目录
     */
-    public static function MkDirs($dir, $mode = 0700, $recursive = true) {
+    public static function MkDirs($dir, $mode = 0777, $recursive = true) {
         if (is_null($dir) || $dir == "") {
             return false;
         }
         if (is_dir($dir) || $dir == "/") {
             return true;
         }
-        self::MkDirs(dirname($dir) , $mode, $recursive);
-        mkdir($dir, $mode);
+        if (self::MkDirs(dirname($dir) , $mode, $recursive)) {
+            return mkdir($dir, $mode);
+        }
         return false;
     }
     public static function getUserDir($uid = false) {
         $dir = Yii::app()->params['uploadUser'];
-        if (YII_DEBUG && false) {
-            $dir = Yii::app()->getBaseUrl() . $dir;
+        if (YII_DEBUG) {
+            $dir = '/k' . Yii::app()->getBaseUrl() . $dir;
         }
         if (!$uid) {
             $uid = self::getFormid();
@@ -802,6 +814,10 @@ class Ak {
     public static function getSupplier($supplier = false) {
         $id = $supplier ? $supplier : self::getState('branch');
         return $id == '800';
+    }
+    public static function srcUrl($url) {
+        $result = str_replace(dirname(Yii::app()->BasePath) , Yii::app()->homeUrl . '/', $url);
+        return str_replace('//', '/', $result);
     }
 }
 /*

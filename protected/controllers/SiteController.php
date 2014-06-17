@@ -165,9 +165,13 @@ END;
         if (!$k) {
             isset(Yii::app()->request->cookies['fid']) && $k = Yii::app()->request->cookies['fid']->value;
             if (!$k && strpos(Yii::app()->user->returnUrl, 'fid')) {
+
                 $parts = parse_url(urldecode(Yii::app()->user->returnUrl));
+
                 parse_str($parts['query'], $query);
+
                 isset($query['fid']) && $k = $query['fid'];
+
             }
             if ($k) {
                 $this->redirect($this->createUrl('login', array(

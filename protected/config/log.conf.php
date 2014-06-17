@@ -29,10 +29,10 @@ if (YII_DEBUG || true) {
         'levels' => 'error, warning, trace',
         'categories' => 'cool.*,system.db.CDbCommand,php',
         'allowedIPs' => array(
-            '127.0.0.1',
+            // '127.0.0.1',
              // '192.168.0.201',
-             '192.168.1.201',
-             '192.168.0.201',
+             '192.168.1.201x',
+             // '192.168.0.201',
         ) ,
     );
     $log[] = $log_debug;

@@ -39,10 +39,12 @@ class TestMemeberController extends JController {
         $m = $this->modelName;
         if (isset($_POST[$m])) {
             $model->attributes = $_POST[$m];
-            if ($model->save()) {
-                $manageid = $_POST[$m]['manageid'];
-                if ($model->manageid != $manageid) {
-                    $model->moveManage($manageid);
+            if ($model->save()) {                
+                if (isset($_POST[$m]['manageid'])) {
+                    $manageid = $_POST[$m]['manageid'];
+                    if ($model->manageid != $manageid) {
+                        $model->moveManage($manageid);
+                    }
                 }
                 $this->redirect($this->returnUrl ? $this->returnUrl : array(
                     'view',
@@ -114,7 +116,7 @@ class TestMemeberController extends JController {
         ));
     }
     public function actionDb($id) {
-        $user = $this->loadModel($id);       
+        $user = $this->loadModel($id);
         // Tak::KD(Tak::getWdb($user->primaryKey));
         $m = 'DbConfig';
         $dbconfig = Info::model()->findByAttributes(array(
@@ -145,7 +147,7 @@ class TestMemeberController extends JController {
                 if ($dbconfig->save()) {
                     // echo $user->primaryKey;
                     // 更新数据库缓存
-                    TAk::setWdb($model->toString(), $user->primaryKey);
+                    TAk::setWdb($model->toString() , $user->primaryKey);
                     $this->redirect(array(
                         'db',
                         'id' => $user->primaryKey

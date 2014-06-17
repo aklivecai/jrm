@@ -76,6 +76,7 @@ class Tak extends Ak {
     }
     
     public static function getViewMenu($itemid) {
+        $itemid = self::setSId($itemid);
         $items = array(
             'Action' => array(
                 'label' => Tk::g('Action') ,
@@ -106,7 +107,7 @@ class Tak extends Ak {
                 'icon' => 'edit',
                 'url' => array(
                     'update',
-                    'id' => self::setSId($itemid)
+                    'id' => $itemid
                 )
             ) ,
             '---',
@@ -115,7 +116,7 @@ class Tak extends Ak {
                 'icon' => 'trash',
                 'url' => array(
                     'delete',
-                    'id' => self::setSId($itemid)
+                    'id' => $itemid
                 ) ,
                 'linkOptions' => array(
                     'class' => 'delete'
@@ -210,7 +211,6 @@ class Tak extends Ak {
                 $result = 0;
             break;
         }
-        
         return $result;
     }
     
@@ -267,6 +267,7 @@ class Tak extends Ak {
             'clientele' => ',clientele,contactpPrson,contact,clienteles,',
             'pss' => ',purchase,stocks,product,sell,',
             'subordinate' => ',subordinate,',
+            'production' => ',production,cost,',
             'setting' => ',category,changepwd,profile,sell,orderconfig,'
         );
         $items = array(
@@ -275,13 +276,13 @@ class Tak extends Ak {
                 'url' => array(
                     '/Site/Index'
                 ) ,
-                'label' => sprintf($strSpan, Tk::g('主页')) ,
+                'label' => sprintf($strSpaｙn, Tk::g('主页')) ,
             ) ,
             'test' => array(
                 'icon' => 'isw-grid',
-                'url' => "javascript:window.open('/costaccounting/mvc.html?', 'newwindow', 'height=600, width=1050');",
+                'url' => "javascript:window.open('/_/test/costaccounting/mvc.html?', 'newwindow', 'height=600, width=1050');",
                 'label' => sprintf($strSpan, Tk::g('成本核算')) ,
-                'visible' => self::getFormid() == 1,
+                'visible' => YII_DEBUG,
             ) ,
             'setting' => array(
                 'icon' => 'isw-sync',
@@ -696,16 +697,7 @@ class Tak extends Ak {
                         'url' => array(
                             '/Stocks'
                         ) ,
-                        'visible' => self::checkAccess('Stocks.Index')||self::checkAccess('Stocks.*') ,
-                    ) ,
-                    'costaccounting' => array(
-                        'icon' => 'th',
-                        'url' => "javascript:;",
-                        'label' => sprintf($strSpan, Tk::g('成本核算')) ,
-                        'linkOptions' => array(
-                            'id' => 'costaccounting',
-                            'onclick'=>"window.open('/costaccounting/mvc.html?', '', 'height=600, width=1100,top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=no,location=n o, status=no');"
-                        )
+                        'visible' => self::checkAccess('Stocks.Index') || self::checkAccess('Stocks.*') ,
                     ) ,
                 ) ,
             ) ,
@@ -735,6 +727,47 @@ class Tak extends Ak {
                         'linkOptions' => array(
                             'target' => '_blank'
                         )
+                    ) ,
+                ) ,
+            ) ,
+            'production' => array(
+                'visible' => self::isCost() && self::checkAccess('Production.*') ,
+                'icon' => 'isw-list',
+                'label' => sprintf($strSpan, Tk::g('Production')) ,
+                'url' => array(
+                    '/Production/Index'
+                ) ,
+                'items' => array(
+                    'Workshop' => array(
+                        'icon' => 'certificate',
+                        'url' => array(
+                            '/Cost/Workshop'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Workshop',
+                            'Setting'
+                        ))) ,
+                        'linkOptions' => array(
+                            'class' => 'target-win',
+                            'target' => '_blank',
+                        ) ,
+                    ) ,
+                    array(
+                        'icon' => 'th-list',
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Production',
+                            'Admin'
+                        ))) ,
+                        'url' => array(
+                            '/Production/Index'
+                        )
+                    ) ,
+                    'Cost' => array(
+                        'icon' => 'th-list',
+                        'url' => array(
+                            '/cost/Index'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g('历史成本核算')) ,
                     ) ,
                 ) ,
             ) ,
@@ -1308,17 +1341,46 @@ class Tak extends Ak {
         $content = preg_replace("/face=.+?['|\"]/", '', $content); //去除样式只允许
         /**/
     }
+    
+    public static function down_file($filepath, $filename) {
+        if (!file_exists($filepath)) {
+            echo "backup error ,download file no exist";
+            exit();
+        }
+        ob_end_clean();
+        header('Content-Type: application/download');
+        header("Content-type: text/csv");
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header("Content-Encoding: binary");
+        header("Content-Length:" . filesize($filepath));
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        readfile($filepath);
+        $e = ob_get_contents();
+        ob_end_clean();
+    }
+    
+    public static function getNums($stocks) {
+        $result = sprintf('%01.4f', $stocks);
+        $result = str_replace('.0000', '.00', $result);
+        return $result;
+    }
+    
+    public static function isCost() {
+        $id = self::getFormid();
+        return $id == 1 || $id == 5139 || $id == 3930 || $id == 4960;
+    }
 }
 /*
-$id = '44773236400282037';
-$id16 = dechex($id);
-$idstr = Tak::setCryptKey($id16);
-$idstr116 = Tak::setCryptKey($id16);
-
-echo sprintf("%s\t%s\n",strlen($id),$id);
-echo sprintf("%s\t%s\n",strlen($id16),$id16);
-echo sprintf("%s\t%s\n",strlen($idstr1),$idstr1);
-echo sprintf("%s\t%s\n",strlen($idstr116),$idstr116);
-
-echo sprintf("%s\n 16 to 10 \n ",hexdec('536aed2fb09bc90c1d8b456a'));
+    $id = '44773236400282037';
+    $id16 = dechex($id);
+    $idstr = Tak::setCryptKey($id16);
+    $idstr116 = Tak::setCryptKey($id16);
+    
+    echo sprintf("%s\t%s\n",strlen($id),$id);
+    echo sprintf("%s\t%s\n",strlen($id16),$id16);
+    echo sprintf("%s\t%s\n",strlen($idstr1),$idstr1);
+    echo sprintf("%s\t%s\n",strlen($idstr116),$idstr116);
+    
+    echo sprintf("%s\n 16 to 10 \n ",hexdec('536aed2fb09bc90c1d8b456a'));
 */

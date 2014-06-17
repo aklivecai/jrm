@@ -78,7 +78,7 @@ class Order extends MRecord {
             'itemid' => '订单编号',
             'fromid' => '商铺',
             'manageid' => '下单用户',
-            'company' => '公司',
+            'company' => '客户名称',
             'add_time' => '下单时间',
             'total' => '总金额',
             'status' => '订单状态', /*(-1:删除,1待审核,2已取消,3通过审核,4已完成)*/

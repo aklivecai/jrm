@@ -44,7 +44,7 @@ echo $form->dropDownList($model, 'manageid', Order::getUsersSelect());
         <tr>
             <th><?php echo $form->label($model, 'total') ?></th>
             <td colspan="4">
-                <?=CHtml::dropDownList('comparison',Tak::getQuery('comparison'),TakType::items('comparison'))?>
+                <?php echo CHtml::dropDownList('comparison',Tak::getQuery('comparison'),TakType::items('comparison'))?>
                 <?php echo $form->textField($model, 'total'); ?>
             </td>
         </tr>
@@ -65,7 +65,7 @@ echo $form->dropDownList($model, 'manageid', Order::getUsersSelect());
         <tr>
             <th><?php echo CHtml::label('产品', 'info-product') ?></th>
             <td colspan="4">
-            <?=CHtml::textField('info-product',$_GET['info-product'])?>
+            <?php echo CHtml::textField('info-product',$_GET['info-product'])?>
             </td></tr> 
         <tr>
             <th><?php echo $form->label($model, 'note') ?></th>

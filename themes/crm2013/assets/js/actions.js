@@ -2,97 +2,46 @@
  dateFormat('yyyy-MM-dd hh:mm:ss');
 dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss');
  */
-if (typeof window['log'] == 'undefined') {
-    var log = function(msg) {
-        if (typeof window['console'] == 'undefined') return false;
-        var len = arguments.length;
-        if (len > 1) {
-            for (var i = 0; i < len; i++) {
-                log(arguments[i] + '\n');
-            }
+var affirm = function() {
+    var btn = $('#btn-affirm'),
+        txt = btn.text(),
+        url = btn.attr('href');
+    if (confirm("是否" + txt + "?\n")) {
+        if (url) {
+            window.location.href = url;
         } else {
-            console.log(msg);
+            return true;
         }
     }
-}
-//用于动态生成网址
-//$route,$params=array(),$ampersand='&'
-var createUrl = function(route) {
-    if (!CrmPath) {
-        return false;
-    }
-    var ampersand = typeof arguments[2] != 'undefined' ? arguments[2] : '&',
-        params = typeof arguments[1] != 'undefined' ? arguments[1] : [];
-    if (!route || route == "undefined") {
-        return CrmPath;
-    }
-    // var url = CrmPath + (CrmPath.indexOf('?')>0?'':'?');
-    var url = CrmPath;
-    url += route;
-    url = url + (url.indexOf('?') > 0 ? '' : '?');
-    if (params.length > 0) {
-        url += ampersand + params.join(ampersand);
-    };
-    if (url.indexOf('?&') > 0) {
-        url = url.replace('?&', '?');
-    };
-    return url;
-}, dateFormat = function(date, format) {
-        if (format === undefined) {
-            format = date;
-            date = new Date();
-        }
-        var map = {
-            "M": date.getMonth() + 1, //月份 
-            "d": date.getDate(), //日 
-            "h": date.getHours(), //小时 
-            "m": date.getMinutes(), //分 
-            "s": date.getSeconds(), //秒 
-            "q": Math.floor((date.getMonth() + 3) / 3), //季度 
-            "S": date.getMilliseconds() //毫秒 
-        };
-        format = format.replace(/([yMdhmsqS])+/g, function(all, t) {
-            var v = map[t];
-            if (v !== undefined) {
-                if (all.length > 1) {
-                    v = '0' + v;
-                    v = v.substr(v.length - 2);
-                }
-                return v;
-            } else if (t === 'y') {
-                return (date.getFullYear() + '').substr(4 - all.length);
-            }
-            return all;
-        });
-        return format;
-    }, affirm = function() {
-        var btn = $('#btn-affirm'),
-            txt = btn.text(),
-            url = btn.attr('href');
-        if (confirm("是否" + txt + "?\n" + txt + "后将不可以修改。")) {
-            if (url) {
-                window.location.href = url;
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }, sCF = function(msg) {
-        return !confirm(msg);
-    }, gotoElem = function(elem) {
-        /*
-        $("body,html").animate({
-            scrollTop:$(elem).offset().top //让body的scrollTop等于pos的top，就实现了滚动
-        },0);
-    */
-        $(window).scrollTop($(elem).offset().top);
-    };
+    return false;
+};
 jQuery(function($) {
     /*表格折叠,订单展示*/
     $(document).on('click', 'table.action-fold caption', function() {
         var t = $(this).parent();
         t.toggleClass('active');
-    });
+    }).on('click', '#btn-toxls', function() {
+        var ifmname = 'ifm' + Math.floor(new Date().getTime() / 1000),
+            wap = $('#content'),
+            ifm = $('<iframe src="about:blank" style="position: absolute;top:-9999;" width="2" height="1" frameborder="0" name="' + ifmname + '">');
+        wap.addClass('load-content');
+        ifm.load(function() {
+            wap.removeClass('load-content');
+        });
+        ifm.appendTo($(document.body));
+        var search = $('#search-form').clone().appendTo(ifm),
+            url = search.attr('action').replace('/index', '/toxls').replace('/admin', '/toxls');
+        search.attr({
+            // 'target':'_blank',
+            'target': ifmname,
+            'action': url,
+        });
+        search.submit();
+    }).on("click", ".more-product,.more-product-hide", function(event) {
+        // 更多信息显示，折叠和收起
+        event.preventDefault();
+        $(this).parent().toggleClass("move-clear-product");
+    })
     /**/
     if (typeof isprintf != 'undefined') {
         $(document.body).on('ajax-load', function() {
@@ -107,13 +56,18 @@ jQuery(function($) {
             // wap.find('table').addClass('list').find('td:first-child');
             temp.find('.dataTables_info,.btn-print').remove();
             var html = temp.html();
-            html = html.replace(/HREF=("|\')?([^ "\']*)("|\')/ig,'');
+            html = html.replace(/HREF=("|\')?([^ "\']*)("|\')/ig, '');
             printHtml(html);
         });
         var checkprintf = function() {
             var pages = $('#list-grid').find('.keys');
             if (pages.find('span').length > 0) {
-                pages.after('<div class="fl"><button class="btn btn-print">打印</button></div>');
+                html = '<div class="fl"><button class="btn btn-print">打印</button>';
+                if (typeof istoxls != 'undefined') {
+                    html += '<button class="btn" id="btn-toxls">导出</button>';
+                }
+                html += '</div>';
+                pages.after(html);
             };
         }, printHtml = function(html) {
                 newWin = window.open('about:blank', 'printf', 'width=800,height=650,resizable=0,scrollbars=1');
@@ -539,46 +493,6 @@ jQuery(function($) {
     // 
     // 
     // 
-    window.popupCate = function(data) {
-        $('input[name=vendor_id_display]').val(data.text);
-        $('.sourceField').val(data.id);
-    }
-    window.popups = {};
-    var getPopups = function(elem) {
-        var data = {}, name = $(elem).attr('name');
-        if (typeof window.popups[name] === 'undefined') {
-            data.val = $(elem);
-            var parent = $(elem).parent();
-            data.txt = parent.find('input[name=vendor_id_display]');
-            data.mod = parent.find('input[name=popupReferenceModule]');
-            data.parent = parent;
-            window.popups[name] = data;
-        } else {
-            data = window.popups[name];
-        }
-        return data;
-    }
-    $(document).on('click', '.relatedPopup,.clearReferenceSelection', function() {
-        var t = $(this),
-            data = getPopups(t.parent().find('.sourceField'));
-        if (t.hasClass('relatedPopup')) {
-            url = createUrl('Category/admin', ['m=' + data.mod.val(), 'action=select']);
-            wurl = url;
-            if (data.val.val() > 0) {
-                wurl += '&id=' + data.val.val();
-            };
-            window.open(wurl, "windowName", "width=800,height=650,resizable=0,scrollbars=1");
-        } else if (t.hasClass('clearReferenceSelection')) {
-            data.txt.val(data.txt.attr('placeholder'));
-            data.val.val('');
-        }
-    }).on('click', '.clearReferenceSelection', function() {
-        var data = getPopups($(this).parent().find('.sourceField'));
-    }).on('click', '.createPopup', function() {
-        var data = getPopups($(this).parent().find('.sourceField'));
-        wurl = createUrl('Category/create', ['m=' + data.mod.val(), 'action=select']);
-        modShow(wurl, $(this).attr('title'));
-    })
 });
 $(window).load(function() {
     headInfo();

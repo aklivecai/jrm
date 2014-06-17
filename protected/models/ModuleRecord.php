@@ -129,7 +129,6 @@ class ModuleRecord extends MRecord {
     }
     //保存数据前
     protected function beforeSave() {
-        
         $isok = func_num_args() > 0 && func_get_arg(0);
         $result = parent::beforeSave($isok);
         if (!$isok && $result) {

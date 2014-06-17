@@ -171,6 +171,8 @@ class PermissionController extends Controller {
             'Subordinate.*',
             'Events.*',
             'Message.*',
+            'Warehouse',
+
         );
         $notstr = '~' . implode('~', $_notArr) . '~';
         // Tak::KD($notstr,1);
