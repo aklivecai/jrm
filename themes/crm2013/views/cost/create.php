@@ -36,8 +36,8 @@ var tags = []
 									<label>规格：<input type="text" class="input-bborder" data-bind="value:spec,attr:{name:getName('spec')}" required/></label>
 									<label>颜色：<input type="text" class="input-bborder" data-bind="value:color,attr:{name:getName('color')}" required/></label>
 				
-									<label>制造管理费：<input type="number" class="expenses" value="0" data-bind="value: expenses,attr:{name:getName('expenses')}"/></label>
-									<label>生产数量：<input type="number" class="input-bborder" value="1" data-bind="value:number,attr:{name:getName('numbers')}" required min="1" /></label>
+									<label>制造管理费：<input type="number" class="expenses" min="0" value="0" data-bind="value: expenses,attr:{name:getName('expenses')}"/></label>
+									<label>生产数量：<input type="number" class="input-bborder" value="1" data-bind="value:number,attr:{name:getName('numbers')}" required min="1" step="1" /></label>
 									<label class="fbold">
 										成本单价:￥<input type="text" readonly="readonly" value="0" class="text-show prices" data-bind="value:price,attr:{name:getName('price')}" tabIndex="-1"/>
 									</label>

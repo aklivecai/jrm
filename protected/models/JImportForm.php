@@ -92,12 +92,17 @@ class JImportForm extends CFormModel {
             foreach ($this->headers as $key => $col) {
                 $t = $this->checkS($key, $value[$key], $index);
                 if ($t) {
-                    $errors[] = $this->getColName($key, $index);
+                    $_NAME = $this->getColName($key, $index);
+                    $_NAME = str_replace(']','',$_NAME);
+                    $_NAME = str_replace('[','_',$_NAME);
+                    $errors[] = $_NAME;
                 } else {
                     $row[$key] = $value[$key];
                 }
             }
-            $result[$value['A']] = $row;
+            //以前是防止重复，加上而已
+            // $result[$value['A']] = $row;
+            $result[] = $row;
         }
         if (count($errors) > 0) {
             $this->errors = $errors;
@@ -124,15 +129,14 @@ class JImportForm extends CFormModel {
                 unlink($this->varfile);
                 return $result;
             } else {
-                // $head = array_keys($head);
-                
-                
+                /*$head = array_keys($head);*/
             }
             // Tak::KD($data);
             $error = 0;
             foreach ($data as $value) {
                 $temp = array();
                 if (is_array($value)) {
+                    //第一列不允许为空
                     $icol = trim(current($value));
                     if (strpos($icol, '注意事项') !== false) {
                         break;
@@ -145,9 +149,10 @@ class JImportForm extends CFormModel {
                         continue;
                     }
                     foreach ($head as $key => $v) {
-                        $temp[$key] = $value[$key];
+                        //可能会有ＮＵＬＬ值
+                        $temp[$key] = $value[$key] ? $value[$key] : '';
                     }
-                    $result[$value['A']] = $temp;
+                    $result[] = $temp;
                 }
             }
             return $result;
@@ -170,9 +175,5 @@ class JImportForm extends CFormModel {
             }
         }
         return $result;
-    }
-    
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
     }
 }

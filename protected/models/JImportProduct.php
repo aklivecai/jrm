@@ -48,20 +48,28 @@ class JImportProduct extends JImportForm {
     
     private $newProducts = 0;
     private $arr = null;
+    
+    private $cates = null;
+    private $cateids = null;
+    private $cate = null;
+    private $newCates = array();
+    const PRE_STR = '`';
+    /*$str =  "分类/分类1/分类2/分类3"*/
+    
     public function init() {
         parent::init();
         $this->arr = Tak::getOM();
+        unset($this->arr['itemid']);
         $this->arr['note'] = '导入';
     }
-    
     public function import($warehouse_id = false) {
         if (!$warehouse_id) {
             $warehouse_id = Tak::getPost('warehouse_id', false);
         }
         $arr = $this->arr;
-        unset($arr['itemid']);
-        
-        $logfile = sprintf('%s-test.log', Tak::getFormid());
+        $cates = $this->getCates();
+        $sqls = array();
+        $logfile = sprintf('%s-test.log', Ak::getFormid());
         $strMsg = '';
         // 不记录日志
         AdminLog::$isLog = false;
@@ -71,31 +79,29 @@ class JImportProduct extends JImportForm {
         
         $stock = new Stocks('create');
         $stock->attributes = $arr;
-        $this->newCates = array();
+        
         $itemid = Tak::fastUuid();
         $data = $this->data;
         $transaction = Tak::getDb('db')->beginTransaction();
         try {
-            
             foreach ($data as $key => $value) {
-                $itemid = Tak::numAdd($itemid, $key + 2);                
-                
+                $itemid = Tak::numAdd($itemid, $key + 2);
                 $catid = $this->getCateId($value['catename'], $key * 2);
-                
-                Tak::KD($value['catename']);
-
+                $stocks = $value['stocks'] == '' ? 0 : $value['stocks'];
+                $value['stocks'] = $stocks;
+                if ($value['price'] == '') {
+                    $value['price'] = 0;
+                }
                 $product->attributes = $value;
                 if ($product->itemid > 0) {
                     $product->itemid = $itemid;
                     $product->setIsNewRecord(true);
                 }
-                if ($product->price == '') {
-                    $product->price = 0;
-                }
+                // Tak::KD($product->attributes);
+                // Tak::KD($catid);
                 $product->typeid = $catid;
-                
                 if ($product->save()) {
-                    if ($warehouse_id > 0 && $product->stocks > 0) {
+                    if ($warehouse_id > 0 && $stocks > 0) {
                         if ($stock->itemid > 0) {
                             $stock->itemid = $itemid;
                             $stock->setIsNewRecord(true);
@@ -103,7 +109,7 @@ class JImportProduct extends JImportForm {
                         $stock->attributes = array(
                             'product_id' => $product->itemid,
                             'warehouse_id' => $warehouse_id,
-                            'stocks' => $product->stocks,
+                            'stocks' => $stocks,
                         );
                         $stock->warehouse_id = $warehouse_id;
                         if ($stock->save()) {
@@ -128,8 +134,6 @@ class JImportProduct extends JImportForm {
             }
             return false;
         }
-        // 记录日志
-        AdminLog::$isLog = true;
         $str = '
             <ul>
                 <li>
@@ -153,19 +157,21 @@ class JImportProduct extends JImportForm {
         $url = Yii::app()->createUrl('Product/Admin?');
         $url.= Tak::createMUrl($tarr, $this->getModel());
         $str = sprintf($str, $this->newProducts, $url, $strCate);
-        Tak::deleteUCache($this->model);
+        //删除导入数据缓存html
+        if (!YII_DEBUG) {
+            Tak::deleteUCache($this->model);
+        }
+        // 记录日志
+        AdminLog::$isLog = true;
+        //记录日志
         AdminLog::log($str, $arr);
+        //设置提示消息，成功导入多少数据，新建多少分类
         Tak::setFlash($str);
-        // Tak::K(count($this->data) , $logfile);
-        // Tak::K($strMsg, $logfile);
-        /**/
+        Tak::K(count($this->data) , $logfile);
+        Tak::K($strMsg, $logfile);
     }
-    private $cates = null;
-    private $cateids = null;
-    private $cate = null;
-    private $newCates = array();
-    const PRE_STR = '`';
-    /*$str =  "分类/分类1/分类2/分类3"*/
+    // $name = '成品/11/22/33/44/55/A/B/C/D/E/F/G';
+    // $name = '//成品/\\//111/22/33/44/55.55/AA/BB/CC/DD/EE/FFF/GGGG/';
     public function getCateId($name, $ikeys = 0) {
         $cates = $this->getCates();
         $strPRE = self::PRE_STR;
@@ -186,7 +192,7 @@ class JImportProduct extends JImportForm {
         $cid = 0;
         $data = array(
             $names
-        );        
+        );
         if (isset($cates[$names])) {
             //分类已经存在
             $cid = $cates[$names];
@@ -215,6 +221,8 @@ class JImportProduct extends JImportForm {
             ;
         }
         if ($cid == 0) {
+            //确保新插入的分类不缓存,读取最新的分类
+            Category::$isNew = true;
             foreach ($data as $key => $value) {
                 $int = strrpos($value, $strPRE);
                 if ($int === false) {
@@ -227,23 +235,31 @@ class JImportProduct extends JImportForm {
                 if ($this->cate === null) {
                     $cate = new Category('create');
                     $arr = $this->arr;
-                    unset($arr['itemid']);
                     $cate->attributes = $arr;
                     $cate->setModel($this->model);
+                } else {
+                    $cate = $this->cate;
                 }
                 $cate->parentid = $pid;
                 if ($cate->catid > 0) {
-                    
                     $cate->catid+= $ikeys;
                 }
                 $cate->catename = $catename;
                 $cate->setIsNewRecord(true);
-                $cate->save();
+                if (!$cate->save()) {
+                    Tak::KD($cate->getErrors());
+                }
+                //记录新增分类的名字
                 $this->newCates[] = $cate->catename;
-                $pid = $cates[$value] = $cate->catid;
-                
+                //保存分类对象
                 $this->cate = $cate;
+                //保存刚刚插入的分类
+                $pid = $cates[$value] = $cate->catid;
             }
+            //取消读取最新的分类
+            Category::$isNew = false;
+            //更新全部分类里
+            $this->cateids = $cates;
             $cid = $pid;
         }
         // Tak::KD($cid);

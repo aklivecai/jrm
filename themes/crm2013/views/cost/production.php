@@ -57,7 +57,7 @@ $links = JHtml::link(Tk::g(array(
 					<tbody data-bind="foreach: lines">
 						<tr>
 							<td>
-							<select data-bind='options: workshopsSelect,optionsText: "name", optionsCaption: "选择车间",value:workshops' ></select>
+							<select data-bind='options: workshopsSelect,optionsText: "name", optionsCaption: "选择车间",optionsValue:"id",value:workshops,valueAllowUnset:true'></select>
 						</td>
 						<td><span data-bind="text: name"></span></td>
 					</tr>
@@ -105,6 +105,7 @@ $links = JHtml::link(Tk::g(array(
 				<tfoot>
 				<tr>
 					<td colspan="3">
+						<button type="submit" class="ibtn">提交</button>
 						<button type="submit" class="ibtn ibtn-ok">提交</button>
 					</td>
 				</tr>

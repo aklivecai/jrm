@@ -281,6 +281,7 @@ class Product extends DbRecod {
                 $warehouse_id = Warehouse::getUserWare();
             }
             $this->_stock = Stocks::getStocks($this->itemid, $warehouse_id);
+            $this->_stock = Tak::getNums($this->_stock);
         } else {
         }
         return $this->_stock;
@@ -323,7 +324,7 @@ class Product extends DbRecod {
         $result = $this->getHistory($warehouse_id);
         // Ak::KD($result, 1);
         $html = isset($result[$type]) ? $result[$type] : 0;
-        return sprintf('%01.4f', $html);
+        return Tak::getNums(sprintf('%01.4f', $html));
         return $html;
     }
     

@@ -7,12 +7,14 @@
 		<?php 
 			$this->renderPartial('_'.$action); 
 		?>
+		<a class="btn"  href="<?php echo $this->createUrl("Clears",array('action'=>$action))?>">清空</a>
 		<button class="btn" id="btn-submit" type="sublime">提交</button>
+
 		<div class="dr"><span></span></div>
 		<h6>总数:
 		<span class="label label-warning">
 			<?php echo  count($data)?>
-		</span>,		请正确填写<span class="red">红色</span>文本框的内容!</h6>
+		</span>,请正确填写<span class="red">红色</span>文本框的内容!</h6>
 	</div>
 	<div class="dr"><span></span></div>
 	<table class="items table table-striped table-bordered table-condensed">
@@ -29,8 +31,23 @@
 				<?php foreach($value as $k=>$v):?>
 				<td><?php 
 					$id = JImportForm::colName($action,$k,$key);
-					$arr = array('id'=>$id);
-					echo JHtml::textField($id,$v,$arr);
+					// $arr = array('id'=>$id);
+					$arr = array();
+					$_txt = '';
+					if ($action=='product') {
+						if ($k=='H'||$k=='I') {
+							$arr['min']	= 0;
+							$arr['required'] = true;
+							if (!$v) {
+								$v = 0;
+							}
+							$_txt = JHtml::numberField($id,$v,$arr);
+						}						
+					}
+					if ($_txt=='') {
+						$_txt = JHtml::textField($id,$v,$arr);
+					}
+					echo $_txt;
 				?></td>
 				<?php endforeach ?>
 			</tr>

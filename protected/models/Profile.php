@@ -77,9 +77,8 @@ class Profile extends CActiveRecord {
     
     public function cheTel($attribute, $params) {
         $tel = $this->$attribute;
-        if ($tel!='') {
-            if(preg_match('/(0[0-9]{2,3}[\-]?[2-9][0-9]{6,7}[\-]?[0-9]?)$/',$tel)){
-
+        if ($tel != '') {
+            if (preg_match('/(0[0-9]{2,3}[\-]?[2-9][0-9]{6,7}[\-]?[0-9]?)$/', $tel)) {
             } else {
                 $this->addError($attribute, '电话号码格式不对,如:0755-8888888');
             }
@@ -87,7 +86,7 @@ class Profile extends CActiveRecord {
     }
     public function cheMobile($attribute, $params) {
         $tel = $this->$attribute;
-        if ($tel!='') {
+        if ($tel != '') {
             if (preg_match("/^0?(13[0-9]|15[012356789]|18[0236789]|14[57])[0-9]{8}$/", $tel)) {
             } else {
                 $this->addError($attribute, '手机号码格式不对    !');

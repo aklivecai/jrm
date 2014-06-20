@@ -85,7 +85,7 @@ $columns = array(
         'value' => 'Warehouse::deisplayName($_GET[Product][warehouse_id])'
     ) ,
     array(
-        'name' => '数量',
+        'name' => '库存',
         'type' => 'raw',
         'value' => 'Tak::tagNum($data->stock)',
     ) ,

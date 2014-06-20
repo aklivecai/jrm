@@ -250,7 +250,7 @@ $(document).on('click','.target-win', function(event) {
     ShowModal(url,{width:width,height:500});
 });
     </script>
-    <?php
+<?php
 Tak::showMsg();
 Tak::copyright();
 /*
@@ -262,33 +262,26 @@ Tak::KD($cates);
     <!--
     <?php
 if (YII_DEBUG) {
-    
     $cost_id = Tak::fastUuid();
-    for ($i = 20;$i > 0;$i--) {
-        $cost_id = Tak::numAdd($cost_id, $i);
-        echo sprintf("%s\n", $cost_id);
-    }
-    
-    $str = Tak::fastUuid() . '122223333333333333333333333333.x%|898sxs;.$ContactpPrson.*http://hao123.com';
+    $str = Tak::fastUuid();
     $str = 'Clienteles.**http://hao123.com||http%3A%2F%2Fhao123.com';
     $str = "abcdefghijklmnopqrstuvwz=.";
-    $str = "http://192.168.0.201/GitHub/CRM/manage/RevokeSub/d0bfbcf5lkXO8tBldSAltbUAYOVFtRUFQGAApKQkxSUQoBB1NQVgBVHRNO?name=8a0b3b76RMK645V1JYDgNWVwMCVFAFVwBVVVIdGx1QAloNA1NQAFBVTRoc";
-    // $str = "1";
+    $str = "http://192.168.0.201/GitHub/CRM/manage/RevokeSub/index.php?name=&t=20";
     $s1 = Tak::setCryptKey($str);
     $s2 = Tak::getCryptKey($s1);
-    echo strlen($s1);
-    echo sprintf("\n\n %s\n\n %s\n\n %s\n\n", $str, $s1, $s2);
+    echo sprintf("\n %s\n %s\n %s\n", strlen($str) , strlen($s1) , strlen($s2));
+    echo sprintf("\n %s\n %s\n %s\n", $str, $s1, $s2);
     
     $crypt = new SysCrypt();
     $s1 = $crypt->encrypt($str);
-    
     $s2 = $crypt->decrypt($s1);
     echo sprintf("%s\n %s\n", $s1, $s2);
     // urldecode
-    
-    
 }
 ?>
     -->
+
+    <!--注意,下面href后没有双引号,若要加入需用%22-->
+<a href="about:<a href=%22http://www.9juren.com/xxx.zip%22> 点此下载 </a>" target="_blank"> 点此打入下载页面 </a>
   </body>
 </html>

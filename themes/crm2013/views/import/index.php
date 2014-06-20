@@ -11,6 +11,8 @@ $this->breadcrumbs = array(
 $file = '/k/GitHub/CRM/upload/users/JU1/temp/import/20140315-145106__clientele.xls';
 // $model->varfile = $file;
 // $model->getTags();
+
+
 ?>
 <div class="page-header">
 	<h1><?php echo $title ?> <small>请先下载模板，然后按模板编辑信息并上传。</small></h1>
@@ -29,13 +31,19 @@ $file = '/k/GitHub/CRM/upload/users/JU1/temp/import/20140315-145106__clientele.x
 			</form>
 			<div id="message"></div>
 			<div id="progress">
-			<?php
+<?php
 $html = Tak::getUCache($action);
 if ($html && is_array($html)) {
     echo sprintf('<span class="label ">%s上传没有导入</span>', Tak::timetodate($html['time'], 6));
-    echo $html['data'];
+    $header = $model->getHeader();
+    $this->renderPartial('view', array(
+        'header' => $header,
+        'data' => $html['data'],
+        'action' => $action,
+    ));
 }
 ?>				
+
 			</div>
 		</div>
 	</div>
@@ -88,9 +96,11 @@ $(document).on('click','#btn-submit',function(event){
 window.showError = function(data){
 	if (data.length>0) {		
 		// parent.gotoElem($('#'+data[0]).eq(0));
-		var ids ='input[name="'+data.join('"],input[name="')
+		// var ids ='input[name="'+data.join('"],input[name="')
+		 var ids ='#'+data.join(',#')
 		var list = $(ids).addClass('error');
-		parent.gotoElem(list.eq(0));		
+		parent.gotoElem(list.eq(0));
+		list.eq(0).focus();
 	};	
 }
 window.showOk = function(){

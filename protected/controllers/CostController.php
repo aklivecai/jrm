@@ -206,8 +206,7 @@ class CostController extends Controller {
             $result.= sprintf("[%s]", $value);
         }
         return $result;
-    }
-    
+    }    
     private function saveInfo($cost_id, $products) {
         $product_id = $cost_id;
         $errors = array();

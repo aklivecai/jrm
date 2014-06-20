@@ -4,6 +4,7 @@ class ToolsController extends JController {
         '0' => '操作',
         'product' => '清空产品',
         'order' => '清空订单',
+        'production' => '生产管理',
     );
     public function init() {
         parent::init();
@@ -52,11 +53,13 @@ class ToolsController extends JController {
                 case 'order':
                     $this->clearOrder($fid);
                 break;
+                case 'production':
+                    $this->clearProduction($fid);
+                break;
                 default:
                 break;
             }
         }
-        echo $fid;
         $this->render('index', array(
             'fid' => $fid,
             'aciton' => $action,
@@ -73,12 +76,12 @@ class ToolsController extends JController {
                 "DELETE FROM {{order}} WHERE fromid=:fromid ",
                 "DELETE FROM {{order_info}} WHERE itemid NOT IN(SELECT itemid FROM {{order}}) ",
                 "DELETE FROM {{order}} WHERE itemid NOT IN(SELECT itemid FROM {{order_info}}) ",
-
+                
                 "DELETE FROM  {{order_files}} WHERE action_id  IN( SELECT oflow.itemid FROM {{order_flow}} AS oflow
                                             INNER JOIN {{order}}  AS o 
                                                 ON oflow.order_id=o.itemid 
                                             WHERE o.fromid=:fromid  UNION ALL SELECT itemid FROM {{order_product}}  WHERE fromid=:fromid)",
-
+                
                 "DELETE FROM {{order_product}} WHERE order_id NOT IN(SELECT itemid FROM {{order}}) ",
                 "DELETE FROM {{order_flow}} WHERE order_id NOT IN(SELECT itemid {{order_info}});",
             );
@@ -92,23 +95,23 @@ class ToolsController extends JController {
                                             INNER JOIN {{order_product}}  AS oproduct 
                                                 ON ofile.action_id=oproduct.itemid 
                                             WHERE oproduct.fromid=:fromid',
-
+                
                 '删除订单产品' => 'DELETE oproduct FROM {{order_product}} AS oproduct 
                                             INNER JOIN {{order}}  AS o 
                                                 ON oproduct.order_id = o.itemid 
                                             WHERE oproduct.fromid=:fromid',
-
+                
                 '删除变更产品' => 'DELETE aproduct FROM {{alteration_product}} AS aproduct 
                                             INNER JOIN {{order}}  AS o 
                                                 ON aproduct.alteration_id = o.itemid 
                                             WHERE o.fromid=:fromid',
-
+                
                 '删除订单流程' => 'DELETE oflow FROM {{order_flow}} AS oflow
                                             INNER JOIN {{order}}  AS o 
                                                 ON oflow.order_id=o.itemid 
                                             WHERE o.fromid=:fromid',
-
-                '删除订单和信息'=>' DELETE o,oinfo FROM {{order}} AS o　
+                
+                '删除订单和信息' => ' DELETE o,oinfo FROM {{order}} AS o　
                                             LEFT JOIN {{order_info}} AS oinfo
                                                     ON o.itemid=oinfo.itemid
                                             WHERE o.fromid=:fromid',
@@ -120,7 +123,7 @@ class ToolsController extends JController {
                     $rowCount = $command->execute($arr);
                     if ($rowCount == 0) {
                         // 没得可删了，退出！
-                        Tak::KD($command->text);
+                        // Tak::KD($command->text);
                         break;
                     } else {
                         Tak::KD($rowCount);
@@ -129,6 +132,31 @@ class ToolsController extends JController {
                     usleep(50000);
                 }
             }
+        }
+    }
+    private function clearProduction($fid) {
+        $command = Tak::getDb('db')->createCommand('');
+        $arr = array(
+            ':fromid' => $fid
+        );
+        if (!$fid) {
+            return false;
+        }
+        /*成本核算，生产管理*/
+        $sqls = array(
+            "DELETE FROM {{Cost}} WHERE fromid=:fromid ",
+            "DELETE FROM {{Cost_Product}} WHERE fromid=:fromid ",
+            "DELETE FROM {{Cost_Materia}} WHERE fromid=:fromid ",
+            "DELETE FROM {{Cost_Process}} WHERE fromid=:fromid ",
+            "DELETE FROM {{Production}} WHERE fromid=:fromid ",
+            "DELETE FROM {{Production_Product_Days}} WHERE fromid=:fromid ",
+            "DELETE FROM {{Production_Days}} WHERE fromid=:fromid ",
+            "DELETE FROM {{production_progresss}} WHERE fromid=:fromid ",
+        );
+        foreach ($sqls as $key => $value) {
+            $command->text = $value;
+            $rowCount = $command->execute($arr);
+            Tak::KD($rowCount);
         }
     }
     private function clearProduct($fid) {

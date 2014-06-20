@@ -9,7 +9,7 @@
  * @property string $item
  * @property integer $listorder
  */
-class TakType extends CActiveRecord {
+class TakType extends DbiRecod {
     //信息状态
     const STATUS_DELETED = 0;
     const STATUS_DEFAULT = 1;
@@ -22,10 +22,6 @@ class TakType extends CActiveRecord {
     
     private $scondition = false; /*默认搜索条件*/
     public static $table = '{{type}}';
-    public function tableName() {
-        $m = get_class($this);
-        return $m::$table;
-    }
     public function primaryKey() {
     }
     
@@ -96,12 +92,12 @@ class TakType extends CActiveRecord {
             '3' => 'label-important',
             '4' => 'label-info',
             '5' => 'label-inverse'
-        ),
-        'comparison'=>array(
-            'then'=>'大概',
-            'equals'=>'等于',
-            'greater'=>'大于',
-            'less'=>'小于',
+        ) ,
+        'comparison' => array(
+            'then' => '大概',
+            'equals' => '等于',
+            'greater' => '大于',
+            'less' => '小于',
         )
     );
     

@@ -7,10 +7,12 @@ class Category extends LRecord {
     );
     
     private $oldParentid = null;
+    //是否永远读取最新的数据信息
+    public static $isNew = false;
     
     private static $cates = array();
     private static function getCates($module) {
-        if (!isset(self::$cates[$module])) {
+        if (self::$isNew || !isset(self::$cates[$module])) {
             $sql = "SELECT * FROM :table WHERE  fromid=:fromid AND module=':module' ORDER BY listorder DESC,catid ASC";
             // $sql = "SELECT * FROM :table WHERE  fromid=:fromid AND module=':module' ORDER BY catid DESC,listorder DESC";
             $sql = strtr($sql, array(

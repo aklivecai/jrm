@@ -11,22 +11,22 @@ jQuery(function($) {
         var self = this;
         self.obj = obj;
         self.itemid = obj.itemid;
-        self.workshops = ko.observable('');
+        self.workshops = ko.observable("0");
         self.workshops.subscribe(function(oldValue) {
-            if (typeof oldValue == 'object') {
+            if (typeof oldValue == 'string') {
                 // 车间设置
-                if (oldValue.id >= 0) {
-                    mWorkshops.lines()[oldValue.id].products.remove(self);
+                if (oldValue >= 0) {
+                    mWorkshops.lines()[oldValue].products.remove(self);
                 }
             }
         }, null, "beforeChange");
         self.workshops.subscribe(function(value) {
-            if (typeof value == 'object') {
+            if (typeof value == 'string') {
                 // 车间设置
-                if (value.id < 0) {
+                if (value < 0) {
                     document.getElementById('btn-workshop').click();
                 } else {
-                    mWorkshops.lines()[value.id].products.push(self);
+                    mWorkshops.lines()[value].products.push(self);
                 }
             }
         });
@@ -104,7 +104,7 @@ jQuery(function($) {
         }
     var mView = new ListViewModel(),
         mWorkshops = new WorkshopsModel(),
-        workshopsSelect = [];
+        workshopsSelect = []
     if (tags.length > 0) {
         for (var i = 0; i < tags.length; i++) {
             var obj = new MoLine(tags[i]);

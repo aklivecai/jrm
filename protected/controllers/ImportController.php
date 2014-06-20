@@ -11,7 +11,7 @@ class ImportController extends Controller {
     }
     public function allowedActions() {
         return 'message,upload,import';
-    }    
+    }
     private function getType($action) {
         return isset($this->types[$action]) ? $this->types[$action] : null;
     }
@@ -36,8 +36,6 @@ class ImportController extends Controller {
                 $url.= '/客户资料导入模板.xls';
             break;
             default:
-                # code...
-                
             break;
         }
         return $url;
@@ -50,6 +48,11 @@ class ImportController extends Controller {
             'action' => $action,
             'url' => $url,
         ));
+    }
+    public function actionClears($action) {
+        $model = $this->loadModel($action);
+        Tak::deleteUCache($action, $tags);
+        $this->redirect($action);
     }
     public function actionProduct() {
         $action = 'product';
@@ -69,10 +72,9 @@ class ImportController extends Controller {
             // Tak::KD(count($_POST[$model->model]),1);
             $result = $model->load($_POST[$model->model]);
             if ($result) {
-                // Tak::KD($model,1);
                 $model->import();
             }
-            $this->_setLayout('//layouts/columnWindows');
+            $this->_setLayout('//layouts/columnWin');
             $this->render('submit', array(
                 'model' => $model,
                 'action' => $actoin,
@@ -98,7 +100,14 @@ class ImportController extends Controller {
         $data = false;
         $errors = false;
         if ($model->validate() && $model->save()) {
+            //读取xls数据
             $data = $model->getTags();
+            $tags = array(
+                'time' => Tak::now() ,
+                'data' => $data,
+            );
+            //保存到缓存中
+            Tak::setUCache($action, $tags);
         } else {
             $error = $model->getErrors();
             foreach ($error as $key => $value) {

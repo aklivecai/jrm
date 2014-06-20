@@ -12,7 +12,7 @@ echo JHtml::button('选择用户', array(
 echo ' <br />';
 echo JHtml::dropDownList($id, $value, array());
 
-Yii::app()->clientScript->registerScript('manageid', "
+Tak::regScript('manageid', "
 	var wap = $('.mangeid')
 		inputs = wap.find('.key')
 	;
@@ -20,7 +20,6 @@ Yii::app()->clientScript->registerScript('manageid', "
 		var t = $(elem)
 			p = t.parent(),
 			btn = p.find('.btn_mangeid')
-
 		;	
 		btn.on('click',function(){
 			
@@ -30,15 +29,13 @@ Yii::app()->clientScript->registerScript('manageid', "
 		}
 	});
 	 initSelect = function(key,){
-	        $.ajax({
-             url: '../tools/selectmid'
-             success: function(data){
-                 
-             },
-         });
-
+    $.ajax({
+       url: '../tools/selectmid'
+       success: function(data){
+           
+       },
+   });
 	 }
-	;
-");
+	;", CClientScript::POS_END);
 ?>
 </div>

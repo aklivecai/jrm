@@ -1,5 +1,5 @@
 <?php
-class Manage extends ModuleRecord {
+class Manage extends DbRecod {
     public $linkName = 'user_name'; /*连接的显示的字段名字*/
     public $branch = 0;
     public $isbranch = 0;

@@ -1,6 +1,6 @@
 <?php
 Yii::app()->getClientScript()->registerCoreScript('jquery');
-$this->regCssFile('cost/style.css?t=112');
+$this->regCssFile('cost/style.css?t=113');
 $strScript = sprintf('var CrmPath = "%s/";', Yii::app()->getBaseUrl());
 Tak::regScript('', $strScript, CClientScript::POS_HEAD);
 ?>

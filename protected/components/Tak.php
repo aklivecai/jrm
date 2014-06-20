@@ -276,13 +276,7 @@ class Tak extends Ak {
                 'url' => array(
                     '/Site/Index'
                 ) ,
-                'label' => sprintf($strSpaｙn, Tk::g('主页')) ,
-            ) ,
-            'test' => array(
-                'icon' => 'isw-grid',
-                'url' => "javascript:window.open('/_/test/costaccounting/mvc.html?', 'newwindow', 'height=600, width=1050');",
-                'label' => sprintf($strSpan, Tk::g('成本核算')) ,
-                'visible' => YII_DEBUG,
+                'label' => sprintf($strSpan, Tk::g('主页')) ,
             ) ,
             'setting' => array(
                 'icon' => 'isw-sync',

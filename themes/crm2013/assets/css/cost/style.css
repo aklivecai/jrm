@@ -52,11 +52,12 @@ h3 a {
     color: inherit;
     text-decoration: none;
 }
-a {
+button,a {
     text-decoration: none;
     color: #666;
     font-size: 12px;
     transition: all .8s;
+
 }
 a:hover {
     text-decoration: none;
@@ -157,6 +158,10 @@ input[required] {
 }
 .ibtn:hover {
     background-position: 0 -160px;
+    -webkit-transform: scale(1.15);
+    -moz-transform: scale(1.15);
+    -o-transform: scale(1.15);
+    transform: scale(1.15);
 }
 .ibtn:active, .ibtn:focus {
     background-position: 0 -200px;
@@ -296,12 +301,12 @@ input[required] {
     padding: 0px;
 }
 .itable>tbody>tr:hover {
+    -o-transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
     background: #fbf8e9;
-    -o-transition: all 0.1s ease-in-out;
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -ms-transition: all 0.1s ease-in-out;
-    transition: all 0.1s ease-in-out;
 }
 .itable>tfoot th, .itable>tfoot td {
     padding: 2px;

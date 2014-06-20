@@ -235,7 +235,7 @@ class Stocks extends DbRecod {
         );
         $query = self::$db->createCommand($sql)->queryAll();
         foreach ($query as $key => $value) {
-            $arr[$value['type']] = $value['total'];
+            $arr[$value['type']] = Tak::getNums($value['total']);
         }
         return $arr;
     }
