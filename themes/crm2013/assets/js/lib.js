@@ -133,17 +133,15 @@ var createUrl = function(route) {
         return _uuid(len, len);
     }, ShowModal = function(url) {
         var options = arguments.length > 1 ? arguments[1] : {
-            width: 500,
-            height: 500
+            width: screen.availWidth < 1300 ? 1000 : screen.availWidth - screen.availWidth / 5,
+            height: screen.availHeight - screen.availHeight / 5
         };
         l = (screen.availWidth - 10 - options.width) / 2,
         t = (screen.availHeight - 30 - options.height) / 2,
         dataObj = arguments.length >= 3 ? arguments[2] : {},
         retValue = {},
         pars = [],
-        winName = typeof options.name != 'undefined' ? options.name : '';
-        options.height = screen.availHeight - screen.availHeight / 5;
-        options.width = screen.availWidth < 1300 ? 1000 : screen.availWidth - screen.availWidth / 5;
+        winName = typeof options.name != 'undefined' ? options.name : 'xxx';
         t = 25;
         if (window.showModalDialog) {
             pars.push("resizable:yes");

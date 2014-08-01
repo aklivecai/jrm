@@ -71,7 +71,7 @@ class MovingsController extends Controller {
                         $this->error();
                     }
                 }
-                if ($model->save()) {
+                if ($model->validate() && $model->save()) {
                     $script = sprintf('parent.window.location.href="%s";', $this->createUrl('view', array(
                         'id' => $model->primaryKey
                     )));
@@ -144,6 +144,7 @@ class MovingsController extends Controller {
         $result = '';
         if (isset($_POST[$m])) {
             $_model = new ProductMoving();
+            $_model->type = $model->type;
             $_model->attributes = $_POST[$m];
             $_model->product_id = $this->getSId($_model->product_id);
             $_model->movings_id = 888;
@@ -193,7 +194,7 @@ class MovingsController extends Controller {
             '<ol class="mov-products">'
         );
         foreach ($data as $key => $value) {
-            $numbers = $value['numbers'];
+            $numbers = Tak::getNums($value['numbers']);
             if ($value['unit']) {
                 $numbers.= sprintf('%s', $value['unit']);
             }

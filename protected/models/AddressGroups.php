@@ -139,7 +139,7 @@ class AddressGroups extends DbRecod {
                 ':fromid' => Tak::getFormid() ,
             ));
             
-            $tags = Tak::getDb('db')->createCommand($sql)->queryAll(true);
+            $tags = Ak::db(true)->createCommand($sql)->queryAll(true);
             $result = array();
             foreach ($tags as $key => $value) {
                 if ($iskey) {

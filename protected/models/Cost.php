@@ -20,7 +20,7 @@ class Cost extends DbRecod {
                 'max' => 25
             ) ,
             array(
-                'fromid, totals, add_time, add_ip, modified_time, modified_ip',
+                'fromid, add_time, add_ip, modified_time, modified_ip',
                 'length',
                 'max' => 10
             ) ,
@@ -33,6 +33,10 @@ class Cost extends DbRecod {
                 'note',
                 'length',
                 'max' => 255
+            ) ,
+            array(
+                'totals',
+                'numerical',
             ) ,
             array(
                 'name, totals, add_time, note, status',
@@ -162,6 +166,7 @@ class Cost extends DbRecod {
     public function upProduction() {
         $this->upStatus(3);
     }
+    
     public function upStatus($status = 0) {
         $sql = strtr('UPDATE :table SET status=:status WHERE fromid = :fromid AND itemid=:itemid', array(
             ':table' => self::$table,

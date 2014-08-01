@@ -129,6 +129,7 @@ foreach ($items as $value) {
 <?php
     $this->widget('ext.AkCListView', array(
         'dataProvider' => $value::model()->recently(4, 'clienteleid=' . $model->itemid) ,
+        'template' => '{items}',
         'itemView' => "_$value",
         'emptyText' => '<p>暂无数据</p>',
         'htmlOptions' => array(

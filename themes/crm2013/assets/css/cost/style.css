@@ -34,12 +34,16 @@ input, button {
     padding: 0;
     font-size: 12px;
 }
-: : -moz-selection {
-    background: #13B7FE;
+::selection { 
+    background: #CB000A;
+    color: #FFF;   
+}
+::-moz-selection {
+    background: #CB000A;
     color: #FFF;
 }
-: : -webkit-selection {
-    background: #13B7FE;
+::-webkit-selection {
+    background: #CB000A;
     color: #FFF;
 }
 h1, h2, h3, h4 {
@@ -52,12 +56,11 @@ h3 a {
     color: inherit;
     text-decoration: none;
 }
-button,a {
+button, a {
     text-decoration: none;
     color: #666;
     font-size: 12px;
     transition: all .8s;
-
 }
 a:hover {
     text-decoration: none;
@@ -158,10 +161,10 @@ input[required] {
 }
 .ibtn:hover {
     background-position: 0 -160px;
-    -webkit-transform: scale(1.15);
-    -moz-transform: scale(1.15);
-    -o-transform: scale(1.15);
-    transform: scale(1.15);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
 }
 .ibtn:active, .ibtn:focus {
     background-position: 0 -200px;
@@ -749,8 +752,7 @@ float: left;
 }
 .ico-ok:before {
     /*content: "\2713";*/
-
-content: "\270E";
+    content: "\270E";
 }
 .ico-save {
     background: #3c763d;
@@ -777,7 +779,9 @@ content: "\270E";
     margin: 2px 5px 5px 5px;
 }
 /**生产管理**/
-
+.list-production .zebra td{
+    vertical-align: top;
+}
 .production-view {} .list-production-process {
     text-align: center;
 }
@@ -791,20 +795,38 @@ content: "\270E";
     border-radius: 2px;
     box-shadow: 0px 2px 2px #AAA;
 }
-.list-production-process input[type=checkbox] {
-    border: 0;
-}
-.list-production-process .days {
-    display: block;
-    width: 95%;
-    margin: 0 auto;
-}
 .list-production-process.error {
     background-color: #fbf8e9;
     border-width: 1px 2px;
     position: relative;
 }
-.list-production-process.error:before {
+/**生产排期，计划时间**/
+.list-production-process-days{
+    position: relative;
+}
+.list-production-process-days li{
+    float: left;
+    width: 120px;
+    min-height: 35px;
+    margin: 2px;
+    padding: 2px 5px;
+    border: 1px solid #DDD;
+    border-radius: 2px;
+    box-shadow: 0px 2px 2px #AAA;    
+}
+
+.list-production-process-days input[type=checkbox] {
+    border: 0;
+}
+.d-content .days{
+    width:40%;
+}
+
+.d-content input[type=text] {
+    margin:2px auto;
+    width: 50%;
+}
+.list-production-process-days.error:before {
     content: '请选择工序！';
     color: red;
     font-size: 18px;
@@ -812,11 +834,113 @@ content: "\270E";
     right: .2em;
     bottom: .2em;
 }
-/**生产进度**/
 
+/**生产进度**/
 .list-production {
-    ;
+
 }
-.list-production li {
+.list-production>li {
+    margin-left: 12px;
     list-style-type: decimal;
+}
+.list-progresss {
+    position: relative;
+    z-index: 8;
+}
+.wap-progresss-action {
+    min-width: 150px;
+    width: 150px;
+    /*max-width: 150px;*/
+
+    padding: 5px;
+    /*width: 85%;*/
+    
+    position: absolute;
+    left: -50%;
+    background: #FFF;
+    box-shadow: 2px 1px 2px 2px #AAA;
+    border-width: 2px 1px 2px 2px\0;
+    border-color: #AAA\0;
+    border-style: solid\0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    /* Firefox 4 */
+
+-webkit-transition: all 0.3s;
+    /* Safari 和 Chrome */
+
+-o-transition: all 0.3s;
+    /* Opera */
+
+visibility: hidden;
+}
+.cure-action {
+    z-index: 99;
+}
+.cure-action .btn-add {
+    opacity: 0;
+    visibility: hidden;
+}
+.cure-action .wap-progresss-action {
+    left: 1%;
+    top: 95%;
+    opacity: 1;
+    visibility: visible;
+}
+.wap-progresss-action label {
+    width: 20%
+}
+.wap-progresss-action .ibtn-ok {
+    display: block;
+    margin: 0 auto;
+}
+.wap-progresss-action textarea{
+    height: 35px;
+}
+
+#wrapper tr.sover td{
+    background-color: #F2FDF2;
+}
+#wrapper td.sover {
+    background: #468847 !important;
+    color: #FFF;
+}
+
+
+/****/
+.talbe-th tbody th{
+    background: #DDD;
+    text-align: right;
+    border-bottom-color: #FFF;
+}
+.talbe-th th,
+.talbe-th td{
+    border-bottom:1px solid #DDD;
+}
+
+.list-worker li{
+    float: left;
+    margin: 1px 3px;
+}
+.list-worker li input{
+    float: left;
+    height: 17px;
+}
+
+#wamp-wage-workshop .list-wage-process li{
+    width: 250px;
+    float: left;
+}
+#wamp-wage-workshop .list-wage-process label{
+    /*width:25%;*/
+    float: left;
+    padding-left: 5px;
+}
+#wamp-wage-workshop .list-wage-process input[type=text]{
+    width:80px;
+}
+#wamp-wage-workshop .list-wage-process input[type=number]{
+    width: 60px;
 }

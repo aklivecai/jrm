@@ -58,12 +58,12 @@ class JImportAddressbook extends JImportForm {
         $itemid = Tak::fastUuid();
         foreach ($this->data as $key => $value) {
             $itemid = Tak::numAdd($itemid, 2);
-
+            
             if (isset($cates[$value['catename']])) {
                 $groups_id = $cates[$value['catename']];
             } else {
                 if ($cate->address_groups_id > 0) {
-                    $cate->address_groups_id+= $key+ 2;
+                    $cate->address_groups_id+= $key + 2;
                 }
                 $cate->name = $value['catename'];
                 $cate->setIsNewRecord(true);
@@ -90,6 +90,8 @@ class JImportAddressbook extends JImportForm {
                 $newProducts++;
             } else {
                 // Tak::KD($model->getErrors(),1);
+                
+                
             }
         }
         AdminLog::$isLog = true;
@@ -127,7 +129,7 @@ class JImportAddressbook extends JImportForm {
             ':table' => AddressGroups::$table,
             ':fromid' => Tak::getFormid() ,
         ));
-        $tags = Tak::getDb('db')->createCommand($sql)->queryAll();
+        $tags = Ak::db(true)->createCommand($sql)->queryAll();
         $result = array();
         foreach ($tags as $key => $value) {
             $result[$value['name']] = $value['address_groups_id'];

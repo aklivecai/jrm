@@ -1,7 +1,8 @@
 <?php
  $form = $this->beginWidget('CActiveForm', array(
 	'id'=>'import',
-	'action'=>array('Import/Import?action='.$action)
+	'action'=>array('/Import/Import?action='.$action)
+	// 'action'=>'/_/i.php?action='.$action
 )); ?>
 	<div class="controls">
 		<?php 
@@ -34,9 +35,13 @@
 					// $arr = array('id'=>$id);
 					$arr = array();
 					$_txt = '';
+					if ($action=='order'&&($k=='A'||$k=='K')&&(is_numeric($v)&&$v>1000&&$v<900000)) {
+						$v = Ak::ExcelDateToPhpDate($v);
+						$v = Ak::timetodate($v);
+					}
 					if ($action=='product') {
 						if ($k=='H'||$k=='I') {
-							$arr['min']	= 0;
+							// $arr['min']	= 0;
 							$arr['required'] = true;
 							if (!$v) {
 								$v = 0;
@@ -45,6 +50,7 @@
 						}						
 					}
 					if ($_txt=='') {
+						$v = str_replace('"', "", $v);
 						$_txt = JHtml::textField($id,$v,$arr);
 					}
 					echo $_txt;

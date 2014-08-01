@@ -4,9 +4,13 @@ class Xls {
     private $dir = null;
     public function getXls() {
         if ($this->xls == null) {
-            $this->dir = Tak::getUserDir() . 'toxls/';
-            // Tak::KD($this->dir,1);
-            Tak::MkDirs($this->dir);
+            $folder = Tak::getUserDir($id) . 'toxls/';
+            $root = YiiBase::getPathOfAlias('webroot');
+            Tak::MkDirs($root . $folder);
+            $this->dir = $root . $folder;
+            
+            // Tak::KD($this->dir, 1);
+            
             spl_autoload_unregister(array(
                 'YiiBase',
                 'autoload'
@@ -21,7 +25,7 @@ class Xls {
             
             $this->xls = new PHPExcel();
             // echo 12;
-            $this->xls->getProperties()->setCreator("Maarten Balliauw")->setLastModifiedBy("Maarten Balliauw")->setTitle("Office 2007 XLSX Test Document")->setSubject("Office 2007 XLSX Test Document")->setDescription("Document for Office 2007 XLSX, generated using PHP classes.")->setKeywords("office 2007 openxml php")->setCategory("Test result file");
+            $this->xls->getProperties()->setCreator("营销管理系统")->setLastModifiedBy("营销管理系统")->setTitle("test.9juren.com 营销管理系统")->setSubject("test.9juren.com 营销管理系统")->setDescription("test.9juren.com 营销管理系统")->setKeywords("test.9juren.com 营销管理系统")->setCategory("营销管理系统");
         }
         return $this->xls;
     }
@@ -30,7 +34,7 @@ class Xls {
      * @param  [type] $data [description]
      * @return [type]       [description]
      */
-    public function toXLs($data) {        
+    public function toXLs($data) {
         $objPHPExcel = $this->getXls();
         $headList = $data['headers'];
         $headerText = $data['headerText'];
@@ -41,10 +45,11 @@ class Xls {
             $tname.= $data['file'];
         }
         $tname.= date('YmdHis');
-        $fileurl.= $tname . '.xls';
+        $_md5 = md5(Tak::fastUuid(4));
+        $fileurl.= $tname . '_' . $_md5 . '.xlsx';
         $ki = 0;
         $col = 3;
-        $getActiveSheet  = $objPHPExcel->getActiveSheet();
+        $getActiveSheet = $objPHPExcel->getActiveSheet();
         foreach ($headList as $k => $v) {
             $ki++;
             $newkey = chr(64 + $ki);
@@ -77,7 +82,7 @@ class Xls {
         // 底纹
         $getActiveSheet->getStyle('A1')->getFill()->getStartColor()->setARGB('00FFFFE3');
         $cols = 4;
-
+        
         foreach ($list as $ks => $vs) {
             foreach ($headList as $k => $v) {
                 $tstr = $vs[$k];
@@ -88,8 +93,7 @@ class Xls {
         $getActiveSheet->setCellValue('A2', $headerText);
         $objPHPExcel->setActiveSheetIndex(0);
         $getActiveSheet->setTitle($tname);
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         // Tak::KD($fileurl);
         $objWriter->save($fileurl);
         return $fileurl;

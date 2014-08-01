@@ -10,16 +10,16 @@ class ProductMoving extends CActiveRecord {
     public function rules() {
         return array(
             array(
-                'itemid, movings_id, product_id, numbers',
+                'itemid, movings_id, product_id, numbers,warehouse_id,type',
                 'required'
             ) ,
             array(
-                'itemid, movings_id, product_id,warehouse_id,price,numbers',
+                'itemid,fromid,movings_id, product_id,price',
                 'length',
                 'max' => 25
             ) ,
             array(
-                'numbers',
+                'numbers,warehouse_id,time_stocked',
                 'length',
                 'max' => 10
             ) ,
@@ -31,7 +31,7 @@ class ProductMoving extends CActiveRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array(
-                'itemid, type, movings_id, product_id, numbers, note',
+                'itemid, type, movings_id, product_id,warehouse_id, numbers, note',
                 'safe',
                 'on' => 'search'
             ) ,
@@ -60,7 +60,7 @@ class ProductMoving extends CActiveRecord {
         if ($this->price > 0 && $this->numbers != 0) {
             $result = $this->price * $this->numbers;
         }
-        return sprintf('%01.2f', $result);
+        return $result;
     }
     /**
      * 查询出入库的产品记录
@@ -107,6 +107,7 @@ class ProductMoving extends CActiveRecord {
             'time_stocked' => '确认操作日期',
             'movings_id' => '出入库号',
             'product_id' => '产品',
+            'warehouse_id' => '仓库',
             'price' => '价格',
             'numbers' => '数量',
             'note' => '备注',

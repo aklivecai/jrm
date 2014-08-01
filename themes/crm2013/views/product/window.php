@@ -21,13 +21,7 @@ $this->renderPartial("_search", array(
     'warehouse' => true,
     'typeid' => $typeid
 ));
-$this->widget('bootstrap.widgets.TbButton', array(
-    'buttonType' => 'link',
-    'label' => '选择产品',
-    'htmlOptions' => array(
-        "id" => "tak-select"
-    )
-));
+
 $options = Tak::gredViewOptions(false);
 $options["afterAjaxUpdate"] = null;
 $options['dataProvider'] = $tags;
@@ -130,3 +124,6 @@ var select = function(data){
 }
 , listData = ' . Tak::modulesToJson($m));
 ?>
+    <div class="pop-bottom">
+        <button id="tak-select">选择产品</button>
+    </div>

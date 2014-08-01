@@ -42,7 +42,7 @@ if ($tags->itemCount > 0) {
     $totals = Product::getTotals($sql);
     $str.= '<div class="clearfix"><i class="icon-tasks"></i>总价格: <span class="badge badge-important">:ptotal</span>   <i class="icon-tasks"></i>总数量: <span class="badge badge-warning">:stotal</span>     </div><div class="dr"><span></span></div>';
     $str = strtr($str, array(
-        ':stotal' => $totals['stotal'],
+        ':stotal' => Tak::getNums($totals['stotal']),
         ':ptotal' => Tak::format_price($totals['ptotal']) ,
     ));
     $options['template'] = $options['template'] . $str;

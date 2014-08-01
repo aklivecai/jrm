@@ -31,3 +31,7 @@ body {
 .errorPage a{
   margin: 0 5px;
 }
+
+.errorPage .name{
+  color:#CCC\0;
+}

@@ -328,8 +328,8 @@ jQuery(function($) {
             pro.number(obj.amount);
             productView.add(pro);
         };
-        // $('.action-fold').trigger('click').eq(0).trigger('click');
     }
+    $('.action-fold').trigger('click');
     ko.applyBindings(productView, document.getElementById('wrapper'));
     $(document).on("click", '.action-deleted', function() {
         if (confirm('是否确认删除!')) {

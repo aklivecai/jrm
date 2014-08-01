@@ -14,7 +14,7 @@ class AkCListView extends CListView
 	{
 		$this->enablePagination = false;
 		$this->enableSorting = false;
-		$this->template = '{items}';
+		// $this->template = '{items}';
 		parent::init();
 	}	
 

@@ -23,12 +23,12 @@ var tags = []
 ', CClientScript::POS_HEAD);
 ?>
 		<div id="wrapper">
-			<form action="" method="post" id="form-const" data-bind="submit: doSomething">
+			<form action="" method="post" id="form-const">
 				<div class="mod" id="constac">
 					<h2>物料成本清单核算</h2>
 					<div class="modc">
 						<div data-bind='foreach: {data:lines,afterRender:$root.initElement}'>
-							<table class="itable">
+							<table class="itable table-product">
 								<caption>
 								<div class="product-info">
 									<label>品 名：<input type="text" class="input-bborder" data-bind="value:type,attr:{name:getName('type')}" required/></label>
@@ -68,8 +68,12 @@ var tags = []
 				<hr />
 			</div>
 			 <!-- /ko -->
+
+	<div class="footer-action">
+			<a tabindex="-1" class="ibtn ibtn-cancel" onclick="window.close()">关闭窗口</a>
 			<button class="ibtn" type="button" data-bind="click: add">添加产品</button>
-			<button class="ibtn ibtn-ok" type="submit">保存</button>
+			<button class="ibtn ibtn-ok" type="submit">保存</button>			
+	</div>
 			<div class="wap-tips">
 				<span class="tips_icon_help">
 				提示: 核算说明
@@ -90,7 +94,6 @@ var tags = []
 </form>
 </div>
 <a href="about" id="tak-load"></a>
-
 <script type="text/html" id="materia-template">
 <th>
 	<span data-bind="text: typeName"></span>

@@ -44,7 +44,9 @@ class ToolsController extends JController {
     public function actionDelete($id) {
         throw new CHttpException(404, '所请求的页面不存在。');
     }
-    public function actionIndex($fid = false, $action = false) {
+    public function actionIndex() {
+        $fid = Tak::getPost('fid', false);
+        $action = Tak::getPost('action', false);
         if ($action && $fid) {
             switch ($action) {
                 case 'product':
@@ -72,18 +74,20 @@ class ToolsController extends JController {
                 ':fromid' => $fid
             );
             /*清空数据,订单*/
-            $sqls = array(
-                "DELETE FROM {{order}} WHERE fromid=:fromid ",
-                "DELETE FROM {{order_info}} WHERE itemid NOT IN(SELECT itemid FROM {{order}}) ",
-                "DELETE FROM {{order}} WHERE itemid NOT IN(SELECT itemid FROM {{order_info}}) ",
-                
+            $sqls = array(                
                 "DELETE FROM  {{order_files}} WHERE action_id  IN( SELECT oflow.itemid FROM {{order_flow}} AS oflow
                                             INNER JOIN {{order}}  AS o 
                                                 ON oflow.order_id=o.itemid 
                                             WHERE o.fromid=:fromid  UNION ALL SELECT itemid FROM {{order_product}}  WHERE fromid=:fromid)",
                 
-                "DELETE FROM {{order_product}} WHERE order_id NOT IN(SELECT itemid FROM {{order}}) ",
-                "DELETE FROM {{order_flow}} WHERE order_id NOT IN(SELECT itemid {{order_info}});",
+                "DELETE FROM {{order_product}} WHERE order_id IN(SELECT itemid FROM {{order}} WHERE fromid=:fromid ) ",
+
+                "DELETE FROM {{order_flow}} WHERE order_id IN(SELECT itemid FROM {{order_info}}  WHERE fromid=:fromid )",
+
+
+                "DELETE FROM {{order_review}} WHERE fromid=:fromid ",
+                "DELETE FROM {{order}} WHERE fromid=:fromid ",
+                "DELETE FROM {{order_info}} WHERE fromid=:fromid ",
             );
             
             $sqlsx = array(
@@ -120,6 +124,7 @@ class ToolsController extends JController {
                 while (1) {
                     //每次只做1000条
                     $command->text = sprintf('%s LIMIT 1000', $value);
+                    // $command->text = $value;
                     $rowCount = $command->execute($arr);
                     if ($rowCount == 0) {
                         // 没得可删了，退出！
@@ -134,8 +139,12 @@ class ToolsController extends JController {
             }
         }
     }
+    private function getDb($id) {
+        $db = Tak::db(true, $id)->createCommand('');
+        return $db;
+    }
     private function clearProduction($fid) {
-        $command = Tak::getDb('db')->createCommand('');
+        $command = $this->getDb($fid);
         $arr = array(
             ':fromid' => $fid
         );
@@ -160,7 +169,7 @@ class ToolsController extends JController {
         }
     }
     private function clearProduct($fid) {
-        $command = Tak::getDb('db')->createCommand('');
+        $command = $this->getDb($fid);
         $arr = array(
             ':fromid' => $fid
         );

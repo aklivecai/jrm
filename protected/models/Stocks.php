@@ -211,7 +211,7 @@ class Stocks extends DbRecod {
      * @return [type]            [description]
      */
     public static function getTypeStocks($productid) {
-        $sql = ' SELECT SUM(numbers) AS total,type FROM :tabl  WHERE product_id=:productid :warehouse GROUP BY type';
+        $sql = ' SELECT SUM(numbers) AS total,type FROM :tabl  WHERE product_id=:productid AND time_stocked>0 :warehouse GROUP BY type';
         $warehouse = '';
         /*是不是仓库管理员*/
         if (Permission::iSWarehouses()) {

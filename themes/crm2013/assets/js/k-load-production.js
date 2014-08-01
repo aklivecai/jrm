@@ -11,7 +11,7 @@ jQuery(function($) {
         var self = this;
         self.obj = obj;
         self.itemid = obj.itemid;
-        self.workshops = ko.observable("0");
+        self.workshops = ko.observable();
         self.workshops.subscribe(function(oldValue) {
             if (typeof oldValue == 'string') {
                 // 车间设置
@@ -21,7 +21,7 @@ jQuery(function($) {
             }
         }, null, "beforeChange");
         self.workshops.subscribe(function(value) {
-            if (typeof value == 'string') {
+            if (typeof value == 'string' || typeof value == 'number') {
                 // 车间设置
                 if (value < 0) {
                     document.getElementById('btn-workshop').click();
@@ -30,6 +30,9 @@ jQuery(function($) {
                 }
             }
         });
+        self.getName = function() {
+            return sprintf("M[%s]", self.itemid);
+        }
         self.name = '';
         (function(_obj) {
             var data = [];
@@ -39,6 +42,10 @@ jQuery(function($) {
             _obj.color != '' && data.push(_obj.color);
             data.push('数量:' + _obj.numbers);
             self.name = data.join(' , ');
+            //修改时候，已经存在车间了
+            if (typeof _obj['workshop_id'] != 'undefined' && typeof worksTags[_obj['workshop_id']] != 'undefined') {
+                self.workshops(worksTags[_obj['workshop_id']]);
+            };
         })(obj);
     };
     var ListViewModel = function() {
@@ -57,8 +64,9 @@ jQuery(function($) {
         self.isShow = ko.computed(function() {
             return self.products().length > 0;
         });
-        self.getWName = function() {
-            return sprintf("M[%s][workshop]", self.id);
+        /*
+        self.getPWName = function(id) {
+            return sprintf("M[%s][workshop]", id, self.id);
         }
         self.getPName = function(pid) {
             return sprintf("M[%s][process][%s]", self.id, pid);
@@ -66,6 +74,7 @@ jQuery(function($) {
         self.getPId = function(id) {
             return sprintf("process-%s-%s", self.id, id);
         }
+        */
         self.load = function(obj) {
             self.id = obj.typeid;
             self.name = obj.typename;
@@ -85,6 +94,7 @@ jQuery(function($) {
             self.add = function(line) {
                 self.lines.push(line);
             }
+            self.isprintf = ko.observable(false);
             self.initInput = function() {
                 if (tak.ihtml5.placeholder) {
                     $('.placeholder').each(function() {
@@ -104,14 +114,10 @@ jQuery(function($) {
         }
     var mView = new ListViewModel(),
         mWorkshops = new WorkshopsModel(),
-        workshopsSelect = []
-    if (tags.length > 0) {
-        for (var i = 0; i < tags.length; i++) {
-            var obj = new MoLine(tags[i]);
-            mView.add(obj);
-        };
-    };
+        worksTags = {},
+        workshopsSelect = [];
     for (var key in workshops) {
+        worksTags[workshops[key].typeid] = key;
         workshopsSelect.push({
             'id': key,
             'name': workshops[key].typename
@@ -124,41 +130,23 @@ jQuery(function($) {
         name: '-车间设置-'
     });
     window.workshopsSelect = workshopsSelect;
+    if (tags.length > 0) {
+        for (var i = 0; i < tags.length; i++) {
+            var obj = new MoLine(tags[i]);
+            mView.add(obj);
+        };
+    };
     ko.applyBindings(mView, document.getElementById('init-production'));
     ko.applyBindings(mWorkshops, document.getElementById('init-workshops'));
-    wap.on('click', '.check-pro', function() {
-        var t = $(this),
-            par = t.parent().find('.days');
-        if ($(this).prop('checked')) {
-            par.removeAttr('disabled').attr('required', 'required').show();
-        } else {
-            par.attr('disabled', 'disabled').removeAttr('required').hide();
-        }
-    })
     var formSubmit = $('#form-submit'),
-        ifm = getIfm(),
         result = false;
-    // formSubmit.attr('target', ifm.attr('name'));
     formSubmit.on('submit', function(event) {
         result = false;
         // event.preventDefault();
-        if (true || tak.ihtml5.required) {
-            formSubmit.find('select,input[required]').removeClass('error').each(function() {
-                var t = $(this)
-                value = t.val();
-                if (t.get(0).tagName.toLowerCase() != 'input') {
-                    if (t.find("option:selected").text() != '选择车间') {
-                        value = t.find("option:selected").text();
-                    }
-                } else {
-                    // ＞0正的数字判断
-                    if (value.search(/^\d+[\d\.]?\d*$/) != 0) {
-                        value = 0;
-                    } else {
-                        value = parseFloat(value).toFixed(2).replace('.00', '');
-                    }
-                    t.val(value);
-                }
+        if (tak.ihtml5.required) {
+            formSubmit.find('select').removeClass('error').each(function() {
+                var t = $(this);
+                value = t.find("option:selected").text();
                 if (value == '' || value <= 0) {
                     t.addClass('error');
                     if (result == false) {
@@ -166,24 +154,17 @@ jQuery(function($) {
                     }
                 };
             });
-        } else {
-            formSubmit.find('input[required][value=0]').addClass('error');
         }
         if (result) {
             result.focus();
-        } else {
-            formSubmit.find('.list-production-process').removeClass('error').each(function() {
-                var t = $(this);
-                if (t.find("input:checked").length == 0) {
-                    t.addClass('error');
-                    if (result == false) {
-                        result = true;
-                    }
-                };
-            });
-        }
-        if (result) {
             event.preventDefault();
         };
     })
+    $('#print-produciotn').on('click', function() {
+        mWorkshops.isprintf(true);
+        var html = $('#print-table').html(),
+            _html = "<style>.list-production-process li {float: left;width: 110px;margin: 2px;padding: 2px 5px;border: 1px solid #AAA;}.list-production-process strong{display:block;text-align:center;}.hr1,.hr2{display: inline-block;border-bottom: 1px solid #000;}.hr2{width: 30px;}.hr1{width: 70px;}</style>";
+        html = html.replace(/zebra/ig, 'list');
+        printHtml(_html + html);
+    });
 });

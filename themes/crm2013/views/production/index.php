@@ -56,16 +56,6 @@ $columns = array(
         'headerHtmlOptions' => array(
             'style' => 'width: 85px'
         ) ,
-    ) ,
-    array(
-        'name' => 'status',
-        'headerHtmlOptions' => array(
-            'style' => 'width: 100px'
-        ) ,
-        'value' => '$data->getState()',
-        'htmlOptions' => array(
-            'class' => 'red '
-        )
     )
 );
 $options['columns'] = $columns;

@@ -5,15 +5,14 @@
 ?>
 <?php  
 	$action = $model->isNewRecord?'Create':'Update';
- $items = Tak::getEditMenu($model->itemid,$model->isNewRecord);
+ 	$items = Tak::getEditMenu($model->itemid,$model->isNewRecord);
 ?>
 <div class="row-fluid">
 <div class="span12">
-
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'product-form',
 	 'type'=>'horizontal',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 <?php echo $form->errorSummary($model); ?>
 <div class="head clearfix">
@@ -58,10 +57,10 @@ $this->renderPartial('/category/select', array(
 		<?php echo $form->textFieldRow($model,'spec',array('size'=>60,'maxlength'=>100)); ?>
 	</div>
 	<div class="row-form clearfix" >
-		<?php echo $form->textFieldRow($model,'color',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->textFieldRow($model,'color',array('size'=>50,'maxlength'=>50)); ?>
 	</div>
 	<div class="row-form clearfix" >
-		<?php echo $form->textFieldRow($model,'unit',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->textFieldRow($model,'unit',array('size'=>50,'maxlength'=>50)); ?>
 	</div>
 	<div class="row-form clearfix" >
 		<?php echo $form->textAreaRow($model,'note',array()); ?>
@@ -69,8 +68,8 @@ $this->renderPartial('/category/select', array(
 
 </div>
 <div class="footer tar">
-    <?php $this->widget('bootstrap.widgets.TbButton', array('size'=>'large','buttonType'=>'submit', 'label'=>Tk::g($action))); ?>
-    <?php $this->widget('bootstrap.widgets.TbButton', array('size'=>'large','buttonType'=>'reset', 'label'=>Tk::g('Reset'))); ?>    
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>Tk::g($action))); ?>
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Tk::g('Reset'))); ?>    
 </div>
 <?php $this->endWidget(); ?>
 </div>

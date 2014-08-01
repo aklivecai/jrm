@@ -51,6 +51,8 @@ class OrderProduct extends MRecord {
             $result = $this->price * $this->amount;
             $result = round($result, 2);
             // $result = Yii::app()->numberFormatter->formatDecimal($result);
+            
+            
         }
         $this->sum = $result;
         return $this->sum;
@@ -149,6 +151,11 @@ class OrderProduct extends MRecord {
     }
     
     public function getListByOrder($condition) {
+        echo '<div style="display:none;">';
+        print_r(Ak::getDb('db'));
+        print_r(self::$db);
+        echo '</div>';
+        
         $arr = array();
         foreach ($condition as $key => $value) {
             $arr[$key] = $value;

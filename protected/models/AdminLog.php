@@ -11,7 +11,7 @@
  * @property string $ip
  * @property string $add_time
  */
-class AdminLog extends CActiveRecord {
+class AdminLog extends DbiRecod {
     
     public static $isLog = true;
     
@@ -165,7 +165,7 @@ class AdminLog extends CActiveRecord {
             return false;
         }
         $m = new self('create');
-        $m->info = $info;
+        $m->info = Ak::strip_nr($info);
         $m->qstring = Yii::app()->request->getUrl();
         $arr = Tak::getOM();
         $arr['user_name'] = Tak::getManame();

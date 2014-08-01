@@ -12,6 +12,7 @@ class PermissionController extends Controller {
             foreach ($tabs as $key => $value) {
                 // $tabs[$this->setSId($key) ] = $value;
                 // unset($tabs[$key]);
+                
             }
             $this->tabs = $tabs;
             if (isset($this->tabs['998'])) {
@@ -19,8 +20,8 @@ class PermissionController extends Controller {
         }
     }
     public function loadModel($id) {
-        if ($this->_model === null) {            
-            $id = $this->getSId($id);            
+        if ($this->_model === null) {
+            $id = $this->getSId($id);
             $m = $this->modelName;
             $m = $m::model();
             $this->_model = $m->findByPk($id);
@@ -72,11 +73,6 @@ class PermissionController extends Controller {
                 'id' => $this->setSId($id) ,
             ));
         }
-        $m = $this->modelName;
-        $model = new $m('search');
-        $this->render($this->templates['admin'], array(
-            'model' => $model,
-        ));
     }
     
     public function actionPreview($id) {
@@ -172,7 +168,6 @@ class PermissionController extends Controller {
             'Events.*',
             'Message.*',
             'Warehouse',
-
         );
         $notstr = '~' . implode('~', $_notArr) . '~';
         // Tak::KD($notstr,1);

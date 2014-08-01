@@ -76,8 +76,11 @@ endif
 				</tfoot>
 			</table>
 		</div>
-	</div>
 
+	</div>
+	<div class="footer-action">
+		<a tabindex="-1" class="ibtn ibtn-cancel" onclick="window.close()">关闭窗口</a>
+	</div>
 	<div class="wap-tips not-printf" >
 		<span class="tips_icon_help">
 		提示

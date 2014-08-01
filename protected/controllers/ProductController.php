@@ -12,6 +12,35 @@ class ProductController extends Controller {
         ));
     }
     
+    public function actionToJson($id) {
+        $model = $this->loadModel($id);
+        $data = array();
+        $data[] = $model->attributes;
+        $script = '  if(window.opener == undefined) {window.opener = window.dialogArguments; }';
+        $script.= ';opener.addData(' . CJSON::encode($data) . ');window.close();';
+        $this->_setLayout('//layouts/columnWindows');
+        $this->render('/chip/iframe', array(
+            'script' => $script,
+        ));
+    }
+    protected function beforeCreate($model) {
+        if (Tak::getQuery('action') == 'window') {
+            $this->redirect(array(
+                'tojson',
+                'id' => $this->setSId($model->primaryKey) ,
+            ));
+        }
+    }
+    public function actionCreate($action = false) {
+        if ($action == 'window') {
+            $this->_setLayout('//layouts/columnWindows');
+            if (isset($_POST[$m])) {
+                $this->returnUrl = $this->createUrl('toJson');
+            }
+        }
+        parent::actionCreate();
+    }
+    
     public function actionSelect() {
         $pageSize = Yii::app()->request->getQuery('page_limit', 10);
         $page = Yii::app()->request->getQuery('page', 1);

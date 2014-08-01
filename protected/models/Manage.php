@@ -2,10 +2,8 @@
 class Manage extends DbRecod {
     public $linkName = 'user_name'; /*连接的显示的字段名字*/
     public $branch = 0;
-    public $isbranch = 0;
-    
-    private $oldbranch = false;
-    
+    public $isbranch = 0;    
+    private $oldbranch = false;    
     public function primaryKey() {
         return 'manageid';
     }
@@ -100,7 +98,7 @@ class Manage extends DbRecod {
             $arr[':itemid'] = $this->primaryKey;
             $sql[] = 'fromid=' . $this->fromid;
         } else {
-            $sql[] = 'fromid=' . Tak::getFormid();
+            $sql[] = 'fromid=' . Ak::getFormid();
         }
         
         $sql = implode(' AND ', $sql);
@@ -127,15 +125,13 @@ class Manage extends DbRecod {
         );
         $condition = array();
         if ($this->hasAttribute('fromid')) {
-            $fromid = Tak::getFormid();
+            $fromid = Ak::getFormid();
             if ($fromid > 0) {
                 if (Tak::getAdmin()) {
                     $condition[] = '1=1';
                 } else {
-                    $condition[] = 'fromid=' . Tak::getFormid();
-                    // $condition[] = "user_name<>'admin'";
-                    
-                    
+                    $condition[] = 'fromid=' . $fromid;
+                    /*$condition[] = "user_name<>'admin'";*/
                 }
             }
         }
@@ -160,15 +156,15 @@ class Manage extends DbRecod {
         );
     }
     public function search() {
-        $criteria = new CDbCriteria;        
+        $criteria = new CDbCriteria;
         if (Tak::getAdmin()) {
             if ($this->fromid) {
                 $criteria->compare('fromid', $this->fromid);
             } else {
-                $criteria->addCondition("fromid=" . Tak::getFormid());
+                $criteria->addCondition("fromid=" . Ak::getFormid());
             }
         } else {
-            $criteria->addCondition("fromid=" . Tak::getFormid());
+            $criteria->addCondition("fromid=" . Ak::getFormid());
             $criteria->addCondition("user_name<>'admin'");
         }
         
@@ -177,8 +173,7 @@ class Manage extends DbRecod {
         $criteria->compare('user_nicename', $this->user_nicename, true);
         $criteria->compare('user_email', $this->user_email, true);
         $criteria->compare('login_count', $this->login_count);
-        $criteria->compare('note', $this->note, true);
-        
+        $criteria->compare('note', $this->note, true);        
         if ($this->branch >= 0) {
             $criteria->compare('branch', $this->branch);
         }
@@ -246,9 +241,9 @@ class Manage extends DbRecod {
                 $this->add_time = $arr['time'];
                 $this->add_ip = $arr['ip'];
                 $this->fromid = $arr['fromid'];
-                $this->salt = $this->generateSalt();                
+                $this->salt = $this->generateSalt();
                 if (!$this->user_status) {
-                    $this->user_status = TakType::STATUS_DEFAULT;
+                    $this->user_status = TakType::STATUS_DELETED;
                 }
                 $this->user_pass = $this->hashPassword($this->user_pass, $this->salt);
             } else {
@@ -275,7 +270,7 @@ class Manage extends DbRecod {
             ':fromid' => $this->fromid,
             ':userid' => $this->manageid,
             ':tabl' => '{{rbac_authassignment}}',
-        );        
+        );
         if ($this->isNewRecord || $this->oldbranch >= 0) {
             $comm = Tak::getDb('db')->createCommand();
             // Tak::KD($this->oldbranch);
@@ -288,12 +283,14 @@ class Manage extends DbRecod {
                 $comm->setText($sql)->execute();
                 // $db->createCommand($sql)->execute();
                 // Tak::KD($sql,1);
+                
+                
             }
             // 判断是否已经存在 queryScalar
-            $sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";            
+            $sql = " SELECT COUNT(*) FROM :tabl WHERE fromid=:fromid AND  userid=:userid AND itemname=':itemname'";
             $sql = strtr($sql, $arr);
             $rows = $comm->setText($sql)->queryScalar();
-            // Tak::KD($rows);            
+            // Tak::KD($rows);
             // Tak::KD($rows,1);
             if ($rows == 0) {
                 $sql = "INSERT INTO :tabl (itemname,fromid,userid,data) VALUES(:itemname,:fromid,:userid,'N;')";
@@ -301,11 +298,33 @@ class Manage extends DbRecod {
                 // $db->createCommand($sql)->execute();
                 $comm->setText($sql)->execute();
                 // Tak::KD($sql,1);
+                
+                
             }
             // exit;
+            
+            
         }
     }
-    
+
+   public static function getNameById($manageid){
+        $sql = " SELECT user_nicename FROM :tableName 
+        WHERE
+             fromid = :fromid
+             AND manageid = :manageid
+        ";
+        $sql = strtr($sql, array(
+            ':tableName' => self::$table,
+            ':fromid' => AK::getFormid(),
+            ':manageid' => $manageid,
+        ));
+        $query = Ak::db(true)->createCommand($sql)->queryScalar();
+        return $query;
+   }    
+    /**
+     * *更新最后活跃时间
+     * @return [type] [description]
+     */
     public function upActivkey() {
         $arr = Tak::getOM();
         $sql = " UPDATE :tableName SET
@@ -320,7 +339,7 @@ class Manage extends DbRecod {
             ':fromid' => $arr['fromid'],
             ':manageid' => $arr['manageid']
         ));
-        $query = Yii::app()->db->createCommand($sql);
+        $query = Ak::db(true)->createCommand($sql);
         $query->execute();
         AdminLog::log('退出操作');
         return true;
@@ -343,7 +362,7 @@ class Manage extends DbRecod {
             ':fromid' => $arr['fromid'],
             ':manageid' => $arr['manageid']
         ));
-        $query = Yii::app()->db->createCommand($sql);
+        $query = Ak::db(true)->createCommand($sql);
         $query->execute();
         AdminLog::log('登录操作');
         return true;

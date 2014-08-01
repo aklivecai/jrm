@@ -11,11 +11,16 @@
 .row-form .required span{color: #F00;} 
 .row-form{
   padding:0 16px;
-  padding-top:8px;
 }
-.row-form input[type="text"],
-.row-form input[type="password"], 
-.row-form textarea{height: 35px;}
+.row-form .control-group  input[type="text"],
+.row-form  .control-group input[type="password"], 
+.row-form .control-group  textarea{
+  height: 18px;
+  line-height: 18px;
+}
+.footer{
+  margin-left: 160px;
+}
 
 .form-horizontal .control-group{margin-bottom:8px;}
 
@@ -169,7 +174,7 @@ ul.yiiPager .first, ul.yiiPager .last {
 
 
 .span2 .nav-list > .active > a
-,.span2 .nav-list .nav-header{
+,.span2 .nav-list .nav-er{
     margin-right: 0;
 }
 
@@ -246,3 +251,130 @@ input[type=date]{
   opacity: 0.2;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=20)";
 } 
+
+.tak-wap{
+  width: 80%;
+  margin: 0 auto;
+}
+#content .table{
+  margin-bottom: 2px;
+}
+.list-view{
+  padding:0;
+}
+.pagination{
+  margin: 0;
+}
+#content input{
+  margin: 0;
+}
+ul.buttons{
+  display: none;
+}
+h1{
+  font-size: 25px;
+  border-bottom: 1px solid #DDD;
+  text-indent: 2em;
+}
+#content .createPopup{
+  display: none;
+}
+
+#content .input-prepend input[readonly=readonly]{
+    min-height: 20px\9; 
+}
+
+.pop-bottom{
+  position: fixed;
+  bottom: 55px;
+  right: 0px;
+}
+.pop-bottom button,.pop-bottom a{
+    font:15px Calibri, Arial, sans-serif;
+
+    /* A semi-transparent text shadow */
+    text-shadow:1px 1px 0 rgba(255,255,255,0.4);
+    
+    /* Overriding the default underline styling of the links */
+    text-decoration:none !important;
+    white-space:nowrap;
+    
+    display:inline-block;
+    vertical-align:baseline;
+    position:relative;
+    cursor:pointer;
+    padding:10px 20px;
+    
+    background-repeat:no-repeat;
+
+    /* The following two rules are fallbacks, in case
+       the browser does not support multiple backgrounds. */
+
+    background-position:bottom left;
+    background-image:url(button_bg.png);
+    
+    /* Multiple backgrounds version. The background images
+       are defined individually in color classes */
+    
+    background-position:bottom left, top right, 0 0, 0 0;
+    background-clip:border-box;
+    
+
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+    border-radius:8px;
+    
+    /* A 1px highlight inside of the button */
+    
+    -moz-box-shadow:0 0 1px #fff inset;
+    -webkit-box-shadow:0 0 1px #fff inset;
+    box-shadow:0 0 1px #fff inset;  
+
+    color:#0f4b6d !important;
+    
+    border:1px solid #84acc3 !important;
+
+
+    -webkit-transition:background-position 1s;
+    -moz-transition:background-position 1s;
+    transition:background-position 1s;
+    
+    /* A fallback background color */
+    background-color: #48b5f2;
+    
+    /* Specifying a version with gradients according to */
+    
+    background-image:   url(img/button_bg.png), url(img/button_bg.png),
+                        -moz-radial-gradient(   center bottom, circle,
+                                                rgba(89,208,244,1) 0,rgba(89,208,244,0) 100px),
+                        -moz-linear-gradient(#4fbbf7, #3faeeb);
+
+    background-image:   url(img/button_bg.png), url(img/button_bg.png),
+                        -webkit-gradient(   radial, 50% 100%, 0, 50% 100%, 100,
+                                            from(rgba(89,208,244,1)), to(rgba(89,208,244,0))),
+                        -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4fbbf7), to(#3faeeb));
+}
+
+.pop-bottom button:hover,.pop-bottom a:hover{
+    /* The first rule is a fallback, in case the browser
+       does not support multiple backgrounds
+    */    
+    background-position:top left;
+    background-position:top left, bottom right, 0 0, 0 0;
+}
+
+.pop-bottom button:active,.pop-bottom a:active{
+    /* Moving the button 1px to the bottom when clicked */
+    bottom:-1px;
+    background-color:#63c7fe;
+    
+    background-image:   url(img/button_bg.png), url(img/button_bg.png),
+                        -moz-radial-gradient(   center bottom, circle,
+                                                rgba(109,217,250,1) 0,rgba(109,217,250,0) 100px),
+                        -moz-linear-gradient(#63c7fe, #58bef7);
+                        
+    background-image:   url(img/button_bg.png), url(img/button_bg.png),
+                        -webkit-gradient(   radial, 50% 100%, 0, 50% 100%, 100,
+                                            from(rgba(109,217,250,1)), to(rgba(109,217,250,0))),
+                        -webkit-gradient(linear, 0% 0%, 0% 100%, from(#63c7fe), to(#58bef7));
+}

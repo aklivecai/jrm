@@ -63,7 +63,7 @@ class LRecord extends CActiveRecord {
         $this->$attribute = Tak::fastUuid();
     }
     public function addNow($attribute, $params) {
-        $this->$attribute = Tak::now();
+        $this->$attribute = time();
     }
     public function checkRepetition($attribute, $params) {
         $sql = array(

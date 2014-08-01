@@ -60,7 +60,7 @@ class MovesForm extends CFormModel
 			WHERE c.manageid = :fmid AND c.itemid=cp.clienteleid AND
 			 c.itemid = cc.clienteleid
 		 ';
-		 $connection = Tak::getDb('db');
+		 $connection = Ak::db(true);
 		 $transaction = $connection->beginTransaction();
 		 foreach (array('c','cp','cc')  as $key=>$value) {
 		 	 $_sql  = "UPDATE :$value SET manageid = :tmid WHERE manageid = :fmid ";

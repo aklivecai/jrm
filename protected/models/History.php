@@ -153,13 +153,11 @@ class History extends MRecord
 	}	
 
 	public static function addCount($sid){
-        $member = TestMemeber::model()->findByPk($sid);
-       
-        if ($member!=null) {
-
+        $member = TestMemeber::model()->findByPk($sid);       
+        if ($member!==null) {
             $m = self::model()->findByAttributes(array('sid'=>$sid));
             $time = time();
-            if ($m!=null){
+            if ($m!==null){
                 $date = $time - $m->last_time ;
                 $date = bcdiv($date,60);
                 if ($date>30) {

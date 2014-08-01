@@ -30,9 +30,13 @@ class CostProcess extends DbRecod {
                 'max' => 25
             ) ,
             array(
-                'fromid, price',
+                'fromid',
                 'length',
                 'max' => 10
+            ) ,
+            array(
+                'price',
+                'numerical',
             ) ,
             array(
                 'name',

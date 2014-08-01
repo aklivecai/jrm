@@ -13,23 +13,22 @@
 <?php
 Yii::app()->bootstrap->register();
 $this->regCssFile(array(
-    'window.css',
-    'ak.css?2014'
+	'ak.css?t=20140721',
+    'window.css?t=20140723',
+    
 ))->regScriptFile('k-load.js');
 ?>
 <script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/lib.js?>"></script>
 <!--[if lt IE 9]>
-<link href="<?php echo $this->getAssetsUrl(); ?>css/ie8.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $this->getAssetsUrl(); ?>css/ie8.css?t=20140721" rel="stylesheet" type="text/css" />
 <![endif]-->
 <!--[if lt IE 10]> 
-<script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/ie.js?>"></script>
+<script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/ie.js?t=20140721>"></script>
 <![endif]-->
-
 <base target="_self">
-
 </head>
 <body>
-<div id="content">
+<div id="content" class="content">
 	<?php echo $content; ?>
 </div><!-- content -->
 <script type="text/javascript">

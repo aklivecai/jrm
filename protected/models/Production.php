@@ -110,6 +110,7 @@ class Production extends DbRecod {
             $arr['condition']
         );
         // $condition[] = 'display>0';
+        $arr['order'] = "add_time DESC";
         $arr['condition'] = join(" AND ", $condition);
         return $arr;
     }
@@ -127,32 +128,54 @@ class Production extends DbRecod {
     protected function afterSave() {
         parent::afterSave();
     }
-    
     public function getState() {
-        $result = $this->status == 2 ? '完成' : '生产中';
+        return self::getStateText($this->status);
+    }
+    
+    public static function getStateText($status) {
+        switch ($status) {
+            case 1:
+                $result = '开始排期';
+            break;
+            case 2:
+                $result = '排期完成';
+            break;
+            case 3:
+                $result = '生产中';
+            break;
+            case 8:
+                $result = '完成';
+            break;
+            default:
+            break;
+        }
         return $result;
+    }
+    /**
+     * 生产已完成
+     */
+    public function StatusOver() {
+        $this->upStatus(8);
+    }
+    public function isOver() {
+        return $this->status == 8;
+    }
+    //修改生产状态
+    public function upStatus($status) {
+        $sql = strtr('UPDATE :table SET status=:status,modified_time=:time WHERE fromid = :fromid AND itemid=:itemid', array(
+            ':table' => self::$table,
+            ':status' => $status,
+            ':fromid' => $this->fromid,
+            ':itemid' => $this->itemid,
+            ':time' => Ak::now() ,
+        ));
+        self::$db->createCommand($sql)->execute();
     }
     /**
      * 更新生产工序用时
      * @return [type] [description]
      */
     public function upPdays() {
-        $sqls = array(
-            'DELETE FROM :production_days WHERE fromid=:fromid AND production_id=:production_id',
-            "INSERT INTO :production_days (itemid,production_id,fromid,workshop_id,process,days) 
-SELECT (product_id+workshop_id + ROUND((RAND() * SUM(days)*9999),-1) ) AS itemid,production_id,fromid,workshop_id,process,SUM(days) AS totals FROM :product_days WHERE fromid=:fromid AND production_id=:production_id GROUP BY workshop_id,process"
-        );
-        $data = array(
-            ':product_days' => ProductionProductDays::$table,
-            ':production_days' => ProductionDays::$table,
-            ':production_id' => $this->itemid,
-            ':fromid' => $this->fromid,
-        );
-        foreach ($sqls as $key => $value) {
-            $sql = strtr($value, $data);
-            // Tak::KD($sql);
-            self::$db->createCommand($sql)->execute();
-        }
     }
     //删除信息后
     protected function afterDelete() {
@@ -165,9 +188,9 @@ SELECT (product_id+workshop_id + ROUND((RAND() * SUM(days)*9999),-1) ) AS itemid
      */
     public function getProducts($itemid = 0) {
         $itemid == 0 && $itemid = $this->itemid;
-        $sql = "SELECT p.*,pp.workshop_id FROM :cost_product AS p LEFT JOIN (SELECT product_id,workshop_id FROM :production_product_days WHERE fromid=:fromid AND production_id=:itemid  GROUP BY product_id ) AS pp ON p.itemid=pp.product_id WHERE p.cost_id=:itemid ";
+        $sql = "SELECT p.*,pp.workshop_id FROM :cost_product AS p LEFT JOIN (SELECT product_id,workshop_id FROM :production_product WHERE fromid=:fromid AND production_id=:itemid  GROUP BY product_id ) AS pp ON p.itemid=pp.product_id WHERE p.fromid=:fromid AND  p.cost_id=:itemid ";
         $data = array(
-            ':production_product_days' => ProductionProductDays::$table,
+            ':production_product' => ProductionProduct::$table,
             ':cost_product' => CostProduct::$table,
             ':itemid' => $itemid,
             ':fromid' => Ak::getFormid() ,
@@ -192,6 +215,27 @@ SELECT (product_id+workshop_id + ROUND((RAND() * SUM(days)*9999),-1) ) AS itemid
         );
         $sql = strtr($sql, $data);
         $result = self::$db->createCommand($sql)->queryAll();
+        return $result;
+    }
+    
+    public function getWid() {
+    }
+    
+    public function getPidWid($itemid = 0) {
+        $itemid == 0 && $itemid = $this->itemid;
+        $sql = "SELECT product_id,workshop_id FROM :table WHERE fromid = :fromid AND production_id=:itemid ORDER BY product_id DESC";
+        $data = array(
+            ':table' => ProductionProduct::$table,
+            ':itemid' => $itemid,
+            ':fromid' => Ak::getFormid() ,
+        );
+        
+        $sql = strtr($sql, $data);
+        $tags = self::$db->createCommand($sql)->queryAll();
+        $result = array();
+        foreach ($tags as $value) {
+            $result[$value['product_id']] = $value['workshop_id'];
+        }
         return $result;
     }
 }

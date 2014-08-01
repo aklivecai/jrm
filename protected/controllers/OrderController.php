@@ -5,13 +5,20 @@ class OrderController extends Controller {
         $this->modelName = 'Order';
     }
     public function getLink($id, $status) {
-        $text = '处理订单';
+        $id = $this->setSId($id);
+        $text = Tk::g(array(
+            'Order',
+            'Admin'
+        ));
         $arr = array(
             'id' => $id
         );
         $style = array();
         if ($status == 999 || $status == 200) {
-            $text = '浏览订单';
+            $text = Tk::g(array(
+                'View',
+                'Order'
+            ));
             $url = $this->createUrl('view', $arr);
             $style['class'] = 'ibtn-success';
         } else {
@@ -30,8 +37,8 @@ class OrderController extends Controller {
         );
         //存在生产模块
         if (Tak::isCost()) {
-            $result[] = JHtml::link('成本核算', array(
-                '/Cost/Create',
+            $result[] = JHtml::link('生产管理', array(
+                '/Production/View',
                 'id' => $id
             ) , array(
                 'class' => 'target-win ibtn ixbtn-mini',
@@ -41,9 +48,18 @@ class OrderController extends Controller {
         return implode(' | ', $result);
     }
     public function actionView($id) {
+        
         $model = $this->loadModel($id);
+        
+        $orderReview = null;
+        if ($model->isStatusOver()) {
+            $orderReview = $model->getOrderReview();
+        }
+        
         $this->render('views', array(
             'model' => $model,
+            'id' => $id,
+            'orderReview' => $orderReview,
         ));
     }
     public function actionIndex() {
@@ -56,7 +72,7 @@ class OrderController extends Controller {
         if ($model->status != 10) {
             $this->redirect(array(
                 'updates',
-                'id' => $model->primaryKey
+                'id' => $id
             ));
         }
         $m = 'OrderFlow';
@@ -98,10 +114,9 @@ class OrderController extends Controller {
                 }
             }
         }
-        
         $this->redirect(array(
             'updates',
-            'id' => $model->primaryKey
+            'id' => $id,
         ));
     }
     public function actionUpdates($id) {
@@ -109,9 +124,24 @@ class OrderController extends Controller {
         $temp = 'updates';
         if ($model->status == 999 || $model->status == 200 || $model->status == 10) {
             $temp = 'views';
+        } else {
+            if (!$model->serialid) {
+                $model->serialid = Order::getSerialidMax();
+            }
         }
         $this->render($temp, array(
             'model' => $model,
+            'id' => $id,
+        ));
+    }
+    public function actionUpData($id) {
+        $model = $this->loadModel($id);
+        $model->serialid = Tak::getPost('serialid', '');
+        $model->cnote = Tak::getPost('cnote', '');
+        $model->save();
+        $this->redirect($this->returnUrl ? $this->returnUrl : array(
+            'updates',
+            'id' => $id
         ));
     }
     public function actionStatus($id, $status) {
@@ -121,22 +151,31 @@ class OrderController extends Controller {
         } elseif ($model->status == $status) {
             $this->redirect(array(
                 'updates',
-                'id' => $model->primaryKey
+                'id' => $id,
             ));
         }
-        $model->saveStatus($status);
+        if ($status == 101) {
+            $model->serialid = Tak::getPost('serialid', '');
+            $model->cnote = Tak::getPost('cnote', '');
+            $model->save();
+            $note = '';
+        } else {
+            $note = Tak::getPost('note', '');
+        }
+        $model->saveStatus($status, $note);
         $this->redirect($this->returnUrl ? $this->returnUrl : array(
             'updates',
-            'id' => $model->primaryKey
+            'id' => $id
         ));
     }
     
     public function actionFlowset($id) {
         $model = $this->loadModel($id);
+        $itemid = $this->getSId($id);
         $m = 'OrderFlow';
         $flow = new $m;
         if (isset($_POST[$m])) {
-            $_POST[$m]['order_id'] = $id;
+            $_POST[$m]['order_id'] = $itemid;
             $flow->attributes = $_POST[$m];
             if ($flow->save()) {
                 // Tak::KD($_POST[$m],1);
@@ -157,7 +196,44 @@ class OrderController extends Controller {
         }
         $this->redirect(array(
             'updates',
-            'id' => $model->primaryKey
+            'id' => $id,
+        ));
+    }
+    
+    public function actionUpdatePrice($id, $itemid, $value) {
+        $model = $this->loadModel($id);
+        if ($model->isStatusOver() || $model->status == 1) {
+            exit;
+        }
+        if (!is_numeric($value) && $value <= 0) {
+            $this->error();
+        }
+        $value = floatval($value);
+        $orderProduct = OrderProduct::model()->findByPk($itemid);
+        if ($orderProduct === null || $orderProduct->order_id != $model->itemid) {
+            $this->error();
+        }
+        $orderProduct->price = $value;
+        $orderProduct->sum = $orderProduct->price * $amount;
+        if ($orderProduct->save()) {
+            $model->upTotal();
+        } else {
+            print_r($orderProduct->getErrors());
+        }
+    }
+    
+    public function actionWindow() {
+        $m = $this->modelName;
+        $model = new $m('search');
+        $model->unsetAttributes(); // clear any default values
+        if (isset($_GET[$m])) {
+            $model->attributes = $_GET[$m];
+        }
+        $data = array();
+        $this->_setLayout('columnWindows');
+        $this->render('window', array(
+            'data' => $data,
+            'model' => $model,
         ));
     }
 }

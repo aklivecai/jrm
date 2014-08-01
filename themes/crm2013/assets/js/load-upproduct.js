@@ -81,6 +81,7 @@ jQuery(function($) {
             for (i = 0; i < len; i++) {
                 if (!checkeProduct(odata[i]["itemid"])) {
                     obj = {};
+                    //window.open 拆散对象，ＩＥ中窗口传递过来的数据，窗口已经关闭，会出错，无法引用到对象,被调用的对象已与其客户端断开连接
                     for (var el in odata[i]) {
                         obj[el] = odata[i][el];
                     };
@@ -109,7 +110,7 @@ jQuery(function($) {
         var self = this;
         self.itemid = ko.observable();
         self.price = ko.observable(0).extend({
-            numeric: 2,
+            numeric: 4,
             rateLimit: 500
         });
         self.number = ko.observable(1).extend({
@@ -120,10 +121,10 @@ jQuery(function($) {
         /*总价*/
         self.totals = ko.computed(function() {
             var total = 0;
-            number = formatCurrency(self.number()),
-            price = formatCurrency(self.price());
-            total += formatCurrency(number * price);
-            return formatCurrency(total);
+            number = formatFloat(self.number(), 4),
+            price = formatFloat(self.price(), 4);
+            total += formatFloat(number * price, 4);
+            return formatFloat(total, 4);
         });
         self.isNews = function() {
             return self.obj.product_id == self.itemid();
@@ -167,7 +168,7 @@ jQuery(function($) {
             jQuery.each(self.list(), function() {
                 total += this.totals();
             });
-            return formatCurrency(total);
+            return formatFloat(total, 4);
         });
         self.edit = function(item) {
             var _item = self.selectedItem();
@@ -305,6 +306,10 @@ jQuery(function($) {
     ko.applyBindings(viewm, document.getElementById('table-upproduct'));
     $('#addproduct').on('click', function() {
         var wurl = createUrl("Product/window", ["warehouse_id=" + $("#Movings_warehouse_id").val()]);
-        ShowModal(wurl,{width:800,height:650,name:'windowName'});
+        ShowModal(wurl, {
+            width: 800,
+            height: 650,
+            name: 'windowName'
+        });
     });
 })

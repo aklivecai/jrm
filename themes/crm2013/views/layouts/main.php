@@ -47,9 +47,7 @@ $jss = array(
     'plugins/intro/intro.js',
     
     'plugins/stepywizard/jquery.stepy.js',
-    // 'plugins/validate/jquery.validate.min.js',
-    
-    
+    // 'plugins/validate/jquery.validate.min.js',  
 );
 
 $this->regCssFile(array(
@@ -83,15 +81,31 @@ if (YII_DEBUG) {
 Tak::regScriptFile($scrpitS, 'static');
 Tak::regCssFile($cssS, 'static');
 $this->regScriptFile($jss);
+
+Tak::regScript('crmpatch', 'var CrmPath = "' . Yii::app()->getBaseUrl() . '/";', CClientScript::POS_HEAD);
+
+$targetWin = 
+<<<END
+$(document).on('click','.target-win', function(event) {
+    event.preventDefault();
+    var url = $(this).attr('href'),
+        width=$(this).attr('data-width')?$(this).attr('data-width'):1100
+    ;
+    url += url.indexOf('?') > 0 ? '&' : '?';
+    url += '__x=' + Math.random();
+    ShowModal(url,{width:width,height:500});
+});
+END;
+Tak::regScript('target-win', $targetWin, CClientScript::POS_END);
 ?>
     <script type="text/javascript">
-    var CrmPath = '<?php echo Yii::app()->getBaseUrl(); ?>/';
+    
     </script>
     <!--[if lt IE 10]>
     <script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/ie.js?>"></script>
     <![endif]-->
-    <script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/lib.js?20140616>"></script>
-    <script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/actions.js?20140616>"></script>
+    <script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/lib.js?20140617>"></script>
+    <script type="text/javascript" src="<?php echo $this->getAssetsUrl(); ?>js/actions.js?20140624>" charset="utf-8"></script>
   </head>
 
   <body id="ibody" class="<?php echo Yii::app()->user->getState('themeSettings_bg'); ?>" >
@@ -157,9 +171,6 @@ echo CHtml::tag('a', array(
           <div class="adminControl active"> 欢迎，
             <?php
 echo Tak::getManame();
-// echo Tak::getManageid();
-
-
 ?>
 
           </div>
@@ -239,49 +250,62 @@ CHtml::tag('iframe', array(
 ) , '') ?>
       </div>
     </div>
-    <script type="text/javascript">
-$(document).on('click','.target-win', function(event) {
-    event.preventDefault();
-    var url = $(this).attr('href'),
-        width=$(this).attr('data-width')?$(this).attr('data-width'):950
-    ;
-    url += url.indexOf('?') > 0 ? '&' : '?';
-    url += '__x=' + Math.random();
-    ShowModal(url,{width:width,height:500});
-});
-    </script>
-<?php
-Tak::showMsg();
-Tak::copyright();
-/*
-$tm = new JImportProduct();
-$cates = $tm->getCateId('aacC1/bbc/ccc/33445566',500);
-Tak::KD($cates);
-*/
-?>
-    <!--
     <?php
-if (YII_DEBUG) {
+Tak::showMsg();
+?>
+    <?php Tak::copyright() ?>
+    <?php
+if (YII_DEBUG && false) {
+    
+    $str = '
+            <ul>
+                <li>
+                    导入通讯录：1个<a href="/AddressBook/Admin?AddressBook[add_time]=1395019772&AddressBook[add_ip]=1885283417">点击浏览</a>
+                </li>
+            </ul>
+        
+';
+    echo strlen($str);
+    echo "\n";
+    
+    $str = AK::strip_nr($str);
+    echo strlen($str);
+    echo "\n";
+    
+    echo $str;
+    
     $cost_id = Tak::fastUuid();
-    $str = Tak::fastUuid();
+    for ($i = 20;$i > 0;$i--) {
+        $cost_id = Tak::numAdd($cost_id, $i);
+        echo sprintf("%s\n", $cost_id);
+    }
+    
+    $str = Tak::fastUuid() . '122223333333333333333333333333.x%|898sxs;.$ContactpPrson.*http://hao123.com';
     $str = 'Clienteles.**http://hao123.com||http%3A%2F%2Fhao123.com';
     $str = "abcdefghijklmnopqrstuvwz=.";
-    $str = "http://192.168.0.201/GitHub/CRM/manage/RevokeSub/index.php?name=&t=20";
+    $str = "http://192.168.0.201/GitHub/CRM/manage/RevokeSub/d0bfbcf5lkXO8tBldSAltbUAYOVFtRUFQGAApKQkxSUQoBB1NQVgBVHRNO?name=8a0b3b76RMK645V1JYDgNWVwMCVFAFVwBVVVIdGx1QAloNA1NQAFBVTRoc";
+    // $str = "1";
     $s1 = Tak::setCryptKey($str);
     $s2 = Tak::getCryptKey($s1);
-    echo sprintf("\n %s\n %s\n %s\n", strlen($str) , strlen($s1) , strlen($s2));
-    echo sprintf("\n %s\n %s\n %s\n", $str, $s1, $s2);
+    echo strlen($s1);
+    echo sprintf("\n\n %s\n\n %s\n\n %s\n\n", $str, $s1, $s2);
     
     $crypt = new SysCrypt();
     $s1 = $crypt->encrypt($str);
+    
     $s2 = $crypt->decrypt($s1);
     echo sprintf("%s\n %s\n", $s1, $s2);
     // urldecode
+    echo strlen(Yii::app()->request->url);
 }
-?>
-    -->
-
+/*
+  <!---->
     <!--注意,下面href后没有双引号,若要加入需用%22-->
-<a href="about:<a href=%22http://www.9juren.com/xxx.zip%22> 点此下载 </a>" target="_blank"> 点此打入下载页面 </a>
+    <!--
+    <a href="about: 点此下载" target="_blank"> 点此打入下载页面 </a>
+    <a href="data:text/html, 点此下载" target="_blank"> 点此打入下载页面 </a>
+    -->
+*/
+?>  
   </body>
 </html>

@@ -262,13 +262,14 @@ class Tak extends Ak {
             'file' => 'file',
             'invite' => ',invite,',
             'job' => ',job,',
-            'order' => ',order,',
+            'order' => ',order,orderconfig,',
             'training' => ',training,',
             'clientele' => ',clientele,contactpPrson,contact,clienteles,',
-            'pss' => ',purchase,stocks,product,sell,',
+            'pss' => ',purchase,stocks,product,sell,category,',
             'subordinate' => ',subordinate,',
             'production' => ',production,cost,',
-            'setting' => ',category,changepwd,profile,sell,orderconfig,'
+            'wage' => ',wage,department,',
+            'setting' => ',changepwd,profile,sell,'
         );
         $items = array(
             'index' => array(
@@ -296,69 +297,6 @@ class Tak extends Ak {
                             '/Site/Profile'
                         ) ,
                         'visible' => true,
-                    ) ,
-                    array(
-                        'icon' => 'th',
-                        'label' => sprintf($strSpan, Tk::g(array(
-                            'Warehouse',
-                            'Admin'
-                        ))) ,
-                        'url' => array(
-                            '/Warehouse/Admin'
-                        ) ,
-                        'visible' => self::checkAccess('Warehouse.*') ,
-                    ) ,
-                    array(
-                        'icon' => 'th',
-                        'label' => sprintf($strSpan, Tk::g('Product Type')) ,
-                        'url' => array(
-                            '/Category/Admin?m=product'
-                        ) ,
-                        'visible' => self::checkAccess('Category.*') ,
-                    ) ,
-                    array(
-                        'icon' => 'shopping-cart',
-                        'label' => sprintf($strSpan, Tk::g(array(
-                            'Order',
-                            'Config'
-                        ))) ,
-                        'url' => array(
-                            '/OrderConfig/Config'
-                        ) ,
-                        'visible' => self::checkAccess('Orderconfig.*') ,
-                    ) ,
-                    'product' => array(
-                        'icon' => 'screenshot',
-                        'url' => array(
-                            '/Import/Product'
-                        ) ,
-                        'label' => sprintf($strSpan, Tk::g(array(
-                            'Import',
-                            'Product'
-                        ))) ,
-                        'visible' => self::checkAccess('Import.Product') ,
-                    ) ,
-                    'iClientele' => array(
-                        'icon' => 'screenshot',
-                        'url' => array(
-                            '/Import/Clientele'
-                        ) ,
-                        'label' => sprintf($strSpan, Tk::g(array(
-                            'Import',
-                            'Clientele'
-                        ))) ,
-                        'visible' => self::checkAccess('Import.Clientele') ,
-                    ) ,
-                    'iaddressbook' => array(
-                        'icon' => 'screenshot',
-                        'url' => array(
-                            '/Import/AddressBook'
-                        ) ,
-                        'label' => sprintf($strSpan, Tk::g(array(
-                            'Import',
-                            'AddressBook'
-                        ))) ,
-                        'visible' => self::checkAccess('Import.Addressbook') ,
                     ) ,
                 )
             ) ,
@@ -471,6 +409,18 @@ class Tak extends Ak {
                 ) ,
                 'visible' => self::checkAccess('Clientele.*') ,
                 'items' => array(
+
+                    'iClientele' => array(
+                        'icon' => 'screenshot',
+                        'url' => array(
+                            '/Import/Clientele'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Import',
+                            'Clientele'
+                        ))) ,
+                        'visible' => self::checkAccess('Import.Clientele') ,
+                    ) ,                    
                     array(
                         'icon' => 'plus',
                         'label' => sprintf($strSpan, Tk::g(array(
@@ -547,6 +497,17 @@ class Tak extends Ak {
                 'label' => sprintf($strSpan, Tk::g('AddressBook')) ,
                 'visible' => self::checkAccess('Addressbook.Index') || self::checkAccess('Addressbook') ,
                 'items' => array(
+                    'iaddressbook' => array(
+                        'icon' => 'screenshot',
+                        'url' => array(
+                            '/Import/AddressBook'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Import',
+                            'AddressBook'
+                        ))) ,
+                        'visible' => self::checkAccess('Import.Addressbook') ,
+                    ) ,
                     array(
                         'icon' => 'plus',
                         'label' => sprintf($strSpan, Tk::g('AddressGroups')) ,
@@ -662,6 +623,36 @@ class Tak extends Ak {
                 'items' => array(
                     array(
                         'icon' => 'th',
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Warehouse',
+                            'Admin'
+                        ))) ,
+                        'url' => array(
+                            '/Warehouse/Admin'
+                        ) ,
+                        'visible' => self::checkAccess('Warehouse.*') ,
+                    ) ,
+                    array(
+                        'icon' => 'th',
+                        'label' => sprintf($strSpan, Tk::g('Product Type')) ,
+                        'url' => array(
+                            '/Category/Admin?m=product'
+                        ) ,
+                        'visible' => self::checkAccess('Category.*') ,
+                    ) ,
+                    'product' => array(
+                        'icon' => 'screenshot',
+                        'url' => array(
+                            '/Import/Product'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Import',
+                            'Product'
+                        ))) ,
+                        'visible' => self::checkAccess('Import.Product') ,
+                    ) ,
+                    array(
+                        'icon' => 'th',
                         'label' => sprintf($strSpan, Tk::g('Product')) ,
                         'url' => array(
                             '/Product/Admin'
@@ -698,11 +689,34 @@ class Tak extends Ak {
             'order' => array(
                 'visible' => self::checkAccess('Order.*') ,
                 'icon' => 'isw-list',
-                'label' => sprintf($strSpan, Tk::g('Order')) ,
+                'label' => sprintf($strSpan, Tk::g(array('Order','Admin'))) ,
                 'url' => array(
                     '/Order/Index'
                 ) ,
                 'items' => array(
+
+                    array(
+                        'icon' => 'shopping-cart',
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Order',
+                            'Config'
+                        ))) ,
+                        'url' => array(
+                            '/OrderConfig/Config'
+                        ) ,
+                        'visible' => self::checkAccess('Orderconfig.*') ,
+                    ) ,
+                    'iorder' => array(
+                        'icon' => 'screenshot',
+                        'url' => array(
+                            '/Import/Order'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Import',
+                            'Order'
+                        ))) ,
+                        'visible' => self::checkAccess('Import.Order') && (self::getFormid() == 1 || self::getFormid() == 5139) ,
+                    ) ,
                     array(
                         'icon' => 'shopping-cart',
                         'label' => '<span class="text">' . Tk::g(array(
@@ -727,7 +741,7 @@ class Tak extends Ak {
             'production' => array(
                 'visible' => self::isCost() && self::checkAccess('Production.*') ,
                 'icon' => 'isw-list',
-                'label' => sprintf($strSpan, Tk::g('Production')) ,
+                'label' => sprintf($strSpan, Tk::g(array('Production','Admin'))) ,
                 'url' => array(
                     '/Production/Index'
                 ) ,
@@ -762,6 +776,36 @@ class Tak extends Ak {
                             '/cost/Index'
                         ) ,
                         'label' => sprintf($strSpan, Tk::g('历史成本核算')) ,
+                    ) ,
+                ) ,
+            ) ,
+            'wage' => array(
+                'visible' => self::isWage() && self::checkAccess('Wage.*') ,
+                'icon' => 'isw-list',
+                'label' => sprintf($strSpan, Tk::g(array('计件','Wage'))) ,
+                'url' => array(
+                    '/Wage/Index'
+                ) ,
+                'items' => array(
+                    'Workshop' => array(
+                        'icon' => 'certificate',
+                        'url' => array(
+                            '/Department/Admin'
+                        ) ,
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Workshop',
+                            'Setting'
+                        ))) ,
+                    ) ,
+                    array(
+                        'icon' => 'th-list',
+                        'label' => sprintf($strSpan, Tk::g(array(
+                            'Wage',
+                            'Admin'
+                        ))) ,
+                        'url' => array(
+                            '/Wage/Index'
+                        )
                     ) ,
                 ) ,
             ) ,
@@ -1030,22 +1074,6 @@ class Tak extends Ak {
                         ) ,
                         'visible' => YII_DEBUG
                     ) ,
-                    array(
-                        'icon' => 'fire',
-                        'label' => '<span class="text">导入VIP</span>',
-                        'url' => array(
-                            '/Site/Tak'
-                        ) ,
-                        'visible' => YII_DEBUG || self::getAdmin()
-                    ) ,
-                    array(
-                        'icon' => '',
-                        'label' => '<span class="text">Member</span>',
-                        'url' => array(
-                            '/Site/Tak'
-                        ) ,
-                        'visible' => YII_DEBUG
-                    ) ,
                 ) ,
             );
             $items[] = array(
@@ -1299,24 +1327,6 @@ class Tak extends Ak {
         }
         return self::getCryptNum($id, $str);
     }
-    /*解密ID*/
-    public static function getSId($id) {
-        if (!is_numeric($id) && strlen($id) >= 35) {
-            $result = Tak::getCryptKey($id);
-        } else {
-            $result = $id;
-        }
-        return $result;
-    }
-    /*加密要传输的ID*/
-    public static function setSId($id) {
-        if (!is_numeric($id) || strlen($id) >= 35) {
-            $result = $id;
-        } else {
-            $result = Tak::setCryptKey($id, 180000);
-        }
-        return $result;
-    }
     
     public static function reptHtml($data) {
         $content = preg_replace("/<a[^>]*>/i", "", $content);
@@ -1360,9 +1370,50 @@ class Tak extends Ak {
         return $result;
     }
     
+    public static function isWage() {
+        $id = self::getFormid();
+        $data = array(
+            1 => '',
+            5139 => '深圳市卡森家具有限公司',
+            3930 => '佛山市木之源家具有限公司',
+            4960 => '深圳市金品家具有限公司',
+            2446 => '深圳市泰之林家具限公司',
+            4083=>'东莞市圣发家具有限公司',
+        );
+        return isset($data[$id]);
+    }
     public static function isCost() {
         $id = self::getFormid();
-        return $id == 1 || $id == 5139 || $id == 3930 || $id == 4960;
+        $data = array(
+            1 => '',
+            5139 => '深圳市卡森家具有限公司',
+            3930 => '佛山市木之源家具有限公司',
+            4960 => '深圳市金品家具有限公司',
+            2446 => '深圳市泰之林家具限公司',
+            5471 => '深圳市冠邦世佳家居有限公司',
+            4973 => '深圳市欧廷美居家具有限公司',
+            4083=>'东莞市圣发家具有限公司',
+        );
+        return isset($data[$id]);
+    }
+    
+    public static function getMsgByErrors($errors, $one = true) {
+        if ($one) {
+            $result = "<ul>";
+        }
+        if (is_array($errors)) {
+            foreach ($errors as $key => $value) {
+                if (is_array($value)) {
+                    $result.= self::getMsgByErrors($value, fasel);
+                } else {
+                    $result.= sprintf("<li>%s</li>", $value);
+                }
+            }
+        }        
+        if ($one) {
+            $result.= "</ul>";
+        }
+        return $result;
     }
 }
 /*

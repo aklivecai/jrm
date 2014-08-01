@@ -55,7 +55,9 @@ jQuery(function($) {
                     html = '',
                     tdata = [];
                 dropdownlist.empty().addClass('tips-loading');
-                if (trim(qustr) == '') {
+                if (tags.length == 0) {
+                    html = '仓库中没有产品!';
+                } else if (trim(qustr) == '') {
                     html = '请输入要搜索的库存!';
                 } else {
                     if (tags.length > 0) {
@@ -161,28 +163,29 @@ jQuery(function($) {
     window.showOk = function() {
         window.location.href = '';
     }
+    form.find('.ibtn-ok').on('click', function(event) {
+        isok = false;
+        form.find('input[required]').each(function(i, elem) {
+            var t = $(elem),
+                v = t.val();
+            if (v == '' || v == 0) {
+                t.addClass('error');
+                t.parents('.table-product').eq(0).removeClass('action-active');
+                if (!isok) {
+                    isok = t;
+                };
+            } else {
+                t.removeClass('error');
+            }
+        });
+        if (isok) {
+            isok.focus();
+            event.preventDefault();
+            return false;
+        }
+    });
     form.attr('target', ifm.attr('name'));
     form.on('submit', function(event) {
-        isok = false;
-        if (tak.ihtml5.required) {
-            form.find('input[required]').each(function(i, elem) {
-                var t = $(elem),
-                    v = t.val();
-                if (v == '' || v == 0) {
-                    t.addClass('error');
-                    if (!isok) {
-                        isok = t;
-                    };
-                } else {
-                    t.removeClass('error');
-                }
-            });
-            if (isok) {
-                isok.focus();
-                event.preventDefault();
-                return false;
-            }
-        };
         var itemid = $('#itemid').val();
         itemid += itemid != '' ? '-订单' : '';
         name = prompt('输出保存的标题', itemid);

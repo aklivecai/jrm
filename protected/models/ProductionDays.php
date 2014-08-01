@@ -16,7 +16,7 @@ class ProductionDays extends DbRecod {
     public function rules() {
         return array(
             array(
-                'itemid, production_id, workshop_id, process',
+                'production_id, workshop_id, process,days,planner',
                 'required'
             ) ,
             array(
@@ -42,7 +42,7 @@ class ProductionDays extends DbRecod {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array(
-                'itemid, production_id, workshop_id, process, days, progress',
+                'itemid, production_id, workshop_id, process, days, progress,planner',
                 'safe',
                 'on' => 'search'
             ) ,
@@ -71,6 +71,7 @@ class ProductionDays extends DbRecod {
         $criteria->compare('process', $this->process, true);
         $criteria->compare('days', $this->days, true);
         $criteria->compare('progress', $this->progress);
+        $criteria->compare('planner', $this->planner);
         return $cActive;
     }
     
@@ -79,30 +80,21 @@ class ProductionDays extends DbRecod {
     }
     //默认继承的搜索条件
     public function defaultScope() {
-        $arr = parent::defaultScope();
-        $condition = array(
-            $arr['condition']
-        );
-        // $condition[] = 'display>0';
-        $arr['condition'] = join(" AND ", $condition);
-        return $arr;
+        return array();
     }
     //保存数据前
     protected function beforeSave() {
-        $result = parent::beforeSave();
-        if ($result) {
-            if ($this->isNewRecord) {
-            } else {
-            }
+        if ($this->isNewRecord) {
+            $this->itemid = Ak::fastUuid();
+            $this->fromid = Ak::getFormid();
         }
-        return $result;
+        return true;
     }
     //保存数据后
     protected function afterSave() {
-        parent::afterSave();
     }
     //删除信息后
     protected function afterDelete() {
-        parent::afterDelete();
+        // parent::afterDelete();      
     }
 }

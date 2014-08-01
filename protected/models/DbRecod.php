@@ -8,8 +8,9 @@ class DbRecod extends ModuleRecord {
     public function getDbConnection() {
         if (self::$_db !== null) return self::$_db;
         else {
-            if ($db = Ak::db(true)) {
+            if ($db = Ak::db()) {
                 self::$db = self::$_db = $db;
+                self::$_db->setActive(true);
             } else {
                 self::$_db = self::$db;
             }

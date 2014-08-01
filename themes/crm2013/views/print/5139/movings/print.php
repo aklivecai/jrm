@@ -61,7 +61,7 @@ $totals = 0;
 		<input type="text" value="<?php echo $model->enterprise ?>" >
 	</div>
 	<div class="col3 txt-center">		
-		<?php echo date("Y 年 m 月 d 日", $model->time_stocked); ?>
+		<?php echo date("Y 年 m 月 d 日", $model->time); ?>
 	</div>
 	<div class="col3 txt-right">
 		<?php echo CHtml::encode($numbers); ?>:
@@ -94,9 +94,9 @@ $totals = 0;
 				<td><?php echo $value->iProduct->name ?></td>
 				<td class="txt-center"><?php echo $value->iProduct->unit ?></td>
 				<td><?php echo $value->iProduct->spec ?></td>
-				<td><?php echo $value->numbers ?></td>
-				<td><?php echo $value->price ?></td>
-				<td class="txt-bold"><?php echo $value->total ?></td>
+				<td><?php echo Tak::getNums($value->numbers) ?></td>
+				<td><?php echo Tak::getNums($value->price) ?></td>
+				<td class="txt-bold"><?php echo Tak::getNums($value->total) ?></td>
 			</tr>
 		<?php
     $totals+= $value->total;
@@ -107,7 +107,7 @@ endforeach
 			<tr>
 				<td colspan="5"></td>
 				<td class="txt-right">合计:</td>
-				<td><strong><?php echo sprintf('%.2f', $totals) ?></strong></td>
+				<td><strong><?php echo Tak::getNums($totals) ?></strong></td>
 			</tr>
 		</tfoot>		
 	</table>
@@ -126,7 +126,7 @@ endforeach
 	</div>
 	<div class="col4 txt-right">
 		领料人:
-		<input type="text" value="<?php echo $model->us_launch ?>" >
+		<input style="width:150px" type="text" value="<?php echo $model->us_launch ?>" >
 	</div>
 	<i class="clearfix"></i>
 	<div class="noprint txt-center footer" >

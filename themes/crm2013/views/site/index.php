@@ -108,6 +108,7 @@ foreach ($items as $value) {
     $this->widget('ext.AkCListView', array(
         'dataProvider' => $mclientele->sort_time()->recently(5, "industry=$value") ,
         'itemView' => '_clientele',
+        'template' => '{items}',
         'preItemsTag' => $pre_html,
         'postItemsTag' => $post_html,
         'emptyText' => '<p>暂无数据</p>',
@@ -142,6 +143,7 @@ foreach ($items as $value) {
     <?php
 $this->widget('ext.AkCListView', array(
     'dataProvider' => contactpPrson::model()->sort_time()->recently(10) ,
+    'template' => '{items}',
     'itemView' => '_contactpPrson',
     'emptyText' => '<p>暂无数据</p>',
     'htmlOptions' => array(
@@ -180,6 +182,7 @@ $this->widget('ext.AkCListView', array(
 $this->widget('ext.AkCListView', array(
     'dataProvider' => Contact::model()->sort_time()->recently(10) ,
     'itemView' => '_contact',
+    'template' => '{items}',
     'emptyText' => '<p>暂无数据</p>',
     'htmlOptions' => array(
         'class' => ''

@@ -165,13 +165,12 @@ END;
         if (!$k) {
             isset(Yii::app()->request->cookies['fid']) && $k = Yii::app()->request->cookies['fid']->value;
             if (!$k && strpos(Yii::app()->user->returnUrl, 'fid')) {
-
+                
                 $parts = parse_url(urldecode(Yii::app()->user->returnUrl));
-
+                
                 parse_str($parts['query'], $query);
-
+                
                 isset($query['fid']) && $k = $query['fid'];
-
             }
             if ($k) {
                 $this->redirect($this->createUrl('login', array(
@@ -246,6 +245,7 @@ END;
     }
     
     public function actionPreviewTestMember($id) {
+        $id = $this->getSId($id);
         $msg = Profile::getOne($id);
         if ($msg === null) throw new CHttpException(404, '所请求的页面不存在。');
         if (!$this->isAjax) $this->_setLayout('//layouts/columnPreview');

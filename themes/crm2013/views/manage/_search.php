@@ -27,7 +27,15 @@ if (Tak::getAdmin()) {
 }
 ?>
 <?php
- $form->dropDownList($model, 'user_status', TakType::sitems('status', '状态'));
+echo ' ';
+/**默认查找启用的用户**/
+if ($model->user_status==-1){
+
+}elseif ($model->user_status != 0 || $model->user_status == '') {
+    $model->user_status = 1;
+}
+echo ' ';
+echo $form->dropDownList($model, 'user_status', TakType::sitems('status', '状态'));
 ?>
 <?php
 echo $form->dropDownList($model, 'branch', $branchs);
@@ -36,14 +44,14 @@ echo $form->dropDownList($model, 'branch', $branchs);
 echo $form->textFieldRow($model, 'user_name', array(
     'size' => 10,
     'maxlength' => 10,
-    'style' =>"width:85px;"
+    'style' => "width:85px;"
 ));
 ?>
 <?php
 echo $form->textFieldRow($model, 'user_nicename', array(
     'size' => 10,
     'maxlength' => 10,
-    'style' =>"width:85px;"
+    'style' => "width:85px;"
 ));
 ?>
 <?php

@@ -10,12 +10,27 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'method' => 'get',
 ));
 
+$_permissions = Permission::getList();
+
+$permissions = array(
+    '部门'
+);
+foreach ($_permissions as $key => $value) {
+    $permissions[$key] = $value;
+}
+
 echo $form->dropDownList($model, 'industry', TakType::items('industry', 0, '类型'));
+
+echo CHtml::dropDownList('permission', Tak::getQuery('permission') , $permissions, array(
+
+    'onchange' => "$('#Clientele_manageid').select2('val', '')",
+));
 
 echo $form->textFieldRow($model, 'manageid', array(
     'class' => 'select-manageid',
     'size' => 20,
-    'style' => 'width:150px'
+    'style' => 'width:150px',
+    'data-selectby' => '#permission:branch',
 ));
 
 echo $form->textFieldRow($model, 'clientele_name', array(

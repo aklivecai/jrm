@@ -1,6 +1,7 @@
 <?php if ($action == 'select'): ?>
-<button onclick="window.close()">关闭</button>
-<hr />
+    <div class="pop-bottom">
+        <button onclick="window.close()">关闭</button>
+    </div>
 <?php
 endif
 ?>
@@ -20,7 +21,9 @@ foreach ($data as $key => $value) {
         'id' => $key,
         'name' => $value['catename']
     );
-    $state = array();
+    $state = array(
+        'opened' => true
+    );
     // 不存在ＩＤ时候默认展开一级分类
     if (!$id) {
         // if ($value['child'] == 0) {

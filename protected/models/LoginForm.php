@@ -70,6 +70,9 @@ class LoginForm extends CFormModel {
      * This is the 'authenticate' validator as declared in rules().
      */
     public function authenticate($attribute, $params) {
+         if ($this->password==''||$this->username=='') {
+            return false;
+        }
         $this->_identity = new UserIdentity($this->fromid, $this->username, $this->password);
         if (!$this->_identity->authenticate()) {
             $key = 'username';
@@ -82,7 +85,10 @@ class LoginForm extends CFormModel {
                     $str = '不存在用户！';
                 break;
                 case 8:
-                    $str = '帐号禁止登录!';
+                    $str = '帐号禁止登录！';
+                break;
+                case 9:
+                    $str = '帐号还没有激活,请激活后使用！';
                 break;
                 default:
                 break;
@@ -106,9 +112,10 @@ class LoginForm extends CFormModel {
             $this->_identity = new UserIdentity($this->fromid, $this->username, $this->password);
             $this->_identity->authenticate();
         }
+        // Tak::KD($this->_identity->errorCode);
         if ($this->_identity->errorCode === UserIdentity::ERROR_NONE) {
         //记住密码，没有则为０,有则保存账户登录状态30天
-            $duration = $this->rememberMe ? 3600 * 24 * 30 : 0; // 30 days
+            $duration = $this->rememberMe ? 3600 * 24 * 1 : 0; // 30 days
             Yii::app()->user->login($this->_identity, $duration);
             // 更新登录次数，信息
             Manage::model()->upLogin();

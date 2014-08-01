@@ -67,6 +67,8 @@
 ul.yiiPager .first, ul.yiiPager .last {
     display: inline;
 }
+
+tfoot td .pagination{margin:0;}
 .pagination .first, .pagination .last {
     display: none;
 }
@@ -249,6 +251,7 @@ input[type=date] {
     min-height: 250px;
     padding: 8px;
 }
+.tab-content {}
 /* 出入库 */
 
 .not-mpr input {
@@ -702,7 +705,6 @@ label, input, button, select, textarea {
     transition: all 0.3s;
 }
 .move-clear-product ol {
-
     padding-left: 15px;
     height: auto;
     overflow: visible;
@@ -741,4 +743,49 @@ label, input, button, select, textarea {
 
 #table-product input {
     margin: 0;
+}
+input[type=number] {
+    -webkit-ime-mode: disabled;
+    -moz-ime-mode: disabled;
+    -ms-image-mode: disabled;
+    ime-mode: disabled;
+}
+
+/**工资车间管理**/
+.department .table input {
+    margin: 0;
+    width:88%;
+    height: 15px;
+    line-height: 15px;
+}
+.department form{
+    margin: 0;
+}
+.department .pagination{
+    margin:0;
+    float: right;
+}
+.department .btn{
+    margin:0;
+}
+
+/**工时录入**/
+.wage-create td{
+    padding: 1px;
+}
+.wage-create .type-date{
+    width: 85px;
+}
+.wage-create input{
+    margin: 0;
+    padding: 0;
+    width: 99%;
+}
+.wage-create label input{
+    width:65%;
+}
+.wage-create select{
+    margin: 0;
+    padding: 0;
+    width: 80px;
 }

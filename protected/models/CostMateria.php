@@ -36,7 +36,7 @@ class CostMateria extends DbRecod {
                 'max' => 25
             ) ,
             array(
-                'fromid, typeid, unit, price',
+                'fromid, typeid, unit',
                 'length',
                 'max' => 10
             ) ,
@@ -46,9 +46,13 @@ class CostMateria extends DbRecod {
                 'max' => 100
             ) ,
             array(
-                'numbers',
+                'price,numbers',
                 'length',
                 'max' => 20
+            ) ,
+            array(
+                'price,numbers',
+                'numerical',
             ) ,
             array(
                 'note',

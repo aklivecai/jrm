@@ -9,6 +9,23 @@ class Ak {
         }
         return $result;
     }
+    /**
+     * 取得字符串最后的数字累加1
+     * @param [type] $result [description]
+     */
+    public static function addIntStr($result) {
+        $result = preg_replace("/\d+/", "$$\\0$$", $result);
+        $result = explode('$$', $result);
+        $len = count($result);
+        $start = $len == 1 ? 0 : $result[$len - 2];
+        $start+= 1;
+        if ($len > 1) {
+            unset($result[$len - 1]);
+            unset($result[$len - 2]);
+            $start = sprintf(implode('', $result) . '%s', $start);
+        }
+        return $start;
+    }
     public static function K($msg, $file = 'main.log') {
         if (is_array($msg)) {
             $string = var_export($msg, TRUE); /*输出数组*/
@@ -16,7 +33,6 @@ class Ak {
             $string = $msg;
         }
         $dir = Yii::getPathOfAlias('webroot');
-        
         $fileName = sprintf('%s\log\%s', $dir, $file);
         $file = fopen($fileName, "a");
         fwrite($file, $string);
@@ -131,12 +147,14 @@ class Ak {
      * @param  boolean $iseover 是否一定要
      * @return [type]           [description]
      */
-    public static function db($iseover = false) {
+    public static function db($iseover = false, $fid = false) {
         if (self::$_db !== null) return self::$_db;
         $result = false;
         $temp = self::getDb('db');
-        if ($connection = self::getWdb()) {
-            // self::KD($connection,1);
+        if ($connection = self::getWdb($fid)) {
+            // self::KD($connection);
+            // self::KD($temp);
+            // echo('<pre style="display:none;">');
             $db = new CDbConnection($connection['dns'], $connection['username'], $connection['password']);
             $db->tablePrefix = $temp->tablePrefix;
             $db->charset = $temp->charset;
@@ -367,10 +385,14 @@ class Ak {
             'Y-m-d H:i:s'
         );
         if (isset($types[$type])) $type = $types[$type];
-        return date($type, $time);
+        $result = date($type, $time);
+        $result = str_replace('00:00', '', $result);
+        $result = str_replace(':00', '', $result);
+        return $result;
     }
-    public static function format_price($val = "0.00", $currency = "￥", $ifval = false) {
+    public static function format_price($val = "0.000", $currency = "￥", $ifval = false) {
         $result = Yii::app()->numberFormatter->formatCurrency($val, $currency);
+        $result = str_replace('.0000', '.00', $result);
         return $result;
     }
     /*获取iP数字*/
@@ -496,6 +518,14 @@ class Ak {
             }
         }
         return $result;
+    }
+    public static function isPhone($tel) {
+        $result = preg_match("/^0?(13[0-9]|15[012356789]|18[0236789]|14[57])[0-9]{8}$/", $tel);
+        return $result;
+    }
+    public static function isEmail($email) {
+        if (preg_match("/^[a-zA-Z0-9_-]{3,}+@[a-zA-Z0-9-]{2,}+.[a-zA-Z]{2,}$/", $email) > 0) return true;
+        else return false;
     }
     /*IP转成无符号数值*/
     public static function IP2Num($ip) {
@@ -774,7 +804,7 @@ class Ak {
     }
     public static function isPrice($str) {
         // $pattern = '/^\d+(:?[.]\d{1,2})$/';
-        $pattern = '/^\d{0,8}\.{0,1}(\d{1,2})?$/';
+        $pattern = '/^\d{0,8}\.{0,1}(\d{1,4})?$/';
         $result = true;
         if (preg_match($pattern, $str) == '0' || (strpos($str, '.') !== false && strpos($str, '.') == (strlen($str) - 1))) {
             $result = false;
@@ -817,7 +847,132 @@ class Ak {
     }
     public static function srcUrl($url) {
         $result = str_replace(dirname(Yii::app()->BasePath) , Yii::app()->homeUrl . '/', $url);
+        $result = str_replace('//', '/', $result);
         return str_replace('//', '/', $result);
+    }
+    
+    public static function ExcelDateToPhpDate($excelDateTime) {
+        $date_formate = floor($excelDateTime);
+        $time_formate = $excelDateTime - $date_formate;
+        return ($date_formate > 0) ? ($date_formate - 25569) * 86400 + $time_formate * 86400 : $time_formate * 86400;
+    }
+    
+    public static function strip_nr($string) {
+        $string = str_replace(array(
+            chr(13) ,
+            chr(10) ,
+            "\n",
+            "\r",
+            "\t"
+        ) , array(
+            '',
+            '',
+            '',
+            '',
+            ''
+        ) , $string);
+        //$string = preg_replace('/[\n\r\t]/', ' ', $string);
+        //$string =  str_replace("  "," ",$string);
+        $string = preg_replace('/\s(?=\s)/', '', $string);
+        $string = str_replace("> ", ">", $string);
+        //$string =  str_replace(" <","<",$string);
+        $pattern = array(
+            "/> *([^ ]*) *</", //去掉注释标记
+            "/<!--[^!]*-->/",
+            "'/\*[^*]*\*/'"
+        );
+        $replace = array(
+            ">\\1<",
+            "",
+            ""
+        );
+        return preg_replace($pattern, $replace, $string);
+    }
+    /*解密ID*/
+    public static function getSId($id) {
+        if (!is_numeric($id) && strlen($id) >= 35) {
+            $result = Tak::getCryptKey($id);
+        } else {
+            $result = $id;
+        }
+        return $result;
+    }
+    /*加密要传输的ID*/
+    public static function setSId($id) {
+        if (!is_numeric($id) || strlen($id) >= 35) {
+            $result = $id;
+        } else {
+            $result = self::setCryptKey($id, 180000);
+        }
+        return $result;
+    }
+    //功能：根据用户输入的Email跳转到相应的电子邮箱首页
+    public static function gotomail($mail) {
+        $t = explode('@', $mail);
+        $t = strtolower($t[1]);
+        if ($t == '163.com') {
+            return 'mail.163.com';
+        } else if ($t == 'vip.163.com') {
+            return 'vip.163.com';
+        } else if ($t == '126.com') {
+            return 'mail.126.com';
+        } else if ($t == 'qq.com' || $t == 'vip.qq.com' || $t == 'foxmail.com') {
+            return 'mail.qq.com';
+        } else if ($t == 'gmail.com') {
+            return 'mail.google.com';
+        } else if ($t == 'sohu.com') {
+            return 'mail.sohu.com';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'vip.sina.com') {
+            return 'vip.sina.com';
+        } else if ($t == 'sina.com.cn' || $t == 'sina.com') {
+            return 'mail.sina.com.cn';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'yahoo.com.cn' || $t == 'yahoo.cn') {
+            return 'mail.cn.yahoo.com';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'yeah.net') {
+            return 'www.yeah.net';
+        } else if ($t == '21cn.com') {
+            return 'mail.21cn.com';
+        } else if ($t == 'hotmail.com') {
+            return 'www.hotmail.com';
+        } else if ($t == 'sogou.com') {
+            return 'mail.sogou.com';
+        } else if ($t == '188.com') {
+            return 'www.188.com';
+        } else if ($t == '139.com') {
+            return 'mail.10086.cn';
+        } else if ($t == '189.cn') {
+            return 'webmail15.189.cn/webmail';
+        } else if ($t == 'wo.com.cn') {
+            return 'mail.wo.com.cn/smsmail';
+        } else if ($t == '139.com') {
+            return 'mail.10086.cn';
+        } else {
+            return '';
+        }
+    }
+    public static function sendEmail($email, $subject, $body, $from = '9juren@9juren.com') {
+        $mailer = Yii::app()->mailer;
+        $mailer->CharSet = "UTF-8";
+        $mailer->IsHTML(true);
+        $mailer->IsSMTP();
+        $mailer->SMTPAuth = true;
+        $mailer->Port = '25';
+        $mailer->Host = 'smtp.vip.163.com';
+        $mailer->Username = '9juren001';
+        $mailer->Password = 'juren001';
+        $mailer->From = '9juren001@vip.163.com';
+        $mailer->FromName = $from;
+        $mailer->AddReplyTo($from);
+        $mailer->AddAddress($email);
+        $mailer->Subject = $subject;
+        $mailer->Body = $body;
+        $sendmail = $mailer->Send();
     }
 }
 /*

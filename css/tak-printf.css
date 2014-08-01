@@ -1,6 +1,6 @@
   article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
 body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin: 0; padding: 0; }
-body, button, input, select, textarea { font: 12px/1.5 tahoma, arial, \5b8b\4f53; color:#555; }
+body, button, input, select, textarea { font: 10px/1.5 tahoma, arial, \5b8b\4f53; color:#555; }
 h1, h2, h3, h4, h5, h6 { font-size: 100%; }
 address, cite, dfn, em, var { font-style: normal; }
 code, kbd, pre, samp { font-family: courier new, courier, monospace; }
@@ -19,20 +19,29 @@ button, input, select, textarea { font-size: 100%; }
 .hide{
     display:none;
 }
+.show-print{
+	display: block;
+}
 
 html {height:auto; overflow:auto; }
 body{
-    font: 12px/1.5 tahoma, arial, \5b8b\4f53;
+    font: 11px/1.5 tahoma, arial, \5b8b\4f53;
     color: #555;
     background: #fff;    
     width:95%;
     margin:8px auto;
+}
+body,table td,table th{
+	font-size:11px !important;
 }
 
 .grid{float: left;padding: 18px;border:1px solid #cfcfcf;background: #fff;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
 .H{font-size:24px;font-weight:bold;text-align: center;}
 .R{text-align: right;}
 .B{font-weight: bold;}
+.L{
+	text-align: left;
+}
 table{border-collapse:collapse;}
 table.caption{margin-bottom: 5px;}
 table.list{border:1px solid #666;}

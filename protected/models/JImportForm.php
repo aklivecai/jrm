@@ -93,8 +93,8 @@ class JImportForm extends CFormModel {
                 $t = $this->checkS($key, $value[$key], $index);
                 if ($t) {
                     $_NAME = $this->getColName($key, $index);
-                    $_NAME = str_replace(']','',$_NAME);
-                    $_NAME = str_replace('[','_',$_NAME);
+                    $_NAME = str_replace(']', '', $_NAME);
+                    $_NAME = str_replace('[', '_', $_NAME);
                     $errors[] = $_NAME;
                 } else {
                     $row[$key] = $value[$key];
@@ -125,6 +125,7 @@ class JImportForm extends CFormModel {
             $result = array();
             // 字段不匹配，或者空行
             if ($head != $xhead) {
+                // if (count($head) != count($xhead)) {
                 // 删除文件
                 unlink($this->varfile);
                 return $result;
@@ -148,6 +149,7 @@ class JImportForm extends CFormModel {
                         }
                         continue;
                     }
+                    $error = 0;
                     foreach ($head as $key => $v) {
                         //可能会有ＮＵＬＬ值
                         $temp[$key] = $value[$key] ? $value[$key] : '';

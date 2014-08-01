@@ -146,7 +146,6 @@ class FUtils {
             'viv' => 'video/vnd.vivo',
             'vivo' => 'video/vnd.vivo',
             
-            'pdf' => 'application/pdf',
             'psd' => 'image/vnd.adobe.photoshop',
             'ai' => 'application/postscript',
             'eps' => 'application/postscript',
@@ -159,6 +158,8 @@ class FUtils {
             'xlsx' => 'application/msexcel',
             'ppt' => 'application/mspowerpoint',
             'pptx' => 'application/mspowerpoint',
+
+            'pdf' => 'application/pdf',
             
             'odt' => 'application/vnd.oasis.opendocument.text',
             'ods' => 'application/vnd.oasis.opendocument.spreadsheet',

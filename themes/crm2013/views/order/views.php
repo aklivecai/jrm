@@ -13,7 +13,7 @@ $this->breadcrumbs = array(
     $itemid,
 );
 $orderInfo = $model->getOrderInfo();
-$listStatus = $model->getListStatus();
+// $listStatus = $model->getListStatus();
 
 $pay_type = OrderConfig::getAlipay($orderInfo->pay_type, $fromid);
 ?>
@@ -39,17 +39,20 @@ $pay_type = OrderConfig::getAlipay($orderInfo->pay_type, $fromid);
 	</strong>
 	，
 	<?php echo $model->getAttributeLabel('manageid'); ?>：
-	<?php
+<?php
+$company = $model->company;
 if (isset($model->iManage)) {
-    echo CHtml::link($model->iManage->company, Yii::app()->createUrl('/Site/PreviewTestMember', array(
-        'id' => $model->manageid
+    $str = '<i class="icon-eye-open"></i>' . $model->company;
+    $company = CHtml::link($str, Yii::app()->createUrl('/Site/PreviewTestMember', array(
+        'id' => Tak::setSId($model->manageid)
     )) , array(
         'class' => 'data-ajax',
-        'title' => $model->iManage->company
+        'title' => $model->company
     ));
-} else {
-    echo '未知';
+} elseif ($company == '') {
+    $company = '未知';
 }
+echo $company;
 ?>
 	<!--，
 	<?php echo $model->getAttributeLabel('add_ip'); ?>：
@@ -66,6 +69,47 @@ if ($model->delivery_time > 0) {
 }
 ?>
 </p> 
+  <?php if ($model->status >= 101): ?>
+  <p>
+  <strong><?php echo $model->getAttributeLabel('serialid'); ?></strong>：
+  <span><?php echo $model->serialid; ?></span>
+  ，
+  <strong><?php echo $model->getAttributeLabel('cnote'); ?></strong>：
+  <span id="data-cnote"><?php echo $model->cnote; ?></span>
+  </p>
+<?php
+endif
+?>
+
+<?php if ($model->isStatusOver()): ?>
+<table class="tak-table">
+	<caption>订单评价</caption>
+	<colgroup align="center">
+	<col width="100px" />
+	</colgroup>
+	<tbody>
+<?php
+    if($orderReview):
+?>
+<tr>
+	<th>内容
+	<br />
+	<?php echo Tak::timetodate($orderReview['add_time'], 4) ?>
+	</th>
+	<td><?php echo JHtml::encode($orderReview['content']) ?></td>
+</tr>
+<?php
+    else:
+        echo "<tr><td>客户还没有进行评价!</td></tr>";
+?><?php
+    endif
+?>
+</tbody>
+</table>
+<?php
+endif
+?>
+
 <?php
 $this->renderPartial('_info', array(
     'model' => $model,

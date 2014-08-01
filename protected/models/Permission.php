@@ -82,6 +82,9 @@ class Permission extends CActiveRecord {
         $criteria->select = 'name,description';
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => 5000,
+            ) ,
         ));
     }
     
@@ -149,9 +152,28 @@ class Permission extends CActiveRecord {
     /**
      *获取所有的仓库管理员
      */
-    public static function getUWarehouses() {
+    public static function _getUWarehouses() {
         $sql = sprintf("SELECT r.userid,m.user_nicename,m.user_name FROM {{rbac_authassignment}} AS r LEFT JOIN {{manage}} AS m ON(r.userid=m.manageid)  WHERE r.fromid=%s AND r.itemname='Warehouse'", Ak::getFormid());
         $_result = Ak::getDb('db')->createCommand($sql)->queryAll();
+        $result = array();
+        foreach ($_result as $key => $value) {
+            $result[$value['userid']] = $value['user_nicename'] != '' ? $value['user_nicename'] : $value['user_name'];
+        }
+        return $result;
+    }
+    /**
+     *获取所有的仓库管理员
+     */
+    public static function getUWarehouses() {
+        $fid = Ak::getFormid();
+        $sql = sprintf("SELECT r.userid FROM {{rbac_authassignment}} AS r  WHERE r.fromid=%s AND r.itemname='Warehouse' GROUP BY r.userid", $fid);
+        $_result = Ak::getDb('db')->createCommand($sql)->queryColumn();
+        if (count($_result) > 0) {
+            $ids = implode(',', $_result);
+            $sql = sprintf("SELECT m.manageid AS userid,m.user_nicename,m.user_name FROM {{manage}} AS m WHERE m.fromid=%s AND m.manageid IN(%s)", $fid, $ids);
+            $db = Ak::db(true);
+            $_result = $db->createCommand($sql)->queryAll();
+        }
         $result = array();
         foreach ($_result as $key => $value) {
             $result[$value['userid']] = $value['user_nicename'] != '' ? $value['user_nicename'] : $value['user_name'];

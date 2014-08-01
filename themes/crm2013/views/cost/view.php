@@ -9,9 +9,7 @@ $stocks = $model->getMateriasStocks();
 // Tak::KD($model->attributes);
 // Tak::KD($materias);
 // Tak::KD($produts);
-// Tak::KD($stocks);
-
-
+/*Tak::KD($stocks);*/
 ?>
 <div id="wrapper">
 	<div class="mod" id="constac1">
@@ -173,7 +171,7 @@ endforeach
 							<th>合计</th>
 							<th>仓库库存</th>
 							<th>仓库分布</th>
-							<th>需要入库数量</th>
+							<th>需要采购的数量</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -238,19 +236,20 @@ endforeach
 		</div>
 	</div>
 	<div class="footer-action not-printf">
+			<a tabindex="-1" class="ibtn ibtn-cancel" onclick="window.close()">关闭窗口</a>
 		<button class="ibtn-print ibtn" >打印当前页面</button>
 		<?php
     if ($model->status == 2) {
         echo JHtml::link('确认生产', array(
             'Production',
-            'id' => $model->itemid
+            'id' => $id,
         ) , array(
             'class' => 'ibtn'
         ));
     } elseif ($model->status == 3) {
         echo JHtml::link('查看生产进度', array(
             '/Production/View',
-            'id' => $model->itemid
+            'id' => $id
         ) , array(
             'class' => 'ibtn'
         ));

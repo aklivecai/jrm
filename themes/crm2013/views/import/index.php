@@ -27,13 +27,13 @@ $file = '/k/GitHub/CRM/upload/users/JU1/temp/import/20140315-145106__clientele.x
 		</div>
 		<div class="block clearfix">
 			<form action="Upload?action=<?php echo $action ?>" id="upload" method="post" enctype="multipart/form-data">
-				<input type="file" name="file" id="file"  />
+				<input type="file" name="file" class="ifile" />
 			</form>
 			<div id="message"></div>
 			<div id="progress">
 <?php
 $html = Tak::getUCache($action);
-if ($html && is_array($html)) {
+if ($html && is_array($html) && is_array($html['data']) && count($html['data']) > 0) {
     echo sprintf('<span class="label ">%s上传没有导入</span>', Tak::timetodate($html['time'], 6));
     $header = $model->getHeader();
     $this->renderPartial('view', array(
@@ -58,19 +58,21 @@ var getIfm = function(progress){
 	loading.appendTo(progress);		
 	return ifm;
 }
-$('#file').on('change',function(){
+$(document).on('change','.ifile',function(){
 	var progress = $('#progress')
 	, ifm = getIfm(progress)
 	, ifmname = ifm.attr('name')
+	, fuplado = $('#upload')
 	;
-	$('#upload').attr('target',ifmname);
-	$('#upload').submit();
+	fuplado.attr('target',ifmname).submit();
 	ifm.on('load',function(){
 		progress.find('.data-loading').remove();
 		progress.removeClass("wap-loading");
 		progress.html(ifm.contents().find('#content').html());	
 		// ifm.remove();
 		 initSelect(progress);
+		 fuplado.html('<input type="file" name="file" class="ifile" />');
+		 fuplado.find('.ifile').uniform();
 	});
 });
 $(document).on('click','#btn-submit',function(event){

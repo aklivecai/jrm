@@ -4,6 +4,7 @@ class ImportController extends Controller {
         'product' => 'JImportProduct',
         'addressBook' => 'JImportAddressbook',
         'clientele' => 'JImportClientele',
+        'order' => 'JImportOrder',
     );
     public $type = null;
     public function init() {
@@ -35,6 +36,8 @@ class ImportController extends Controller {
             case 'clientele':
                 $url.= '/客户资料导入模板.xls';
             break;
+            case 'order':
+                $url.= '/Order.xls';
             default:
             break;
         }
@@ -58,6 +61,10 @@ class ImportController extends Controller {
         $action = 'product';
         $this->action($action);
     }
+    public function actionOrder() {
+        $action = 'order';
+        $this->action($action);
+    }
     public function actionClientele() {
         $action = 'clientele';
         $this->action($action);
@@ -69,7 +76,7 @@ class ImportController extends Controller {
     public function actionImport($action) {
         $model = $this->loadModel($action);
         if (isset($_POST[$model->model])) {
-            // Tak::KD(count($_POST[$model->model]),1);
+            // Tak::KD(count($_POST[$model->model]));
             $result = $model->load($_POST[$model->model]);
             if ($result) {
                 $model->import();

@@ -15,14 +15,14 @@ foreach ($model->getNP(true) as $key => $value) {
         'label' => Tk::g($key) ,
         'url' => array(
             'view',
-            'id' => $value
+            'id' => $this->setSId($value)
         )
     );
 }
 $items[] = array(
     'icon' => 'isw-left',
     'label' => Tk::g('Return') ,
-    'url' => Yii::app()->request->urlReferrer
+    'url' => $this->getRUrl()
 );
 $items[] = array(
     'url' => '#',

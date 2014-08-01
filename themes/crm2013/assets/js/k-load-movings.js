@@ -104,7 +104,7 @@ jQuery(function($) {
         var self = this;
         self.itemid = ko.observable();
         self.price = ko.observable(0).extend({
-            numeric: 2,
+            numeric: 4,
             rateLimit: 500
         });
         self.number = ko.observable(1).extend({
@@ -115,10 +115,10 @@ jQuery(function($) {
         /*总价*/
         self.totals = ko.computed(function() {
             var total = 0;
-            number = formatCurrency(self.number()),
-            price = formatCurrency(self.price());
-            total += formatCurrency(number * price);
-            return formatCurrency(total);
+            number = formatFloat(self.number(), 4),
+            price = formatFloat(self.price(), 4);
+            total += formatFloat(number * price, 4);
+            return formatFloat(total, 4);
         });
         self.obj = {};
         self.load = function(obj) {
@@ -146,7 +146,7 @@ jQuery(function($) {
             jQuery.each(self.list(), function() {
                 total += this.totals();
             });
-            return formatCurrency(total);
+            return formatFloat(total, 4);
         });
         self.add = function(newItem) {
             var result = $.isArray(newItem) ? newItem : [newItem],
@@ -161,11 +161,9 @@ jQuery(function($) {
             $(".stepContainer").css('height', '');
         };
         self.remove = function(item) {
-            if (confirm('是否确认删除?')) {
-                var product_id = item.obj.product_id;
-                removeProduct(item.obj.product_id);
-                self.list.remove(item);
-            }
+            var product_id = item.obj.product_id;
+            removeProduct(item.obj.product_id);
+            self.list.remove(item);
         }
         self.templateToUse = function(item) {
             return 'itemsTmpl';
@@ -181,6 +179,14 @@ jQuery(function($) {
             name: 'windowName'
         });
     });
+    $('#create-product').on('click', function() {
+        var wurl = createUrl("Product/create", ['action=window', "warehouse_id=" + $("#Movings_warehouse_id").val()]);
+        ShowModal(wurl, {
+            width: 800,
+            height: 550,
+            name: 'windowName'
+        });
+    })
 })
 var getIfm = function() {
     var ifmname = "ifm" + Math.random(),
@@ -243,27 +249,26 @@ function submitAction() {
         return false;
     }
     var message = "",
-        priceMessage = "",
-        reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
+        priceMessage = "";
     $("#product-movings input[name*=number]").each(function() {
         var val = $(this).val();
-        if (val.search(/^[\+\-]?\d+\.?\d*$/) == 0 && val > 0) {
+        if (checkDecimal(val) && val > 0) {
             $(this).removeClass("error");
         } else {
             $(this).addClass("error");
             if (message == "") {
-                message = "<li>请输入正确的数量!</li>";
+                message = "<li>请输入正确的数量(正数，最多四位小数)！</li>";
             }
         }
     });
     $("#product-movings input[name*=price]").each(function() {
         var val = $(this).val();
-        if (reg.test(val) && val > 0) {
+        if (checkDecimal(val) && val > 0) {
             $(this).removeClass("error");
         } else {
             $(this).addClass("error");
             if (priceMessage == "") {
-                priceMessage = "<li>价格必须为合法数字(正数，最多两位小数)！</li>";
+                priceMessage = "<li>价格必须为合法数字(正数，最多四位小数)！</li>";
             }
         }
     });
@@ -277,6 +282,7 @@ function submitAction() {
     var ifm = getIfm(),
         ifmname = ifm.attr("name");
     wizard.parents("form").attr("target", ifmname);
+    wizard.find('.buttonFinish').addClass('buttonDisabled');
     wizard.parents("form").submit();
     ifm.on("load", function() {
         // ifm.remove();
@@ -284,7 +290,7 @@ function submitAction() {
     wizard.smartWizard("setError", "0");
 }
 wizard.smartWizard({
-    // selected: 1,  
+    // selected: 1,
     // errorSteps:[0],
     labelNext: "下一步",
     labelPrevious: "上一步",

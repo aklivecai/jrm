@@ -9,7 +9,6 @@
 
 $sdata = Tak::searchData();
 
-
 $scol = isset($scol)?$scol:'add_time';
 if (isset($condition)) {
 	$scol = 'modified_time';

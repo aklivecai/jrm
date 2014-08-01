@@ -12,6 +12,7 @@
   Yii::app()->bootstrap->register();
     $this->regCssFile('window.css');
 ?>
+<base target="_self">
 </head>
 <body>
 <div id="content">

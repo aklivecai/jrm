@@ -3,7 +3,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
     'type'=>'search',
     'htmlOptions'=>array('class'=>'well','to-view'=>'list-views'),
-    'action' => Yii::app()->createUrl($this->route,array('id'=>$model->itemid)),
+    'action' => Yii::app()->createUrl($this->route,array('id'=>$this->setSId($model->itemid))),
     'method'=>'get',
 )); 
 

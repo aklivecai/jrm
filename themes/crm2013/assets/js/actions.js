@@ -16,27 +16,17 @@ var affirm = function() {
     return false;
 };
 jQuery(function($) {
+    var getToXlsUrl = function() {
+        var searchForm = $('#search-form');
+        var __url = searchForm.attr('action').replace('/index', '/toxls/').replace('/admin', '/toxls/');;
+        __url += '?';
+        __url += searchForm.serialize();
+        return __url
+    }
     /*表格折叠,订单展示*/
     $(document).on('click', 'table.action-fold caption', function() {
         var t = $(this).parent();
         t.toggleClass('active');
-    }).on('click', '#btn-toxls', function() {
-        var ifmname = 'ifm' + Math.floor(new Date().getTime() / 1000),
-            wap = $('#content'),
-            ifm = $('<iframe src="about:blank" style="position: absolute;top:-9999;" width="2" height="1" frameborder="0" name="' + ifmname + '">');
-        wap.addClass('load-content');
-        ifm.load(function() {
-            wap.removeClass('load-content');
-        });
-        ifm.appendTo($(document.body));
-        var search = $('#search-form').clone().appendTo(ifm),
-            url = search.attr('action').replace('/index', '/toxls').replace('/admin', '/toxls');
-        search.attr({
-            // 'target':'_blank',
-            'target': ifmname,
-            'action': url,
-        });
-        search.submit();
     }).on("click", ".more-product,.more-product-hide", function(event) {
         // 更多信息显示，折叠和收起
         event.preventDefault();
@@ -64,7 +54,13 @@ jQuery(function($) {
             if (pages.find('span').length > 0) {
                 html = '<div class="fl"><button class="btn btn-print">打印</button>';
                 if (typeof istoxls != 'undefined') {
-                    html += '<button class="btn" id="btn-toxls">导出</button>';
+                    var url = $(document.body).attr('data-xls');
+                    if (!url) {
+                        url = getToXlsUrl();
+                        $(document.body).attr('data-xls', url);
+                    }
+                    url = url.replace('/index', '/toxls').replace('/admin', '/toxls');
+                    html += '<a class="btn" href="' + url + '"target="_blank">导出</a>';
                 }
                 html += '</div>';
                 pages.after(html);
@@ -135,7 +131,11 @@ jQuery(function($) {
         var action = searchForm.attr('to-view') ? searchForm.attr('to-view') : 'list-grid',
             data = {
                 'data': searchForm.serialize()
-            };;
+            };
+        if (typeof istoxls != 'undefined') {
+            __url = getToXlsUrl();
+            $(document.body).attr('data-xls', __url);
+        }
         if (action.indexOf('grid') >= 0) {
             $.fn.yiiGridView.update(action, data);
             if (typeof History != 'undefined') {
@@ -294,7 +294,7 @@ jQuery(function($) {
                 });
                 if (errorElem) {
                     event.preventDefault();
-                    errorElem.onfocus();
+                    errorElem.focus();
                 };
             }
             return true;

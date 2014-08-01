@@ -1,10 +1,10 @@
 <?php
 /*
-	部门属下信息调整，查询
-	只查询属下们的客户情况
+    部门属下信息调整，查询
+    只查询属下们的客户情况
 */
 
-class Subordinate extends CActiveRecord {
+class Subordinate extends DbiRecod {
     public static $table = '{{subordinate}}';
     
     public static $mos = null;
@@ -225,7 +225,7 @@ class Subordinate extends CActiveRecord {
     protected function beforeSave() {
         $result = parent::beforeSave(true);
         if ($result) {
-            $this->fromid = Tak::getFormid();
+            $this->fromid = Ak::getFormid();
         }
     }
     public static function getUsers() {
@@ -238,7 +238,7 @@ class Subordinate extends CActiveRecord {
     }
     public static function getDb() {
         if (self::$db == null) {
-            self::$db = Tak::getDb('db');
+            self::$db = Ak::db(true);
         }
         return self::$db;
     }

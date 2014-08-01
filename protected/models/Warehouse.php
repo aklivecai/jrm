@@ -94,13 +94,14 @@ class Warehouse extends LRecord {
      */
     public static function getDatas($isuse = true) {
         if (self::$datas === null) {
+            $db = Ak::db(true);
             $sql = 'SELECT * FROM :tabl WHERE :where ORDER BY listorder DESC,itemid DESC';
             $where = 'fromid=' . Ak::getFormid();
             $sql = strtr($sql, array(
                 ':tabl' => self::$table,
                 ':where' => $where,
             ));
-            $tags = Ak::getDb('db')->createCommand($sql)->queryAll(true);
+            $tags = $db->createCommand($sql)->queryAll(true);
             if ($isuse) {
                 $sql = sprintf('SELECT user_nicename,user_name FROM %s WHERE %s AND manageid IN(:ids)', Manage::$table, $where);
             }
@@ -115,7 +116,7 @@ class Warehouse extends LRecord {
                         $_sql = strtr($sql, array(
                             ':ids' => $uname,
                         ));
-                        $names = Ak::getDb('db')->createCommand($_sql)->queryColumn();
+                        $names = $db->createCommand($_sql)->queryColumn();
                         $value['user_name'] = implode(' , ', $names);
                     }
                 }

@@ -45,6 +45,7 @@ class Workshop {
             }
             $workshop[$value['item']]['process'][$value['typeid']] = $value;
         }
+        // Tak::KD($workshop,1);
         return $workshop;
         $data = array(
             'process' => array_keys($process) ,

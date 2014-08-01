@@ -5,8 +5,8 @@ class CostController extends Controller {
         parent::init();
         $this->modelName = 'Cost';
     }
-    public function loadModel($id, $iserror = true) {
-        if ($this->_model === null) {
+    public function loadModel($id, $iserror = true, $isload = false) {
+        if ($isload || $this->_model === null) {
             $id = $this->getSId($id);
             $m = $this->modelName;
             $m = $m::model();
@@ -42,6 +42,7 @@ class CostController extends Controller {
         return $html;
     }
     public function getLink($id, $status) {
+        $id = $this->setSid($id);
         $result = array();
         $result[] = JHtml::link('核算详细', array(
             "View",
@@ -70,6 +71,7 @@ class CostController extends Controller {
     }
     public function actionIndex($orderid = 0) {
         $this->_setLayout('//layouts/column2');
+        $order_id = $this->getSid($orderid);
         $m = $this->modelName;
         $model = new $m('search');
         $model->unsetAttributes(); // clear any default values
@@ -77,7 +79,7 @@ class CostController extends Controller {
             $model->attributes = $_GET[$m];
         }
         /**订单转入**/
-        if ($orderid > 0 && $model->isOrder($orderid)) {
+        if ($order_id > 0 && $model->isOrder($order_id)) {
             $order_id = $orderid;
         } else {
             $order_id = false;
@@ -91,98 +93,111 @@ class CostController extends Controller {
         $model = $this->loadModel($id);
         $this->render('view', array(
             'model' => $model,
+            'id' => $id,
         ));
     }
+    /**
+     * 初次配置生产的车间
+     * @param  int $id 成本核算单号
+     * @return [type]     [description]
+     */
     public function actionProduction($id) {
         $model = $this->loadModel($id);
-        $id = $model->itemid;
+        $itemid = $model->itemid;
         // 非订单过来的，
         if ($model->status <= 1) {
             $this->redirect(array(
                 'view',
-                'id' => $this->setSId($id) ,
-            ));
-        } elseif ($model->status == 3) {
-            //已经生成生产单了
-            $this->redirect(array(
-                '/Production/view',
-                'id' => $this->setSId($id) ,
+                'id' => $id,
             ));
         }
+        $this->modelName = 'Production';
+        $production = $this->loadModel($itemid, false, true);
         // 查询所有车间
         $workshops = Workshop::getAll();
         //查询核算编号的所有产品
         $produts = $model->getProducts();
         $m = 'M';
-        if (isset($_POST[$m]) && is_array($_POST[$m]) && count($produts) == count($_POST[$m])) {
-            $data = $_POST[$m];
-            $ppday = new ProductionProductDays('create');
-            $ppday->production_id = $id;
+        //$data =  array('product_id'=>'workshop_id','123'=>123);
+        $data = isset($_POST[$m]) ? $_POST[$m] : false;
+        if ($data && is_array($data) && count($produts) == count($data)) {
+            // Tak::KD($data, 1);
+            $pproduct = new ProductionProduct('create');
+            $pproduct->production_id = $itemid;
             $errors = array();
             $_temps = array();
+            $workshop_ids = array();
+            $sqls = array(
+                'fromid' => Ak::getFormid() ,
+                'production_id' => $itemid,
+            );
+            /**删除车间产品记录**/
+            ProductionProduct::model()->deleteAllByAttributes($sqls);
             foreach ($produts as $key => $value) {
                 $_temps[$value['itemid']] = $value;
             }
             $produts = $_temps;
-            foreach ($data as $product_id => $product) {
+            foreach ($data as $product_id => $workshop_id) {
                 if (
                 //存在的产品
                 isset($produts[$product_id])
                 //存在的车间
-                 && isset($workshops[$product['workshop']])
-                //有传递工序数据过来
-                 && is_array($product['process']) && count($product['process']) > 0) {
-                    $dataprocess = $workshops[$product['workshop']]['process'];
-                    foreach ($product['process'] as $proid => $days) {
-                        //存在的车间工序
-                        if (isset($dataprocess[$proid])
-                        //工序用时大于０
-                         && is_numeric($days) && $days > 0) {
-                            $ppday->setIsNewRecord(true);
-                            $ppday->product_id = $product_id;
-                            $ppday->workshop_id = $product['workshop'];
-                            $ppday->days = $days;
-                            $ppday->process = $dataprocess[$proid]['typename'];
-                            if ($ppday->validate() && $ppday->save()) {
-                                $ppdays[] = $ppday;
-                            } else {
-                                Tak::KD($ppday->getErrors());
-                                $errors = true;
-                            }
-                        } else {
-                            $errors = true;
-                        }
+                 && isset($workshops[$workshop_id])) {
+                    $pproduct->setIsNewRecord(true);
+                    $pproduct->product_id = $product_id;
+                    $pproduct->workshop_id = $workshop_id;
+                    if ($pproduct->validate() && $pproduct->save()) {
+                        $workshop_ids[$workshop_id] = $workshop_id;
+                    } else {
+                        $errors[$product_id] = $pproduct->getErrors();
                     }
                 } else {
-                    $errors = true;
+                    if (!isset($produts[$product_id])) {
+                        $errors[$product_id] = '不存在的产品';
+                    } elseif (!isset($workshops[$workshop_id])) {
+                        $errors[$product_id] = '不存在的车间';
+                    }
                 }
             }
             /**有错误，删除刚刚插入的信息**/
             if ($errors) {
-                ProductionProductDays::model()->deleteAllByAttributes(array(
-                    'fromid' => Ak::getFormid() ,
-                    'production_id' => $id,
-                ));
+                ProductionProduct::model()->deleteAllByAttributes($sqls);
             } else {
-                /*新建生产单*/
-                $production = new Production('create');
-                $production->itemid = $id;
-                $production->name = sprintf("%s-订单", $id);
-                $production->company = Order::model()->findByPk($id)->company;
-                $production->save();
-                //更新汇总车间的工序的用时
-                $production->upPdays();
-                //更新成本合算，状态为已经生成生产单
-                $model->upProduction();
+                if ($production !== null) {
+                    if (count($workshop_ids) > 0) {
+                        $sql = sprintf('workshop_id NOT IN(%s)', implode(',', $workshop_ids));
+                    } else {
+                        $sql = '';
+                    }
+                    /**删除不存在的车间工序记录　**/
+                    ProductionDays::model()->deleteAllByAttributes($sqls, $sql);
+                } else {
+                    /*新建生产单*/
+                    $production = new Production('create');
+                    $production->itemid = $itemid;
+                    $production->name = sprintf("%s-订单", $itemid);
+                    $production->company = Order::model()->findByPk($itemid)->company;
+                    $production->save();
+                    //更新成本合算，状态为已经生成生产单
+                    $model->upProduction();
+                }
                 
                 $this->redirect(array(
-                    '/Production/view',
-                    'id' => $this->setSId($id) ,
+                    '/Production/Process',
+                    'id' => $id,
                 ));
             }
         }
+        if ($production != null) {
+            $pidwids = $production->getPidWid();
+        } else {
+            $pidwids = array();
+        }
         foreach ($produts as $key => $value) {
             $produts[$key]['numbers'] = Tak::getNums($value['numbers']);
+            if (isset($pidwids[$value['itemid']])) {
+                $produts[$key]['workshop_id'] = $pidwids[$value['itemid']];
+            }
         }
         foreach ($workshops as $key => $value) {
             if (isset($value['process'])) {
@@ -193,6 +208,7 @@ class CostController extends Controller {
         }
         $this->render('production', array(
             'model' => $model,
+            'id' => $id,
             'produts' => $produts,
             'workshops' => array_values($workshops) ,
         ));
@@ -206,9 +222,9 @@ class CostController extends Controller {
             $result.= sprintf("[%s]", $value);
         }
         return $result;
-    }    
+    }
     private function saveInfo($cost_id, $products) {
-        $product_id = $cost_id;
+        $product_id = Tak::fastUuid();
         $errors = array();
         /**添加产品**/
         if ($products) {
@@ -271,12 +287,13 @@ class CostController extends Controller {
         return $errors;
     }
     public function actionCreate($id = 0) {
-        if ($id > 0) {
-            $model = $this->loadModel($id, false);
+        $itemid = $this->getSId($id);
+        if ($itemid > 0) {
+            $model = $this->loadModel($itemid, false);
             if ($model != null) {
                 $this->redirect(array(
                     'view',
-                    'id' => $this->setSId($model->itemid) ,
+                    'id' => $id,
                 ));
             }
         }
@@ -288,11 +305,12 @@ class CostController extends Controller {
         $products = array();
         $orderid = '';
         //判断是不是订单编号
-        if ($model->isOrder($id)) {
-            $orderid = $cost_id = $id;
-            $products = $model->getOrderProduct($id);
+        if ($model->isOrder($itemid)) {
+            $orderid = $cost_id = $itemid;
+            $products = $model->getOrderProduct($itemid);
         } else {
             $cost_id = Tak::fastUuid();
+            $id = $this->setSId($cost_id);
         }
         if (isset($_POST['M'])) {
             $data = $_POST['M'];
@@ -322,7 +340,7 @@ class CostController extends Controller {
                 $script = sprintf('
                     var s = parent.document.getElementById("tak-load");s.setAttribute("href","%s");s.click();
                 ', $this->createUrl('view', array(
-                    'id' => $model->itemid
+                    'id' => $id,
                 )));
             }
         }
@@ -352,6 +370,7 @@ class CostController extends Controller {
     
     public function actionOrderWorkshop($id) {
         header('Content-Type: application/json');
+        $id = $this->getSid($id);
         $data = null;
         if (!$id) {
             $data = '不存在车间';
@@ -386,6 +405,7 @@ class CostController extends Controller {
     }
     public function actionDelWorkshop($id) {
         header('Content-Type: application/json');
+        $id = $this->getSid($id);
         $data = null;
         if (!$id) {
             $data = '请选择车间';
@@ -412,6 +432,8 @@ class CostController extends Controller {
      */
     public function actionDelProcess($id, $typeid) {
         header('Content-Type: application/json');
+        $id = $this->getSid($id);
+        $typeid = $this->getSid($typeid);
         $data = null;
         $ws = Workshop::getAll();
         if (!$id) {
@@ -444,6 +466,7 @@ class CostController extends Controller {
     
     public function actionUpWorkshop($name, $id = 0) {
         header('Content-Type: application/json');
+        $id = $this->getSid($id);
         $typeid = is_numeric($id) ? $id : false;
         $data = null;
         if (!$name) {
@@ -487,6 +510,7 @@ class CostController extends Controller {
      */
     public function actionUpProcess($id, $name, $itemid = 0) {
         header('Content-Type: application/json');
+        $id = $this->getSid($id);
         $typeid = is_numeric($id) ? $id : false;
         $data = null;
         if (!$name) {

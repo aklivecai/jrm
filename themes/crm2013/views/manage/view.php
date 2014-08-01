@@ -19,8 +19,9 @@ $this->breadcrumbs = array(
             <?php
 $items = Tak::getViewMenu($model->primaryKey);
 // revoke-link
-$items['Delete']['label'] = Tk::g('Lock');
-$items['Delete']['linkOptions']['class'] = 'revoke-link';
+unset($items['Delete']);
+// $items['Delete']['label'] = Tk::g('Lock');
+// $items['Delete']['linkOptions']['class'] = 'revoke-link';
 $_itemis = array(
     '---',
     'log' => array(

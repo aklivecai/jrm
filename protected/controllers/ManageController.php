@@ -173,6 +173,7 @@ class ManageController extends Controller {
             if ($data['branch'] != $model->branch) {
                 $model->changeBranch();
             }
+            $data['user_status'] = isset($data['user_status']) ? 1 : 0;
             $model->attributes = $data;
             if ($model->save()) {
                 $this->redirect($this->returnUrl ? $this->returnUrl : array(
@@ -194,6 +195,11 @@ class ManageController extends Controller {
         $result['data']['attributes'][] = 'user_nicename';
         if ($q) {
             $result['data']['criteria']->addSearchCondition('user_nicename', $q, true, 'OR');
+        }
+        //部门编号
+        if (isset($_GET['branch']) && is_numeric($_GET['branch']) && $_GET['branch'] > 0) {
+            $branch = Tak::numAdd($_GET['branch'],0);
+            $result['data']['criteria']->addCondition(sprintf('branch=%s', $branch));
         }
         return $result;
     }

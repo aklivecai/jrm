@@ -277,7 +277,7 @@ class Product extends DbRecod {
     public function getStock() {
         if ($this->_stock == null) {
             $warehouse_id = $_GET['Product[warehouse_id]'];
-            if (!$warehouse_id && Permission::iSWarehouses()) {
+            if ($warehouse_id>0&&!$warehouse_id && Permission::iSWarehouses()) {
                 $warehouse_id = Warehouse::getUserWare();
             }
             $this->_stock = Stocks::getStocks($this->itemid, $warehouse_id);
@@ -337,7 +337,7 @@ class Product extends DbRecod {
             ':tabl' => ProductMoving::$table,
         );
         $condition = array(
-            ' WHERE 1=1',
+            ' WHERE time_stocked>0 ',
             sprintf('product_id=%s', $this->itemid)
         );
         /* 查询仓库*/
@@ -386,6 +386,7 @@ class Product extends DbRecod {
             '21' => 0,
             '22' => 0,
         );
+        // Tak::KD($sql,1);
         $query = self::$db->createCommand($sql)->queryAll();
         foreach ($query as $key => $value) {
             $arr[$value['itype']] = $value['total'];

@@ -32,7 +32,7 @@ class CostProduct extends DbRecod {
                 'max' => 25
             ) ,
             array(
-                'fromid, expenses, price, totals',
+                'fromid, expenses,  totals',
                 'length',
                 'max' => 10
             ) ,
@@ -47,9 +47,13 @@ class CostProduct extends DbRecod {
                 'max' => 255
             ) ,
             array(
-                'numbers',
+                'totals,price,numbers',
                 'length',
                 'max' => 20
+            ) ,
+            array(
+                'totals,price,numbers',
+                'numerical',
             ) ,
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.

@@ -9,7 +9,7 @@
 <div>
 	<div class="col3">
 		<?php echo CHtml::encode($model->getAttributeLabel('numbers')); ?>:</b>
-		<?php echo CHtml::encode($model->numbers); ?>
+		<input type="text" value="<?php echo $model->numbers ?>" >
 	</div>
 	<div class="col3">
 		<?php echo CHtml::encode($model->getAttributeLabel('enterprise')); ?>:</b>
@@ -17,7 +17,7 @@
 	</div>
 	<div class="col3">
 		<?php echo CHtml::encode($model->getAttributeLabel('time')); ?>:</b>
-		<?php echo Tak::timetodate($model->modified_time); ?>
+		<?php echo date("Y 年 m 月 d 日", $model->time_stocked); ?>
 	</div>
 	<i class="clearfix"></i>
  <?php $this->widget('bootstrap.widgets.TbListView', array(
@@ -28,7 +28,7 @@
 		)); ?> 
 	<div class="txt-right">
 		<?php echo CHtml::encode($model->getAttributeLabel('us_launch')); ?>:</b>
-		<?php echo CHtml::encode($model->us_launch); ?>
+		<input type="text" value="<?php echo $model->us_launch ?>" >
 	</div>
 
 <div class="noprint txt-center">

@@ -151,7 +151,8 @@ class Controller extends RController {
             }
             if ($notcu) {
                 $m->setGetCU();
-            }            
+            }
+            
             $m = $m->findByPk($id);
             if ($m === null) {
                 $this->error();
@@ -198,8 +199,6 @@ class Controller extends RController {
         if ($uuid && Tak::getEid($uuid) != $id) {
             // $not = false;
             // $status = false;
-            
-            
         }
         $this->render($this->templates['preview'], array(
             'model' => $this->loadModel($id, $status, $not) ,
@@ -212,8 +211,7 @@ class Controller extends RController {
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET[$m])) {
             $model->attributes = $_GET[$m];
-        }
-        
+        }        
         $this->render($this->templates['index'], array(
             'model' => $model,
         ));
@@ -226,6 +224,9 @@ class Controller extends RController {
         ));
     }
     
+    protected function beforeCreate($model) {
+
+    }
     public function actionCreate() {
         $m = $this->modelName;
         $model = new $m('create');
@@ -233,6 +234,7 @@ class Controller extends RController {
             $this->performAjaxValidation($model);
             $model->attributes = $_POST[$m];
             if ($model->save()) {
+                $this->beforeCreate($model);
                 if ($this->returnUrl) {
                     $this->redirect($this->returnUrl);
                 } else {
@@ -431,5 +433,16 @@ class Controller extends RController {
         exit;
     }
     
+    public function dow($file) {
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header('Content-Disposition:inline;filename="' . $file . '"');
+        header("Content-Transfer-Encoding: binary");
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Pragma: no-cache");
+    }
 }
 

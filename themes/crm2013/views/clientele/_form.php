@@ -5,12 +5,25 @@ $items = Tak::getEditMenu($model->itemid, $model->isNewRecord);
 <div class="row-fluid">
 <div class="span12">
 
+<!-- 
+	客户端校验，按下提交以后，设置按钮为注销状态
+	防止表单重复提交 
+	导致多次数据插入数据库
+ -->
 <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'clientele-form',
     'type' => 'horizontal',
-    'enableAjaxValidation' => false,
+    'enableAjaxValidation' => true,
+    'enableClientValidation'=>true,    
+  
+    'clientOptions'=>array('validateOnSubmit'=>'true','errorCss'=>'red','afterValidateAttribute'=>'dform',),
 )); ?>
-
+<script type="text/javascript">
+	var dform =function() {
+		log(arguments);
+		alert(1);
+	};
+</script>
 <?php echo $form->errorSummary($model); ?>
 
 <div class="head clearfix">

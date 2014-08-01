@@ -1,0 +1,21 @@
+http://home.163.com/14/*
+
+<div class="textListbg clearfix">
+
+<div id="endText">
+
+
+<a href="{url}" target="_self" class="ep-pages-ctrl">&gt;</a>
+
+
+
+ <span class="left"><a href="http://home.163.com/"><img src="http://img1.cache.netease.com/cnews/css13/img/end_home.png" alt="netease" width="13" height="12" class="icon"></a> 本文来源：京华时报 。更多精彩内容请访问京华网 <a rel="nofollow" href=http://www.jinghua.cn>http://www.jinghua.cn</a> </span>
+
+
+
+
+
+
+</strong></span>
+                                                                            <a href="http://news.jc001.cn/14/0728/816732_3.html">3</a>
+

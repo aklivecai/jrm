@@ -7,9 +7,7 @@ Tak::regScriptFile($scrpitS, 'static', null, CClientScript::POS_END);
 $scrpitS = array(
     'k-load-production.js',
 );
-
 $this->regScriptFile($scrpitS, CClientScript::POS_END);
-
 if (1) {
     $jsonp = CJSON::encode($produts);
 } else {
@@ -20,7 +18,6 @@ Tak::regScript('datas', '
 , workshops = ' . CJSON::encode($workshops) . '
 	;
 ', CClientScript::POS_HEAD);
-
 $links = JHtml::link(Tk::g(array(
     'Workshop',
     'Setting'
@@ -31,6 +28,23 @@ $links = JHtml::link(Tk::g(array(
     'class' => 'ibtn',
     'id' => 'btn-workshop'
 ));
+$buttons = array();
+$buttons[] = JHtml::link('成本核算', array(
+    'view',
+    'id' => $id
+) , array(
+    'class' => 'ibtn'
+));
+if ($model->status == 3) {
+    $buttons[] = JHtml::link('生产进度', array(
+        '/Production/View',
+        'id' => $id
+    ) , array(
+        'class' => 'ibtn'
+    ));
+} else {
+}
+$buttons[] = '<button type="submit"class="ibtn ibtn-ok"> 计划时间录入 </button>';
 ?>
 <div id="wrapper">
 	<ul class="header-tools">
@@ -46,7 +60,7 @@ $links = JHtml::link(Tk::g(array(
 				<table class="zebra" summary="" width="100%" id="init-production">
 					<colgroup>
 					<col width="15%" />
-					<col width="auto" />					
+					<col width="auto" />
 					</colgroup>
 					<thead>
 						<tr>
@@ -57,72 +71,161 @@ $links = JHtml::link(Tk::g(array(
 					<tbody data-bind="foreach: lines">
 						<tr>
 							<td>
-							<select data-bind='options: workshopsSelect,optionsText: "name", optionsCaption: "选择车间",optionsValue:"id",value:workshops,valueAllowUnset:true'></select>
+							<select data-bind='options: workshopsSelect,optionsText: "name", optionsCaption: "选择车间",optionsValue:"id",value:workshops,valueAllowUnset:true' required="required"></select>
 						</td>
 						<td><span data-bind="text: name"></span></td>
 					</tr>
 				</tbody>
 			</table>
 			<hr />
-			<table class="zebra" summary="" width="100%"  id="init-workshops">
 			<h2>
-				车间，产品，工序
+			车间，产品，工序
 			</h2>
-				<colgroup>
-				<col width="10%" />
-				</colgroup>
-				<thead>
-					<tr>
-						<th>车间</th>
-						<th>产品列表</th>
-						<th>工序</th>
-					</tr>
-				</thead>
-				<tbody data-bind="foreach: lines">
-					<!-- ko if: isShow()>0-->
-					<tr>
-						<td><span data-bind="text:name"></span></td>
-						<td>
-							<ol class="list-production" data-bind="foreach:products">
-								<li data-bind="text:name"></li>
-							</ol>
-						</td>
-						<td  class="list-production-process">
-							<div>
-								<input type="hidden" data-bind="value: id,attr: {name:getWName()}"/>
-								<ul data-bind="foreach:  {data:process,afterRender:$root.initInput}">
-									<li>
-										<input type="checkbox" data-bind="attr: {id: $parent.getPId(typeid)}" class="check-pro"/>
-										<label data-bind="text: typename, attr: {'for':$parent.getPId(typeid),}"></label>
-										<input type="number" class="days placeholder"  step="0.1" min="0.1" data-bind="attr: {name: $parent.getPName(typeid),id: $parent.getPName(typeid)}" style="display:none"  placeholder="计划完成天数" disabled="disabled" />
-									</li>
-								</ul>
-							</div>
-						</td>
-					</tr>
+			<div  id="init-workshops">
+				<table class="zebra" summary="" width="100%">
+					<colgroup>
+					<col width="10%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th>车间</th>
+							<th>产品列表</th>
+							<th>工序
+								<div class="fr">
+									<a id="print-produciotn" href="javascript:;">
+									<i class="icon action-print" title="打印">&nbsp;</i>线下计划表
+									</a>
+								</div></th>
+							</tr>
+						</thead>
+						<tbody data-bind="foreach: lines">
+							<!-- ko if: isShow()>0-->
+							<tr>
+								<td><span data-bind="text:name"></span></td>
+								<td>
+									<ol class="list-production" data-bind="foreach:products">
+										<li>
+											<input type="hidden" data-bind="attr: { name:getName()},value:$parent.id">
+											<span data-bind="text:name"></span>
+										</li>
+									</ol>
+								</td>
+								<td  class="list-production-process">
+									<div>
+										<ul data-bind="foreach:  {data:process}">
+											<li>
+												<span data-bind="text: typename"></span>
+												<div class="hide show-print L">
+													<span>计划完成天数:</span>
+													<br />
+													<span>计划人:</span>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+							<!-- /ko -->
+						</tbody>
+						<tfoot class="not-printf">
+						<tr>
+							<td colspan="3">
+								<div class="footer-action">
+									<a tabindex="-1" class="ibtn ibtn-cancel" onclick="window.close()">关闭窗口</a>
+									<?php echo implode("", $buttons); ?>
+								</div>
+							</td>
+						</tr>
+						</tfoot>
+					</table>
+					<!-- ko if: isprintf()-->
+					<div id="print-table">
+						<table class="list hide show-print" width="100%">
+						<colgroup align="center">
+							<col width="120px"/>
+						</colgroup>
+							<thead>
+								<tr>
+									<th>车间</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody data-bind="foreach: lines">
+								<!-- ko if: isShow()>0-->
+								<tr>
+									<td><span data-bind="text:name"></span></td>
+									<td>
+										<table width="100%">										
+											<colgroup align="center">
+												<col width="80px"/>
+											</colgroup>
+											<tbody>
+												<tr>
+													<th class="R">产品列表</th>
+													<td>
+													<table width="100%">
+													<thead>
+														<tr>
+															<th>品名</th>
+															<th>型号</th>
+															<th>规格</th>
+															<th>颜色</th>
+															<th>数量</th>
+														</tr>
+													</thead>
+														<tbody  data-bind="foreach:products">
+															<tr>
+															<td data-bind="text:obj.type"></td>
+															<td data-bind="text:obj.name"></td>
+															<td data-bind="text:obj.spec"></td>
+															<td data-bind="text:obj.color"></td>
+															<td data-bind="text:obj.numbers"></td>
+															</tr>
+														</tbody>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<th class="R">各工序计划完成时间</th>
+													<td>
+														<div class="list-production-process">
+															<ul data-bind="foreach:  {data:process}">
+																<li>
+																	<strong data-bind="text: typename"></strong>
+																	<div class="show-print L">
+																		<span>计划完成<i class="hr2">&nbsp;</i>天</span>
+																		<br />
+																		<span>计划人<i class="hr1">&nbsp;</i></span>
+																	</div>
+																</li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+
+										</table>
+
+
+									</td>
+								</tr>
+								<!-- /ko -->
+							</tbody>
+						</table>
+					</div>
 					<!-- /ko -->
-				</tbody>
-				<tfoot>
-				<tr>
-					<td colspan="3">
-						<button type="submit" class="ibtn">提交</button>
-						<button type="submit" class="ibtn ibtn-ok">提交</button>
-					</td>
-				</tr>
-				</tfoot>
-			</table>
-		</form>
+				</div>
+			</form>
+		</div>
 	</div>
-</div>
-<div class="wap-tips not-printf" >
-	<span class="tips_icon_help">
-	提示:
-	</span>
-	<div class="tips-mod">
-		<ul>
-			<li>红色边框为必填选项,不能为空</li>
-			<li>选择有工序的时候，天数必须大于0</li>
-		</ul>
+	<div class="wap-tips not-printf" >
+		<span class="tips_icon_help">
+		提示:
+		</span>
+		<div class="tips-mod">
+			<ul>
+				<li>车间是必选项</li>
+			</ul>
+		</div>
 	</div>
-</div>
 </div>

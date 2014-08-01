@@ -159,13 +159,13 @@ class OrderFlow extends MRecord {
         return $result;
     }
     
-    public function getName() {
+    public function getName($fromid = 0) {
         $result = OrderType::item('order-status', $this->status);
         if (!$result) {
             if ($this->name) {
                 $result = $this->name;
             } else {
-                $result = TakType::item('order-flow', $this->status);
+                $result = TakType::item('order-flow', $this->status,$fromid);
             }
         }
         return $result;
@@ -176,15 +176,16 @@ class OrderFlow extends MRecord {
         $arr = array(
             ':order_id' => $id
         );
-        $command = Tak::getDb('db')->createCommand($sql);
+        $command = Ak::getDb('db')->createCommand($sql);
         $model = $command->queryRow(true, $arr);
         return $model;
     }
-    public function getListByOrder($condition) {
+    public function getListByOrder($condition) {        
         $arr = array();
         foreach ($condition as $key => $value) {
             $arr[$key] = $value;
         }
+        // Ak::KD($arr,1);
         $list = $this->findAllByAttributes($arr);
         foreach ($list as $key => $value) {
             $value->loadFiles();

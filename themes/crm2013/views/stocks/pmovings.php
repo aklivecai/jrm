@@ -1,6 +1,7 @@
 <?php
 $template = "<div class=\"list-view\">{pager}</div>\n<table class=\"items table table-striped table-bordered table-condensed\"> <thead> <tr> 
                 <th>{$m->getAttributeLabel('numbers') }</th>
+                <th>{$m->getAttributeLabel('warehouse_id') }</th>
                 <th>{$m->getAttributeLabel('enterprise') }</th>
                 <th>{$m->getAttributeLabel('typeid') }</th>
                 <th>数量</th>  
@@ -19,7 +20,8 @@ $this->widget('bootstrap.widgets.TbListView', array(
     ) ,
     'emptyText' => '<tr><td colspan="8">没有数据!</td></tr>',
     'viewData' => array(
-        'cates' => $cates
+        'cates' => $cates,
+        'manageid'=>$model->add_us,
     )
 ) );
 

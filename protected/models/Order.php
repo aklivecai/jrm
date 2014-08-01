@@ -30,7 +30,7 @@ class Order extends MRecord {
                 'max' => 50
             ) ,
             array(
-                'note',
+                'note,cnote,serialid',
                 'length',
                 'max' => 255
             ) ,
@@ -42,7 +42,7 @@ class Order extends MRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array(
-                'itemid, fromid, manageid, add_time, total, status, pay_time, delivery_time, u_time, invoice_number, note',
+                'itemid, fromid, manageid, add_time, total, status, pay_time, delivery_time, u_time, invoice_number, note,serialid',
                 'safe',
                 'on' => 'search'
             ) ,
@@ -78,6 +78,7 @@ class Order extends MRecord {
             'itemid' => '订单编号',
             'fromid' => '商铺',
             'manageid' => '下单用户',
+            'serialid' => '工单号',
             'company' => '客户名称',
             'add_time' => '下单时间',
             'total' => '总金额',
@@ -87,6 +88,7 @@ class Order extends MRecord {
             'u_time' => '用户确认收货时间',
             'invoice_number' => '发货单号',
             'note' => '备注',
+            'cnote' => '商家备注',
             'add_ip' => '下单IP',
         );
         $_ts = parent::attributeLabels();
@@ -107,8 +109,8 @@ class Order extends MRecord {
         if ($this->manageid > 0) {
             $criteria->compare('manageid', $this->manageid);
         }
-        $times = array();
         
+        $times = array();
         $_time = isset($_GET['time']) ? $_GET['time'] : array();
         foreach ($_time as $key => $value) {
             $times[$key] = $value;
@@ -189,6 +191,7 @@ class Order extends MRecord {
         $criteria->compare('invoice_number', $this->invoice_number);
         $criteria->compare('company', $this->company, true);
         $criteria->compare('note', $this->note, true);
+        $criteria->compare('serialid', $this->serialid, true);
         
         if ($this->status && $this->getState($this->status)) {
             // Tak::KD($this->status,1);
@@ -221,16 +224,25 @@ class Order extends MRecord {
         $result = parent::beforeSave(true);
         if ($result) {
             //添加数据时候
-            $arr = Tak::getOM();
+            $arr = Ak::getOM();
             if ($this->isNewRecord) {
                 if (!$this->itemid) {
                     $this->itemid = $arr['itemid'];
                 }
-                $this->add_time = $arr['time'];
-                $this->add_ip = $arr['ip'];
-                $this->manageid = $arr['manageid'];
+                if (!$this->add_time) {
+                    $this->add_time = $arr['time'];
+                }
+                if (!$this->add_ip) {
+                    $this->add_ip = $arr['ip'];
+                }
+                if (!$this->manageid) {
+                    $this->manageid = $arr['manageid'];
+                }
             } else {
             }
+        }
+        if (!$this->serialid) {
+            $this->serialid = '';
         }
         return $result;
     }
@@ -451,5 +463,30 @@ WHERE itemid = ':itemid'";
         $command = self::$db->createCommand($sql);
         $tags = $command->queryAll(true);
         return $tags;
+    }
+    /**
+     * 订单已经完成
+     * @return boolean [description]
+     */
+    public function isStatusOver() {
+        return $this->status == 999;
+    }
+    public function getOrderReview() {
+        return OrderReview::model()->findByAttributes(array(
+            'fromid' => $this->fromid,
+            'order_id' => $this->itemid
+        ));
+    }
+    
+    public static function getSerialidMax() {
+        $sql = "SELECT serialid  FROM :table WHERE fromid=:fromid AND serialid<>''  ORDER BY serialid DESC";
+        $sql = strtr($sql, array(
+            ':table' => self::$table,
+            ':fromid' => Ak::getFormid() ,
+        ));
+        
+        $command = self::$db->createCommand($sql);
+        $result = $command->queryScalar();
+        return Ak::addIntStr($result);
     }
 }

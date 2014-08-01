@@ -23,7 +23,7 @@ foreach ($orderStatus as $key => $value) {
         );
         if (($key > $model->status && $model->status > 10 && !($key == 200 || $key == 101)) || ($model->status == 1 && ($key == 200 || $key == 101))) {
             $temp['url'] = $this->createUrl('status', array(
-                'id' => $itemid,
+                'id' => $id,
                 'status' => $key
             ));
         }
@@ -67,121 +67,7 @@ if ($model->status < 999 && $model->status > 10) {
         'url' => 'javascript:;'
     );
 }
-?>
 
-<div class="tak-order-status">
-  <?php echo CHtml::image($this->getAssetsUrl() . 'img/tak/' . $model->status . '.png') ?>
-</div>
-
-<div class="well">
-
-<strong><?php echo $model->getAttributeLabel('itemid'); ?></strong>：
-  <?php echo $model->itemid; ?>
-  ，
-<strong><?php echo $model->getAttributeLabel('status'); ?></strong>：
-  <?php echo OrderType::item('order-status', $model->status); ?>
-  ，
-  <?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
-    'type' => 'info', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-    'buttons' => array(
-        array(
-            'label' => '订单状态处理',
-            'items' => $optionsStatus
-        ) ,
-    ) ,
-)); ?>
-    <strong class="red">第1步</strong>
-<p>
-  <?php echo $model->getAttributeLabel('add_time'); ?>：
-  <?php echo Tak::timetodate($model->add_time, 6); ?>
-  ，
-  <?php echo $model->getAttributeLabel('total'); ?>：
-  <strong class="price-strong">
-    <?php echo Tak::format_price($model->total); ?>
-  </strong>
-  ，
-  <?php echo $model->getAttributeLabel('manageid'); ?>：
-  <?php
-if (isset($model->iManage)) {
-    echo CHtml::link($model->iManage->company, Yii::app()->createUrl('/Site/PreviewTestMember', array(
-        'id' => $model->manageid
-    )) , array(
-        'class' => 'data-ajax',
-        'title' => $model->iManage->company
-    ));
-} else {
-    echo '未知';
-}
-?>
-  ，
-  <?php echo $model->getAttributeLabel('add_ip'); ?>：
-  <?php echo Tak::Num2IP($model->add_ip); ?>
-</p>
-<p>
-  <?php
-if ($model->pay_time > 0) {
-    echo $model->getAttributeLabel('pay_time') . '：' . Tak::timetodate($model->pay_time, 6) . '，';
-}
-if ($model->delivery_time > 0) {
-    echo $model->getAttributeLabel('delivery_time') . '：' . Tak::timetodate($model->delivery_time, 6);
-}
-?>
-</p>
-<div class="wide">
-
-<?php
-$flow = new OrderFlow;
-$form = $this->beginWidget('CActiveForm', array(
-    'id' => 'flow-form',
-    'action' => $this->createUrl('flowset', array(
-        'id' => $itemid
-    )) ,
-    // 'htmlOptions' => array('class'=>'flow-form'),
-    
-    
-)); ?>
-<?php echo $form->hiddenField($flow, 'status'); ?>
-<?php echo $form->hiddenField($flow, 'itemid'); ?>
-<input type="hidden" disabled="">
-<table class="tak-table">
-<caption>
-<strong class="red">第2步</strong>
-<?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
-    'type' => 'info', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-    'buttons' => array(
-        array(
-            'label' => ' 订单流程操作 ',
-            'items' => $optionsAction
-        ) ,
-    ) ,
-)); ?>
-
-    &nbsp;&nbsp;
-  <span class="label label-info" id="show-status"></span>
-</caption>
-<tbody class="wap-flow-content">
-  <tr>
-  <th><?php echo $form->label($flow, 'action_user'); ?></th>
-  <td>
-    <?php echo $form->textField($flow, 'action_user', array(
-    'size' => 100,
-    'maxlength' => 10,
-    'required' => 'required'
-)); ?>
-  </td>
-  <th><?php echo $form->label($flow, 'name'); ?></th>
-  <td>
-    <?php echo $form->textField($flow, 'name', array(
-    'size' => 60,
-    'maxlength' => 60,
-    'disabled' => 'disabled'
-)); ?>
-  </td>
-  </tr>
-  <tr>
-    <th>文件列表</th>
-    <td>
-      <?php
 $iupload = $this->widget('ext.Plupload.PluploadWidget', array(
     'config' => array(
         'pluploadPath' => true,
@@ -192,128 +78,202 @@ $iupload = $this->widget('ext.Plupload.PluploadWidget', array(
     'id' => 'uploader'
 ) , true);
 
-$postFileUrl = $this->createUrl('/it/upload');
+Tak::regScript('orders-updates', sprintf('var takurls={updatePrice:"%s",updates:"%s",postFileUrl:"%s",iupload:"%s"};', $this->createUrl('updatePrice', array(
+    'id' => $id
+)) , $this->createUrl('updates', array(
+    'id' => $id
+)) , $this->createUrl('/it/upload') , $iupload) , CClientScript::POS_HEAD);
+$this->regScriptFile('k-load-order-updates.js', CClientScript::POS_END);
+?>
 
-$tempscript = "
-  var objUpload = {
-  runtimes : 'flash,html5,html4',
-  'url': '$postFileUrl',
-  flash_swf_url : '$iupload/Moxie.swf',
-  silverlight_xap_url : '$iupload/Moxie.xap', 
-  browse_button:'pickfiles' ,
-  container:'container' ,
-  filters : {
-    max_file_size : '10mb',
-    mime_types: [
-      {'title' : 'Image files', 'extensions' : 'jpg,gif,png,jpeg'},
-      {'title' : 'Zip files', 'extensions' : 'zip,rar'},
-      {'title' : 'Doc files', 'extensions' : 'doc,docx,xls,xlsx,rtf,txt'}
-    ]
-  }}
-  , uploader = new plupload.Uploader(objUpload)
-
-  ;
-
-  $('#uploadfiles').click(function(e) {
-    uploader.start();
-    e.preventDefault();
-  });
-  uploader.init();  
-  uploader.bind('PostInit', function(up) {
-    $('#filelist').html('');
-  });
-  uploader.bind('FilesAdded', function(up, files) {
-    plupload.each(files, function(file) {
-      document.getElementById('filelist').innerHTML += '<div id=\"' + file.id + '\"><a data-to=\"'+file.id+'\" href=\"javascript:;\" class=\"remove\"><i class=\"icon-trash\"></i></a>  ' + file.name + ' <b></b></div></div>';
-    });
-    up.refresh(); 
-    uploader.start();
-  });
-
-  uploader.bind('UploadProgress', function(up, file) {
-    $('#' + file.id + ' b').html(file.percent + '%');
-  });
-
-  uploader.bind('Error', function(up, err) {
-    $('#filelist').append('<div class=\"red\">提示: ' + err.message +(err.file ? ', 文件: ' + err.file.name :'') +'</div>'
-    );
-    up.refresh();
-  });
-    uploader.bind('FileUploaded', function(up, file,msg) {
-      var elem = $('#' + file.id);
-         elem.find('b').html('100%');
-        if (msg&&typeof msg['response']!='undefined') {
-          var obj = $.parseJSON(msg['response']);
-          if (obj&&typeof obj['result']!='undefined') {           
-          elem.append('<input type=\"hidden\" name=\"files[]\" value=\"'+obj.result+'\"/>');
-          }
-        }
-    });
-    $('#filelist').on('click',' a.remove',function(event) {
-      event.preventDefault();
-      var id = $(this).attr('data-to');
-        uploader.removeFile(uploader.getFile(id));
-        $('#' + id).remove();
-    });
-";
-Yii::app()->clientScript->registerScript('', $tempscript, CClientScript::POS_READY);
-?>    
-<div id="container" class="itak-dr">
-  <a id="pickfiles" href="#">[选择文件]</a>
-  <div class="dr"><span></span></div>
-  <div id="filelist"></div>
+<div class="tak-order-status">
+  <?php echo CHtml::image($this->getAssetsUrl() . 'img/tak/' . $model->status . '.png') ?>
 </div>
-    </td>
-  <th><?php echo $form->label($flow, 'note'); ?></th>
-  <td>
-    <?php echo $form->textArea($flow, 'note', array(
+<div class="well">
+  <strong><?php echo $model->getAttributeLabel('itemid'); ?></strong>：
+  <?php echo $model->itemid; ?>
+  ，
+  <strong><?php echo $model->getAttributeLabel('status'); ?></strong>：
+  <?php echo OrderType::item('order-status', $model->status); ?>
+  ，
+  <?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
+    'type' => 'info', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+    'htmlOptions' => array(
+        'id' => 'list-status',
+    ) ,
+    'buttons' => array(
+        array(
+            'label' => '订单状态处理',
+            'items' => $optionsStatus
+        ) ,
+    ) ,
+)); ?>
+  <strong class="red">第1步</strong>
+  <p>
+    <strong><?php echo $model->getAttributeLabel('add_time'); ?></strong>：
+  <?php echo Tak::timetodate($model->add_time, 6); ?>
+  ，
+  <strong><?php echo $model->getAttributeLabel('total'); ?></strong>：
+  <strong class="price-strong">
+  <?php echo Tak::format_price($model->total); ?>
+  </strong>
+  ，
+  <strong><?php echo $model->getAttributeLabel('manageid'); ?></strong>：
+  <?php
+$company = $model->company;
+if (isset($model->iManage)) {
+    $str = '<i class="icon-eye-open"></i>' . $model->company;
+    $company = CHtml::link($str, Yii::app()->createUrl('/Site/PreviewTestMember', array(
+        'id' => Tak::setSId($model->manageid)
+    )) , array(
+        'class' => 'data-ajax',
+        'title' => $model->company
+    ));
+} elseif ($company == '') {
+    $company = '未知';
+}
+echo $company;
+?>
+  ，
+  <strong><?php echo $model->getAttributeLabel('add_ip'); ?></strong>：
+  <?php echo Tak::Num2IP($model->add_ip); ?>
+  </p>
+  <p>
+  <?php
+if ($model->pay_time > 0) {
+    echo '<strong>', $model->getAttributeLabel('pay_time') , '</strong>：', Tak::timetodate($model->pay_time, 6) , '，';
+}
+if ($model->delivery_time > 0) {
+    echo '<strong>', $model->getAttributeLabel('delivery_time') , '</strong>：', Tak::timetodate($model->delivery_time, 6);
+}
+
+?>
+  </p>
+  <?php if ($model->status >1): ?>
+  <p>
+  <strong><?php echo $model->getAttributeLabel('serialid'); ?></strong>：
+  <span><?php echo $model->serialid; ?></span>
+  ，
+  <strong><?php echo $model->getAttributeLabel('cnote'); ?></strong>：
+  <span id="data-cnote"><?php echo $model->cnote; ?></span>
+  &nbsp;&nbsp;&nbsp;
+  <a href="<?php echo $this->createUrl('upData', array(
+        'id' => $id
+    )) ?>" class="edit-row"><i class="icon-pencil"></i>修改</a>
+  </p>
+<?php
+endif
+?>
+  <div class="wide">
+    <?php
+$flow = new OrderFlow;
+$form = $this->beginWidget('CActiveForm', array(
+    'id' => 'flow-form',
+    'action' => $this->createUrl('flowset', array(
+        'id' => $id
+    )) ,
+    /*
+    // 'htmlOptions' => array('class'=>'flow-form'),
+    */
+)); ?>
+    <?php echo $form->hiddenField($flow, 'status'); ?>
+    <?php echo $form->hiddenField($flow, 'itemid'); ?>
+    <input type="hidden" disabled="">
+    <table class="tak-table">
+      <caption>
+      <strong class="red">第2步</strong>
+      <?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
+    'type' => 'info', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+    'buttons' => array(
+        array(
+            'label' => ' 订单流程操作 ',
+            'items' => $optionsAction
+        ) ,
+    ) ,
+)); ?>
+      &nbsp;&nbsp;
+      <span class="label label-info" id="show-status"></span>
+      </caption>
+      <tbody class="wap-flow-content">
+        <tr>
+          <th><?php echo $form->label($flow, 'action_user'); ?></th>
+          <td>
+            <?php echo $form->textField($flow, 'action_user', array(
+    'size' => 100,
+    'maxlength' => 10,
+    'required' => 'required'
+)); ?>
+          </td>
+          <th><?php echo $form->label($flow, 'name'); ?></th>
+          <td>
+            <?php echo $form->textField($flow, 'name', array(
+    'size' => 60,
+    'maxlength' => 60,
+    'disabled' => 'disabled',
+    'required' => 'required'
+)); ?>
+          </td>
+        </tr>
+        <tr>
+          <th>文件列表</th>
+          <td>
+            <?php
+?>
+            <div id="container" class="itak-dr">
+              <a id="pickfiles" href="#">[选择文件]</a>
+              <div class="dr"><span></span></div>
+              <div id="filelist"></div>
+            </div>
+          </td>
+          <th><?php echo $form->label($flow, 'note'); ?></th>
+          <td>
+            <?php echo $form->textArea($flow, 'note', array(
     'size' => 60,
     'maxlength' => 255
 )); ?>
-  </td>
-  </tr>
-  <tr>
-  <th></th>
-  <td colspan="3">
-      <?php $this->widget('bootstrap.widgets.TbButton', array(
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td colspan="3">
+            <?php $this->widget('bootstrap.widgets.TbButton', array(
     'buttonType' => 'submit',
     'label' => Tk::g('Save')
 )); ?>
-  </td>
-  </tr>
-</tbody>
-</table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <?php $this->endWidget(); ?>
 
-<?php $this->endWidget(); ?>
 
- 
-<table class="tak-table action-fold">
-  <caption>订单跟踪</caption>
-  <colgroup align="center">
-  <col width="140px"/>
-  <col width="85px"/>
-  <col width="150px"/>
-  </colgroup> 
-  <thead>
-  <tr>
-    <th>处理时间</th>
-    <th>操作人</th>
-    <th>状态</th>
-    <th>文件</th>
-    <th>处理信息</th>
-  </tr>
-  </thead>
-  <tbody class="wap-products">
-  <?php
+    <table class="tak-table action-fold">
+      <caption>订单跟踪</caption>
+      <colgroup align="center">
+      <col width="140px"/>
+      <col width="85px"/>
+      <col width="150px"/>
+      </colgroup>
+      <thead>
+        <tr>
+          <th>处理时间</th>
+          <th>操作人</th>
+          <th>状态</th>
+          <th>文件</th>
+          <th>处理信息</th>
+        </tr>
+      </thead>
+      <tbody class="wap-products">
+        <?php
 $list = $model->getFlows();
 $result = '';
 $strHtml = '<tr>
-  <td>:add_time</td>
-  <td>:action_user</td>
-  <td>:name</td>
-  <td>:pics</td>
-  <td>:note</td>
-  </tr>';
+          <td>:add_time</td>
+          <td>:action_user</td>
+          <td>:name</td>
+          <td>:pics</td>
+          <td>:note</td>
+        </tr>';
 $arr = false;
 foreach ($list as $key => $value) {
     $arr = array(
@@ -327,96 +287,97 @@ foreach ($list as $key => $value) {
 }
 echo $result;
 ?>
-  </tbody>  
-</table>
+      </tbody>
+    </table>
 
-</div>
+  </div>
 
-<?php if ($orderInfo): ?>
+  <?php if ($orderInfo): ?>
 
-<table class="tak-table action-fold">
-  <caption>详细信息</caption>
-  <tbody>
-  <tr>
-    <th><?php echo $orderInfo->getAttributeLabel('date_time'); ?>:</th>
-    <td><?php echo Tak::timetodate($orderInfo->date_time, 3); ?></td>
-    <th><?php echo $orderInfo->getAttributeLabel('packing'); ?>:</th>
-    <td><?php echo OrderType::item('packing', $orderInfo->packing); ?></td>
-  </tr>
-  <tr>
-    <th><?php echo $orderInfo->getAttributeLabel('taxes'); ?>:</th>
-    <td><?php echo OrderType::item('taxes', $orderInfo->taxes); ?></td>
-    <th><?php echo $orderInfo->getAttributeLabel('convey'); ?>:</th>
-    <td><?php echo OrderType::item('convey', $orderInfo->convey); ?></td>
-  </tr>
-  <tr>
-    <th><?php echo $orderInfo->getAttributeLabel('pay_type'); ?>:</th>
-    <td colspan="3">
-      <?php
+  <table class="tak-table action-fold">
+    <caption>详细信息</caption>
+    <tbody>
+      <tr>
+        <th><?php echo $orderInfo->getAttributeLabel('date_time'); ?>:</th>
+        <td><?php echo Tak::timetodate($orderInfo->date_time, 3); ?></td>
+        <th><?php echo $orderInfo->getAttributeLabel('packing'); ?>:</th>
+        <td><?php echo OrderType::item('packing', $orderInfo->packing); ?></td>
+      </tr>
+      <tr>
+        <th><?php echo $orderInfo->getAttributeLabel('taxes'); ?>:</th>
+        <td><?php echo OrderType::item('taxes', $orderInfo->taxes); ?></td>
+        <th><?php echo $orderInfo->getAttributeLabel('convey'); ?>:</th>
+        <td><?php echo OrderType::item('convey', $orderInfo->convey); ?></td>
+      </tr>
+      <tr>
+        <th><?php echo $orderInfo->getAttributeLabel('pay_type'); ?>:</th>
+        <td colspan="3">
+          <?php
     echo $pay_type['title'];
     echo $orderInfo->getPayInfo($model->total);
 ?>
-    </td>   
-  </tr>
-  <tr>
-    <th><?php echo $orderInfo->getAttributeLabel('detype'); ?>:</th>
-    <td colspan="3">
-    <?php
+        </td>
+      </tr>
+      <tr>
+        <th><?php echo $orderInfo->getAttributeLabel('detype'); ?>:</th>
+        <td colspan="3">
+          <?php
     echo OrderType::getStatus('detype', $orderInfo->detype);
     echo $orderInfo->getContactp();
 ?>
-    </td>
-  </tr>
-  <tr>
-    <th><?php echo $orderInfo->getAttributeLabel('note'); ?>:</th>
-    <td colspan="3">
-    <?php
+        </td>
+      </tr>
+      <tr>
+        <th><?php echo $orderInfo->getAttributeLabel('note'); ?>:</th>
+        <td colspan="3">
+          <?php
     echo $orderInfo->note;
 ?>
-    </td>
-  </tr>
-  </tbody>
-</table>
-
-<?php
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <?php
 endif
 ?>
 
-<table class="tak-table action-fold">
-  <caption>商品清单</caption>
-  <thead>
-    <tr>
-      <th width="150">产品名称</th>
-      <th>详情</th>
-      <th width="120">单价</th>
-      <th width="80">数量</th>
-      <th width="150">小计</th>
-    </tr>
-  </thead>
-  <tbody class="wap-products">
-  <?php
+  <table class="tak-table action-fold">
+    <caption>商品清单</caption>
+    <thead>
+      <tr>
+        <th width="150">产品名称</th>
+        <th>详情</th>
+        <th width="150">单价(双击价格进行调整)</th>
+        <th width="80">数量</th>
+        <th width="150">小计</th>
+      </tr>
+    </thead>
+    <tbody class="wap-products">
+      <?php
 $list = $model->getProducts();
 $result = '';
 $strHtml = '<tr>
-  <td>:name</td>
-  <td>
-    <dl>
-      <dt>$model:</dt><dd>:model &nbsp;</dd>
-      <dt>$standard:</dt><dd>:standard &nbsp;</dd>
-      <dt>$color:</dt><dd>:color &nbsp;</dd>
-      <dt>$unit:</dt><dd>:unit &nbsp;</dd>
-    </dl>
-    <div class="kclear"></div>
-    <div>
-    <strong>$note:</strong>
-    :note
-    </div>
-    :pics
-  </td>
-  <td class="price-strong">￥:price</td>
-  <td>:amount</td>
-  <td class="price-strong">￥:sum</td>
-  </tr>';
+        <td>:name</td>
+        <td>
+          <dl>
+            <dt>$model:</dt><dd>:model &nbsp;</dd>
+            <dt>$standard:</dt><dd>:standard &nbsp;</dd>
+            <dt>$color:</dt><dd>:color &nbsp;</dd>
+            <dt>$unit:</dt><dd>:unit &nbsp;</dd>
+          </dl>
+          <div class="kclear"></div>
+          <div>
+            <strong>$note:</strong>
+            :note
+          </div>
+          :pics
+        </td>
+        <td class="price-strong ajax-price" id=":itemid" data-value=":price" title="双击修改" >
+          ￥:price
+        </td>
+        <td>:amount</td>
+        <td class="price-strong">￥:sum</td>
+      </tr>';
 $arr = false;
 foreach ($list as $key => $value) {
     $arr = array(
@@ -424,6 +385,7 @@ foreach ($list as $key => $value) {
     );
     $icount = 0;
     foreach (array(
+        'itemid',
         'name',
         'amount',
         'price',
@@ -444,69 +406,76 @@ foreach ($list as $key => $value) {
 }
 echo $result;
 ?>
-  </tbody>
-  <tfoot>
+    </tbody>
+    <tfoot>
     <tr>
       <td colspan="5">合计:
-      <strong  class="price-strong">￥
-      <?php echo $model->total; ?>
-      </strong>
+        <strong  class="price-strong">￥
+        <?php echo $model->total; ?>
+        </strong>
       </td>
     </tr>
-  </tfoot>
-</table>
+    </tfoot>
+  </table>
 
-<?php $this->beginWidget('bootstrap.widgets.TbModal', array(
-    'id' => 'sssModal'
+  <?php $this->beginWidget('bootstrap.widgets.TbModal', array(
+    'options' => array(
+        'show' => false,
+    ) ,
+    'id' => 'modalStatusWap'
 )); ?>
- 
-<div class="modal-header">
+  <div class="modal-header">
     <a class="close" data-dismiss="modal">&times;</a>
-    <h4>Modal header</h4>
+    <h4>...</h4>
+  </div>
+  <?php
+$form = $this->beginWidget('CActiveForm', array(
+    'id' => 'status-form',
+    'action' => $this->createUrl('status') ,
+    'htmlOptions' => array(
+        'class' => 'form-horizontal'
+    ) ,
+)); ?>
+  <?php echo $form->hiddenField($flow, 'status'); ?>
+  <?php echo $form->hiddenField($flow, 'itemid'); ?>
+  <div class="modal-body">
+  <div  class="hide tak-data-rows">
+    <div class="row-form clearfix">
+      <div class="control-group ">
+        <label class="control-label" for="mserialid">工单号</label>
+        <div class="controls">
+          <input type="text"  name="serialid" id="mserialid" value="<?php echo $model->serialid; ?>" />
+        </div>
+      </div>
+    </div>
+    <div class="row-form">
+      <div class="control-group ">
+        <label class="control-label" for="mcnote">订单备注</label>
+        <div class="controls">
+          <textarea name="cnote" id="cnote"><?php echo $model->cnote; ?></textarea>
+        </div>
+      </div>
+  </div>
 </div>
- 
-<div class="modal-body">
-    <p>用户信息........</p>
-</div> 
-<div class="modal-footer">
+    <div class="row-form clearfix tak-data-rows hide">
+      <div class="control-group ">
+        <label class="control-label" for="mnote">备注说明</label>
+        <div class="controls">
+          <textarea name="note" id="mnote"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn">保存</button>
     <?php $this->widget('bootstrap.widgets.TbButton', array(
-    'label' => 'Close',
+    'label' => '取消',
     'url' => '#',
     'htmlOptions' => array(
         'data-dismiss' => 'modal'
     ) ,
 )); ?>
+  </div>
+  <?php $this->endWidget(); ?>
+  <?php $this->endWidget(); ?>
 </div>
- 
-<?php $this->endWidget(); ?>
-
-
-
-<script>
-var flowForm = $('#flow-form')
-, flowStatus = flowForm.find('#OrderFlow_status')
-, flowName = flowForm.find('#OrderFlow_name')
-
-, setStatus = function(status,txt){ 
-  $('#show-status').html(txt);
-  if (status!=='') {
-    flowForm.addClass('active');
-    flowStatus.val(status);
-    if (status==0) {
-      flowName.removeAttr('disabled');
-    }else{
-      flowName.attr('disabled',true);
-    }
-  }else{
-    flowForm.removeClass('active');
-  }
-};
-
- flowForm.on('submit',function(event){
-   if (flowStatus.val()==0&&flowName.val()=='') {
-    event.preventDefault();
-    alert('流程名字不能为空!');
-    flowName.focus();
-   };
-});
-</script>

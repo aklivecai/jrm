@@ -22,7 +22,6 @@ Tak::regScript('tak', 'isprintf = true;', CClientScript::POS_END);
 		?>                                  
 	</div>
 		<div class="block-fluid clearfix">
-
 <?php $this->renderPartial('//_search',array('model'=>$model)); ?>
 
 <?php $this->renderPartial('_search',array('model'=>$model)); ?>

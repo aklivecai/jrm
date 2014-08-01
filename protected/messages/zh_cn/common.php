@@ -21,6 +21,7 @@ return array(
     'Add' => '添加',
     'Create' => '新建',
     'Entering' => '录入',
+    'Summary' => '汇总',
     'Data' => '数据',
     'Delete' => '删除',
     'Description' => '描述',
@@ -151,6 +152,12 @@ return array(
     'Cost' => '成本核算',
     'Production' => '生产',
     'Workshop' => '车间',
+    'Wage' => '工资',
+
+
+    'Department' => '车间',
+    'DepartmentWorker'=>'工人',
+    'DepartmentPrice'=>'工序价格',
     
     ':name move dw' => ' :name 下移',
     ':name move up' => ':name 上移',

@@ -21,6 +21,7 @@ class StocksController extends Controller {
             'm' => $m,
             'tags' => $tags,
             'cates' => $cates,
+            'model'=>$this->_model,
         ) , true);
         if ($write) {
             echo $content;
@@ -32,12 +33,14 @@ class StocksController extends Controller {
     public function actionViewProduct($id, $ajax = 0) {
         $model = Product::model()->findByPk($id);
         if ($model === null) $this->error();
+        $this->_model = $model;
         $product_id = $model->primaryKey;
         $datas = array();
         $types = array(
             1 => 'purchase',
             2 => 'sell'
         );
+        //ａｊａｘ获取内容直接退出
         if ($ajax > 0 && isset($types[$ajax])) {
             $this->getPMovings($ajax, $product_id, true);
         }
@@ -87,6 +90,7 @@ class StocksController extends Controller {
         $model->unsetAttributes(); // clear any default values
         if (isset($_GET[$m])) {
             $model->attributes = $_GET[$m];
+            Tak::K($model->attributes,'main1.log');
         }
         $this->warehouse_id = $model->warehouse_id;
         if (($this->warehouse_id <= 0 || $this->warehouse_id == '') && Permission::iSWarehouses()) {
@@ -115,8 +119,8 @@ class StocksController extends Controller {
             $totals = Product::getTotals($sql);
             $str = '总价格: :ptotal，总数量: :stotal';
             $headerText = strtr($str, array(
-                ':stotal' => $totals['stotal'],
-                ':ptotal' => $totals['ptotal'],
+                ':stotal' => Tak::getNums($totals['stotal']),
+                ':ptotal' => Tak::format_price($totals['ptotal']),
             ));
         }
         
@@ -174,10 +178,6 @@ class StocksController extends Controller {
                 'name' => '本月结存',
                 'width' => 12
             ) ,
-            '上个月结存' => array(
-                'name' => '上个月结存',
-                'width' => 12
-            ) ,
         );
         foreach ($_temps as $key => $data) {
             $datas[] = array(
@@ -186,14 +186,13 @@ class StocksController extends Controller {
                 'typeid' => Category::getProductName($data->typeid) ,
                 'material' => $data->material,
                 'spec' => $data->spec,
-                'stock' => $data->stock,
-                'price' => $data->price,
+                'stock' => Tak::getNums($data->stock),
+                'price' => Tak::getNums(($data->price)),
                 '小计' => $data->total,
-                '上个月结存' => $data->name,
-                '本月进货' => $data->writeHistory(1, $this->warehouse_id) ,
-                '本月出货' => $data->writeHistory(2, $this->warehouse_id) ,
-                '本月结存' => $data->writeHistory(3, $this->warehouse_id) ,
-                '上个月结存' => $data->writeHistory(4, $this->warehouse_id) ,
+                '上个月结存' => $data->writeHistory(1, $this->warehouse_id) ,
+                '本月进货' => $data->writeHistory(2, $this->warehouse_id) ,
+                '本月出货' => $data->writeHistory(3, $this->warehouse_id) ,
+                '本月结存' => $data->writeHistory(4, $this->warehouse_id) ,
             );
         }
         // Tak::KD($datas);

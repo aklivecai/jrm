@@ -212,7 +212,7 @@ editable: true,
     // CHECKBOXES AND RADIO
     $.uniform.defaults.fileButtonHtml = "浏览";
     $.uniform.defaults.fileDefaultHtml = "选择文件";    
-    $(".row-form,.row-fluid,.dialog,.loginBox,.block,.block-fluid").find("input:checkbox, input:radio, input:file").not(".skip, input.ibtn").uniform();        
+    $(".row-form,.row-fluid,.dialog,.loginBox,.block,.block-fluid").find("input:checkbox, input:radio, input:file").not(".skip, input.ibtn").uniform();
         
     // CUSTOM SCROLLING
         $(".scroll").mCustomScrollbar();

@@ -70,7 +70,7 @@ class JImportClientele extends JImportForm {
         $itemid = Tak::fastUuid();
         // Tak::KD($this->data);
         foreach ($this->data as $key => $value) {
-            $itemid = Tak::numAdd($itemid,$key+2);
+            $itemid = Tak::numAdd($itemid, $key + 2);
             
             $value['manageid'] = $manageid;
             $model->attributes = $value;
@@ -94,7 +94,9 @@ class JImportClientele extends JImportForm {
                     if ($contact->save()) {
                         $newContact++;
                     } else {
-                        // Tak::KD();                        
+                        // Tak::KD();
+                        
+                        
                     }
                 }
                 $newModels++;
@@ -133,7 +135,7 @@ class JImportClientele extends JImportForm {
             ':table' => AddressGroups::$table,
             ':fromid' => Tak::getFormid() ,
         ));
-        $tags = Tak::getDb('db')->createCommand($sql)->queryAll();
+        $tags = Ak::db(true)->createCommand($sql)->queryAll();
         $result = array();
         foreach ($tags as $key => $value) {
             $result[$value['name']] = $value['address_groups_id'];

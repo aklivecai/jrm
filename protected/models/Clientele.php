@@ -1,7 +1,7 @@
 <?php
-class Clientele extends DbRecod {    
+class Clientele extends DbRecod {
     public $linkName = 'clientele_name'; /*连接的显示的字段名字*/
-    public $profession = 4;    
+    public $profession = 4;
     public static $table = '{{clientele}}';
     /**
      * @return array validation rules for model attributes.字段校验的结果
@@ -57,6 +57,40 @@ class Clientele extends DbRecod {
                 'checkRepetition'
             ) ,
         );
+    }
+    /**
+     * 检验重复
+     */
+    public function checkRepetition($attribute, $params) {
+        $sql = array(
+            "LOWER(:col)=:val"
+        );
+        $arr = array(
+            ':col' => $attribute,
+        );
+        if ($this->primaryKey > 0) {
+            $sql[] = ':ikey<>:itemid';
+            $arr[':ikey'] = $this->primaryKey();
+            $arr[':itemid'] = $this->primaryKey;
+        }
+        
+        $sql = implode(' AND ', $sql);
+        // Tak::KD(strtr($sql,$arr),1);
+        // Tak::KD($arr,1);
+        // 查找满足指定条件的结果中的第一行
+        $sql = strtr($sql, $arr);
+        $m = $this->find($sql, array(
+            ':val' => strtolower($this->$attribute)
+        ));
+        // Tak::KD($m,1);
+        $result = true;
+        if ($m != null) {
+            $err = $this->getAttributeLabel($attribute) . ' 已经存在 :';
+            // $err.= $m->getHtmlLink();
+            $this->addError($attribute, $err);
+            $result = false;
+        }
+        return $result;
     }
     /**
      * @return array relational rules. 表的关系，外键信息
@@ -149,6 +183,14 @@ class Clientele extends DbRecod {
             'modified_time'
         ));
         $criteria->compare('note', $this->note, true);
+        
+        $permission = Ak::getQuery('permission', false);
+        if ($permission && $permission > 0) {
+            $permission = $permission;
+            $sql = sprintf("manageid in (SELECT manageid FROM %s WHERE fromid=%s AND branch=$permission)", Manage::$table, Ak::getFormid());
+            $criteria->addCondition($sql);
+        }
+        
         return $cActive;
     }
     public static function model($className = __CLASS__) {
@@ -251,5 +293,21 @@ class Clientele extends DbRecod {
             $value->isLog = false;
             $value->delete();
         }
+    }
+    
+    protected function getDefaultScopeSql() {
+        $sqlWhere = $this->defaultScope(0);
+        if (is_array($sqlWhere) && $sqlWhere['condition']) {
+            $sqlWhere = is_array($sqlWhere['condition']) ? implode(' AND ', $sqlWhere['condition']) : $sqlWhere['condition'];
+        } else {
+            $sqlWhere = '';
+        }
+        if ($this->manageid > 0) {
+            if ($sqlWhere) {
+                $sqlWhere.= ' AND ';
+            }
+            $sqlWhere.= sprintf(' manageid=%s', $this->manageid);
+        }
+        return $sqlWhere;
     }
 }

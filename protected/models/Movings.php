@@ -255,21 +255,38 @@ class Movings extends DbRecod {
      */
     private function updateStockProduct($data) {
         if ($this->isAffirm()) {
+            $model = Stocks::model()->findByAttributes(array(
+                'warehouse_id' => $this->warehouse_id,
+                'product_id' => $data['itemid']
+            ));
+            $stocks = $data['numbers'];
+            $this->type != 1&&$stocks*=-1;
+            if ($model === null) {
+                $model = new Stocks('create');
+                $model->attributes = array(
+                    'product_id'=>$data['itemid'],
+                    'warehouse_id' => $this->warehouse_id,
+                    'stocks'=>$stocks,
+                );
+                $model->save();
+            } else {
+                $model->stocks = $model->stocks+$stocks;
+                $model->save();
+            }
+            return true;
             $arr = array(
-                ':time' => Tak::now() ,
+                ':time' => Ak::now() ,
                 ':itemid' => $data['itemid'],
                 ':numbers' => $data['numbers'],
                 ':warehouse_id' => $this->warehouse_id,
                 ':operate' => $this->type == 1 ? '+' : '-',
                 ':stocks' => Stocks::$table,
-            );
+            );            
             $sql = "UPDATE :stocks AS s SET s.stocks=s.stocks:operate:numbers , s.modified_time = :time WHERE s.product_id = :itemid AND s.warehouse_id = :warehouse_id ";
             $sql = strtr($sql, $arr);
             // Tak::KD($sql);
             self::$db->createCommand($sql)->execute();
-            // Tak::KD($sql,1);
-            
-            
+            // Tak::KD($sql,1);            
         }
     }
     /**
@@ -319,7 +336,7 @@ class Movings extends DbRecod {
             'type' => $this->type,
             'movings_id' => $this->itemid
         ));
-        // Tak::KD($model->attributes, 1);
+        
         if ($model == null) {
             $model = new ProductMoving();
             $model->attributes = $product;
@@ -461,10 +478,10 @@ class Movings extends DbRecod {
             $m->movings_id = $this->itemid;
             $m->fromid = $this->fromid;
             $m->warehouse_id = $this->warehouse_id;
-            $itemid = $m->itemid = Tak::fastUuid();
+            $itemid = $m->itemid = Ak::fastUuid();
             foreach ($tags as $key => $value) {
                 $m->setIsNewRecord(true);
-                $itemid = Tak::numAdd($itemid, 2);
+                $itemid = Ak::numAdd($itemid, 2);
                 $m->itemid = $itemid;
                 $m->product_id = $key;
                 $m->numbers = $value['numbers'];
@@ -484,7 +501,7 @@ class Movings extends DbRecod {
         $connection = self::$db;
         $transaction = $connection->beginTransaction();
         try {
-            $time = Tak::now();
+            $time = Ak::now();
             $itemid = $this->itemid;
             $arr = array(
                 ':time' => $time,

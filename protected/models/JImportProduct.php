@@ -6,6 +6,7 @@
  * @version $Id$
  */
 class JImportProduct extends JImportForm {
+    
     public $headers = array(
         'A' => '产品型号',
         'B' => '货物分类',
@@ -82,7 +83,7 @@ class JImportProduct extends JImportForm {
         
         $itemid = Tak::fastUuid();
         $data = $this->data;
-        $transaction = Tak::getDb('db')->beginTransaction();
+        $transaction = Tak::db(true)->beginTransaction();
         try {
             foreach ($data as $key => $value) {
                 $itemid = Tak::numAdd($itemid, $key + 2);
@@ -112,7 +113,28 @@ class JImportProduct extends JImportForm {
                             'stocks' => $stocks,
                         );
                         $stock->warehouse_id = $warehouse_id;
+                        #保存库存信息，导入仓库
                         if ($stock->save()) {
+                            // exit;
+                            #保存一个到产品出入库里面，编号和产品编号一致
+                            $pmoving = new ProductMoving('create');
+                            $pmoving->attributes = array(
+                                'itemid' => $product->itemid,
+                                'movings_id' => $product->itemid,
+                                'product_id' => $product->itemid,
+                                'fromid' => $product->fromid,
+                                'type' => 1,
+                                'warehouse_id' => $warehouse_id,
+                                'time_stocked' => $product->add_time,
+                                'numbers' => $stocks,
+                                'price' => $product->price,
+                                'note' => '导入',
+                            );
+                            if (!$pmoving->save()) {
+                                $strMsg.= "\n" . var_export($pmoving->getErrors() , TRUE);
+                                Tak::KD($strMsg);
+                                exit;
+                            }
                         } else {
                             $strMsg.= "\n" . var_export($stock->getErrors() , TRUE);
                         }
@@ -273,7 +295,7 @@ class JImportProduct extends JImportForm {
                 ':module' => 'product',
                 ':fromid' => Tak::getFormid() ,
             ));
-            $tags = Tak::getDb('db')->createCommand($sql)->queryAll();
+            $tags = Tak::db(true)->createCommand($sql)->queryAll();
             $result = array();
             $farr = array();
             $cateids = array();

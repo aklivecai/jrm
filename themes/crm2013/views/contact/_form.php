@@ -14,7 +14,9 @@ $items['Create']['url'] = array('create','Contact[clienteleid]'=>$model->cliente
         <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
         'id'=>'contact-form',
         'type'=>'horizontal',
-        'enableAjaxValidation'=>false,
+    'enableAjaxValidation' => true,
+    'enableClientValidation'=>true,
+    'clientOptions'=>array('validateOnSubmit'=>'true'),
         )); ?>
         <?php echo $form->errorSummary($model); ?>
         <div class="head clearfix">
